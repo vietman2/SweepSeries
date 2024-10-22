@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
-import { AppIcon } from "@components/Icons";
+import { AppIcon } from "../Icons";
 
 interface Props {
   icon: string;
