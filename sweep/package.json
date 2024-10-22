@@ -11,7 +11,29 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "setupFiles": [
+      "./utils/jest.setup.tsx"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/jest",
+      "/android",
+      "/ios"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!src/**/*.d.ts",
+      "!src/**/*/types.ts",
+      "!src/**/*/navigation.ts",
+      "!src/**/*/index.tsx",
+      "!src/**/*/index.ts",
+      "!src/**/*/store.ts",
+      "!src/**/*/apiConfig.ts",
+      "!src/constants/**/*.{js,jsx,ts,tsx}",
+      "!src/hooks/**/*.{js,jsx,ts,tsx}",
+      "!src/variables/**/*.{js,jsx,ts,tsx}"
+    ]
   },
   "dependencies": {
     "@expo/config-plugins": "^8.0.10",
