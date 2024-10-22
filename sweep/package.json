@@ -13,7 +13,7 @@
   "jest": {
     "preset": "jest-expo",
     "setupFiles": [
-      "./utils/jest.setup.tsx"
+      "./src/utils/jest.setup.tsx"
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
