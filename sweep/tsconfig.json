@@ -12,6 +12,9 @@
       "@hooks/*": [
         "./src/hooks/*"
       ],
+      "@pages/*": [
+        "./src/pages/*"
+      ],
       "@themes/*": [
         "./src/constants/themes/*"
       ],
