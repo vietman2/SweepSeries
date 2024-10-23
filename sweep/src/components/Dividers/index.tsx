@@ -1,4 +1,3 @@
-import { Divider } from "./Divider";
-import { VerticalDivider } from "./VerticalDivider";
+import { Divider, VerticalDivider } from "./Divider";
 
 export { Divider, VerticalDivider };

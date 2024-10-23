@@ -18,3 +18,23 @@ export function Divider({
     />
   );
 }
+
+interface VerticalProps {
+  width: number;
+  color?: string;
+}
+
+export function VerticalDivider({
+  color = "#D9D9D9",
+  width,
+}: Readonly<VerticalProps>) {
+  return (
+    <View
+      style={{
+        height: "100%",
+        backgroundColor: color,
+        width: width,
+      }}
+    />
+  );
+}
