@@ -1,3 +1,4 @@
-import { MainButton } from "./MainButton";
+import { KakaoButton, NaverButton } from "./SocialButtons";
+import { TextButton } from "./TextButton";
 
-export { MainButton };
+export { KakaoButton, NaverButton, TextButton };
