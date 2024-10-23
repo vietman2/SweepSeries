@@ -14,12 +14,19 @@ import { VerticalDivider } from "@components/Dividers";
 import { LoadingComponent } from "@components/Fallbacks";
 import { MainLogo } from "@components/Icons";
 import { TextInput } from "@components/Inputs";
+import { useAuth } from "@contexts/auth";
+import { useTheme } from "@contexts/theme";
+import { ThemeColorType } from "@themes/colors";
 
 export function Login() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const { login } = useAuth();
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
 
   const handleLogin = async () => {
     setIsLoading(true);
@@ -58,6 +65,7 @@ export function Login() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsLoading(false);
 
+    login();
     router.dismissAll();
     router.replace("/home");
   };
@@ -112,11 +120,11 @@ export function Login() {
             <TextButton text="로그인" onPress={handleLogin} fontSize={20} />
           )}
           <View style={styles.troubleshoot}>
-            <TouchableOpacity onPress={handleUsernameFind}>
+            <TouchableOpacity onPress={handleUsernameFind} testID="find-username">
               <Text style={styles.findButton}>아이디 찾기</Text>
             </TouchableOpacity>
             <VerticalDivider width={1} />
-            <TouchableOpacity onPress={handlePasswordFind}>
+            <TouchableOpacity onPress={handlePasswordFind} testID="find-password">
               <Text style={styles.findButton}>비밀번호 찾기</Text>
             </TouchableOpacity>
           </View>
@@ -128,44 +136,44 @@ export function Login() {
   );
 }
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    paddingHorizontal: 20,
-    backgroundColor: "#FFFFFF",
-  },
-  buttons: {
-    justifyContent: "center",
-    marginTop: 20,
-    marginBottom: 10,
-  },
-  error: {
-    alignItems: "flex-end",
-  },
-  errorText: {
-    color: "rgba(255, 0, 0, 0.8)",
-    marginTop: 5,
-  },
-  header: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 120,
-  },
-  headerText: {
-    marginTop: 15,
-    fontSize: 20,
-    textAlign: "center",
-  },
-  troubleshoot: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    marginVertical: 10,
-    paddingHorizontal: 60,
-  },
-  textinputs: {
-    marginTop: 15,
-  },
-  findButton: {
-    color: "#9D9D9D",
-  },
-});
+const createStyles = (theme: ThemeColorType) =>
+  StyleSheet.create({
+    mainContainer: {
+      flex: 1,
+      paddingHorizontal: 20,
+    },
+    buttons: {
+      justifyContent: "center",
+      marginTop: 20,
+      marginBottom: 10,
+    },
+    error: {
+      alignItems: "flex-end",
+    },
+    errorText: {
+      color: "rgba(255, 0, 0, 0.8)",
+      marginTop: 5,
+    },
+    header: {
+      alignItems: "center",
+      justifyContent: "center",
+      marginTop: 120,
+    },
+    headerText: {
+      marginTop: 15,
+      fontSize: 20,
+      textAlign: "center",
+    },
+    troubleshoot: {
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+      marginVertical: 10,
+      paddingHorizontal: 60,
+    },
+    textinputs: {
+      marginTop: 15,
+    },
+    findButton: {
+      color: theme.lowEmphasis,
+    },
+  });
