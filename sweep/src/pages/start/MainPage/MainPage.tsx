@@ -6,10 +6,6 @@ import { useTheme } from "@contexts/theme";
 import { ThemeColorType } from "@themes/colors";
 
 export function MainPage() {
-  // TODO: 화면 구현
-  // 일단 자동로그인
-  // if 성공: tabs로 이동
-  // else: 아래 화면
   const { theme } = useTheme();
   const styles = createStyles(theme);
 

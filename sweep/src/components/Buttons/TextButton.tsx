@@ -16,7 +16,7 @@ export function TextButton({
   backgroundColor = "#14863E",
   color = "#FFFFFF",
   active = true,
-}: Props) {
+}: Readonly<Props>) {
   backgroundColor = active ? backgroundColor : "#9D9D9D";
 
   return (
@@ -45,7 +45,7 @@ interface LinkProps {
   onPress: () => void;
 }
 
-export function Link({ text, onPress }: LinkProps) {
+export function Link({ text, onPress }: Readonly<LinkProps>) {
   return (
     <TouchableOpacity onPress={onPress} style={styles.link}>
       <Text style={styles.linkText}>{text}</Text>

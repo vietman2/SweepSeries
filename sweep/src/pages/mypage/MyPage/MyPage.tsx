@@ -110,7 +110,7 @@ interface TextProps {
   text: string;
 }
 
-function Subtitle({ text }: TextProps) {
+function Subtitle({ text }: Readonly<TextProps>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
