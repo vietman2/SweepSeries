@@ -3,9 +3,8 @@ import axios from "axios";
 
 interface AuthContextType {
   login: () => void;
-  setToken: (token: string) => void;
   logout: () => void;
-  //user_uuid: string | null;
+  token: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -13,7 +12,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  //const [user, setUser] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null);
   /*
     useEffect(() => {
       const interceptor = axios.interceptors.response.use(
@@ -71,15 +70,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 */
   const login = () => {
-    console.log("login");
-  };
-  const setToken = (token: string) => {
-    console.log("setToken");
+    setToken("token");
   };
   const logout = () => {
     console.log("logout");
   };
-  const value = useMemo(() => ({ login, setToken, logout }), []);
+  const value = useMemo(() => ({ login, logout, token }), [token]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
