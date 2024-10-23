@@ -1,9 +1,9 @@
 import { Text, View } from "react-native";
 
-export default function MyPage() {
+export default function Steal() {
   return (
     <View>
-      <Text>MyPage</Text>
+      <Text>Steal</Text>
     </View>
   );
 }
