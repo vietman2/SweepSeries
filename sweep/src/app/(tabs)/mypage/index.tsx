@@ -1,9 +1,3 @@
-import { Text, View } from "react-native";
+import { MyPage } from "@pages/mypage";
 
-export default function MyPage() {
-  return (
-    <View>
-      <Text>MyPage</Text>
-    </View>
-  );
-}
+export default MyPage;
