@@ -24,6 +24,9 @@
       "@themes/*": [
         "./src/constants/themes/*"
       ],
+      "@utils/*": [
+        "./src/utils/*"
+      ]
     }
   },
   "include": [
