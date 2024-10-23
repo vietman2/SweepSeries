@@ -1,8 +1,11 @@
 import { ActivityIndicator, StyleSheet } from "react-native";
 
+import { useTheme } from "@contexts/theme";
+
 export function LoadingComponent() {
-  // TODO: theme color
-  return <ActivityIndicator animating color="#14863E" style={styles.loading} />;
+  const { theme } = useTheme();
+
+  return <ActivityIndicator animating color={theme.primary} style={styles.loading} />;
 }
 
 const styles = StyleSheet.create({
