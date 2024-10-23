@@ -13,7 +13,7 @@ export function TextButton({
   text,
   onPress,
   fontSize = 16,
-  backgroundColor = "#14863E", // TODO: theme color
+  backgroundColor = "#14863E",
   color = "#FFFFFF",
   active = true,
 }: Props) {
@@ -40,6 +40,19 @@ export function TextButton({
   );
 }
 
+interface LinkProps {
+  text: string;
+  onPress: () => void;
+}
+
+export function Link({ text, onPress }: LinkProps) {
+  return (
+    <TouchableOpacity onPress={onPress} style={styles.link}>
+      <Text style={styles.linkText}>{text}</Text>
+    </TouchableOpacity>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
@@ -50,5 +63,13 @@ const styles = StyleSheet.create({
   },
   text: {
     fontWeight: "500",
+  },
+  link: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 10,
+  },
+  linkText: {
+    fontSize: 12,
   },
 });

@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     height: 30,
   },
   kakaoBackground: {
-    backgroundColor: "#fee500",
+    backgroundColor: "#FEE500",
   },
   kakaoColor: {
     color: "rgba(0, 0, 0, 0.85)",

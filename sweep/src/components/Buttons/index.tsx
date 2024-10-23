@@ -1,4 +1,5 @@
+import { SvgIconButton } from "./IconButton";
 import { KakaoButton, NaverButton } from "./SocialButtons";
-import { TextButton } from "./TextButton";
+import { Link, TextButton } from "./TextButton";
 
-export { KakaoButton, NaverButton, TextButton };
+export { KakaoButton, Link, NaverButton, SvgIconButton, TextButton };
