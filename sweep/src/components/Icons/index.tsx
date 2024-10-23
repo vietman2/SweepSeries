@@ -1,6 +1,6 @@
 import { SvgCssUri } from "react-native-svg/css";
 
 import { AppIcon } from "./AppIcon";
-import { MainLogo } from "./MainLogo";
+import { HorizontalLogo, MainLogo } from "./Logo";
 
-export { AppIcon, MainLogo, SvgCssUri };
+export { AppIcon, HorizontalLogo, MainLogo, SvgCssUri };

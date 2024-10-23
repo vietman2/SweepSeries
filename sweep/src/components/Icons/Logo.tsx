@@ -1,19 +1,36 @@
 import { StyleSheet, View } from "react-native";
 import { SvgCssUri } from "react-native-svg/css";
 
+import { useTheme } from "@contexts/theme";
+
 interface Props {
   size?: number;
-  color?: string;
 }
 
-export function MainLogo({ size = 160, color = "#083F25" }: Readonly<Props>) {
+export function MainLogo({ size = 160 }: Readonly<Props>) {
+  const { theme } = useTheme();
+
   return (
     <View style={styles.container}>
       <SvgCssUri
         uri="https://kr.object.ncloudstorage.com/sweepdev/icons/mainlogo_currentcolor.svg"
         width={size}
         height={size}
-        color={color}
+        color={theme.logo}
+      />
+    </View>
+  );
+}
+
+export function HorizontalLogo({ size = 30 }: Readonly<Props>) {
+  const width = size * 4.5;
+
+  return (
+    <View>
+      <SvgCssUri
+        uri="https://kr.object.ncloudstorage.com/sweepdev/icons/mainlogo_horizontal.svg"
+        width={width}
+        height={size}
       />
     </View>
   );
