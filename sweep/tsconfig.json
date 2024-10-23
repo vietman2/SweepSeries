@@ -9,6 +9,12 @@
       "@components/*": [
         "./src/components/*"
       ],
+      "@contexts/*": [
+        "./src/contexts/*"
+      ],
+      "@fragments/*": [
+        "./src/fragments/*"
+      ],
       "@hooks/*": [
         "./src/hooks/*"
       ],
