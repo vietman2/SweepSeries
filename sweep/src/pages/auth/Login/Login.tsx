@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
   KeyboardAvoidingView,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -14,6 +13,7 @@ import { VerticalDivider } from "@components/Dividers";
 import { LoadingComponent } from "@components/Fallbacks";
 import { MainLogo } from "@components/Icons";
 import { TextInput } from "@components/Inputs";
+import { GSScroll } from "@components/ScrollView";
 import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
 import { ThemeColorType } from "@themes/colors";
@@ -89,8 +89,8 @@ export function Login() {
   };
 
   return (
-    <ScrollView style={styles.mainContainer}>
-      <KeyboardAvoidingView behavior="height">
+    <GSScroll style={styles.mainContainer}>
+      <KeyboardAvoidingView behavior="padding">
         <View style={styles.header}>
           <MainLogo />
           <Text style={styles.headerText}>
@@ -120,11 +120,17 @@ export function Login() {
             <TextButton text="로그인" onPress={handleLogin} fontSize={20} />
           )}
           <View style={styles.troubleshoot}>
-            <TouchableOpacity onPress={handleUsernameFind} testID="find-username">
+            <TouchableOpacity
+              onPress={handleUsernameFind}
+              testID="find-username"
+            >
               <Text style={styles.findButton}>아이디 찾기</Text>
             </TouchableOpacity>
             <VerticalDivider width={1} />
-            <TouchableOpacity onPress={handlePasswordFind} testID="find-password">
+            <TouchableOpacity
+              onPress={handlePasswordFind}
+              testID="find-password"
+            >
               <Text style={styles.findButton}>비밀번호 찾기</Text>
             </TouchableOpacity>
           </View>
@@ -132,7 +138,7 @@ export function Login() {
           <NaverButton onPress={handleNaverLogin} />
         </View>
       </KeyboardAvoidingView>
-    </ScrollView>
+    </GSScroll>
   );
 }
 
