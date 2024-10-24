@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
+import { router } from "expo-router";
 
 import { Link, SvgIconButton } from "@components/Buttons";
 import { Divider } from "@components/Dividers";
@@ -10,7 +11,7 @@ import { MainProfile } from "@fragments/Profile";
 import { ThemeColorType } from "@themes/colors";
 
 export function MyPage() {
-  const { token } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -22,10 +23,15 @@ export function MyPage() {
   const handleAskPress = () => {};
   const handleFAQPress = () => {};
   const handleSettingsPress = () => {};
-  const handleLogoutPress = () => {};
+  const handleLogoutPress = () => {
+    // TODO: integrate logout with the backend
+    logout();
+    if (router.canDismiss()) router.dismissAll();
+    router.replace("/");
+  };
   const handleDeleteAccountPress = () => {};
 
-  if (!token) return <LoginNeeded />;
+  if (!isAuthenticated) return <LoginNeeded />;
 
   return (
     <>
