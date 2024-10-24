@@ -30,9 +30,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   const value = useMemo(() => ({ theme, colorScheme }), [theme, colorScheme]);
 
   return (
-    <ThemeContext.Provider value={value}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 };
 

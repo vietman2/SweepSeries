@@ -1,7 +1,7 @@
 import { View, default as RN } from "react-native";
+import { render } from "@testing-library/react-native";
 
 import { ThemeProvider, useTheme } from "./ThemeContext";
-import { renderWithProviders } from "@utils/test-utils";
 
 jest.unmock("@contexts/theme");
 
@@ -14,7 +14,7 @@ describe("ThemeProvider", () => {
   it("provides light theme correctly", () => {
     jest.spyOn(RN, "useColorScheme").mockReturnValue("light");
 
-    renderWithProviders(
+    render(
       <ThemeProvider>
         <TestComponent />
       </ThemeProvider>
@@ -24,7 +24,7 @@ describe("ThemeProvider", () => {
   it("provides dark theme correctly", () => {
     jest.spyOn(RN, "useColorScheme").mockReturnValue("dark");
 
-    renderWithProviders(
+    render(
       <ThemeProvider>
         <TestComponent />
       </ThemeProvider>
