@@ -1,10 +1,10 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 import axios from "axios";
 
 interface AuthContextType {
   login: () => void;
   logout: () => void;
-  token: string | null;
+  isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -72,10 +72,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const login = () => {
     setToken("token");
   };
+ 
   const logout = () => {
-    console.log("logout");
+    setToken(null);
   };
-  const value = useMemo(() => ({ login, logout, token }), [token]);
+
+  const isAuthenticated = token !== null;
+
+  const value = useMemo(() => ({ login, logout, isAuthenticated }), [token]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
