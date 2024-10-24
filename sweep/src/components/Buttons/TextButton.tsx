@@ -1,5 +1,8 @@
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
+import { useTheme } from "@contexts/theme";
+import { ThemeColorType } from "@themes/colors";
+
 interface Props {
   text: string;
   onPress: () => void;
@@ -17,11 +20,14 @@ export function TextButton({
   color = "#FFFFFF",
   active = true,
 }: Readonly<Props>) {
-  backgroundColor = active ? backgroundColor : "#9D9D9D";
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+
+  backgroundColor = active ? backgroundColor : theme.border;
 
   return (
     <TouchableOpacity
-      style={[styles.container, { backgroundColor }]}
+      style={[styles.container, { backgroundColor, borderColor: color }]}
       onPress={onPress}
       disabled={!active}
     >
@@ -46,6 +52,9 @@ interface LinkProps {
 }
 
 export function Link({ text, onPress }: Readonly<LinkProps>) {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+
   return (
     <TouchableOpacity onPress={onPress} style={styles.link}>
       <Text style={styles.linkText}>{text}</Text>
@@ -53,23 +62,25 @@ export function Link({ text, onPress }: Readonly<LinkProps>) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    borderRadius: 5,
-  },
-  text: {
-    fontWeight: "500",
-  },
-  link: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 10,
-  },
-  linkText: {
-    fontSize: 12,
-  },
-});
+const createStyles = (theme: ThemeColorType) =>
+  StyleSheet.create({
+    container: {
+      alignItems: "center",
+      justifyContent: "center",
+      paddingHorizontal: 10,
+      paddingVertical: 10,
+      borderRadius: 5,
+      borderWidth: 1,
+    },
+    text: {
+      fontWeight: "bold",
+    },
+    link: {
+      alignItems: "center",
+      justifyContent: "center",
+      paddingHorizontal: 10,
+    },
+    linkText: {
+      fontSize: 12,
+    },
+  });
