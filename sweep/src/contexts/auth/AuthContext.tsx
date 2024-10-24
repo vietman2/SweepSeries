@@ -1,5 +1,4 @@
 import { createContext, useContext, useMemo, useState } from "react";
-import axios from "axios";
 
 interface AuthContextType {
   login: () => void;
