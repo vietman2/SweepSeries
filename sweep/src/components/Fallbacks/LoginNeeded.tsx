@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
 
-export default function CommunityScreen() {
+export function LoginNeeded() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Community</Text>
+      <Text style={styles.text}>로그인이 필요한 서비스입니다.</Text>
     </View>
   );
 }
@@ -11,16 +11,11 @@ export default function CommunityScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
     justifyContent: "center",
+    alignItems: "center",
   },
-  title: {
+  text: {
     fontSize: 20,
     fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
   },
 });
