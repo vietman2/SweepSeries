@@ -5,10 +5,12 @@ import { useTheme } from "@contexts/theme";
 
 interface Props {
   size?: number;
+  color?: string;
 }
 
-export function MainLogo({ size = 160 }: Readonly<Props>) {
+export function MainLogo({ size = 160, color }: Readonly<Props>) {
   const { theme } = useTheme();
+  color = color || theme.logo;
 
   return (
     <View style={styles.container}>
@@ -16,7 +18,7 @@ export function MainLogo({ size = 160 }: Readonly<Props>) {
         uri="https://kr.object.ncloudstorage.com/sweepdev/icons/mainlogo_currentcolor.svg"
         width={size}
         height={size}
-        color={theme.logo}
+        color={color}
       />
     </View>
   );

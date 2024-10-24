@@ -8,6 +8,7 @@ interface Props {
   onChangeText: (text: string) => void;
   placeholder?: string;
   secureTextEntry?: boolean;
+  type?: "default" | "email-address";
 }
 
 export function TextInput({
@@ -15,6 +16,7 @@ export function TextInput({
   onChangeText,
   placeholder,
   secureTextEntry = false,
+  type = "default",
 }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -28,6 +30,7 @@ export function TextInput({
           placeholder={placeholder}
           style={styles.textinputarea}
           secureTextEntry={secureTextEntry}
+          keyboardType={type}
         />
       </View>
     </View>
