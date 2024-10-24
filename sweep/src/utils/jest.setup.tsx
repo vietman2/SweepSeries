@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-jest.mock("@assets/images/hong.jpg", () => "hong.jpg");
 jest.mock("react-native-svg/css", () => ({
   SvgCssUri: "SvgCssUri",
 }));
