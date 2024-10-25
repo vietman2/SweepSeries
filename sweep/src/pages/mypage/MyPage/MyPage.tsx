@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
 
-import { Link, SvgIconButton } from "@components/Buttons";
+import { Link, SvgIconButton, TextButton } from "@components/Buttons";
 import { Divider } from "@components/Dividers";
 import { LoginNeeded } from "@components/Fallbacks";
 import { Scroll } from "@components/ScrollView";
@@ -38,6 +38,12 @@ export function MyPage() {
       <Scroll style={styles.container}>
         <View style={styles.profile}>
           <MainProfile />
+          <TextButton
+            text="아카데미/코치로 등록하기"
+            onPress={() => {}}
+            color={theme.primary}
+            backgroundColor={theme.background}
+          />
         </View>
         <Subtitle text="내 활동" />
         <SvgIconButton
@@ -132,25 +138,25 @@ const createStyles = (theme: ThemeColorType) =>
     },
     profile: {
       flex: 1,
-      flexDirection: "row",
       alignItems: "center",
       justifyContent: "center",
-      paddingHorizontal: 5,
-      marginVertical: 20,
+      paddingHorizontal: 8,
+      marginVertical: 24,
+      gap: 8,
     },
     subtitle: {
-      marginTop: 10,
-      marginBottom: 7.5,
+      marginTop: 8,
+      marginBottom: 8,
       fontWeight: "bold",
       fontSize: 20,
     },
     footer: {
       flexDirection: "row",
       justifyContent: "space-between",
-      paddingHorizontal: 20,
-      paddingVertical: 10,
+      paddingHorizontal: 16,
+      paddingVertical: 8,
     },
     dividerWrapper: {
-      marginVertical: 7.5,
+      marginVertical: 8,
     },
   });

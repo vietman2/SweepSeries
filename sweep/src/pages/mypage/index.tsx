@@ -1,3 +1,4 @@
+import { EditProfile } from "./EditProfile/EditProfile";
 import { MyPage } from "./MyPage/MyPage";
 
-export { MyPage };
+export { EditProfile, MyPage };
