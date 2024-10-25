@@ -16,7 +16,7 @@ import { ThemeColorType } from "@themes/colors";
 export function UsernameEmail() {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [error, setError] = useState<string>("");
+  //const [error, setError] = useState<string>("");
 
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -54,7 +54,7 @@ export function UsernameEmail() {
                 placeholder="이메일을 입력해주세요."
                 type="email-address"
               />
-              {error ? <Text style={styles.error}>{error}</Text> : null}
+              {/*error ? <Text style={styles.error}>{error}</Text> : null*/}
             </View>
           </View>
           <TextButton

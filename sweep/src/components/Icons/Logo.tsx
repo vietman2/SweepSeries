@@ -10,7 +10,7 @@ interface Props {
 
 export function MainLogo({ size = 160, color }: Readonly<Props>) {
   const { theme } = useTheme();
-  color = color || theme.logo;
+  color = color ?? theme.logo;
 
   return (
     <View style={styles.container}>

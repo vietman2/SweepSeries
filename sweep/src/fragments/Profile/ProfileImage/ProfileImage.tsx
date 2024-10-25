@@ -11,7 +11,7 @@ interface Props {
   color?: string;
 }
 
-export function ProfileImage({ uri, edit, color }: Props) {
+export function ProfileImage({ uri, edit, color }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
