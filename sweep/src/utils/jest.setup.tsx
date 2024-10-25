@@ -39,11 +39,17 @@ jest.mock("@components/Icons", () => ({
   MainLogo: () => null,
   HorizontalLogo: () => null,
 }));
-jest.mock("@components/Inputs", () => ({
-  TextInput: () => null,
-}));
+jest.mock("@components/Inputs", () => {
+  const { TextInput } = jest.requireActual("react-native");
+
+  return {
+    TextInput: ({ placeholder }: { placeholder: string }) => (
+      <TextInput testID={placeholder} />
+    ),
+  }
+});
 jest.mock("@components/ScrollView", () => ({
-  GSScroll: () => null,
+  GSScroll: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   Scroll: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 jest.mock("@contexts/auth", () => ({
