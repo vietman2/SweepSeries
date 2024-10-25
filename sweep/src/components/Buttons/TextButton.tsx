@@ -67,9 +67,9 @@ const createStyles = (theme: ThemeColorType) =>
     container: {
       alignItems: "center",
       justifyContent: "center",
-      paddingHorizontal: 10,
-      paddingVertical: 10,
-      borderRadius: 5,
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+      borderRadius: 8,
       borderWidth: 1,
     },
     text: {

@@ -8,7 +8,7 @@ interface Props {
   onChangeText: (text: string) => void;
   placeholder?: string;
   secureTextEntry?: boolean;
-  type?: "default" | "email-address";
+  type?: "default" | "email-address" | "number-pad";
 }
 
 export function TextInput({
