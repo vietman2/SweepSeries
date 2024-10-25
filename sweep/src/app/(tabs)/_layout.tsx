@@ -1,4 +1,3 @@
-import React from 'react';
 import { Tabs } from 'expo-router';
 
 import { AppIcon } from '@components/Icons';
@@ -36,8 +35,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="mypage"
         options={{
-          title: "마이",
+          title: "MY",
           tabBarIcon: ({ color }) => <AppIcon icon="person-circle" color={color} />,
+          headerShown: false,
         }}
       />
     </Tabs>
