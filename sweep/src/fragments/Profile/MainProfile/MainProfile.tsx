@@ -1,4 +1,6 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 
 import { AppIcon } from "@components/Icons";
 import { useTheme } from "@contexts/theme";
@@ -8,20 +10,34 @@ export function MainProfile() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  const handleEditProfile = () => {
+    router.push("/mypage/editprofile");
+  };
+
   return (
     <View>
       <View style={styles.wrapper}>
         <Image
-          source={require("@assets/images/hong.jpg")}
+          src="https://kr.object.ncloudstorage.com/sweepdev/test_images/hong.jpg"
           style={styles.image}
         />
       </View>
-      <View style={styles.nickname}>
+      <LinearGradient
+        colors={["#00BF60", "#00592D"]}
+        start={[0, 1]}
+        end={[1, 0]}
+        style={styles.nickname}
+      >
         <Text style={styles.nicknameText}>홍길동</Text>
-      </View>
-      <View style={styles.edit}>
+      </LinearGradient>
+      <TouchableOpacity
+        style={styles.edit}
+        onPress={handleEditProfile}
+        activeOpacity={0.75}
+        testID="edit-profile"
+      >
         <AppIcon icon="pencil" size={24} color={theme.primary} />
-      </View>
+      </TouchableOpacity>
     </View>
   );
 }
