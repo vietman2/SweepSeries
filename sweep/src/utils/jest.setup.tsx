@@ -83,11 +83,26 @@ jest.mock("@components/Search", () => ({
     return <TouchableOpacity onPress={onSubmit} testID="search" />;
   },
 }));
-jest.mock("@components/ScrollView", () => ({
-  GSScroll: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  Scroll: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  ScrollView: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-}));
+jest.mock("@components/ScrollView", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+
+  return {
+    GSScroll: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+    Scroll: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+    ScrollView: ({
+      children,
+      onRefresh,
+    }: {
+      children: React.ReactNode;
+      onRefresh: () => void;
+    }) => (
+      <>
+        {children}
+        <TouchableOpacity onPress={onRefresh} testID="refresh" />
+      </>
+    ),
+  };
+});
 jest.mock("@contexts/auth", () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
