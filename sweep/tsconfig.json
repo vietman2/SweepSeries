@@ -18,8 +18,14 @@
       "@hooks/*": [
         "./src/hooks/*"
       ],
+      "@models/*": [
+        "./src/constants/models/*"
+      ],
       "@pages/*": [
         "./src/pages/*"
+      ],
+      "@testdata/*": [
+        "./src/constants/testdata/*"
       ],
       "@themes/*": [
         "./src/constants/themes/*"
