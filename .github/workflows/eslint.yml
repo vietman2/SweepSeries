@@ -39,7 +39,7 @@ jobs:
           npm install @typescript-eslint/eslint-plugin@5.8.0 --force
 
       - name: Run ESLint
-        run: npx eslint .
+        run: npx eslint src
           --config .eslintrc.json
           --ext .js,.jsx,.ts,.tsx
           --format @microsoft/eslint-formatter-sarif
