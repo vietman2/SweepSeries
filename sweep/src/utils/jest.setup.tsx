@@ -46,11 +46,19 @@ jest.mock("@components/Inputs", () => {
     TextInput: ({ placeholder }: { placeholder: string }) => (
       <TextInput testID={placeholder} />
     ),
-  }
+  };
 });
+jest.mock("@components/Search", () => ({
+  Searchbar: ({ onSubmit }: { onSubmit: () => void }) => {
+    const { TouchableOpacity } = jest.requireActual("react-native");
+
+    return <TouchableOpacity onPress={onSubmit} testID="search" />;
+  },
+}));
 jest.mock("@components/ScrollView", () => ({
   GSScroll: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   Scroll: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  ScrollView: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 jest.mock("@contexts/auth", () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => (
