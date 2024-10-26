@@ -1,8 +1,8 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { PostContent } from "./PostContent";
-import { samplePostDetail } from "@testdata/community";
 import * as AlertAPI from "@services/alert/alert";
+import { samplePostDetail } from "@testdata/community";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("../Report/ReportModal", () => ({
