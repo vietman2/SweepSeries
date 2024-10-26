@@ -1,4 +1,5 @@
-import { TagType, PostSimpleType } from "@models/community";
+import { sampleComments } from "./comments";
+import { TagType, PostSimpleType, PostDetailType } from "@models/community";
 
 export const sampleTags: TagType[] = [
   {
@@ -63,7 +64,8 @@ export const samplePosts: PostSimpleType[] = [
     author_uuid: "admin_uuid",
     author_nickname: "야구하구",
     title: "야구 규칙 중에서 헷갈리는 부분 질문드립니다",
-    content: "최근 경기에서 규칙을 잘못 이해해서 헷갈렸던 장면이 있었어요ㅠㅠ\n\n타자가 공을 맞았을 때 어떻게 되는지 규정 자세히 아시는 분 있나요?",
+    content:
+      "최근 경기에서 규칙을 잘못 이해해서 헷갈렸던 장면이 있었어요ㅠㅠ\n\n타자가 공을 맞았을 때 어떻게 되는지 규정 자세히 아시는 분 있나요?",
     tag: sampleTags[1],
     image: null,
     created_at: "2024-10-21",
@@ -73,3 +75,22 @@ export const samplePosts: PostSimpleType[] = [
     is_liked: true,
   },
 ];
+
+export const samplePostDetail: PostDetailType = {
+  id: 1,
+  author_uuid: "uuid",
+  author_nickname: "작성자",
+  title: "야구 장비 추천 좀 부탁드립니다!",
+  content:
+    "야구 보러 갈 때마다 경기장 음식을 꼭 먹어야하는데, 다들 경기장에서 자주 먹는 음식이 있나요? 추천해주시면 다음에 시도해보려고요!",
+  tag: sampleTags[0],
+  images: [],
+  forum: "덕아웃",
+  created_at: "5분 전",
+  updated_at: "5분 전",
+  num_comments: 1,
+  num_likes: 1,
+  num_clicks: 1,
+  is_liked: true,
+  comments: sampleComments,
+};

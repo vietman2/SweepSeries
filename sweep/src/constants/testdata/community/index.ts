@@ -1,3 +1,3 @@
-import { samplePosts, sampleTags } from "./posts";
+import { samplePostDetail, samplePosts, sampleTags } from "./posts";
 
-export { samplePosts, sampleTags };
+export { samplePostDetail, samplePosts, sampleTags };
