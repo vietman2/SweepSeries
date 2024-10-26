@@ -31,6 +31,7 @@ jest.mock("@components/Dividers", () => ({
   VerticalDivider: () => null,
 }));
 jest.mock("@components/Fallbacks", () => ({
+  ErrorPage: () => null,
   LoadingComponent: () => null,
   LoginNeeded: () => null,
 }));
@@ -48,6 +49,9 @@ jest.mock("@components/Inputs", () => {
     ),
   };
 });
+jest.mock("@components/Menus", () => ({
+  PopupMenu: () => null,
+}));
 jest.mock("@components/Search", () => ({
   Searchbar: ({ onSubmit }: { onSubmit: () => void }) => {
     const { TouchableOpacity } = jest.requireActual("react-native");
