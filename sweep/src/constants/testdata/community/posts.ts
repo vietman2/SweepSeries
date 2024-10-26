@@ -2,7 +2,7 @@ import { TagType, PostSimpleType } from "@models/community";
 
 export const sampleTags: TagType[] = [
   {
-    id: 2,
+    id: 1,
     forum_id: 1,
     name: "KBO",
     color: "#002561",
@@ -10,9 +10,17 @@ export const sampleTags: TagType[] = [
     icon: "https://kr.object.ncloudstorage.com/sweepdev/community/tags/KBO.svg",
   },
   {
-    id: 3,
+    id: 2,
     forum_id: 1,
     name: "MLB",
+    color: "#ffffff",
+    bgcolor: "#002d72",
+    icon: "https://kr.object.ncloudstorage.com/sweepdev/community/tags/MLB.svg",
+  },
+  {
+    id: 3,
+    forum_id: 2,
+    name: "용병모집",
     color: "#ffffff",
     bgcolor: "#002d72",
     icon: "https://kr.object.ncloudstorage.com/sweepdev/community/tags/MLB.svg",
