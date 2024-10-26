@@ -36,16 +36,4 @@ export const sampleComments: CommentType[] = [
     is_liked: true,
     is_my_comment: true,
   },
-  {
-    id: 2,
-    commenter_uuid: "uuid",
-    commenter_nickname: "댓글쓴이",
-    content: "댓글 내용입니다.",
-    created_at: "5분 전",
-    num_likes: 1,
-    num_recomments: 0,
-    recomments: [],
-    is_liked: false,
-    is_my_comment: false,
-  },
 ];
