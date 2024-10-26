@@ -49,6 +49,7 @@ export function PostList({ mode }: Readonly<Props>) {
   const fetchPosts = async () => {
     setLoading(true);
     // TODO: fetch posts from the backend
+    console.log(mode); // 덕아웃, 드래프트, 마켓
     if (!selectedTag) setPosts(samplePosts);
     else if (selectedTag === sampleTags[0]) {
       setPosts([samplePosts[0]]);
