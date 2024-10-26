@@ -58,7 +58,10 @@ export function Comment({
   const handleReportSubmit = async (
     selectedReason: string,
     detail: string
-  ) => {}; // TODO: integrate with the backend
+  ) => {
+    // TODO: integrate with the backend
+    console.log(selectedReason, detail);
+  };
 
   const handleRecommentPress = () => {
     setSelected(true);

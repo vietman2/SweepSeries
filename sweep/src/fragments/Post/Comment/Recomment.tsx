@@ -36,7 +36,10 @@ export function Recomment({ recomment, refresh }: Readonly<Props>) {
     setLike(!like);
   };
   const removeRecomment = async () => {}; // TODO: integrate with the backend
-  const handleReportSubmit = async () => {}; // TODO: integrate with the backend
+  const handleReportSubmit = async () => {
+    // TODO: integrate with the backend
+    refresh();
+  };
 
   const handleReportPress = () => {
     setModalVisible(true);
