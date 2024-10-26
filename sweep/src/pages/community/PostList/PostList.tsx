@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { router } from "expo-router";
 
-import { Searchbar } from "@components/Search";
+import { SvgIconButton } from "@components/Buttons";
 import { Scroll, ScrollView } from "@components/ScrollView";
+import { Searchbar } from "@components/Search";
 import { useTheme } from "@contexts/theme";
 import { PostSimple, Tag } from "@fragments/Post";
 import { PostSimpleType, TagType } from "@models/community";
@@ -29,7 +31,12 @@ export function PostList({ mode }: Readonly<Props>) {
     setRefreshCount(refreshCount + 1);
   };
 
-  const handlePostPress = async (post: PostSimpleType) => {};
+  const handlePostPress = async (post: PostSimpleType) => {
+    router.push({
+      pathname: "/community/[id]",
+      params: { id: post.id },
+    });
+  };
 
   const handleTagPress = (tag: TagType) => {
     if (selectedTag && selectedTag.id === tag.id) {
@@ -48,8 +55,12 @@ export function PostList({ mode }: Readonly<Props>) {
     } else {
       setPosts([samplePosts[1], samplePosts[2]]);
     }
-    setTagChoices(sampleTags);
+    setTagChoices([sampleTags[0], sampleTags[1]]);
     setLoading(false);
+  };
+
+  const handleCreatePost = () => {
+    // router.push("/community/create");
   };
 
   useEffect(() => {
@@ -57,44 +68,55 @@ export function PostList({ mode }: Readonly<Props>) {
   }, [refreshCount, selectedTag]);
 
   return (
-    <ScrollView refreshing={loading} onRefresh={handleRefresh}>
-      <View style={styles.container}>
-        <View style={styles.horizontal}>
-          <View style={styles.searchbar}>
-            <Searchbar
-              placeholder="제목, 내용으로 검색하세요"
-              value={searchQuery}
-              onChange={setSearchQuery}
-              onSubmit={handleRefresh}
-            />
-          </View>
-        </View>
-        <Scroll horizontal style={styles.tags}>
-          {tagChoices.map((tag) => (
-            <TouchableOpacity
-              onPress={() => handleTagPress(tag)}
-              testID={tag.name}
-              key={tag.id}
-            >
-              <Tag
-                tag={tag}
-                type={2}
-                selected={selectedTag ? tag.id === selectedTag.id : false}
+    <>
+      <ScrollView refreshing={loading} onRefresh={handleRefresh}>
+        <View style={styles.container}>
+          <View style={styles.horizontal}>
+            <View style={styles.searchbar}>
+              <Searchbar
+                placeholder="제목, 내용으로 검색하세요"
+                value={searchQuery}
+                onChange={setSearchQuery}
+                onSubmit={handleRefresh}
               />
+            </View>
+          </View>
+          <Scroll horizontal style={styles.tags}>
+            {tagChoices.map((tag) => (
+              <TouchableOpacity
+                onPress={() => handleTagPress(tag)}
+                testID={tag.name}
+                key={tag.id}
+              >
+                <Tag
+                  tag={tag}
+                  type={2}
+                  selected={selectedTag ? tag.id === selectedTag.id : false}
+                />
+              </TouchableOpacity>
+            ))}
+          </Scroll>
+          {posts.map((post) => (
+            <TouchableOpacity
+              onPress={() => handlePostPress(post)}
+              key={post.id}
+              testID={`post-id-${post.id}`}
+            >
+              <PostSimple post={post} />
             </TouchableOpacity>
           ))}
-        </Scroll>
-        {posts.map((post) => (
-          <TouchableOpacity
-            onPress={() => handlePostPress(post)}
-            key={post.id}
-            testID={`post-id-${post.id}`}
-          >
-            <PostSimple post={post} />
-          </TouchableOpacity>
-        ))}
+        </View>
+      </ScrollView>
+      <View style={styles.button}>
+        <SvgIconButton
+          icon="pencil"
+          text="글쓰기"
+          color={theme.background}
+          backgroundColor={theme.primary}
+          onPress={handleCreatePost}
+        />
       </View>
-    </ScrollView>
+    </>
   );
 }
 
@@ -124,5 +146,10 @@ const createStyles = (theme: ThemeColorType) =>
       marginLeft: -4,
       paddingVertical: 8,
       paddingHorizontal: 8,
+    },
+    button: {
+      position: "absolute",
+      bottom: 20,
+      right: 20,
     },
   });

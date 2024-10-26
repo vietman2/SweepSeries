@@ -3,6 +3,11 @@ import { fireEvent } from "@testing-library/react-native";
 import { PostList } from "./PostList";
 import { renderWithProviders } from "@utils/test-utils";
 
+jest.mock("expo-router", () => ({
+  router: {
+    push: jest.fn(),
+  },
+}));
 jest.mock("@fragments/Post", () => ({
   PostSimple: () => null,
   Tag: () => null,
