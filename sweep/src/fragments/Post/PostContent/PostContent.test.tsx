@@ -18,7 +18,9 @@ describe("<PostContent />", () => {
       .spyOn(AlertAPI, "alert")
       .mockImplementation(
         (title: string, message: string, onPress?: () => void) => {
-          onPress && onPress();
+          if (onPress) {
+            onPress();
+          }
         }
       );
   });

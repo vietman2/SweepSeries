@@ -15,7 +15,9 @@ describe("<Recomment />", () => {
       .spyOn(AlertAPI, "alert")
       .mockImplementation(
         (title: string, message: string, onPress?: () => void) => {
-          onPress && onPress();
+          if (onPress) {
+            onPress();
+          }
         }
       );
   });
@@ -28,7 +30,7 @@ describe("<Recomment />", () => {
     fireEvent.press(getByTestId("수정하기"));
     fireEvent.press(getByTestId("close"));
   });
-  
+
   it("handles report", () => {
     const { getByTestId } = renderWithProviders(
       <Recomment recomment={sampleRecomments[0]} refresh={jest.fn()} />
@@ -36,7 +38,7 @@ describe("<Recomment />", () => {
 
     fireEvent.press(getByTestId("신고하기"));
   });
-  
+
   it("handles delete", () => {
     const { getByTestId } = renderWithProviders(
       <Recomment recomment={sampleRecomments[0]} refresh={jest.fn()} />

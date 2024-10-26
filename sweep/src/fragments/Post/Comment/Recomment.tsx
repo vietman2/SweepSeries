@@ -31,7 +31,10 @@ export function Recomment({ recomment, refresh }: Readonly<Props>) {
   const styles = createStyles(theme);
 
   const patchRecomment = async () => {}; // TODO: integrate with the backend
-  const handleLike = async () => {}; // TODO: integrate with the backend
+  const handleLike = async () => {
+    // TODO: integrate with the backend
+    setLike(!like);
+  };
   const removeRecomment = async () => {}; // TODO: integrate with the backend
   const handleReportSubmit = async () => {}; // TODO: integrate with the backend
 
@@ -67,6 +70,7 @@ export function Recomment({ recomment, refresh }: Readonly<Props>) {
         { label: "차단하기", onPress: () => {} },
       ]);
     }
+    setNumLikes(recomment.num_likes);
   }, []);
 
   return (

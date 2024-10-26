@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+//import { useLocalSearchParams } from "expo-router";
 
 import { ErrorPage } from "@components/Fallbacks";
 import { AppIcon } from "@components/Icons";
@@ -20,7 +20,7 @@ import { ThemeColorType } from "@themes/colors";
 import { samplePostDetail } from "@testdata/community";
 
 export function PostDetail() {
-  const { id } = useLocalSearchParams();
+//  const { id } = useLocalSearchParams();
   const [post, setPost] = useState<PostDetailType>();
   const [newComment, setNewComment] = useState<string>("");
   const [commentMode, setCommentMode] = useState<boolean>(true);

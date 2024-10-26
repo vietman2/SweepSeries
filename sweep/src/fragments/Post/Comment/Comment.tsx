@@ -48,7 +48,10 @@ export function Comment({
     setModalVisible(true);
   };
 
-  const handleCommentLike = () => {}; // TODO: integrate with the backend
+  const handleCommentLike = () => {
+    // TODO: integrate with the backend
+    setLike(!like);
+  };
   const postRecomment = async () => {}; // TODO: integrate with the backend
   const removeComment = async () => {}; // TODO: integrate with the backend
   const patchComment = () => {}; // TODO: integrate with the backend
@@ -86,6 +89,7 @@ export function Comment({
         { label: "차단하기", onPress: () => {} },
       ]);
     }
+    setNumLikes(comment.num_likes);
   }, []);
 
   useEffect(() => {
