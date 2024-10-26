@@ -31,6 +31,7 @@ jest.mock("@components/Dividers", () => ({
   VerticalDivider: () => null,
 }));
 jest.mock("@components/Fallbacks", () => ({
+  ErrorPage: () => null,
   LoadingComponent: () => null,
   LoginNeeded: () => null,
 }));
@@ -46,12 +47,62 @@ jest.mock("@components/Inputs", () => {
     TextInput: ({ placeholder }: { placeholder: string }) => (
       <TextInput testID={placeholder} />
     ),
-  }
+  };
 });
-jest.mock("@components/ScrollView", () => ({
-  GSScroll: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  Scroll: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+jest.mock("@components/Menus", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+
+  return {
+    PopupMenu: ({
+      items,
+      children,
+    }: {
+      items: {
+        label: string;
+        onPress: () => void;
+      }[];
+      children: React.ReactNode;
+    }) => (
+      <>
+        {children}
+        {items.map((item) => (
+          <TouchableOpacity
+            onPress={item.onPress}
+            testID={item.label}
+            key={item.label}
+          />
+        ))}
+      </>
+    ),
+  };
+});
+jest.mock("@components/Search", () => ({
+  Searchbar: ({ onSubmit }: { onSubmit: () => void }) => {
+    const { TouchableOpacity } = jest.requireActual("react-native");
+
+    return <TouchableOpacity onPress={onSubmit} testID="search" />;
+  },
 }));
+jest.mock("@components/ScrollView", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+
+  return {
+    GSScroll: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+    Scroll: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+    ScrollView: ({
+      children,
+      onRefresh,
+    }: {
+      children: React.ReactNode;
+      onRefresh: () => void;
+    }) => (
+      <>
+        {children}
+        <TouchableOpacity onPress={onRefresh} testID="refresh" />
+      </>
+    ),
+  };
+});
 jest.mock("@contexts/auth", () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>

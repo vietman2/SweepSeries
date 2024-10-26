@@ -21,9 +21,9 @@ export const lightColors: ThemeColorType = {
 export const darkColors: ThemeColorType = {
   primary: "#14863E",
   secondary: "#FC6900",
-  background: "#262626",
-  border: "#9D9D9D",
-  logo: "#FFFFFF",
-  highEmphasis: "#F5F5F5",
-  lowEmphasis: "#D9D9D9",
+  background: "#FFFFFF", // #262626
+  border: "#D9D9D9", // #9D9D9D
+  logo: "#083F25",
+  highEmphasis: "#262626",
+  lowEmphasis: "#9D9D9D",
 };

@@ -133,7 +133,7 @@ const createStyles = (theme: ThemeColorType) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      paddingHorizontal: 20,
+      paddingHorizontal: 16,
       backgroundColor: theme.background,
     },
     profile: {

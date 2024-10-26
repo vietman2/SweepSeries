@@ -30,13 +30,16 @@ export default function TabLayout() {
         options={{
           title: "커뮤니티",
           tabBarIcon: ({ color }) => <AppIcon icon="people" color={color} />,
+          headerShown: false,
         }}
       />
       <Tabs.Screen
         name="mypage"
         options={{
           title: "MY",
-          tabBarIcon: ({ color }) => <AppIcon icon="person-circle" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <AppIcon icon="person-circle" color={color} />
+          ),
           headerShown: false,
         }}
       />
