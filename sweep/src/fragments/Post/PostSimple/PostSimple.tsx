@@ -37,19 +37,19 @@ export function PostSimple({ post }: Readonly<Props>) {
       <View style={styles.bottomBar}>
         <View style={styles.horizontal}>
           <View style={styles.placeholder} />
-          <Text style={styles.grayText}>{post.author_nickname}</Text>
+          <Text style={styles.authorText}>{post.author_nickname}</Text>
         </View>
         <View style={styles.horizontal}>
           <View style={styles.count}>
-            <AppIcon icon="eye" size={20} color={theme.lowEmphasis} />
+            <AppIcon icon="eye" size={18} color={theme.lowEmphasis} />
             <Text style={styles.countText}>{post.num_clicks}</Text>
           </View>
           <View style={styles.count}>
-            <AppIcon
-              icon="chat-round"
-              size={20}
-              color={theme.lowEmphasis}
-            />
+            <AppIcon icon="heart" size={16} color={theme.lowEmphasis} />
+            <Text style={styles.countText}>{post.num_likes}</Text>
+          </View>
+          <View style={styles.count}>
+            <AppIcon icon="chat-round" size={18} color={theme.lowEmphasis} />
             <Text style={styles.countText}>{post.num_comments}</Text>
           </View>
         </View>
@@ -93,6 +93,7 @@ const createStyles = (theme: ThemeColorType) =>
     horizontal: {
       flexDirection: "row",
       alignItems: "center",
+      gap: 4,
     },
     placeholder: {
       width: 18,
@@ -112,10 +113,13 @@ const createStyles = (theme: ThemeColorType) =>
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "flex-end",
-      marginLeft: 10,
+      marginLeft: 8,
+      gap: 4,
     },
     countText: {
       color: "gray",
-      marginLeft: 2.5,
+    },
+    authorText: {
+      color: theme.highEmphasis,
     },
   });
