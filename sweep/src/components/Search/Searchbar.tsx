@@ -44,7 +44,7 @@ const createStyles = (theme: ThemeColorType) =>
       paddingVertical: 8,
       borderWidth: 1,
       borderRadius: 8,
-      borderColor: theme.lowEmphasis,
+      borderColor: theme.border,
     },
     input: {
       flex: 1,
