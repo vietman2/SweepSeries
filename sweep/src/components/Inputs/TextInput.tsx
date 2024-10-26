@@ -9,6 +9,7 @@ interface Props {
   placeholder?: string;
   secureTextEntry?: boolean;
   type?: "default" | "email-address" | "number-pad";
+  multiline?: boolean;
 }
 
 export function TextInput({
@@ -17,6 +18,7 @@ export function TextInput({
   placeholder,
   secureTextEntry = false,
   type = "default",
+  multiline = false,
 }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -32,6 +34,7 @@ export function TextInput({
           style={styles.textinputarea}
           secureTextEntry={secureTextEntry}
           keyboardType={type}
+          multiline={multiline}
         />
       </View>
     </View>
