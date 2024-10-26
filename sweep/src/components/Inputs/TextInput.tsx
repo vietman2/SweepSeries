@@ -28,6 +28,7 @@ export function TextInput({
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
+          placeholderTextColor={theme.lowEmphasis}
           style={styles.textinputarea}
           secureTextEntry={secureTextEntry}
           keyboardType={type}
