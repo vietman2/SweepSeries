@@ -49,9 +49,33 @@ jest.mock("@components/Inputs", () => {
     ),
   };
 });
-jest.mock("@components/Menus", () => ({
-  PopupMenu: () => null,
-}));
+jest.mock("@components/Menus", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+
+  return {
+    PopupMenu: ({
+      items,
+      children,
+    }: {
+      items: {
+        label: string;
+        onPress: () => void;
+      }[];
+      children: React.ReactNode;
+    }) => (
+      <>
+        {children}
+        {items.map((item) => (
+          <TouchableOpacity
+            onPress={item.onPress}
+            testID={item.label}
+            key={item.label}
+          />
+        ))}
+      </>
+    ),
+  };
+});
 jest.mock("@components/Search", () => ({
   Searchbar: ({ onSubmit }: { onSubmit: () => void }) => {
     const { TouchableOpacity } = jest.requireActual("react-native");
