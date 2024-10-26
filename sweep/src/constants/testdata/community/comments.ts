@@ -1,6 +1,6 @@
 import { CommentType, ReCommentType } from "@models/community";
 
-const sampleRecomments: ReCommentType[] = [
+export const sampleRecomments: ReCommentType[] = [
   {
     id: 1,
     commenter_uuid: "uuid",
@@ -9,6 +9,7 @@ const sampleRecomments: ReCommentType[] = [
     created_at: "5분 전",
     num_likes: 1,
     is_liked: false,
+    is_my_recomment: true,
   },
   {
     id: 2,
@@ -18,6 +19,7 @@ const sampleRecomments: ReCommentType[] = [
     created_at: "5분 전",
     num_likes: 1,
     is_liked: false,
+    is_my_recomment: false,
   },
 ];
 
@@ -32,6 +34,7 @@ export const sampleComments: CommentType[] = [
     num_recomments: 2,
     recomments: sampleRecomments,
     is_liked: true,
+    is_my_comment: true,
   },
   {
     id: 2,
@@ -43,5 +46,6 @@ export const sampleComments: CommentType[] = [
     num_recomments: 0,
     recomments: [],
     is_liked: false,
+    is_my_comment: false,
   },
 ];

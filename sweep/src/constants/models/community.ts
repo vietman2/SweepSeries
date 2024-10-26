@@ -44,6 +44,7 @@ export type PostDetailType = {
   num_likes: number;
 
   is_liked: boolean;
+  is_my_post: boolean;
 
   created_at: string;
   updated_at: string;
@@ -61,6 +62,7 @@ export type CommentType = {
   recomments: ReCommentType[];
 
   is_liked: boolean;
+  is_my_comment: boolean;
 };
 
 export type ReCommentType = {
@@ -72,4 +74,5 @@ export type ReCommentType = {
   num_likes: number;
 
   is_liked: boolean;
+  is_my_recomment: boolean;
 };
