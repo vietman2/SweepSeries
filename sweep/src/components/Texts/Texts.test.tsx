@@ -1,9 +1,15 @@
-import { Callout, InputTitle } from "./Texts";
+import { CalloutLarge, CalloutSmall, InputTitle } from "./Texts";
 import { renderWithProviders } from "@utils/test-utils";
 
-describe("<Callout />", () => {
+describe("<CalloutLarge />", () => {
   it("should render without subtitle", () => {
-    renderWithProviders(<Callout title="Title" />);
+    renderWithProviders(<CalloutLarge text="Title" />);
+  });
+});
+
+describe("<CalloutSmall />", () => {
+  it("should render without subtitle", () => {
+    renderWithProviders(<CalloutSmall text="Title" />);
   });
 });
 
