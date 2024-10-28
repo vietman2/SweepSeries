@@ -3,20 +3,32 @@ import { router } from "expo-router";
 
 import { TextButton } from "@components/Buttons";
 import { AppIcon } from "@components/Icons";
+import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
 import { ThemeColorType } from "@themes/colors";
 
 export function MainPage() {
+  const { login } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  const handleSignup = () => {
+  const handleProLogin = () => {
+    login("pro");
+    router.replace("/home");
+  };
+
+  const handleNormalLogin = () => {
+    login("normal");
+    router.replace("/home");
+  };
+
+  /*const handleSignup = () => {
     router.push("/signup");
-  }
+  };
 
   const handleLogin = () => {
     router.push("/login");
-  };
+  };*/
 
   const handleGuest = () => {
     router.replace("/home");
@@ -25,7 +37,7 @@ export function MainPage() {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        <TouchableOpacity style={styles.button} onPress={handleSignup}>
+        <TouchableOpacity style={styles.button} onPress={handleProLogin}>
           <AppIcon icon="calendar" color={theme.primary} size={50} />
           <Text>일하러 가기</Text>
         </TouchableOpacity>
@@ -35,19 +47,20 @@ export function MainPage() {
         style={styles.image}
       />
       <View style={styles.wrapper}>
-        <TouchableOpacity style={styles.button} onPress={handleSignup}>
+        <TouchableOpacity style={styles.button} onPress={handleNormalLogin}>
           <AppIcon icon="baseball" color={theme.primary} size={50} />
           <Text>야구하러 가기</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.footer}>
+        {/*
         <TextButton
           text="로그인"
           onPress={handleLogin}
           color={theme.primary}
           backgroundColor={theme.background}
           fontSize={18}
-        />
+        />*/}
         <TextButton
           text="비회원으로 둘러보기"
           onPress={handleGuest}

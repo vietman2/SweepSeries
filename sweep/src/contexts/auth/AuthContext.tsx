@@ -1,8 +1,9 @@
 import { createContext, useContext, useMemo, useState } from "react";
 
 interface AuthContextType {
-  login: () => void;
+  login: (mode: "pro" | "normal" | "guest") => void;
   logout: () => void;
+  mode: "pro" | "normal" | "guest";
   isAuthenticated: boolean;
 }
 
@@ -11,6 +12,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const [mode, setMode] = useState<"pro" | "normal" | "guest">("guest");
   const [token, setToken] = useState<string | null>(null);
   /*
     useEffect(() => {
@@ -68,7 +70,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.removeItem("user_id");
   };
 */
-  const login = () => {
+  const login = (mode: "pro" | "normal" | "guest") => {
+    setMode(mode);
     setToken("token");
   };
  
@@ -78,7 +81,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const isAuthenticated = token !== null;
 
-  const value = useMemo(() => ({ login, logout, isAuthenticated }), [token]);
+  const value = useMemo(() => ({ mode, login, logout, isAuthenticated }), [mode, token]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

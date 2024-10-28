@@ -65,7 +65,7 @@ export function Login() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsLoading(false);
 
-    login();
+    login("normal"); // TODO: replace this with actual login
     router.dismissAll();
     router.replace("/home");
   };

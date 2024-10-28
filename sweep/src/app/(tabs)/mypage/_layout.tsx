@@ -6,6 +6,7 @@ import { useTheme } from "@contexts/theme";
 
 export default function MyPageLayout() {
   const { theme } = useTheme();
+
   const handleBackPress = () => {
     router.back();
   };

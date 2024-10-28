@@ -6,6 +6,7 @@ import { useTheme } from "@contexts/theme";
 
 export default function CommunityLayout() {
   const { theme } = useTheme();
+
   const handleBackPress = () => {
     router.back();
   };
