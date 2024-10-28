@@ -126,12 +126,16 @@ jest.mock("@components/Search", () => ({
 jest.mock("@components/Sorts", () => ({
   Sort: () => null,
 }));
-jest.mock("@components/Texts", () => ({
-  InputTitle: () => null,
-  CalloutSmall: () => null,
-  CalloutLarge: () => null,
-  Text: () => null,
-}));
+jest.mock("@components/Texts", () => {
+  const { Text } = jest.requireActual("react-native");
+
+  return {
+    InputTitle: () => null,
+    CalloutSmall: () => null,
+    CalloutLarge: () => null,
+    Text,
+  };
+});
 jest.mock("@contexts/auth", () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
