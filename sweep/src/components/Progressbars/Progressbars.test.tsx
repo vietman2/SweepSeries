@@ -4,6 +4,7 @@ import { renderWithProviders } from "@utils/test-utils";
 jest.mock("expo-linear-gradient", () => ({
   LinearGradient: "LinearGradient",
 }));
+jest.unmock("@components/Progressbars");
 
 describe("<Progressbar />", () => {
   it("renders correctly", () => {
