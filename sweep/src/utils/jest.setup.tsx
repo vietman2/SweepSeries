@@ -123,9 +123,6 @@ jest.mock("@components/Search", () => ({
     return <TouchableOpacity onPress={onSubmit} testID="search" />;
   },
 }));
-jest.mock("@components/Sorts", () => ({
-  Sort: () => null,
-}));
 jest.mock("@components/Texts", () => {
   const { Text } = jest.requireActual("react-native");
 
