@@ -10,7 +10,7 @@ const TestComponent = () => {
 
   const handleLogin = () => {
     login("pro");
-  }
+  };
 
   return (
     <>
