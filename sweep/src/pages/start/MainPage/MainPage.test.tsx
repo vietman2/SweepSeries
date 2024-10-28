@@ -15,7 +15,8 @@ describe("<MainPage>", () => {
     const { getByTestId, getByText } = renderWithProviders(<MainPage />);
 
     fireEvent.press(getByText("일하러 가기"));
-    fireEvent.press(getByTestId("로그인"));
+    fireEvent.press(getByText("야구하러 가기"));
+    //fireEvent.press(getByTestId("로그인"));
     fireEvent.press(getByTestId("비회원으로 둘러보기"));
   });
 });
