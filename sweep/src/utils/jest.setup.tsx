@@ -39,13 +39,7 @@ jest.mock("@components/Filters", () => {
   const { TouchableOpacity } = jest.requireActual("react-native");
 
   return {
-    Filters: ({
-      selectedFilter,
-      onSelect,
-    }: {
-      selectedFilter: string;
-      onSelect: (filter: string) => void;
-    }) => {
+    Filters: ({ onSelect }: { onSelect: (filter: string) => void }) => {
       return (
         <TouchableOpacity onPress={() => onSelect("asdf")} testID="filter" />
       );
