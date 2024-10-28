@@ -1,14 +1,13 @@
 import { Tabs } from 'expo-router';
 
 import { AppIcon } from '@components/Icons';
-import { useClientOnlyValue } from '@hooks/useClientOnlyValue';
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: "#14863E",
-        headerShown: useClientOnlyValue(false, true),
+        headerShown: false,
       }}
     >
       <Tabs.Screen
@@ -19,10 +18,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="steal"
+        name="calendar"
         options={{
-          title: "스틸",
-          tabBarIcon: ({ color }) => <AppIcon icon="film" color={color} />,
+          title: "캘린더",
+          tabBarIcon: ({ color }) => <AppIcon icon="calendar-number" color={color} />,
         }}
       />
       <Tabs.Screen
@@ -30,7 +29,6 @@ export default function TabLayout() {
         options={{
           title: "커뮤니티",
           tabBarIcon: ({ color }) => <AppIcon icon="people" color={color} />,
-          headerShown: false,
         }}
       />
       <Tabs.Screen
@@ -40,7 +38,6 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <AppIcon icon="person-circle" color={color} />
           ),
-          headerShown: false,
         }}
       />
     </Tabs>
