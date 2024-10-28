@@ -8,9 +8,13 @@ jest.unmock("@contexts/auth");
 const TestComponent = () => {
   const { login, logout } = useAuth();
 
+  const handleLogin = () => {
+    login("pro");
+  }
+
   return (
     <>
-      <TouchableOpacity onPress={login} testID="login" />
+      <TouchableOpacity onPress={handleLogin} testID="login" />
       <TouchableOpacity onPress={logout} testID="logout" />
     </>
   );
