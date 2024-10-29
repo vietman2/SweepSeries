@@ -38,8 +38,7 @@ export default function HomeLayout() {
       <Stack.Screen
         name="academy/[id]"
         options={{
-          headerLeft: () => <BackButton />,
-          headerTitle: "내 아카데미",
+          headerTitle: "",
         }}
       />
     </Stack>
