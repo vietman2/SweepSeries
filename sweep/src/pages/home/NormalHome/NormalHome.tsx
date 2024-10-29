@@ -109,7 +109,7 @@ export function NormalHome() {
           </View>
           <View style={styles.academies}>
             {academies.map((academy) => (
-              <AcademySimple key={academy.uuid} academy={academy} />
+              <AcademySimple key={academy.uuid} academy={academy} quote />
             ))}
           </View>
         </View>
