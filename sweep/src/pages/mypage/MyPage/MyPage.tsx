@@ -15,7 +15,9 @@ export function MyPage() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  const handleRecentlyViewedPress = () => {};
+  const handleRecentlyViewedPress = () => {
+    router.push("/mypage/recentlyviewed");
+  };
   const handleLikedListPress = () => {};
   const handleReviewPress = () => {};
   const handleEventsPress = () => {};
