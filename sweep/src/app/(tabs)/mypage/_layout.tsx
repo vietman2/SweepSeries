@@ -20,7 +20,11 @@ export default function MyPageLayout() {
   };
 
   return (
-    <Stack>
+    <Stack
+      screenOptions={{
+        headerLeft: () => <BackButton />,
+      }}
+    >
       <Stack.Screen
         name="index"
         options={{
@@ -31,8 +35,13 @@ export default function MyPageLayout() {
       <Stack.Screen
         name="editprofile"
         options={{
-          headerLeft: () => <BackButton />,
           headerTitle: "프로필 수정",
+        }}
+      />
+      <Stack.Screen
+        name="recentlyviewed"
+        options={{
+          headerTitle: "최근 본 아카데미/코치",
         }}
       />
       <Stack.Screen name="settings" />
