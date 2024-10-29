@@ -1,4 +1,5 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { router } from "expo-router";
 
 import { Divider, VerticalDivider } from "@components/Dividers";
 import { Progressbar } from "@components/Progressbars";
@@ -6,39 +7,63 @@ import { CalloutSmall, Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
 import { ThemeColorType } from "@themes/colors";
 
-export function MyAcademy() {
+interface Props {
+  type?: 1 | 2;
+}
+
+export function AcademyCard({ type = 1 }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  const handleMyAcademyPress = () => {
+    router.push("/home/academy/my");
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>내 아카데미</Text>
-        <CalloutSmall text="내 아카데미가 없어요" />
+        {type === 1 ? (
+          <>
+            <Text style={styles.title}>내 아카데미</Text>
+            <CalloutSmall text="캐치비 베이스볼 아카데미" />
+          </>
+        ) : (
+          <Text style={[styles.title, { color: theme.primary }]}>
+            캐치비 베이스볼 아카데미
+          </Text>
+        )}
       </View>
       <View style={styles.content}>
         <View style={styles.horizontal}>
           <View style={styles.board}>
             <Text style={styles.subtitle}>마지막 레슨일</Text>
-            <Text style={styles.text}>없음</Text>
+            <Text style={styles.text}>2024.10.20.</Text>
           </View>
           <VerticalDivider width={1} />
           <View style={styles.board}>
             <Text style={styles.subtitle}>남은 횟수</Text>
-            <Text style={styles.text}>0</Text>
+            <Text style={styles.text}>15</Text>
           </View>
         </View>
         <View style={styles.progress}>
           <Text style={styles.subtitle}>아카데미 누적 출석률</Text>
-          <Progressbar done={17} total={20} />
+          <Progressbar done={4} total={5} />
         </View>
       </View>
-      <Divider />
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>내 스케줄 확인하러 가기</Text>
-        </TouchableOpacity>
-      </View>
+      {type === 1 && (
+        <>
+          <Divider />
+          <View style={styles.footer}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handleMyAcademyPress}
+              testID="myacademy"
+            >
+              <Text style={styles.buttonText}>내 스케줄 확인하러 가기</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
     </View>
   );
 }
@@ -67,6 +92,7 @@ const createStyles = (theme: ThemeColorType) =>
     horizontal: {
       flexDirection: "row",
       alignItems: "center",
+      paddingVertical: 8,
     },
     board: {
       flex: 1,
