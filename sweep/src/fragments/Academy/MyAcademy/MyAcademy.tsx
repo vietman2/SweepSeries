@@ -1,0 +1,101 @@
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+
+import { Divider, VerticalDivider } from "@components/Dividers";
+import { Progressbar } from "@components/Progressbars";
+import { CalloutSmall, Text } from "@components/Texts";
+import { useTheme } from "@contexts/theme";
+import { ThemeColorType } from "@themes/colors";
+
+export function MyAcademy() {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>내 아카데미</Text>
+        <CalloutSmall text="내 아카데미가 없어요" />
+      </View>
+      <View style={styles.content}>
+        <View style={styles.horizontal}>
+          <View style={styles.board}>
+            <Text style={styles.subtitle}>마지막 레슨일</Text>
+            <Text style={styles.text}>없음</Text>
+          </View>
+          <VerticalDivider width={1} />
+          <View style={styles.board}>
+            <Text style={styles.subtitle}>남은 횟수</Text>
+            <Text style={styles.text}>0</Text>
+          </View>
+        </View>
+        <View style={styles.progress}>
+          <Text style={styles.subtitle}>아카데미 누적 출석률</Text>
+          <Progressbar done={17} total={20} />
+        </View>
+      </View>
+      <Divider />
+      <View style={styles.footer}>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>내 스케줄 확인하러 가기</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+
+const createStyles = (theme: ThemeColorType) =>
+  StyleSheet.create({
+    container: {
+      paddingHorizontal: 16,
+      borderRadius: 8,
+      borderColor: theme.border,
+      borderWidth: 1,
+    },
+    header: {
+      flexDirection: "row",
+      alignItems: "center",
+      paddingVertical: 16,
+      gap: 8,
+    },
+    title: {
+      fontSize: 20,
+    },
+    content: {
+      paddingBottom: 16,
+      gap: 16,
+    },
+    horizontal: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    board: {
+      flex: 1,
+      alignItems: "center",
+      gap: 8,
+    },
+    subtitle: {
+      fontSize: 16,
+      color: theme.lowEmphasis,
+    },
+    text: {
+      fontSize: 16,
+    },
+    progress: {
+      gap: 8,
+    },
+    footer: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    button: {
+      flex: 1,
+      paddingVertical: 16,
+    },
+    buttonText: {
+      textAlign: "center",
+      fontSize: 16,
+      fontWeight: "bold",
+      color: theme.primary,
+    },
+  });

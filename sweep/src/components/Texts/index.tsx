@@ -1,5 +1,5 @@
 import { Text } from "react-native";
 
-import { Callout, InputTitle } from "./Texts";
+import { CalloutLarge, CalloutSmall, InputTitle } from "./Texts";
 
-export { Callout, InputTitle, Text };
+export { CalloutLarge, CalloutSmall, InputTitle, Text };

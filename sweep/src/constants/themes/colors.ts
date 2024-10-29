@@ -2,6 +2,7 @@ export type ThemeColorType = {
   primary: string;
   secondary: string;
   background: string;
+  backgroundGray: string;
   border: string;
   logo: string;
   highEmphasis: string;
@@ -12,6 +13,7 @@ export const lightColors: ThemeColorType = {
   primary: "#14863E",
   secondary: "#FC6900",
   background: "#FFFFFF",
+  backgroundGray: "#F5F5F5",
   border: "#D9D9D9",
   logo: "#083F25",
   highEmphasis: "#262626",
@@ -22,6 +24,7 @@ export const darkColors: ThemeColorType = {
   primary: "#14863E",
   secondary: "#FC6900",
   background: "#FFFFFF", // #262626
+  backgroundGray: "#F5F5F5", // #1A1A1A
   border: "#D9D9D9", // #9D9D9D
   logo: "#083F25",
   highEmphasis: "#262626",

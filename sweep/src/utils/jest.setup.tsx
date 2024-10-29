@@ -35,6 +35,17 @@ jest.mock("@components/Fallbacks", () => ({
   LoadingComponent: () => null,
   LoginNeeded: () => null,
 }));
+jest.mock("@components/Filters", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+
+  return {
+    Filters: ({ onSelect }: { onSelect: (filter: string) => void }) => {
+      return (
+        <TouchableOpacity onPress={() => onSelect("asdf")} testID="filter" />
+      );
+    },
+  };
+});
 jest.mock("@components/Icons", () => ({
   AppIcon: () => null,
   MainLogo: () => null,
@@ -76,12 +87,8 @@ jest.mock("@components/Menus", () => {
     ),
   };
 });
-jest.mock("@components/Search", () => ({
-  Searchbar: ({ onSubmit }: { onSubmit: () => void }) => {
-    const { TouchableOpacity } = jest.requireActual("react-native");
-
-    return <TouchableOpacity onPress={onSubmit} testID="search" />;
-  },
+jest.mock("@components/Progressbars", () => ({
+  Progressbar: () => null,
 }));
 jest.mock("@components/ScrollView", () => {
   const { TouchableOpacity } = jest.requireActual("react-native");
@@ -101,6 +108,23 @@ jest.mock("@components/ScrollView", () => {
         <TouchableOpacity onPress={onRefresh} testID="refresh" />
       </>
     ),
+  };
+});
+jest.mock("@components/Search", () => ({
+  Searchbar: ({ onSubmit }: { onSubmit: () => void }) => {
+    const { TouchableOpacity } = jest.requireActual("react-native");
+
+    return <TouchableOpacity onPress={onSubmit} testID="search" />;
+  },
+}));
+jest.mock("@components/Texts", () => {
+  const { Text } = jest.requireActual("react-native");
+
+  return {
+    InputTitle: () => null,
+    CalloutSmall: () => null,
+    CalloutLarge: () => null,
+    Text,
   };
 });
 jest.mock("@contexts/auth", () => ({

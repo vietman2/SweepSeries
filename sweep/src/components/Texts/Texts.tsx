@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 
+import { AppIcon } from "@components/Icons";
 import { useTheme } from "@contexts/theme";
 import { ThemeColorType } from "@themes/colors";
 
@@ -22,13 +23,31 @@ export function InputTitle({ title, subtitle }: Readonly<Props>) {
   );
 }
 
-export function Callout({ title }: Readonly<Props>) {
+interface CalloutProps {
+  text: string;
+}
+
+export function CalloutSmall({ text }: Readonly<CalloutProps>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   return (
-    <View style={styles.calloutContainer}>
-      <Text style={styles.calloutText}>{title}</Text>
+    <View style={styles.calloutSmall}>
+      <Text style={styles.calloutText}>{text}</Text>
+    </View>
+  );
+}
+
+export function CalloutLarge({ text }: Readonly<CalloutProps>) {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+
+  return (
+    <View style={styles.calloutLarge}>
+      <View style={styles.icon}>
+        <AppIcon icon="quote" size={16} color="#8F8F8F" />
+      </View>
+      <Text style={styles.calloutText}>{text}</Text>
     </View>
   );
 }
@@ -48,13 +67,29 @@ const createStyles = (theme: ThemeColorType) =>
       fontSize: 14,
       color: "#666666",
     },
-    calloutContainer: {
+    calloutSmall: {
       paddingVertical: 4,
       paddingHorizontal: 16,
-      backgroundColor: theme.border,
+      backgroundColor: theme.backgroundGray,
       borderRadius: 16,
     },
     calloutText: {
       color: theme.lowEmphasis,
+    },
+    calloutLarge: {
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+      borderRadius: 8,
+      backgroundColor: theme.backgroundGray,
+      shadowColor: "black",
+      shadowOffset: { width: 2, height: 4 },
+      shadowOpacity: 0.24,
+      shadowRadius: 4,
+      elevation: 4,
+    },
+    icon: {
+      position: "absolute",
+      top: -8,
+      left: 8,
     },
   });
