@@ -13,9 +13,9 @@ jest.mock("@gorhom/bottom-sheet", () => {
   };
 });
 jest.mock("@fragments/Academy", () => ({
+  AcademyCard: () => <div>AcademyCard</div>,
   AcademySimple: () => <div>AcademySimple</div>,
   AcademySuggest: () => <div>AcademySuggest</div>,
-  MyAcademy: () => <div>MyAcademy</div>,
 }));
 
 describe("<NormalHome />", () => {

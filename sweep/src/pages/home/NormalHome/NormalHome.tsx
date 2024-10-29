@@ -12,7 +12,7 @@ import { Scroll } from "@components/ScrollView";
 import { Searchbar } from "@components/Search";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
-import { AcademySimple, AcademySuggest, MyAcademy } from "@fragments/Academy";
+import { AcademyCard, AcademySimple, AcademySuggest } from "@fragments/Academy";
 import { AcademySimpleType } from "@models/products";
 import { sampleAcademies } from "@testdata/products";
 import { ThemeColorType } from "@themes/colors";
@@ -64,7 +64,7 @@ export function NormalHome() {
   return (
     <>
       <Scroll style={styles.container}>
-        <MyAcademy />
+        <AcademyCard />
         <View style={styles.content}>
           <View style={styles.header}>
             <Text style={styles.title}>나에게 딱 맞는 캐치비 추천!</Text>
@@ -74,7 +74,9 @@ export function NormalHome() {
           </View>
           <Scroll horizontal>
             {suggestions.map((academy) => (
-              <AcademySuggest key={academy.uuid} academy={academy} />
+              <TouchableOpacity key={academy.uuid}>
+                <AcademySuggest academy={academy} />
+              </TouchableOpacity>
             ))}
           </Scroll>
         </View>
