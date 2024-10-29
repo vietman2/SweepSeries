@@ -1,4 +1,4 @@
-import { MyAcademy } from "./MyAcademy";
+import { MyAcademy } from "./AcademyCard";
 import { renderWithProviders } from "@utils/test-utils";
 
 describe("<MyAcademy />", () => {

@@ -1,5 +1,5 @@
+import { AcademyCard } from "./AcademyCard/AcademyCard";
 import { AcademySimple } from "./AcademySimple/AcademySimple";
 import { AcademySuggest } from "./AcademySuggest/AcademySuggest";
-import { MyAcademy } from "./MyAcademy/MyAcademy";
 
-export { AcademySimple, AcademySuggest, MyAcademy };
+export { AcademyCard, AcademySimple, AcademySuggest };

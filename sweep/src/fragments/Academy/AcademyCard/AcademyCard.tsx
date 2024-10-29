@@ -6,7 +6,7 @@ import { CalloutSmall, Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
 import { ThemeColorType } from "@themes/colors";
 
-export function MyAcademy() {
+export function AcademyCard() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -14,23 +14,23 @@ export function MyAcademy() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>내 아카데미</Text>
-        <CalloutSmall text="내 아카데미가 없어요" />
+        <CalloutSmall text="캐치비 베이스볼 아카데미" />
       </View>
       <View style={styles.content}>
         <View style={styles.horizontal}>
           <View style={styles.board}>
             <Text style={styles.subtitle}>마지막 레슨일</Text>
-            <Text style={styles.text}>없음</Text>
+            <Text style={styles.text}>2024.10.20.</Text>
           </View>
           <VerticalDivider width={1} />
           <View style={styles.board}>
             <Text style={styles.subtitle}>남은 횟수</Text>
-            <Text style={styles.text}>0</Text>
+            <Text style={styles.text}>15</Text>
           </View>
         </View>
         <View style={styles.progress}>
           <Text style={styles.subtitle}>아카데미 누적 출석률</Text>
-          <Progressbar done={17} total={20} />
+          <Progressbar done={4} total={5} />
         </View>
       </View>
       <Divider />
