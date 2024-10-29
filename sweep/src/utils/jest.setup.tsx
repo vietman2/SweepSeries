@@ -26,6 +26,9 @@ jest.mock("@components/Buttons", () => ({
     return <TouchableOpacity onPress={onPress} testID={text} />;
   },
 }));
+jest.mock("@components/Calendars", () => ({
+  CalendarHeader: () => null,
+}));
 jest.mock("@components/Dividers", () => ({
   Divider: () => null,
   VerticalDivider: () => null,
