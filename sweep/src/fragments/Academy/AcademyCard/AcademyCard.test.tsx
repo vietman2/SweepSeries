@@ -1,8 +1,8 @@
-import { MyAcademy } from "./AcademyCard";
+import { AcademyCard } from "./AcademyCard";
 import { renderWithProviders } from "@utils/test-utils";
 
-describe("<MyAcademy />", () => {
+describe("<AcademyCard />", () => {
   it("renders correctly", () => {
-    renderWithProviders(<MyAcademy />);
+    renderWithProviders(<AcademyCard />);
   });
 });
