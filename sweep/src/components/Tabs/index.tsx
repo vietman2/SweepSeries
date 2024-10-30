@@ -1,3 +1,4 @@
+import { FAQTabs } from "./FAQTabs";
 import { TabBar } from "./Tabbar";
 
-export { TabBar };
+export { FAQTabs, TabBar };
