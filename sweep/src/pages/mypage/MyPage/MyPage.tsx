@@ -26,13 +26,16 @@ export function MyPage() {
   const handleBulletinPress = () => {
     router.push("/mypage/bulletin");
   };
-  
+
   const handleAskPress = () => {
     router.push("/mypage/customerservice");
   };
+  
+  const handleFAQPress = () => {
+    router.push("/mypage/faq");
+  };
 
   const handleEventsPress = () => {};
-  const handleFAQPress = () => {};
   const handleSettingsPress = () => {};
   const handleLogoutPress = () => {
     // TODO: integrate logout with the backend

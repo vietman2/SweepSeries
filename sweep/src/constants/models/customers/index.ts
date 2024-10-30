@@ -1,3 +1,3 @@
-import { AnnouncementSimpleType, InquirySimpleType } from "./services";
+import { AnnouncementSimpleType, FAQType, InquirySimpleType } from "./services";
 
-export { AnnouncementSimpleType, InquirySimpleType };
+export { AnnouncementSimpleType, FAQType, InquirySimpleType };

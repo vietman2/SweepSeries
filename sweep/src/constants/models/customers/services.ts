@@ -11,3 +11,9 @@ export type AnnouncementSimpleType = {
   content: string;
   created_at: string;
 };
+
+export type FAQType = {
+  id: number;
+  question: string;
+  answer: string;
+};
