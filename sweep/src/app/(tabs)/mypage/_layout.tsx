@@ -14,7 +14,7 @@ export default function MyPageLayout() {
   const BackButton = () => {
     return (
       <TouchableOpacity onPress={handleBackPress}>
-        <AppIcon icon="chevron-left" size={24} color={theme.lowEmphasis} />
+        <AppIcon icon="chevron-left" size={18} color={theme.lowEmphasis} />
       </TouchableOpacity>
     );
   };
@@ -39,9 +39,21 @@ export default function MyPageLayout() {
         }}
       />
       <Stack.Screen
-        name="recentlyviewed"
+        name="liked"
         options={{
-          headerTitle: "최근 본 아카데미/코치",
+          headerTitle: "좋아요 목록",
+        }}
+      />
+      <Stack.Screen
+        name="customerservice"
+        options={{
+          headerTitle: "1:1 문의",
+        }}
+      />
+      <Stack.Screen
+        name="reviews"
+        options={{
+          headerTitle: "내가 쓴 리뷰",
         }}
       />
       <Stack.Screen name="settings" />

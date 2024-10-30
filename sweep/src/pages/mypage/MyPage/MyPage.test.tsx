@@ -37,7 +37,6 @@ describe("<MyPage />", () => {
   it("renders correctly when logged in and handles buttons", () => {
     const { getByTestId } = renderWithProviders(<MyPage />);
 
-    fireEvent.press(getByTestId("recent"));
     fireEvent.press(getByTestId("heart-outline"));
     fireEvent.press(getByTestId("chatbox-outline"));
     fireEvent.press(getByTestId("giftbox"));

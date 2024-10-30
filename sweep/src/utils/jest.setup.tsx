@@ -34,6 +34,7 @@ jest.mock("@components/Dividers", () => ({
   VerticalDivider: () => null,
 }));
 jest.mock("@components/Fallbacks", () => ({
+  Empty: () => null,
   ErrorPage: () => null,
   LoadingComponent: () => null,
   LoginNeeded: () => null,

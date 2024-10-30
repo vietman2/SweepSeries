@@ -1,12 +1,12 @@
-import { RecentAcademies } from "./RecentAcademies";
+import { LikedAcademies } from "./LikedAcademies";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("@fragments/Academy", () => ({
   AcademySimple: () => null,
 }));
 
-describe("<RecentAcademies />", () => {
+describe("<LikedAcademies />", () => {
   it("renders correctly", () => {
-    renderWithProviders(<RecentAcademies />);
+    renderWithProviders(<LikedAcademies />);
   });
 });

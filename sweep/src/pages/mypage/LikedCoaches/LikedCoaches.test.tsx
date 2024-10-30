@@ -1,12 +1,12 @@
-import { RecentCoaches } from "./RecentCoaches";
+import { LikedCoaches } from "./LikedCoaches";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("@fragments/Coach", () => ({
   CoachSimple: () => null,
 }));
 
-describe("<RecentCoaches />", () => {
+describe("<LikedCoaches />", () => {
   it("renders correctly", () => {
-    renderWithProviders(<RecentCoaches />);
+    renderWithProviders(<LikedCoaches />);
   });
 });

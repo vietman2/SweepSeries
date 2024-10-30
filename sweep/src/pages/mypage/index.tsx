@@ -1,6 +1,15 @@
+import { CustomerService } from "./CustomerService/CustomerService";
 import { EditProfile } from "./EditProfile/EditProfile";
+import { LikedAcademies } from "./LikedAcademies/LikedAcademies";
+import { LikedCoaches } from "./LikedCoaches/LikedCoaches";
 import { MyPage } from "./MyPage/MyPage";
-import { RecentAcademies } from "./RecentAcademies/RecentAcademies";
-import { RecentCoaches } from "./RecentCoaches/RecentCoaches";
+import { MyReviews } from "./MyReviews/MyReviews";
 
-export { EditProfile, MyPage, RecentAcademies, RecentCoaches };
+export {
+  CustomerService,
+  EditProfile,
+  LikedAcademies,
+  LikedCoaches,
+  MyPage,
+  MyReviews,
+};
