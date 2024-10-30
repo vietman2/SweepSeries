@@ -39,12 +39,6 @@ export default function MyPageLayout() {
         }}
       />
       <Stack.Screen
-        name="recentlyviewed"
-        options={{
-          headerTitle: "최근 본 아카데미/코치",
-        }}
-      />
-      <Stack.Screen
         name="liked"
         options={{
           headerTitle: "좋아요 목록",

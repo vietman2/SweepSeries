@@ -15,13 +15,14 @@ export function MyPage() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  const handleRecentlyViewedPress = () => {
-    router.push("/mypage/recentlyviewed");
-  };
   const handleLikedListPress = () => {
     router.push("/mypage/liked");
   };
-  const handleReviewPress = () => {};
+
+  const handleReviewPress = () => {
+    router.push("/mypage/reviews");
+  };
+
   const handleEventsPress = () => {};
   const handleBulletinPress = () => {};
   const handleAskPress = () => {
@@ -52,11 +53,6 @@ export function MyPage() {
           />
         </View>
         <Subtitle text="내 활동" />
-        <SvgIconButton
-          icon="recent"
-          text="최근 본 아카데미/코치"
-          onPress={handleRecentlyViewedPress}
-        />
         <SvgIconButton
           icon="heart-outline"
           text="좋아요 목록"
