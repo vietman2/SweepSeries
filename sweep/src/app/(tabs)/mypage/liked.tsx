@@ -2,7 +2,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { Dimensions } from "react-native";
 
 import { TabBar } from "@components/Tabs";
-import { LikedAcademies } from "@pages/mypage";
+import { LikedAcademies, LikedCoaches } from "@pages/mypage";
 
 const Tab = createMaterialTopTabNavigator();
 const { width: screenWidth } = Dimensions.get("window");
@@ -26,7 +26,7 @@ export default function RecentlyViewed() {
       />
       <Tab.Screen
         name="coaches"
-        component={Dummy}
+        component={LikedCoaches}
         options={{ title: "코치" }}
       />
       <Tab.Screen
