@@ -24,7 +24,9 @@ export function MyPage() {
   const handleReviewPress = () => {};
   const handleEventsPress = () => {};
   const handleBulletinPress = () => {};
-  const handleAskPress = () => {};
+  const handleAskPress = () => {
+    router.push("/mypage/customerservice");
+  };
   const handleFAQPress = () => {};
   const handleSettingsPress = () => {};
   const handleLogoutPress = () => {
