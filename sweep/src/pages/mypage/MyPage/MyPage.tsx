@@ -23,11 +23,15 @@ export function MyPage() {
     router.push("/mypage/reviews");
   };
 
-  const handleEventsPress = () => {};
-  const handleBulletinPress = () => {};
+  const handleBulletinPress = () => {
+    router.push("/mypage/bulletin");
+  };
+  
   const handleAskPress = () => {
     router.push("/mypage/customerservice");
   };
+
+  const handleEventsPress = () => {};
   const handleFAQPress = () => {};
   const handleSettingsPress = () => {};
   const handleLogoutPress = () => {

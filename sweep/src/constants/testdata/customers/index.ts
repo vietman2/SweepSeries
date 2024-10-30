@@ -1,3 +1,4 @@
+import { sampleAnnouncements } from "./announcements";
 import { sampleInquiries } from "./inquiries";
 
-export { sampleInquiries };
+export { sampleAnnouncements, sampleInquiries };

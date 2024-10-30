@@ -1,3 +1,4 @@
+import { Bulletin } from "./Bulletin/Bulletin";
 import { CustomerService } from "./CustomerService/CustomerService";
 import { EditProfile } from "./EditProfile/EditProfile";
 import { LikedAcademies } from "./LikedAcademies/LikedAcademies";
@@ -6,6 +7,7 @@ import { MyPage } from "./MyPage/MyPage";
 import { MyReviews } from "./MyReviews/MyReviews";
 
 export {
+  Bulletin,
   CustomerService,
   EditProfile,
   LikedAcademies,

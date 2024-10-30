@@ -51,6 +51,12 @@ export default function MyPageLayout() {
         }}
       />
       <Stack.Screen
+        name="bulletin"
+        options={{
+          headerTitle: "공지사항",
+        }}
+      />
+      <Stack.Screen
         name="reviews"
         options={{
           headerTitle: "내가 쓴 리뷰",
