@@ -56,7 +56,7 @@ export function MyPage() {
 
   return (
     <>
-      <Scroll style={styles.container}>
+      <Scroll style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.profile}>
           <MainProfile />
           <TextButton

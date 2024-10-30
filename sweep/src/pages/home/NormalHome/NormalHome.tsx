@@ -66,7 +66,7 @@ export function NormalHome() {
 
   return (
     <>
-      <Scroll style={styles.container}>
+      <Scroll style={styles.container} showsVerticalScrollIndicator={false}>
         {isAuthenticated && <AcademyCard />}
         <View style={styles.content}>
           <View style={styles.header}>
@@ -75,7 +75,7 @@ export function NormalHome() {
               Catch B가 추천하는 아카데미/레슨
             </Text>
           </View>
-          <Scroll horizontal>
+          <Scroll horizontal showsHorizontalScrollIndicator={false}>
             {suggestions.map((academy) => (
               <TouchableOpacity key={academy.uuid}>
                 <AcademySuggest academy={academy} />

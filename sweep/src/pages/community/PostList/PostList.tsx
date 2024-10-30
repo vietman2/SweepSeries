@@ -131,7 +131,7 @@ const createStyles = (theme: ThemeColorType) =>
     container: {
       flex: 1,
       backgroundColor: theme.background,
-      marginVertical: 8,
+      marginVertical: 1,
       paddingBottom: 24,
       paddingHorizontal: 16,
     },
