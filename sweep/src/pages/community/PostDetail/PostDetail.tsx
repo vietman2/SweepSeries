@@ -20,7 +20,7 @@ import { ThemeColorType } from "@themes/colors";
 import { samplePostDetail } from "@testdata/community";
 
 export function PostDetail() {
-//  const { id } = useLocalSearchParams();
+  //  const { id } = useLocalSearchParams();
   const [post, setPost] = useState<PostDetailType>();
   const [newComment, setNewComment] = useState<string>("");
   const [commentMode, setCommentMode] = useState<boolean>(true);

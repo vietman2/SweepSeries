@@ -121,13 +121,19 @@ export function PostContent({ post }: Readonly<Props>) {
             <Text style={styles.body}>{post.content}</Text>
           </>
         )}
-        <GSScroll horizontal nestedScrollEnabled showsHorizontalScrollIndicator>
-          {post.images.map((image) => (
-            <View key={image.id}>
-              <ImagePreview uri={image.url} />
-            </View>
-          ))}
-        </GSScroll>
+        {post.images.length > 0 && (
+          <GSScroll
+            horizontal
+            nestedScrollEnabled
+            showsHorizontalScrollIndicator
+          >
+            {post.images.map((image) => (
+              <View key={image.id}>
+                <ImagePreview uri={image.url} />
+              </View>
+            ))}
+          </GSScroll>
+        )}
         <View style={styles.footer}>
           <View style={styles.count}>
             <AppIcon icon="eye" size={20} color={theme.lowEmphasis} />
@@ -185,7 +191,7 @@ function TextButton({
 }) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
-  
+
   color = color || theme.background;
   backgroundColor = backgroundColor || theme.primary;
 
