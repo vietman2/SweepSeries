@@ -13,8 +13,8 @@ export function MainPage() {
   const styles = createStyles(theme);
 
   const handleProLogin = () => {
-    login("pro");
-    router.replace("/home");
+    //login("pro");
+    //router.replace("/home");
   };
 
   const handleNormalLogin = () => {

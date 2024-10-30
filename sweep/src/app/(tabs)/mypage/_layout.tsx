@@ -39,9 +39,21 @@ export default function MyPageLayout() {
         }}
       />
       <Stack.Screen
+        name="lessons"
+        options={{
+          headerTitle: "레슨 기록",
+        }}
+      />
+      <Stack.Screen
         name="liked"
         options={{
           headerTitle: "좋아요 목록",
+        }}
+      />
+      <Stack.Screen
+        name="reviews"
+        options={{
+          headerTitle: "리뷰 관리",
         }}
       />
       <Stack.Screen
@@ -60,12 +72,6 @@ export default function MyPageLayout() {
         name="faq"
         options={{
           headerTitle: "자주 묻는 질문",
-        }}
-      />
-      <Stack.Screen
-        name="reviews"
-        options={{
-          headerTitle: "내가 쓴 리뷰",
         }}
       />
       <Stack.Screen
