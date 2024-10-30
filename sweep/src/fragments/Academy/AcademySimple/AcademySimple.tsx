@@ -8,9 +8,10 @@ import { ThemeColorType } from "@themes/colors";
 
 interface Props {
   academy: AcademySimpleType;
+  quote?: boolean;
 }
 
-export function AcademySimple({ academy }: Readonly<Props>) {
+export function AcademySimple({ academy, quote = false }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -33,7 +34,9 @@ export function AcademySimple({ academy }: Readonly<Props>) {
           <Text style={styles.location}>{academy.location}</Text>
         </View>
       </View>
-      <CalloutLarge text="쾌적하고 넓은 환경에서 친구들과 편하게 야구했어요 ~~!! :)" />
+      {quote && (
+        <CalloutLarge text="쾌적하고 넓은 환경에서 친구들과 편하게 야구했어요 ~~!! :)" />
+      )}
     </View>
   );
 }

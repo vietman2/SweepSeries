@@ -10,6 +10,7 @@ jest.mock("expo-router", () => ({
     canDismiss: jest.fn(),
     dismissAll: jest.fn(),
     replace: jest.fn(),
+    push: jest.fn(),
   },
 }));
 jest.mock("@contexts/auth", () => ({
@@ -28,6 +29,7 @@ describe("<MyPage />", () => {
     jest.spyOn(AuthContext, "useAuth").mockReturnValue({
       login: jest.fn(),
       logout: jest.fn(),
+      mode: "normal",
       isAuthenticated: true,
     });
   });
@@ -48,7 +50,7 @@ describe("<MyPage />", () => {
   it("renders correctly and handles logout with no dismiss", () => {
     jest.spyOn(router, "canDismiss").mockReturnValue(false);
     const { getByTestId } = renderWithProviders(<MyPage />);
-    
+
     fireEvent.press(getByTestId("logout"));
   });
 
@@ -63,6 +65,7 @@ describe("<MyPage />", () => {
     jest.spyOn(AuthContext, "useAuth").mockReturnValue({
       login: jest.fn(),
       logout: jest.fn(),
+      mode: "guest",
       isAuthenticated: false,
     });
     renderWithProviders(<MyPage />);

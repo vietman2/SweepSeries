@@ -3,7 +3,11 @@ import { sampleAcademies } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
 describe("<AcademySimple />", () => {
-  it("should render without crashing", () => {
+  it("renders correctly", () => {
     renderWithProviders(<AcademySimple academy={sampleAcademies[0]} />);
+  });
+
+  it("renders with quote", () => {
+    renderWithProviders(<AcademySimple academy={sampleAcademies[0]} quote />);
   });
 });
