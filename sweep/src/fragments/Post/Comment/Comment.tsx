@@ -8,6 +8,7 @@ import { AppIcon } from "@components/Icons";
 import { TextInput } from "@components/Inputs";
 import { PopupMenu } from "@components/Menus";
 import { Text } from "@components/Texts";
+import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
 import { CommentType } from "@models/community";
 import { alert } from "@services/alert";
@@ -37,6 +38,8 @@ export function Comment({
   const [editMode, setEditMode] = useState<boolean>(false);
   const [selected, setSelected] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  
+  const { isAuthenticated } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -104,6 +107,7 @@ export function Comment({
   return (
     <>
       <View>
+        <Divider />
         <View
           style={[
             styles.comment,
@@ -120,9 +124,11 @@ export function Comment({
               <View style={styles.placeholder} />
               <Text style={styles.grayText}>{comment.commenter_nickname}</Text>
             </View>
-            <PopupMenu items={actions}>
-              <AppIcon icon="dots" color={theme.lowEmphasis} size={16} />
-            </PopupMenu>
+            {isAuthenticated && (
+              <PopupMenu items={actions}>
+                <AppIcon icon="dots" color={theme.lowEmphasis} size={16} />
+              </PopupMenu>
+            )}
           </View>
           {editMode ? (
             <View style={styles.editContent}>
@@ -167,13 +173,15 @@ export function Comment({
               />
               <Text style={styles.likeText}>{comment.num_recomments}</Text>
             </View>
-            <TouchableOpacity
-              onPress={handleRecommentPress}
-              style={styles.recommentButton}
-              testID="recomment"
-            >
-              <Text style={styles.grayText}>답글달기</Text>
-            </TouchableOpacity>
+            {isAuthenticated && (
+              <TouchableOpacity
+                onPress={handleRecommentPress}
+                style={styles.recommentButton}
+                testID="recomment"
+              >
+                <Text style={styles.grayText}>답글달기</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
         {comment.recomments.length > 0 ? (
@@ -205,7 +213,6 @@ export function Comment({
             </TouchableOpacity>
           </View>
         ) : null}
-        <Divider />
       </View>
       <ReportModal
         visible={modalVisible}

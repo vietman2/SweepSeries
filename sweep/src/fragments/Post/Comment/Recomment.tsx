@@ -7,6 +7,7 @@ import { AppIcon } from "@components/Icons";
 import { TextInput } from "@components/Inputs";
 import { PopupMenu } from "@components/Menus";
 import { Text } from "@components/Texts";
+import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
 import { ReCommentType } from "@models/community";
 import { alert } from "@services/alert";
@@ -27,6 +28,8 @@ export function Recomment({ recomment, refresh }: Readonly<Props>) {
   >([]);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+
+  const { isAuthenticated } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -84,9 +87,11 @@ export function Recomment({ recomment, refresh }: Readonly<Props>) {
             <View style={styles.placeholder} />
             <Text style={styles.grayText}>{recomment.commenter_nickname}</Text>
           </View>
-          <PopupMenu items={actions}>
-            <AppIcon icon="dots" color={theme.lowEmphasis} size={16} />
-          </PopupMenu>
+          {isAuthenticated && (
+            <PopupMenu items={actions}>
+              <AppIcon icon="dots" color={theme.lowEmphasis} size={16} />
+            </PopupMenu>
+          )}
         </View>
         {editMode ? (
           <View style={styles.editContent}>
@@ -122,7 +127,9 @@ export function Recomment({ recomment, refresh }: Readonly<Props>) {
             <Text style={styles.likeText}>{numLikes}</Text>
           </TouchableOpacity>
         </View>
-        <Divider />
+        <View style={styles.dividerWrapper}>
+          <Divider />
+        </View>
       </View>
       <ReportModal
         visible={modalVisible}
@@ -182,5 +189,8 @@ const createStyles = (theme: ThemeColorType) =>
     likeText: {
       marginLeft: 2.5,
       color: theme.lowEmphasis,
+    },
+    dividerWrapper: {
+      marginTop: 8,
     },
   });

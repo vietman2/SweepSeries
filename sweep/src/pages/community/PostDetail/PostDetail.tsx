@@ -13,6 +13,7 @@ import { ErrorPage } from "@components/Fallbacks";
 import { AppIcon } from "@components/Icons";
 import { TextInput } from "@components/Inputs";
 import { ScrollView } from "@components/ScrollView";
+import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
 import { Comment, PostContent } from "@fragments/Post";
 import { PostDetailType } from "@models/community";
@@ -28,6 +29,8 @@ export function PostDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [refreshCount, setRefreshCount] = useState<number>(0);
+  
+  const { isAuthenticated } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -97,7 +100,8 @@ export function PostDetail() {
             ) : null}
           </Pressable>
         </ScrollView>
-        {commentMode ? (
+
+        {commentMode && isAuthenticated ? (
           <View style={styles.newcomment}>
             <View style={styles.placeholder} />
             <View style={styles.textinput}>

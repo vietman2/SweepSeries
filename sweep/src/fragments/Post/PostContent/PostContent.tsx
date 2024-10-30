@@ -8,6 +8,7 @@ import { TextInput } from "@components/Inputs";
 import { PopupMenu } from "@components/Menus";
 import { GSScroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
+import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
 import { PostDetailType } from "@models/community";
 import { alert } from "@services/alert";
@@ -27,6 +28,7 @@ export function PostContent({ post }: Readonly<Props>) {
     { label: string; onPress: () => void }[]
   >([]);
 
+  const { isAuthenticated } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -88,9 +90,11 @@ export function PostContent({ post }: Readonly<Props>) {
             <Text style={styles.authorText}>{post.author_nickname}</Text>
             <Text style={styles.grayText}>{`  ${post.created_at}`}</Text>
           </View>
-          <PopupMenu items={actions}>
-            <AppIcon icon="dots" color={theme.lowEmphasis} size={20} />
-          </PopupMenu>
+          {isAuthenticated && (
+            <PopupMenu items={actions}>
+              <AppIcon icon="dots" color={theme.lowEmphasis} size={20} />
+            </PopupMenu>
+          )}
         </View>
         {editMode ? (
           <>

@@ -11,6 +11,7 @@ import { AppIcon } from "@components/Icons";
 import { Scroll } from "@components/ScrollView";
 import { Searchbar } from "@components/Search";
 import { Text } from "@components/Texts";
+import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
 import { AcademyCard, AcademySimple, AcademySuggest } from "@fragments/Academy";
 import { AcademySimpleType } from "@models/products";
@@ -28,6 +29,8 @@ export function NormalHome() {
   const [query, setQuery] = useState<string>("");
   const [selectedSort, setSelectedSort] = useState<string>("인기순");
   const [selectedFilter, setSelectedFilter] = useState<string>("");
+
+  const { isAuthenticated } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -64,7 +67,7 @@ export function NormalHome() {
   return (
     <>
       <Scroll style={styles.container}>
-        <AcademyCard />
+        {isAuthenticated && <AcademyCard />}
         <View style={styles.content}>
           <View style={styles.header}>
             <Text style={styles.title}>나에게 딱 맞는 캐치비 추천!</Text>
