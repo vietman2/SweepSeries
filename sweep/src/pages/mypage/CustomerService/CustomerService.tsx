@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { Linking, StyleSheet, TouchableOpacity, View } from "react-native";
+import * as Clipboard from "expo-clipboard";
 
 import { TextButton } from "@components/Buttons";
+import { Empty } from "@components/Fallbacks";
 import { AppIcon } from "@components/Icons";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
 import { InquirySimple } from "@fragments/Inquiry";
 import { InquirySimpleType } from "@models/customers";
+import { alert } from "@services/alert";
 import { sampleInquiries } from "@testdata/customers";
 import { ThemeColorType } from "@themes/colors";
 
@@ -23,6 +26,12 @@ export function CustomerService() {
     Linking.openURL("mailto:support@sweepseries.com");
   };
 
+  const copyEmailAddress = async () => {
+    await Clipboard.setStringAsync("support@sweepseries.com");
+
+    alert("", "이메일 주소가 복사되었습니다.");
+  };
+
   const handleAsk = () => {};
 
   useEffect(() => {
@@ -37,15 +46,15 @@ export function CustomerService() {
           <TouchableOpacity onPress={handleEmail} testID="email">
             <Text style={styles.contactText}>support@sweepseries.com</Text>
           </TouchableOpacity>
+          <TouchableOpacity onPress={copyEmailAddress} testID="copy">
+            <AppIcon icon="copy" size={28} color={theme.primary} />
+          </TouchableOpacity>
         </View>
         <Text style={styles.guideText}>{guideText}</Text>
         <TextButton text="1:1 문의하기" onPress={handleAsk} />
       </View>
       {inquiries.length === 0 ? (
-        <View style={styles.empty}>
-          <AppIcon icon="warning-circle" size={48} color={theme.lowEmphasis} />
-          <Text style={styles.warningText}>{"문의한 내역이 없습니다.\n"}</Text>
-        </View>
+        <Empty message="문의한 내역이 없습니다." color={theme.lowEmphasis} />
       ) : (
         <View style={styles.content}>
           {inquiries.map((inquiry) => (
@@ -81,20 +90,6 @@ const createStyles = (theme: ThemeColorType) =>
       fontSize: 14,
       lineHeight: 20,
       color: theme.lowEmphasis,
-    },
-    empty: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: theme.background,
-      gap: 8,
-    },
-    warningText: {
-      fontSize: 20,
-      fontWeight: "bold",
-      textAlign: "center",
-      color: theme.lowEmphasis,
-      lineHeight: 32,
     },
     content: {
       flex: 1,
