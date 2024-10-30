@@ -56,6 +56,12 @@ export default function MyPageLayout() {
           headerTitle: "1:1 문의",
         }}
       />
+      <Stack.Screen
+        name="reviews"
+        options={{
+          headerTitle: "내가 쓴 리뷰",
+        }}
+      />
       <Stack.Screen name="settings" />
     </Stack>
   );
