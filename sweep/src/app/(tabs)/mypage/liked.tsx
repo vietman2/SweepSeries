@@ -8,7 +8,7 @@ const Tab = createMaterialTopTabNavigator();
 const { width: screenWidth } = Dimensions.get("window");
 
 function Dummy() {
-    return (<></>)
+  return <></>;
 }
 
 export default function RecentlyViewed() {
