@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { Divider } from "@components/Dividers";
-import { AppIcon } from "@components/Icons";
+import { Empty } from "@components/Fallbacks";
 import { Scroll } from "@components/ScrollView";
-import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
 import { AcademySimple } from "@fragments/Academy";
 import { AcademySimpleType } from "@models/products";
@@ -23,12 +22,11 @@ export function LikedAcademies() {
   return (
     <>
       {academies.length === 0 ? (
-        <View style={styles.empty}>
-          <AppIcon icon="warning-circle" size={48} color={theme.primary} />
-          <Text style={styles.warningText}>
-            {"좋아요 한 아카데미가 없어요.\n좋아요는 아카데미에게 큰 힘이 됩니다."}
-          </Text>
-        </View>
+        <Empty
+          message={
+            "좋아요 한 아카데미가 없어요.\n좋아요는 아카데미에게 큰 힘이 됩니다."
+          }
+        />
       ) : (
         <Scroll style={styles.container}>
           <View style={styles.wrapper}>
@@ -59,19 +57,5 @@ const createStyles = (theme: ThemeColorType) =>
     },
     academy: {
       gap: 24,
-    },
-    empty: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: theme.background,
-      gap: 8,
-    },
-    warningText: {
-      fontSize: 20,
-      fontWeight: "bold",
-      textAlign: "center",
-      color: theme.lowEmphasis,
-      lineHeight: 32,
     },
   });

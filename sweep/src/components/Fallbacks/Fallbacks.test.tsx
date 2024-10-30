@@ -1,6 +1,7 @@
 import { fireEvent } from "@testing-library/react-native";
 import { router } from "expo-router";
 
+import { Empty } from "./Empty";
 import { ErrorPage } from "./ErrorPage";
 import { LoadingComponent } from "./Loading";
 import { LoginNeeded } from "./LoginNeeded";
@@ -14,6 +15,12 @@ jest.mock("expo-router", () => ({
   },
 }));
 jest.unmock("@components/Fallbacks");
+
+describe("<Empty>", () => {
+  it("renders correctly", () => {
+    renderWithProviders(<Empty message="Empty message" />);
+  });
+});
 
 describe("<ErrorPage>", () => {
   it("renders and handles refresh correctly", () => {
