@@ -14,7 +14,7 @@ export default function MyPageLayout() {
   const BackButton = () => {
     return (
       <TouchableOpacity onPress={handleBackPress}>
-        <AppIcon icon="chevron-left" size={24} color={theme.lowEmphasis} />
+        <AppIcon icon="chevron-left" size={18} color={theme.lowEmphasis} />
       </TouchableOpacity>
     );
   };
@@ -48,6 +48,12 @@ export default function MyPageLayout() {
         name="liked"
         options={{
           headerTitle: "좋아요 목록",
+        }}
+      />
+      <Stack.Screen
+        name="customerservice"
+        options={{
+          headerTitle: "1:1 문의",
         }}
       />
       <Stack.Screen name="settings" />
