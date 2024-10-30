@@ -18,7 +18,9 @@ export function MyPage() {
   const handleRecentlyViewedPress = () => {
     router.push("/mypage/recentlyviewed");
   };
-  const handleLikedListPress = () => {};
+  const handleLikedListPress = () => {
+    router.push("/mypage/liked");
+  };
   const handleReviewPress = () => {};
   const handleEventsPress = () => {};
   const handleBulletinPress = () => {};
