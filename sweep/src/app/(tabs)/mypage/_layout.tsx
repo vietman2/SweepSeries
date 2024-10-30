@@ -23,6 +23,7 @@ export default function MyPageLayout() {
     <Stack
       screenOptions={{
         headerLeft: () => <BackButton />,
+        headerShadowVisible: false,
       }}
     >
       <Stack.Screen

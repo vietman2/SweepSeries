@@ -20,7 +20,11 @@ export default function CommunityLayout() {
   };
 
   return (
-    <Stack>
+    <Stack
+      screenOptions={{
+        headerShadowVisible: false,
+      }}
+    >
       <Stack.Screen
         name="index"
         options={{

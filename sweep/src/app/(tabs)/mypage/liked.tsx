@@ -5,7 +5,7 @@ import { TabBar } from "@components/Tabs";
 import { LikedAcademies, LikedCoaches } from "@pages/mypage";
 
 const Tab = createMaterialTopTabNavigator();
-const { width: screenWidth } = Dimensions.get("window");
+const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
 function Dummy() {
   return <></>;
@@ -15,7 +15,7 @@ export default function RecentlyViewed() {
   return (
     <Tab.Navigator
       initialRouteName="academies"
-      initialLayout={{ width: screenWidth }}
+      initialLayout={{ width: screenWidth, height: screenHeight }}
       tabBar={(props) => <TabBar {...props} />}
       backBehavior="none"
     >

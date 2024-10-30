@@ -5,13 +5,13 @@ import { TabBar } from "@components/Tabs";
 import { Dugout, Draft, Market } from "@pages/community";
 
 const Tab = createMaterialTopTabNavigator();
-const { width: screenWidth } = Dimensions.get("window");
+const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
 export default function CommunityList() {
   return (
     <Tab.Navigator
       initialRouteName="dugout"
-      initialLayout={{ width: screenWidth }}
+      initialLayout={{ width: screenWidth, height: screenHeight }}
       tabBar={(props) => <TabBar {...props} />}
     >
       <Tab.Screen

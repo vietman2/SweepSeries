@@ -115,14 +115,14 @@ const createStyles = (theme: ThemeColorType) =>
     },
     text: {
       color: theme.lowEmphasis,
-      fontSize: 16,
+      fontSize: 20,
       fontWeight: "bold",
     },
     selectedText: {
       color: theme.primary,
     },
     indicator: {
-      height: 2,
+      height: 3,
       backgroundColor: theme.primary,
       position: "absolute",
       bottom: 0,
