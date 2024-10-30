@@ -68,7 +68,12 @@ export default function MyPageLayout() {
           headerTitle: "내가 쓴 리뷰",
         }}
       />
-      <Stack.Screen name="settings" />
+      <Stack.Screen
+        name="settings"
+        options={{
+          headerTitle: "알림 맞춤 설정",
+        }}
+      />
     </Stack>
   );
 }

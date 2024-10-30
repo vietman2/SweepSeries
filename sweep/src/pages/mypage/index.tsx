@@ -6,6 +6,7 @@ import { LikedAcademies } from "./LikedAcademies/LikedAcademies";
 import { LikedCoaches } from "./LikedCoaches/LikedCoaches";
 import { MyPage } from "./MyPage/MyPage";
 import { MyReviews } from "./MyReviews/MyReviews";
+import { Settings } from "./Settings/Settings";
 
 export {
   Bulletin,
@@ -16,4 +17,5 @@ export {
   LikedCoaches,
   MyPage,
   MyReviews,
+  Settings,
 };

@@ -17,3 +17,15 @@ export type FAQType = {
   question: string;
   answer: string;
 };
+
+export type SettingType = {
+  id: number;
+  title: string;
+  subTitle?: string;
+  isSet: boolean;
+};
+
+export type SettingGroupType = {
+  title: string;
+  settings: SettingType[];
+}
