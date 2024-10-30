@@ -4,7 +4,6 @@ import { Divider } from "@components/Dividers";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
 import { InquirySimpleType } from "@models/customers";
-import { ThemeColorType } from "@themes/colors";
 
 interface Props {
   inquiry: InquirySimpleType;
@@ -12,7 +11,7 @@ interface Props {
 
 export function InquirySimple({ inquiry }: Readonly<Props>) {
   const { theme } = useTheme();
-  const styles = createStyles(theme);
+  const styles = createStyles();
 
   return (
     <>
@@ -39,7 +38,7 @@ export function InquirySimple({ inquiry }: Readonly<Props>) {
   );
 }
 
-const createStyles = (theme: ThemeColorType) =>
+const createStyles = () =>
   StyleSheet.create({
     container: {
       flexDirection: "row",
