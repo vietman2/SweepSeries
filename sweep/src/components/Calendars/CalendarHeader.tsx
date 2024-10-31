@@ -1,4 +1,3 @@
-import { forwardRef } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { CalendarHeaderProps } from "react-native-calendars/src/calendar/header";
 
@@ -56,7 +55,7 @@ export function CalendarHeader({
   );
 }
 
-export const CustomHeader = forwardRef((props: CalendarHeaderProps, ref) => {
+export function CustomHeader(props: CalendarHeaderProps) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -69,7 +68,7 @@ export const CustomHeader = forwardRef((props: CalendarHeaderProps, ref) => {
   };
 
   const formatMonth = () => {
-    return `${props.month.getFullYear()}년 ${props.month.getMonth()+1}월`;
+    return `${props.month.getFullYear()}년 ${props.month.getMonth() + 1}월`;
   };
 
   return (
@@ -102,7 +101,7 @@ export const CustomHeader = forwardRef((props: CalendarHeaderProps, ref) => {
       </View>
     </View>
   );
-});
+}
 
 const createStyles = (theme: ThemeColorType) =>
   StyleSheet.create({
