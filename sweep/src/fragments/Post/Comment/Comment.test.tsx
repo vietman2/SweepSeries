@@ -28,7 +28,6 @@ describe("<Comment />", () => {
       mode: "normal",
       isAuthenticated: true,
     });
-    jest;
     jest
       .spyOn(AlertAPI, "alert")
       .mockImplementation(
