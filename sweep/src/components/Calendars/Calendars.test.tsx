@@ -3,6 +3,7 @@ import { fireEvent } from "@testing-library/react-native";
 
 import { CalendarHeader, CustomHeader } from "./CalendarHeader";
 import { CustomDay } from "./CustomDay";
+import { sampleSchedules } from "@testdata/calendar";
 import { renderWithProviders } from "@utils/test-utils";
 
 describe("<CalendarHeader />", () => {
@@ -55,20 +56,9 @@ describe("<CustomDay />", () => {
   it("renders correctly with schedule", () => {
     jest.useFakeTimers();
     jest.setSystemTime(new Date("2024-10-10").getTime());
-    const schedule1 = {
-      text: "Schedule1",
-      type: 1,
-    };
-    const schedule2 = {
-      text: "Schedule2",
-      type: 2,
-    };
 
     renderWithProviders(
-      <>
-        <CustomDay date={dateData} schedule={schedule1} />
-        <CustomDay date={dateData} schedule={schedule2} />
-      </>
+      <CustomDay date={dateData} schedules={sampleSchedules} />
     );
   });
 });

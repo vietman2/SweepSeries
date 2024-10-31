@@ -4,19 +4,17 @@ import { DateData } from "react-native-calendars";
 
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
+import { ScheduleSimpleType } from "@models/calendar";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
   date: DateData;
-  schedule?: {
-    text: string;
-    type: number;
-  };
+  schedules?: ScheduleSimpleType[];
 }
 
 const { width, height } = Dimensions.get("window");
 
-export function CustomDay({ date, schedule }: Readonly<Props>) {
+export function CustomDay({ date, schedules }: Readonly<Props>) {
   const today = useMemo(() => new Date(), []);
 
   const { theme } = useTheme();
@@ -40,17 +38,21 @@ export function CustomDay({ date, schedule }: Readonly<Props>) {
       >
         {date.day}
       </Text>
-      {schedule && (
-        <View
-          style={[
-            styles.chip,
-            {
-              backgroundColor:
-                schedule.type === 1 ? theme.primary : theme.secondary,
-            },
-          ]}
-        >
-          <Text style={styles.chipText}>{schedule.text}</Text>
+      {schedules && (
+        <View style={styles.chipWrapper}>
+          {schedules.map((schedule) => (
+            <View
+              style={[
+                styles.chip,
+                {
+                  backgroundColor: schedule.color,
+                },
+              ]}
+              key={schedule.text}
+            >
+              <Text style={styles.chipText} numberOfLines={1} ellipsizeMode="clip">{schedule.text}</Text>
+            </View>
+          ))}
         </View>
       )}
     </View>
@@ -61,7 +63,7 @@ const createStyles = (theme: ThemeColorType) =>
   StyleSheet.create({
     container: {
       width: width / 7,
-      height: height * 0.1,
+      height: height * 0.12,
       alignItems: "center",
       paddingTop: 8,
       borderRadius: 8,
@@ -73,14 +75,18 @@ const createStyles = (theme: ThemeColorType) =>
       fontSize: 14,
       fontWeight: "bold",
     },
+    chipWrapper: {
+      width: "85%",
+    },
     chip: {
       marginTop: 4,
-      padding: 4,
-      borderRadius: 4,
+      paddingHorizontal: 2,
+      paddingVertical: 1,
+      borderRadius: 2,
       backgroundColor: theme.primary,
     },
     chipText: {
-      fontSize: 10,
+      fontSize: 12,
       color: theme.background,
     },
   });
