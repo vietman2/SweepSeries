@@ -28,6 +28,8 @@ jest.mock("@components/Buttons", () => ({
 }));
 jest.mock("@components/Calendars", () => ({
   CalendarHeader: () => null,
+  CustomHeader: () => null,
+  CustomDay: () => null,
 }));
 jest.mock("@components/Dividers", () => ({
   Divider: () => null,
