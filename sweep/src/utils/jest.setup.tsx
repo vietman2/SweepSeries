@@ -25,6 +25,11 @@ jest.mock("@components/Buttons", () => ({
 
     return <TouchableOpacity onPress={onPress} testID={text} />;
   },
+  Toggle: ({ onToggle }: { onToggle: () => void }) => {
+    const { TouchableOpacity } = jest.requireActual("react-native");
+
+    return <TouchableOpacity onPress={onToggle} testID="toggle" />;
+  },
 }));
 jest.mock("@components/Calendars", () => ({
   CalendarHeader: () => null,
