@@ -47,7 +47,6 @@
     "@reduxjs/toolkit": "^2.3.0",
     "@types/redux": "^3.6.0",
     "axios": "^1.7.7",
-    "eas-cli": "^12.5.4",
     "expo": "^51.0.38",
     "expo-build-properties": "^0.12.5",
     "expo-clipboard": "^6.0.3",
