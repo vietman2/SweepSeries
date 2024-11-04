@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { router } from "expo-router";
 import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetBackdropProps,
@@ -47,6 +48,13 @@ export function NormalHome() {
     ref.current?.close();
   };
 
+  const handleAcademySelect = (academy: AcademySimpleType) => {
+    router.push({
+      pathname: "/home/academy/[id]",
+      params: { id: academy.uuid },
+    });
+  };
+
   const renderBackdrop = useCallback(
     (props: BottomSheetBackdropProps) => (
       <BottomSheetBackdrop
@@ -77,7 +85,11 @@ export function NormalHome() {
           </View>
           <Scroll horizontal showsHorizontalScrollIndicator={false}>
             {suggestions.map((academy) => (
-              <TouchableOpacity key={academy.uuid}>
+              <TouchableOpacity
+                key={academy.uuid}
+                onPress={() => handleAcademySelect(academy)}
+                testID={`academy-${academy.uuid}`}
+              >
                 <AcademySuggest academy={academy} />
               </TouchableOpacity>
             ))}
