@@ -5,6 +5,7 @@ import {
   WorkingHoursType,
 } from "./academy";
 import { CoachProfessionType, CoachSimpleType } from "./coach";
+import { ProgramSimpleType, LessonPositionType } from "./program";
 
 export {
   AcademySimpleType,
@@ -13,4 +14,6 @@ export {
   CoachSimpleType,
   FacilityType,
   WorkingHoursType,
+  ProgramSimpleType,
+  LessonPositionType,
 };
