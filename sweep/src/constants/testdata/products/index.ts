@@ -1,4 +1,4 @@
-import { sampleAcademies } from "./academies";
+import { sampleAcademies, sampleAcademyDetail } from "./academies";
 import { sampleCoaches } from "./coaches";
 
-export { sampleAcademies, sampleCoaches };
+export { sampleAcademies, sampleAcademyDetail, sampleCoaches };

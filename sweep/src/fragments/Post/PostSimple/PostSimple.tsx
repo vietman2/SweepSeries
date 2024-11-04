@@ -88,7 +88,7 @@ const createStyles = (theme: ThemeColorType) =>
       paddingVertical: 8,
       paddingHorizontal: 12,
       borderRadius: 8,
-      backgroundColor: theme.border,
+      backgroundColor: theme.backgroundGray,
     },
     horizontal: {
       flexDirection: "row",

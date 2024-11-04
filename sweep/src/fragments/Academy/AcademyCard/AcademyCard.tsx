@@ -84,6 +84,7 @@ const createStyles = (theme: ThemeColorType) =>
     },
     title: {
       fontSize: 20,
+      fontWeight: "bold",
     },
     content: {
       paddingBottom: 16,

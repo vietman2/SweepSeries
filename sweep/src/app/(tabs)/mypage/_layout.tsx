@@ -23,6 +23,7 @@ export default function MyPageLayout() {
     <Stack
       screenOptions={{
         headerLeft: () => <BackButton />,
+        headerShadowVisible: false,
       }}
     >
       <Stack.Screen
@@ -39,9 +40,21 @@ export default function MyPageLayout() {
         }}
       />
       <Stack.Screen
+        name="lessons"
+        options={{
+          headerTitle: "레슨 기록",
+        }}
+      />
+      <Stack.Screen
         name="liked"
         options={{
           headerTitle: "좋아요 목록",
+        }}
+      />
+      <Stack.Screen
+        name="reviews"
+        options={{
+          headerTitle: "리뷰 관리",
         }}
       />
       <Stack.Screen
@@ -51,12 +64,23 @@ export default function MyPageLayout() {
         }}
       />
       <Stack.Screen
-        name="reviews"
+        name="bulletin"
         options={{
-          headerTitle: "내가 쓴 리뷰",
+          headerTitle: "공지사항",
         }}
       />
-      <Stack.Screen name="settings" />
+      <Stack.Screen
+        name="faq"
+        options={{
+          headerTitle: "자주 묻는 질문",
+        }}
+      />
+      <Stack.Screen
+        name="settings"
+        options={{
+          headerTitle: "알림 맞춤 설정",
+        }}
+      />
     </Stack>
   );
 }

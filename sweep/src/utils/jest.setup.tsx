@@ -25,9 +25,16 @@ jest.mock("@components/Buttons", () => ({
 
     return <TouchableOpacity onPress={onPress} testID={text} />;
   },
+  Toggle: ({ onToggle }: { onToggle: () => void }) => {
+    const { TouchableOpacity } = jest.requireActual("react-native");
+
+    return <TouchableOpacity onPress={onToggle} testID="toggle" />;
+  },
 }));
 jest.mock("@components/Calendars", () => ({
   CalendarHeader: () => null,
+  CustomHeader: () => null,
+  CustomDay: () => null,
 }));
 jest.mock("@components/Dividers", () => ({
   Divider: () => null,
@@ -122,6 +129,8 @@ jest.mock("@components/Search", () => ({
   },
 }));
 jest.mock("@components/Tabs", () => ({
+  CollapsibleTab: () => null,
+  FAQTabs: () => null,
   Tabbar: () => null,
 }));
 jest.mock("@components/Texts", () => {

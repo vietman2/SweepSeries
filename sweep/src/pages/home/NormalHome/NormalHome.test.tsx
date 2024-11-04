@@ -3,6 +3,11 @@ import { fireEvent } from "@testing-library/react-native";
 import { NormalHome } from "./NormalHome";
 import { renderWithProviders } from "@utils/test-utils";
 
+jest.mock("expo-router", () => ({
+  router: {
+    push: jest.fn(),
+  },
+}));
 jest.mock("@gorhom/bottom-sheet", () => {
   return {
     __esModule: true,
@@ -31,5 +36,11 @@ describe("<NormalHome />", () => {
 
     fireEvent.press(getByTestId("sort-button"));
     fireEvent.press(getByTestId("sort-item-인기순"));
+  });
+  
+  it("handles navigate to academy detail correctly", () => {
+    const { getByTestId } = renderWithProviders(<NormalHome />);
+
+    fireEvent.press(getByTestId("academy-1"));
   });
 });

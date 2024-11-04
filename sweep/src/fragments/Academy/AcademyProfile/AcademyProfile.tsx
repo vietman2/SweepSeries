@@ -1,0 +1,72 @@
+import { Dimensions, Image, StyleSheet, View } from "react-native";
+
+import { AppIcon } from "@components/Icons";
+import { Scroll } from "@components/ScrollView";
+import { Text } from "@components/Texts";
+import { useTheme } from "@contexts/theme";
+import { ThemeColorType } from "@themes/colors";
+
+const { width } = Dimensions.get("window");
+
+export function AcademyProfile() {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+
+  return (
+    <View style={styles.container} pointerEvents="none">
+      <Scroll horizontal pagingEnabled>
+        <Image
+          src={
+            "https://mblogthumb-phinf.pstatic.net/MjAyNDA4MTJfMTk1/MDAxNzIzNDcwMDkyNjI1.CIzE8pfUnv-yPLFphjW8gHScETczni_iOFx9lYYCxrwg.401U8w3xp21TmyobrG2pC1AbGA4kNXahLRe99Jog5Ysg.JPEG/IMG_8197.jpeg?type=w800"
+          }
+          style={styles.image}
+        />
+        <Image src={"https://via.placeholder.com/150"} style={styles.image} />
+        <Image src={"https://via.placeholder.com/150"} style={styles.image} />
+      </Scroll>
+      <View style={styles.header}>
+        <Text style={styles.title}>Catch B 아카데미</Text>
+        <View style={styles.horizontal}>
+          <AppIcon icon="location" size={20} color={theme.lowEmphasis} />
+          <Text style={styles.infoText}>
+            인천시 서구 청라한내로 72번길 17, 416호
+          </Text>
+        </View>
+        <View style={styles.horizontal}>
+          <AppIcon icon="star" size={20} color="#F2B517" />
+          <Text style={styles.infoText}>{(4.2).toFixed(2)} (42)</Text>
+        </View>
+      </View>
+    </View>
+  );
+}
+
+const createStyles = (theme: ThemeColorType) =>
+  StyleSheet.create({
+    container: {
+      paddingBottom: 8,
+      gap: 16,
+      backgroundColor: theme.background,
+    },
+    image: {
+      flex: 1,
+      width,
+      height: (width * 9) / 16,
+    },
+    header: {
+      paddingHorizontal: 16,
+      gap: 4,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: "bold",
+    },
+    horizontal: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 4,
+    },
+    infoText: {
+      color: theme.lowEmphasis,
+    },
+  });

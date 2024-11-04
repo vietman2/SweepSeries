@@ -1,3 +1,4 @@
-import { CalendarHeader } from "./CalendarHeader";
+import { CalendarHeader, CustomHeader } from "./CalendarHeader";
+import { CustomDay } from "./CustomDay";
 
-export { CalendarHeader };
+export { CalendarHeader, CustomHeader, CustomDay };

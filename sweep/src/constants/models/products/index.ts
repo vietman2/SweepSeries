@@ -1,4 +1,16 @@
-import { AcademySimpleType } from "./academy";
+import {
+  AcademySimpleType,
+  AcademyDetailType,
+  FacilityType,
+  WorkingHoursType,
+} from "./academy";
 import { CoachProfessionType, CoachSimpleType } from "./coach";
 
-export { AcademySimpleType, CoachProfessionType, CoachSimpleType };
+export {
+  AcademySimpleType,
+  AcademyDetailType,
+  CoachProfessionType,
+  CoachSimpleType,
+  FacilityType,
+  WorkingHoursType,
+};

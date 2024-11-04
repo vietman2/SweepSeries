@@ -42,7 +42,7 @@ export function LikedCoaches() {
 const createStyles = (theme: ThemeColorType) =>
   StyleSheet.create({
     container: {
-      marginTop: 4,
+      marginTop: 1,
       backgroundColor: theme.background,
     },
     wrapper: {

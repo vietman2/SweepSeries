@@ -61,11 +61,11 @@ const createStyles = (theme: ThemeColorType) =>
     container: {
       flex: 1,
       backgroundColor: theme.background,
-      paddingHorizontal: 20,
-      paddingTop: 20,
+      paddingHorizontal: 16,
+      paddingTop: 16,
     },
     textInput: {
-      marginVertical: 20,
+      marginVertical: 16,
     },
     void: {
       height: 40,

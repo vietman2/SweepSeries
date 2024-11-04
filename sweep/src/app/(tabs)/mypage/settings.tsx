@@ -1,9 +1,3 @@
-import { Text, View } from "react-native";
+import { Settings } from "@pages/mypage";
 
-export default function Settings() {
-  return (
-    <View>
-      <Text>Settings</Text>
-    </View>
-  );
-}
+export default Settings;

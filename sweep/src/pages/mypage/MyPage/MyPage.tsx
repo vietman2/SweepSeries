@@ -15,6 +15,10 @@ export function MyPage() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  const handleLessonsPress = () => {
+    router.push("/mypage/lessons");
+  };
+
   const handleLikedListPress = () => {
     router.push("/mypage/liked");
   };
@@ -23,13 +27,23 @@ export function MyPage() {
     router.push("/mypage/reviews");
   };
 
-  const handleEventsPress = () => {};
-  const handleBulletinPress = () => {};
+  const handleBulletinPress = () => {
+    router.push("/mypage/bulletin");
+  };
+
   const handleAskPress = () => {
     router.push("/mypage/customerservice");
   };
-  const handleFAQPress = () => {};
-  const handleSettingsPress = () => {};
+
+  const handleFAQPress = () => {
+    router.push("/mypage/faq");
+  };
+
+  const handleSettingsPress = () => {
+    router.push("/mypage/settings");
+  };
+
+  const handleEventsPress = () => {};
   const handleLogoutPress = () => {
     // TODO: integrate logout with the backend
     logout();
@@ -42,7 +56,7 @@ export function MyPage() {
 
   return (
     <>
-      <Scroll style={styles.container}>
+      <Scroll style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.profile}>
           <MainProfile />
           <TextButton
@@ -54,13 +68,18 @@ export function MyPage() {
         </View>
         <Subtitle text="내 활동" />
         <SvgIconButton
+          icon="recent"
+          text="레슨 기록"
+          onPress={handleLessonsPress}
+        />
+        <SvgIconButton
           icon="heart-outline"
           text="좋아요 목록"
           onPress={handleLikedListPress}
         />
         <SvgIconButton
           icon="chatbox-outline"
-          text="내가 쓴 리뷰"
+          text="리뷰 관리"
           onPress={handleReviewPress}
         />
         <View style={styles.dividerWrapper}>
@@ -99,11 +118,13 @@ export function MyPage() {
           icon="logout"
           text="로그아웃"
           onPress={handleLogoutPress}
+          color={theme.lowEmphasis}
         />
         <SvgIconButton
           icon="person-minus"
           text="회원탈퇴"
           onPress={handleDeleteAccountPress}
+          color={theme.lowEmphasis}
         />
       </Scroll>
       <View style={styles.footer}>

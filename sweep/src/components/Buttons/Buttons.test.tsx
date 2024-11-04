@@ -1,6 +1,9 @@
+import { fireEvent, waitFor } from "@testing-library/react-native";
+
 import { SvgIconButton } from "./IconButton";
 import { KakaoButton, NaverButton } from "./SocialButtons";
 import { Link, TextButton } from "./TextButton";
+import { Toggle } from "./Toggle";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.unmock("@components/Buttons");
@@ -44,5 +47,19 @@ describe("<TextButton>", () => {
     renderWithProviders(
       <TextButton text="텍스트 버튼" onPress={() => {}} active={false} />
     );
+  });
+});
+
+describe("<Toggle>", () => {
+  it("renders on correctly", () => {
+    const { getByTestId } = renderWithProviders(
+      <Toggle isOn={true} onToggle={jest.fn()} />
+    );
+
+    waitFor(() => fireEvent.press(getByTestId("toggle")));
+  });
+
+  it("renders off correctly", () => {
+    waitFor(() => renderWithProviders(<Toggle isOn={false} onToggle={jest.fn()} />));
   });
 });

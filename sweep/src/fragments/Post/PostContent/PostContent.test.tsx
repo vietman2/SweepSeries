@@ -1,6 +1,7 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { PostContent } from "./PostContent";
+import * as AuthContext from "@contexts/auth";
 import * as AlertAPI from "@services/alert/alert";
 import { samplePostDetail } from "@testdata/community";
 import { renderWithProviders } from "@utils/test-utils";
@@ -11,9 +12,22 @@ jest.mock("../Report/ReportModal", () => ({
 jest.mock("../Tag/Tag", () => ({
   Tag: () => null,
 }));
+jest.mock("@contexts/auth", () => ({
+  AuthProvider: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+  useAuth: jest.fn(),
+}));
 
 describe("<PostContent />", () => {
   beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(AuthContext, "useAuth").mockReturnValue({
+      login: jest.fn(),
+      logout: jest.fn(),
+      mode: "normal",
+      isAuthenticated: true,
+    });
     jest
       .spyOn(AlertAPI, "alert")
       .mockImplementation(

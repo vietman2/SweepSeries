@@ -107,22 +107,24 @@ const createStyles = (theme: ThemeColorType) =>
     },
     tabContainer: {
       flexDirection: "row",
+      borderBottomWidth: 0.5,
+      borderBottomColor: theme.lowEmphasis,
     },
     tab: {
       flex: 1,
       alignItems: "center",
-      paddingVertical: 16,
+      paddingVertical: 12,
     },
     text: {
       color: theme.lowEmphasis,
-      fontSize: 16,
+      fontSize: 20,
       fontWeight: "bold",
     },
     selectedText: {
       color: theme.primary,
     },
     indicator: {
-      height: 2,
+      height: 3,
       backgroundColor: theme.primary,
       position: "absolute",
       bottom: 0,

@@ -5,6 +5,7 @@ import { router } from "expo-router";
 import { SvgIconButton } from "@components/Buttons";
 import { Scroll, ScrollView } from "@components/ScrollView";
 import { Searchbar } from "@components/Search";
+import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
 import { PostSimple, Tag } from "@fragments/Post";
 import { PostSimpleType, TagType } from "@models/community";
@@ -24,6 +25,8 @@ export function PostList({ mode }: Readonly<Props>) {
   //const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshCount, setRefreshCount] = useState<number>(0);
+
+  const { isAuthenticated } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -108,15 +111,17 @@ export function PostList({ mode }: Readonly<Props>) {
           ))}
         </View>
       </ScrollView>
-      <View style={styles.button}>
-        <SvgIconButton
-          icon="pencil"
-          text="글쓰기"
-          color={theme.background}
-          backgroundColor={theme.primary}
-          onPress={handleCreatePost}
-        />
-      </View>
+      {isAuthenticated && (
+        <View style={styles.button}>
+          <SvgIconButton
+            icon="pencil"
+            text="글쓰기"
+            color={theme.background}
+            backgroundColor={theme.primary}
+            onPress={handleCreatePost}
+          />
+        </View>
+      )}
     </>
   );
 }
@@ -126,7 +131,7 @@ const createStyles = (theme: ThemeColorType) =>
     container: {
       flex: 1,
       backgroundColor: theme.background,
-      marginVertical: 8,
+      marginVertical: 1,
       paddingBottom: 24,
       paddingHorizontal: 16,
     },

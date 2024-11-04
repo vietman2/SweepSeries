@@ -1,6 +1,7 @@
 import { fireEvent } from "@testing-library/react-native";
 
 import { Comment } from "./Comment";
+import * as AuthContext from "@contexts/auth";
 import * as AlertAPI from "@services/alert/alert";
 import { sampleComments } from "@testdata/community";
 import { renderWithProviders } from "@utils/test-utils";
@@ -11,9 +12,22 @@ jest.mock("./Recomment", () => ({
 jest.mock("../Report/ReportModal", () => ({
   ReportModal: () => null,
 }));
+jest.mock("@contexts/auth", () => ({
+  AuthProvider: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+  useAuth: jest.fn(),
+}));
 
 describe("<Comment />", () => {
   beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(AuthContext, "useAuth").mockReturnValue({
+      login: jest.fn(),
+      logout: jest.fn(),
+      mode: "normal",
+      isAuthenticated: true,
+    });
     jest
       .spyOn(AlertAPI, "alert")
       .mockImplementation(

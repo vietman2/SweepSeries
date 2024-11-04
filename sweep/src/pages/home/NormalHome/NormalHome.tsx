@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { router } from "expo-router";
 import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetBackdropProps,
@@ -11,6 +12,7 @@ import { AppIcon } from "@components/Icons";
 import { Scroll } from "@components/ScrollView";
 import { Searchbar } from "@components/Search";
 import { Text } from "@components/Texts";
+import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
 import { AcademyCard, AcademySimple, AcademySuggest } from "@fragments/Academy";
 import { AcademySimpleType } from "@models/products";
@@ -28,6 +30,8 @@ export function NormalHome() {
   const [query, setQuery] = useState<string>("");
   const [selectedSort, setSelectedSort] = useState<string>("인기순");
   const [selectedFilter, setSelectedFilter] = useState<string>("");
+
+  const { isAuthenticated } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -42,6 +46,13 @@ export function NormalHome() {
   const handleSortSelect = (sort: string) => {
     setSelectedSort(sort);
     ref.current?.close();
+  };
+
+  const handleAcademySelect = (academy: AcademySimpleType) => {
+    router.push({
+      pathname: "/home/academy/[id]",
+      params: { id: academy.uuid },
+    });
   };
 
   const renderBackdrop = useCallback(
@@ -63,8 +74,8 @@ export function NormalHome() {
 
   return (
     <>
-      <Scroll style={styles.container}>
-        <AcademyCard />
+      <Scroll style={styles.container} showsVerticalScrollIndicator={false}>
+        {isAuthenticated && <AcademyCard />}
         <View style={styles.content}>
           <View style={styles.header}>
             <Text style={styles.title}>나에게 딱 맞는 캐치비 추천!</Text>
@@ -72,9 +83,13 @@ export function NormalHome() {
               Catch B가 추천하는 아카데미/레슨
             </Text>
           </View>
-          <Scroll horizontal>
+          <Scroll horizontal showsHorizontalScrollIndicator={false}>
             {suggestions.map((academy) => (
-              <TouchableOpacity key={academy.uuid}>
+              <TouchableOpacity
+                key={academy.uuid}
+                onPress={() => handleAcademySelect(academy)}
+                testID={`academy-${academy.uuid}`}
+              >
                 <AcademySuggest academy={academy} />
               </TouchableOpacity>
             ))}
