@@ -13,8 +13,6 @@ const Tab = createMaterialTopTabNavigator();
 const MockComponent = () => <></>;
 
 describe("<CollapsibleTab />", () => {
-  const tabs = ["tab1", "tab2", "tab3"];
-
   it("renders correctly", () => {
     const { getByText } = renderWithProviders(
       <Tabs.Container renderTabBar={(props) => <CollapsibleTab {...props} />}>

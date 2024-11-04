@@ -7,7 +7,9 @@ import { useTheme } from "@contexts/theme";
 import { ThemeColorType } from "@themes/colors";
 
 export function CollapsibleTab(props: TabBarProps<TabName>) {
-  const [selectedTab, setSelectedTab] = useState<TabName>(props.focusedTab.value);
+  const [selectedTab, setSelectedTab] = useState<TabName>(
+    props.focusedTab.value
+  );
 
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -15,11 +17,11 @@ export function CollapsibleTab(props: TabBarProps<TabName>) {
   const handleTabPress = (tab: TabName) => {
     setSelectedTab(tab);
     props.onTabPress(tab);
-  }
+  };
 
   return (
     <View style={styles.tabContainer}>
-      {props.tabNames.map((tab, index) => (
+      {props.tabNames.map((tab) => (
         <TouchableOpacity
           key={tab}
           style={[styles.tab, selectedTab === tab && styles.selectedTab]}
