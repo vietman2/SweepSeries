@@ -13,7 +13,7 @@ export function AcademyProfile() {
   const styles = createStyles(theme);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} pointerEvents="none">
       <Scroll horizontal pagingEnabled>
         <Image
           src={
