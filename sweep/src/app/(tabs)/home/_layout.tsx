@@ -22,29 +22,24 @@ export default function HomeLayout() {
   return (
     <Stack
       screenOptions={{
+        headerLeft: () => <BackButton />,
         headerShadowVisible: false,
+        headerTitle: "",
       }}
     >
       <Stack.Screen
         name="index"
         options={{
           headerLeft: () => <HorizontalLogo size={30} />,
-          headerTitle: "",
         }}
       />
       <Stack.Screen
         name="academy/my"
         options={{
-          headerLeft: () => <BackButton />,
           headerTitle: "내 아카데미",
         }}
       />
-      <Stack.Screen
-        name="academy/[id]"
-        options={{
-          headerTitle: "",
-        }}
-      />
+      <Stack.Screen name="academy/[id]" />
     </Stack>
   );
 }
