@@ -1,30 +1,34 @@
+import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { TabBarProps } from "react-native-collapsible-tab-view";
+import { TabName } from "react-native-collapsible-tab-view/lib/typescript/src/types";
 
 import { useTheme } from "@contexts/theme";
 import { ThemeColorType } from "@themes/colors";
 
-interface Props {
-  tabs: string[];
-  selectedIdx: number;
-  setSelectedTab: (idx: number) => void;
-}
+export function CollapsibleTab(props: TabBarProps<TabName>) {
+  const [selectedTab, setSelectedTab] = useState<TabName>(props.focusedTab.value);
 
-export function CollapsibleTab({ tabs, selectedIdx, setSelectedTab }: Props) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  const handleTabPress = (tab: TabName) => {
+    setSelectedTab(tab);
+    props.onTabPress(tab);
+  }
+
   return (
     <View style={styles.tabContainer}>
-      {tabs.map((tab, index) => (
+      {props.tabNames.map((tab, index) => (
         <TouchableOpacity
           key={tab}
-          style={[styles.tab, selectedIdx === index && styles.selectedTab]}
-          onPress={() => setSelectedTab(index)}
+          style={[styles.tab, selectedTab === tab && styles.selectedTab]}
+          onPress={() => handleTabPress(tab)}
         >
           <Text
             style={[
               styles.tabText,
-              selectedIdx === index && styles.selectedTabText,
+              selectedTab === tab && styles.selectedTabText,
             ]}
           >
             {tab}

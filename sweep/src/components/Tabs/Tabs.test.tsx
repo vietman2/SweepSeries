@@ -1,6 +1,7 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { fireEvent, waitFor } from "@testing-library/react-native";
+import { Tabs } from "react-native-collapsible-tab-view";
 
 import { CollapsibleTab } from "./CollapsibleTab";
 import { FAQTabs } from "./FAQTabs";
@@ -16,14 +17,17 @@ describe("<CollapsibleTab />", () => {
 
   it("renders correctly", () => {
     const { getByText } = renderWithProviders(
-      <CollapsibleTab
-        tabs={tabs}
-        selectedIdx={0}
-        setSelectedTab={jest.fn()}
-      />
+      <Tabs.Container renderTabBar={(props) => <CollapsibleTab {...props} />}>
+        <Tabs.Tab name="Tab1">
+          <MockComponent />
+        </Tabs.Tab>
+        <Tabs.Tab name="Tab2">
+          <MockComponent />
+        </Tabs.Tab>
+      </Tabs.Container>
     );
 
-    fireEvent.press(getByText("tab2"));
+    fireEvent.press(getByText("Tab2"));
   });
 });
 
