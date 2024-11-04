@@ -129,6 +129,7 @@ jest.mock("@components/Search", () => ({
   },
 }));
 jest.mock("@components/Tabs", () => ({
+  CollapsibleTab: () => null,
   FAQTabs: () => null,
   Tabbar: () => null,
 }));
