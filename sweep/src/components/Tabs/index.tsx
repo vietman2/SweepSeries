@@ -1,4 +1,5 @@
+import { CollapsibleTab } from "./CollapsibleTab";
 import { FAQTabs } from "./FAQTabs";
 import { TabBar } from "./Tabbar";
 
-export { FAQTabs, TabBar };
+export { CollapsibleTab, FAQTabs, TabBar };

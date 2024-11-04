@@ -107,11 +107,13 @@ const createStyles = (theme: ThemeColorType) =>
     },
     tabContainer: {
       flexDirection: "row",
+      borderBottomWidth: 0.5,
+      borderBottomColor: theme.lowEmphasis,
     },
     tab: {
       flex: 1,
       alignItems: "center",
-      paddingVertical: 16,
+      paddingVertical: 12,
     },
     text: {
       color: theme.lowEmphasis,
