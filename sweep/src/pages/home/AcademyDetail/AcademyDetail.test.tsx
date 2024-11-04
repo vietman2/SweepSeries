@@ -1,8 +1,15 @@
 import { AcademyDetail } from "./AcademyDetail";
 import { renderWithProviders } from "@utils/test-utils";
 
+jest.mock("./Information/Information", () => ({
+  Information: () => "Information",
+}));
+jest.mock("@fragments/Academy", () => ({
+  AcademyProfile: () => "AcademyProfile",
+}));
+
 describe("<AcademyDetail />", () => {
-  it("should render the id", () => {
+  it("renders correctly", () => {
     renderWithProviders(<AcademyDetail />);
   });
 });

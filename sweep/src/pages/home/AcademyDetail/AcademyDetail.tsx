@@ -1,11 +1,44 @@
-import { Text, View } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { View } from "react-native";
+import { Tabs } from "react-native-collapsible-tab-view";
+
+import { Information } from "./Information/Information";
+import { CollapsibleTab } from "@components/Tabs";
+import { Text } from "@components/Texts";
+import { AcademyProfile } from "@fragments/Academy";
+
+function SampleComponent() {
+  return (
+    <View style={{ backgroundColor: "red" }}>
+      <Text>asdf</Text>
+    </View>
+  );
+}
 
 export function AcademyDetail() {
-  const { id } = useLocalSearchParams();
   return (
-    <View>
-      <Text>{id}</Text>
-    </View>
+    <Tabs.Container
+      renderHeader={() => <AcademyProfile />}
+      renderTabBar={(props) => <CollapsibleTab {...props} />}
+      pagerProps={{ scrollEnabled: false }}
+      initialTabName="정보"
+    >
+      <Tabs.Tab name="정보">
+        <Tabs.ScrollView>
+          <Information />
+        </Tabs.ScrollView>
+      </Tabs.Tab>
+      <Tabs.Tab name="프로그램">
+        <SampleComponent />
+      </Tabs.Tab>
+      <Tabs.Tab name="코치">
+        <SampleComponent />
+      </Tabs.Tab>
+      <Tabs.Tab name="소식">
+        <SampleComponent />
+      </Tabs.Tab>
+      <Tabs.Tab name="리뷰">
+        <SampleComponent />
+      </Tabs.Tab>
+    </Tabs.Container>
   );
 }
