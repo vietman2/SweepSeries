@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { router } from "expo-router";
 
 import { useTheme } from "@contexts/theme";
 import { CoachSimple } from "@fragments/Coach";
@@ -13,6 +14,13 @@ export function CoachList() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  const handleCoachPress = (coach: CoachSimpleType) => {
+    router.push({
+      pathname: "/home/academy/coach/[id]",
+      params: { id: coach.uuid },
+    });
+  };
+
   useEffect(() => {
     setCoaches(sampleCoaches);
   }, []);
@@ -20,7 +28,13 @@ export function CoachList() {
   return (
     <View style={styles.container}>
       {coaches.map((coach) => (
-        <CoachSimple key={coach.uuid} coach={coach} />
+        <TouchableOpacity
+          key={coach.uuid}
+          onPress={() => handleCoachPress(coach)}
+          testID={`coach-${coach.uuid}`}
+        >
+          <CoachSimple coach={coach} />
+        </TouchableOpacity>
       ))}
     </View>
   );

@@ -1,4 +1,5 @@
 import { AcademyDetail } from "./AcademyDetail/AcademyDetail";
+import { CoachDetail } from "./AcademyDetail/CoachDetail/CoachDetail";
 import { MyAcademy } from "./MyAcademy/MyAcademy";
 import { NormalHome } from "./NormalHome/NormalHome";
 import { ProHome } from "./ProHome/ProHome";
@@ -14,4 +15,4 @@ function Home() {
   }
 }
 
-export { AcademyDetail, MyAcademy, Home };
+export { AcademyDetail, CoachDetail, MyAcademy, Home };

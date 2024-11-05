@@ -1,4 +1,8 @@
-import { CoachProfessionType, CoachSimpleType } from "@models/products";
+import {
+  CoachDetailType,
+  CoachProfessionType,
+  CoachSimpleType,
+} from "@models/products";
 
 const sampleCoachProfessions: CoachProfessionType[] = [
   {
@@ -61,3 +65,16 @@ export const sampleCoaches: CoachSimpleType[] = [
     num_reviews: 10,
   },
 ];
+
+export const sampleCoachDetail: CoachDetailType = {
+  uuid: "1",
+  name: "홍길동",
+  profile_image:
+    "https://i.namu.wiki/i/Gi_zEqsd9H46GcmFjGefP7Y7RKlTOvzeHA1-yNtL9L_-K4k-_N16xn54WDZkR9aJJQYplpRcyW46AfhwTg2fZw.webp",
+  introduction:
+    "인천 서구 청라  최고의 실내 야구레슨 코치 홍길동 입니다.\n전문지도사 1급 자격증을 보유하고 있으며 전문적인 커리큘럼을 통해 실력을 향상시켜 드릴 수 있습니다.\n\n모든 커리큘럼은 해당 레슨의 실력, 구력을 확인한 이후 개인별 맞춤형으로 재구성될 수 있습니다.\n<투수레슨 커리큘럼>\n1회차: 숄더 코킹 및 로테이션 강화 ",
+  professions: [sampleCoachProfessions[0], sampleCoachProfessions[1]],
+  is_liked: true,
+  rating: 4.5,
+  num_reviews: 10,
+};

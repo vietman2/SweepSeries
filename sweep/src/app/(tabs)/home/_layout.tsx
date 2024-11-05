@@ -13,7 +13,7 @@ export default function HomeLayout() {
 
   const BackButton = () => {
     return (
-      <TouchableOpacity onPress={handleBackPress}>
+      <TouchableOpacity onPress={handleBackPress} style={{ padding: 8 }}>
         <AppIcon icon="chevron-left" size={20} color={theme.highEmphasis} />
       </TouchableOpacity>
     );
@@ -39,6 +39,7 @@ export default function HomeLayout() {
           headerTitle: "내 아카데미",
         }}
       />
+      <Stack.Screen name="academy/coach/[id]" />
       <Stack.Screen name="academy/[id]" />
     </Stack>
   );

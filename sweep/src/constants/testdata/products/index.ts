@@ -1,5 +1,5 @@
 import { sampleAcademies, sampleAcademyDetail } from "./academies";
-import { sampleCoaches } from "./coaches";
+import { sampleCoaches, sampleCoachDetail } from "./coaches";
 import { sampleNotices } from "./notices";
 import { sampleAcademyPrograms } from "./programs";
 import { sampleReviews } from "./review";
@@ -8,6 +8,7 @@ export {
   sampleAcademies,
   sampleAcademyDetail,
   sampleCoaches,
+  sampleCoachDetail,
   sampleNotices,
   sampleAcademyPrograms,
   sampleReviews,
