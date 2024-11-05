@@ -1,21 +1,12 @@
-import { View } from "react-native";
 import { Tabs } from "react-native-collapsible-tab-view";
 
 import { CoachList } from "./CoachList/CoachList";
 import { Information } from "./Information/Information";
 import { NoticeList } from "./NoticeList/NoticeList";
 import { ProgramList } from "./ProgramList/ProgramList";
+import { ReviewList } from "./ReviewList/ReviewList";
 import { CollapsibleTab } from "@components/Tabs";
-import { Text } from "@components/Texts";
 import { AcademyProfile } from "@fragments/Academy";
-
-function SampleComponent() {
-  return (
-    <View style={{ backgroundColor: "red" }}>
-      <Text>asdf</Text>
-    </View>
-  );
-}
 
 export function AcademyDetail() {
   return (
@@ -46,7 +37,9 @@ export function AcademyDetail() {
         </Tabs.ScrollView>
       </Tabs.Tab>
       <Tabs.Tab name="리뷰">
-        <SampleComponent />
+        <Tabs.ScrollView>
+          <ReviewList />
+        </Tabs.ScrollView>
       </Tabs.Tab>
     </Tabs.Container>
   );

@@ -13,6 +13,9 @@ jest.mock("./NoticeList/NoticeList", () => ({
 jest.mock("./ProgramList/ProgramList", () => ({
   ProgramList: () => "ProgramList",
 }));
+jest.mock("./ReviewList/ReviewList", () => ({
+  ReviewList: () => "ReviewList",
+}));
 jest.mock("@fragments/Academy", () => ({
   AcademyProfile: () => "AcademyProfile",
 }));
