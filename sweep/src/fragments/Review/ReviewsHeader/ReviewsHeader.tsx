@@ -45,8 +45,6 @@ function ProgressBar({ rating, number, total }: BarProps) {
 
   const progress = (number / total) * 100;
 
-  console.log(progress)
-
   return (
     <View style={styles.progressbar}>
       <Text style={styles.barText}>{rating}점</Text>
