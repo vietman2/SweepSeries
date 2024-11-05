@@ -11,7 +11,7 @@ interface Props {
   type?: 1 | 2;
 }
 
-export function AcademyCard({ type = 1 }: Readonly<Props>) {
+export function NormalCard({ type = 1 }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -64,6 +64,43 @@ export function AcademyCard({ type = 1 }: Readonly<Props>) {
           </View>
         </>
       )}
+    </View>
+  );
+}
+
+export function ProCard() {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>내 아카데미</Text>
+        <CalloutSmall text="캐치비 베이스볼 아카데미" />
+      </View>
+      <View style={styles.content}>
+        <View style={styles.horizontal}>
+          <View style={styles.board}>
+            <Text style={styles.subtitle}>총 수강생</Text>
+            <Text style={styles.text}>0</Text>
+          </View>
+          <VerticalDivider width={1} />
+          <View style={styles.board}>
+            <Text style={styles.subtitle}>예약 승인 요청</Text>
+            <Text style={styles.text}>0</Text>
+          </View>
+        </View>
+      </View>
+      <Divider />
+      <View style={styles.footer}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {}}
+          testID="myacademy"
+        >
+          <Text style={styles.buttonText}>내 스케줄 확인하러 가기</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
