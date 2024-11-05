@@ -75,7 +75,7 @@ export function NormalHome() {
   return (
     <>
       <Scroll style={styles.container} showsVerticalScrollIndicator={false}>
-        {isAuthenticated && <AcademyCard />}
+        {isAuthenticated && <AcademyCard mode="normal" />}
         <View style={styles.content}>
           <View style={styles.header}>
             <Text style={styles.title}>나에게 딱 맞는 캐치비 추천!</Text>

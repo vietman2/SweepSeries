@@ -32,7 +32,7 @@ export function MyAcademy() {
 
   return (
     <Scroll style={styles.container}>
-      <AcademyCard type={2} />
+      <AcademyCard mode="normal" type={2} />
       <View style={styles.content}>
         <Text style={styles.subtitle}>레슨 일정 및 피드백 목록</Text>
         <CalendarHeader
