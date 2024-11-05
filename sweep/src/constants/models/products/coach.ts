@@ -14,3 +14,14 @@ export type CoachSimpleType = {
   rating: number;
   num_reviews: number;
 };
+
+export type CoachDetailType = {
+  uuid: string;
+  name: string;
+  profile_image: string;
+  professions: CoachProfessionType[];
+  is_liked: boolean;
+  rating: number;
+  num_reviews: number;
+  introduction: string;
+};

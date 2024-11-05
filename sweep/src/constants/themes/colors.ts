@@ -6,6 +6,7 @@ export type ThemeColorType = {
   border: string;
   logo: string;
   highEmphasis: string;
+  mediumEmphasis: string;
   lowEmphasis: string;
 };
 
@@ -17,6 +18,7 @@ export const lightColors: ThemeColorType = {
   border: "#D9D9D9",
   logo: "#083F25",
   highEmphasis: "#262626",
+  mediumEmphasis: "#555555",
   lowEmphasis: "#9D9D9D",
 };
 
@@ -28,5 +30,6 @@ export const darkColors: ThemeColorType = {
   border: "#D9D9D9", // #9D9D9D
   logo: "#083F25",
   highEmphasis: "#262626",
+  mediumEmphasis: "#555555",
   lowEmphasis: "#9D9D9D",
 };
