@@ -1,7 +1,9 @@
 import { View } from "react-native";
 import { Tabs } from "react-native-collapsible-tab-view";
 
+import { CoachList } from "./CoachList/CoachList";
 import { Information } from "./Information/Information";
+import { NoticeList } from "./NoticeList/NoticeList";
 import { ProgramList } from "./ProgramList/ProgramList";
 import { CollapsibleTab } from "@components/Tabs";
 import { Text } from "@components/Texts";
@@ -34,10 +36,14 @@ export function AcademyDetail() {
         </Tabs.ScrollView>
       </Tabs.Tab>
       <Tabs.Tab name="코치">
-        <SampleComponent />
+        <Tabs.ScrollView>
+          <CoachList />
+        </Tabs.ScrollView>
       </Tabs.Tab>
       <Tabs.Tab name="소식">
-        <SampleComponent />
+        <Tabs.ScrollView>
+          <NoticeList />
+        </Tabs.ScrollView>
       </Tabs.Tab>
       <Tabs.Tab name="리뷰">
         <SampleComponent />
