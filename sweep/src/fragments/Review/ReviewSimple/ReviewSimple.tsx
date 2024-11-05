@@ -1,0 +1,155 @@
+import { Image, StyleSheet, View } from "react-native";
+
+import { RatingDiaplay } from "../Rating/RatingDisplay";
+import { AppIcon } from "@components/Icons";
+import { Scroll } from "@components/ScrollView";
+import { Text } from "@components/Texts";
+import { useTheme } from "@contexts/theme";
+import { ReviewType } from "@models/products";
+import { ThemeColorType } from "@themes/colors";
+
+interface Props {
+  review: ReviewType;
+}
+
+export function ReviewSimple({ review }: Readonly<Props>) {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <View style={styles.headerWrapper}>
+          <Image src={review.author_profile} style={styles.authorProfile} />
+          <Text style={styles.authorNickname}>{review.author_nickname}</Text>
+          <Text style={styles.date}>{review.date}</Text>
+        </View>
+        <AppIcon icon="dots" size={16} color={theme.lowEmphasis} />
+      </View>
+      <RatingDiaplay rating={review.rating} />
+      <View style={styles.information}>
+        <Text style={styles.informationText}>{review.lesson}</Text>
+        <Text style={styles.informationText}>{review.coach}</Text>
+      </View>
+      <View style={styles.tags}>
+        {review.tags.map((tag) => (
+          <Tag key={tag} text={tag} />
+        ))}
+      </View>
+      <Scroll horizontal>
+        {review.images.map((image) => (
+          <Image key={image} src={image} style={styles.image} />
+        ))}
+      </Scroll>
+      <Text style={styles.content}>{review.content}</Text>
+      {review.reply && (
+        <View style={styles.reply}>
+          <Text style={styles.replyAuthor}>{review.reply.author_name}</Text>
+          <Text style={styles.replyContent}>{review.reply.content}</Text>
+        </View>
+      )}
+    </View>
+  );
+}
+
+interface TagProps {
+  text: string;
+}
+
+function Tag({ text }: Readonly<TagProps>) {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+
+  return (
+    <View style={styles.tag}>
+      <Text style={styles.tagText}>{text}</Text>
+    </View>
+  );
+}
+
+const createStyles = (theme: ThemeColorType) =>
+  StyleSheet.create({
+    container: {
+      paddingHorizontal: 4,
+      marginBottom: 16,
+      gap: 8,
+    },
+    header: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+    },
+    headerWrapper: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 8,
+    },
+    authorProfile: {
+      width: 20,
+      height: 20,
+      borderRadius: 10,
+    },
+    authorNickname: {
+      fontSize: 16,
+      fontWeight: "bold",
+      color: theme.highEmphasis,
+    },
+    date: {
+      fontSize: 14,
+      color: theme.lowEmphasis,
+    },
+    information: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+    },
+    informationText: {
+      fontSize: 14,
+      color: theme.lowEmphasis,
+    },
+    tags: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 4,
+    },
+    tag: {
+      paddingVertical: 4,
+      paddingHorizontal: 8,
+      borderRadius: 4,
+      borderWidth: 1,
+      borderColor: theme.primary,
+    },
+    tagText: {
+      fontSize: 12,
+      color: theme.primary,
+    },
+    image: {
+      width: 110,
+      height: 110,
+      marginTop: 4,
+      marginRight: 16,
+      borderRadius: 4,
+    },
+    content: {
+      fontSize: 14,
+      lineHeight: 20,
+      color: theme.highEmphasis,
+    },
+    reply: {
+      marginHorizontal: 8,
+      padding: 16,
+      gap: 8,
+      backgroundColor: theme.backgroundGray,
+      borderRadius: 4,
+    },
+    replyAuthor: {
+      fontSize: 14,
+      fontWeight: "bold",
+      color: theme.highEmphasis,
+    },
+    replyContent: {
+      fontSize: 14,
+      lineHeight: 20,
+      color: theme.highEmphasis,
+    },
+  });
