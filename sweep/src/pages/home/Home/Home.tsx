@@ -22,7 +22,7 @@ import { ThemeColorType } from "@themes/colors";
 const sortOptions = ["인기순", "최신순", "평점순"];
 const filters = ["투수전문", "타격전문", "수비전문", "포수전문"];
 
-export function NormalHome() {
+export function Home() {
   const [suggestions, setSuggestions] = useState<AcademySimpleType[]>([]);
   const [academies, setAcademies] = useState<AcademySimpleType[]>([]);
 
@@ -31,7 +31,7 @@ export function NormalHome() {
   const [selectedSort, setSelectedSort] = useState<string>("인기순");
   const [selectedFilter, setSelectedFilter] = useState<string>("");
 
-  const { isAuthenticated } = useAuth();
+  const { mode, isAuthenticated } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -75,26 +75,40 @@ export function NormalHome() {
   return (
     <>
       <Scroll style={styles.container} showsVerticalScrollIndicator={false}>
-        {isAuthenticated && <AcademyCard />}
-        <View style={styles.content}>
-          <View style={styles.header}>
-            <Text style={styles.title}>나에게 딱 맞는 캐치비 추천!</Text>
-            <Text style={styles.subtitle}>
-              Catch B가 추천하는 아카데미/레슨
-            </Text>
+        {isAuthenticated && (
+          <AcademyCard mode={mode === "pro" ? "pro" : "normal"} />
+        )}
+        {mode === "pro" ? (
+          <View style={styles.horizontal}>
+            <Card
+              title="예약 추가"
+              subtitle="빠르고 손쉽게!"
+              icon="calendar-pointer"
+            />
+            <Card title="프로필" subtitle="아카데미 소개" icon="user-pin" />
+            <Card title="리뷰 관리" subtitle="완성도 3/8" icon="" />
           </View>
-          <Scroll horizontal showsHorizontalScrollIndicator={false}>
-            {suggestions.map((academy) => (
-              <TouchableOpacity
-                key={academy.uuid}
-                onPress={() => handleAcademySelect(academy)}
-                testID={`academy-${academy.uuid}`}
-              >
-                <AcademySuggest academy={academy} />
-              </TouchableOpacity>
-            ))}
-          </Scroll>
-        </View>
+        ) : (
+          <View style={styles.content}>
+            <View style={styles.header}>
+              <Text style={styles.title}>나에게 딱 맞는 캐치비 추천!</Text>
+              <Text style={styles.subtitle}>
+                Catch B가 추천하는 아카데미/레슨
+              </Text>
+            </View>
+            <Scroll horizontal showsHorizontalScrollIndicator={false}>
+              {suggestions.map((academy) => (
+                <TouchableOpacity
+                  key={academy.uuid}
+                  onPress={() => handleAcademySelect(academy)}
+                  testID={`academy-${academy.uuid}`}
+                >
+                  <AcademySuggest academy={academy} />
+                </TouchableOpacity>
+              ))}
+            </Scroll>
+          </View>
+        )}
         <View style={styles.content}>
           <View style={styles.header}>
             <Text style={styles.title}>아카데미 찾기</Text>
@@ -156,6 +170,27 @@ export function NormalHome() {
         </BottomSheetView>
       </BottomSheet>
     </>
+  );
+}
+
+interface Props {
+  title: string;
+  subtitle: string;
+  icon: string;
+}
+
+function Card({ title, subtitle, icon }: Readonly<Props>) {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+
+  return (
+    <View style={styles.card}>
+      <Text style={styles.cardTitle}>{title}</Text>
+      <Text style={styles.cardSubtitle}>{subtitle}</Text>
+      <View style={styles.cardIcon}>
+        <AppIcon icon={icon} color={theme.primary} size={50} />
+      </View>
+    </View>
   );
 }
 
@@ -229,5 +264,37 @@ const createStyles = (theme: ThemeColorType) =>
     },
     selectedText: {
       color: theme.primary,
+    },
+    horizontal: {
+      flexDirection: "row",
+      marginTop: 16,
+      gap: 16,
+    },
+    card: {
+      flex: 1,
+      paddingHorizontal: 16,
+      paddingTop: 16,
+      paddingBottom: 8,
+      gap: 8,
+      backgroundColor: theme.background,
+      borderRadius: 8,
+      shadowColor: theme.highEmphasis,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.2,
+      shadowRadius: 4,
+      elevation: 4,
+    },
+    cardTitle: {
+      fontSize: 18,
+      fontWeight: "bold",
+      color: theme.highEmphasis,
+    },
+    cardSubtitle: {
+      fontSize: 16,
+      color: theme.mediumEmphasis,
+    },
+    cardIcon: {
+      alignSelf: "flex-end",
+      marginTop: 4,
     },
   });

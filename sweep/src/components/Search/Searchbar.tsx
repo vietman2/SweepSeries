@@ -20,6 +20,7 @@ export function Searchbar({ placeholder, value, onChange, onSubmit }: Props) {
       <View style={styles.input}>
         <TextInput
           placeholder={placeholder}
+          placeholderTextColor={theme.lowEmphasis}
           value={value}
           onChangeText={onChange}
           enterKeyHint="search"
