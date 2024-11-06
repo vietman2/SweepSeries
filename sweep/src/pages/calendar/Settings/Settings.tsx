@@ -1,18 +1,23 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 
 import { SvgIconButton, TextButton, Toggle } from "@components/Buttons";
 import { useTheme } from "@contexts/theme";
+import { CalendarMembers, CalendarOptions } from "@fragments/Calendar";
+import { CalendarType } from "@models/calendar";
+import { sampleCalendars } from "@testdata/calendar";
 import { ThemeColorType } from "@themes/colors";
 
 export function Settings() {
+  const [calendar, setCalendar] = useState<CalendarType>();
   const [isNotificationOn, setIsNotificationOn] = useState<boolean>(false);
   const [isDailyOn, setIsDailyOn] = useState<boolean>(false);
 
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["40%"], []);
+  const { calendarId } = useLocalSearchParams<{ calendarId: string }>();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -48,10 +53,23 @@ export function Settings() {
     }
   }, [isDailyOn]);
 
+  useEffect(() => {
+    const id = parseInt(calendarId, 10);
+    setCalendar(sampleCalendars[id - 1]);
+  }, [calendarId]);
+
+  if (!calendar) {
+    return null;
+  }
+
   return (
     <>
       <View style={styles.backdrop}>
-        <Pressable onPress={handleCloseModal} style={StyleSheet.absoluteFill} testID="close-modal" />
+        <Pressable
+          onPress={handleCloseModal}
+          style={StyleSheet.absoluteFill}
+          testID="close-modal"
+        />
         <View style={styles.modal}>
           <Pressable
             onPress={handleCloseSheet}
@@ -61,6 +79,7 @@ export function Settings() {
           <View style={styles.content}>
             <View style={styles.wrapper}>
               <Text style={styles.subtitle}>공유하는 멤버</Text>
+              <CalendarMembers calendar={calendar} />
               <SvgIconButton
                 icon="person-add"
                 text="멤버 추가하기"
@@ -72,6 +91,7 @@ export function Settings() {
             </View>
             <View style={styles.wrapper}>
               <Text style={styles.subtitle}>캘린더 정보</Text>
+              <CalendarOptions calendar={calendar} />
             </View>
             <View style={styles.wrapper}>
               <Text style={styles.subtitle}>알림</Text>
@@ -151,7 +171,7 @@ const createStyles = (theme: ThemeColorType) =>
       color: theme.highEmphasis,
     },
     wrapper: {
-      gap: 8,
+      gap: 12,
     },
     horizontal: {
       flexDirection: "row",

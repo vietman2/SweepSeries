@@ -38,4 +38,10 @@ describe("<Calendar />", () => {
 
     fireEvent.press(getByTestId("open-list"));
   });
+
+  it("handles calendar select", () => {
+    const { getByTestId } = renderWithProviders(<Calendar />);
+
+    fireEvent.press(getByTestId("calendar-1"));
+  });
 });

@@ -7,6 +7,7 @@ jest.mock("expo-router", () => ({
   router: {
     back: jest.fn(),
   },
+  useLocalSearchParams: jest.fn(() => ({ calendarId: "1" })),
 }));
 jest.mock("@gorhom/bottom-sheet", () => {
   return {
@@ -17,6 +18,10 @@ jest.mock("@gorhom/bottom-sheet", () => {
     BottomSheetView: ({ children }: { children: React.ReactNode }) => children,
   };
 });
+jest.mock("@fragments/Calendar", () => ({
+  CalendarMembers: () => "CalendarMembers",
+  CalendarOptions: () => "CalendarOptions",
+}));
 
 describe("<Settings />", () => {
   it("should render and handles toggle", () => {

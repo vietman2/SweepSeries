@@ -35,8 +35,16 @@ export function Calendar() {
     ref.current?.expand();
   };
 
+  const handleCalendarSelect = (calendar: CalendarType) => {
+    setSelectedCalendar(calendar);
+    ref.current?.close();
+  }
+
   const handleSettingsPress = () => {
-    router.push("/calendar/settings");
+    router.push({
+      pathname: "/calendar/settings",
+      params: { calendarId: selectedCalendar?.id },
+    });
   };
 
   useEffect(() => {
@@ -120,10 +128,15 @@ export function Calendar() {
                     backgroundColor: theme.border,
                   },
                 ]}
+                onPress={() => handleCalendarSelect(calendar)}
+                testID={`calendar-${calendar.id}`}
               >
                 <CalendarSimple calendar={calendar} />
               </TouchableOpacity>
             ))}
+            <TouchableOpacity style={styles.calendar}>
+              <CalendarSimple />
+            </TouchableOpacity>
           </View>
           <View style={styles.void} />
         </BottomSheetView>
