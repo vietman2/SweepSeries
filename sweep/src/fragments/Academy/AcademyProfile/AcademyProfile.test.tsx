@@ -5,4 +5,8 @@ describe("<AcademyProfile />", () => {
   it("renders correctly", () => {
     renderWithProviders(<AcademyProfile />);
   });
+  
+  it("renders pro mode correctly", () => {
+    renderWithProviders(<AcademyProfile pro />);
+  });
 });
