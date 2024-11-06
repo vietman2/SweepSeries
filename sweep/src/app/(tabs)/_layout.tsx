@@ -1,8 +1,11 @@
-import { Tabs } from 'expo-router';
+import { Tabs } from "expo-router";
 
-import { AppIcon } from '@components/Icons';
+import { AppIcon } from "@components/Icons";
+import { useAuth } from "@contexts/auth";
 
 export default function TabLayout() {
+  const { mode } = useAuth();
+
   return (
     <Tabs
       screenOptions={{
@@ -17,11 +20,23 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <AppIcon icon="home" color={color} />,
         }}
       />
+        <Tabs.Screen
+          name="front"
+          options={{
+            title: "프론트",
+            tabBarIcon: ({ color }) => (
+              <AppIcon icon="calendar" color={color} />
+            ),
+            href: mode === "pro" ? "/front" : null,
+          }}
+        />
       <Tabs.Screen
         name="calendar"
         options={{
           title: "캘린더",
-          tabBarIcon: ({ color }) => <AppIcon icon="calendar-number" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <AppIcon icon="calendar-number" color={color} />
+          ),
         }}
       />
       <Tabs.Screen
