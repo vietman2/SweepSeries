@@ -38,7 +38,7 @@ export function Calendar() {
   const handleCalendarSelect = (calendar: CalendarType) => {
     setSelectedCalendar(calendar);
     ref.current?.close();
-  }
+  };
 
   const handleSettingsPress = () => {
     router.push({
