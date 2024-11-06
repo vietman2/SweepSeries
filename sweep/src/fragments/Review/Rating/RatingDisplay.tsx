@@ -9,11 +9,7 @@ interface Props {
 export function RatingDiaplay({ rating }: Readonly<Props>) {
   return (
     <View style={styles.container}>
-      <AppIcon
-        icon={rating == 1 ? "star" : "star-outline"}
-        size={16}
-        color="#F2B517"
-      />
+      <AppIcon icon="star" size={16} color="#F2B517" />
       <AppIcon
         icon={rating >= 2 ? "star" : "star-outline"}
         size={16}

@@ -1,3 +1,4 @@
+import { CoachRequest } from "./CoachRequest/CoachRequest";
 import { CoachSimple } from "./CoachSimple/CoachSimple";
 
-export { CoachSimple };
+export { CoachRequest, CoachSimple };
