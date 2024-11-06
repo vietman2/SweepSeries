@@ -25,7 +25,7 @@ export default function TabLayout() {
           options={{
             title: "프론트",
             tabBarIcon: ({ color }) => (
-              <AppIcon icon="calendar" color={color} />
+              <AppIcon icon="desk" color={color} />
             ),
             href: mode === "pro" ? "/front" : null,
           }}
