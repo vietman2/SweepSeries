@@ -1,6 +1,7 @@
 import {
   CoachDetailType,
   CoachProfessionType,
+  CoachRequestType,
   CoachSimpleType,
 } from "@models/products";
 
@@ -78,3 +79,22 @@ export const sampleCoachDetail: CoachDetailType = {
   rating: 4.5,
   num_reviews: 10,
 };
+
+export const sampleCoachRequests: CoachRequestType[] = [
+  {
+    uuid: "4",
+    name: "이대호",
+    profile_image:
+      "https://i.namu.wiki/i/1aFaRJqAAAf68HKwP8C7A9z5qlCcduUDSZ3YkVqmRNuTSftbpCq_ZTB_eYNu0JpR-dN_CH3YgvrQCDPAXpnHuw.webp",
+    career: "프로선수 출신",
+    professions: [sampleCoachProfessions[2], sampleCoachProfessions[3]],
+  },
+  {
+    uuid: "5",
+    name: "박찬호",
+    profile_image:
+      "https://i.namu.wiki/i/TOJzoFxf7M3_fGhaJt0oSsVR5hFFIWjBZDiwyDdYYL7vG_VW0cNDjxFLiigQwDxfLft0Sr6NYzhdQ84Qe9qN0w.webp",
+    career: "대학선수 출신",
+    professions: [sampleCoachProfessions[4]],
+  },
+];
