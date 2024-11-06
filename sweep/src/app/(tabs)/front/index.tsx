@@ -2,6 +2,7 @@ import { Dimensions, View } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 import { TabBar } from "@components/Tabs";
+import { CustomerManagement, EmployeeManagement, ProfileManagement, ReviewManagement } from "@pages/front";
 
 function Placeholder() {
   return <View />;
@@ -22,7 +23,7 @@ export default function Front() {
     >
       <Tab.Screen
         name="profile"
-        component={Placeholder}
+        component={ProfileManagement}
         options={{
           title: "프로필",
         }}
@@ -34,17 +35,17 @@ export default function Front() {
       />
       <Tab.Screen
         name="customers"
-        component={Placeholder}
+        component={CustomerManagement}
         options={{ title: "고객관리" }}
       />
       <Tab.Screen
         name="reviews"
-        component={Placeholder}
+        component={ReviewManagement}
         options={{ title: "리뷰관리" }}
       />
       <Tab.Screen
         name="employees"
-        component={Placeholder}
+        component={EmployeeManagement}
         options={{ title: "직원관리" }}
       />
     </Tab.Navigator>
