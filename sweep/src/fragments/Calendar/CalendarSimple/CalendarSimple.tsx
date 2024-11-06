@@ -7,12 +7,25 @@ import { CalendarType } from "@models/calendar";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
-  calendar: CalendarType;
+  calendar?: CalendarType;
 }
 
 export function CalendarSimple({ calendar }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  if (!calendar) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.emptyFill}>
+          <AppIcon icon="plus" size={24} color={theme.lowEmphasis} />
+        </View>
+        <View style={styles.content}>
+          <Text style={styles.buttonText}>새로운 캘린더 만들기</Text>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -46,7 +59,7 @@ const createStyles = (theme: ThemeColorType) =>
     },
     character: {
       fontSize: 20,
-      color: "black",
+      color: theme.mediumEmphasis,
     },
     content: {
       gap: 8,
@@ -63,5 +76,19 @@ const createStyles = (theme: ThemeColorType) =>
     text: {
       fontSize: 14,
       color: theme.mediumEmphasis,
+    },
+    emptyFill: {
+      alignItems: "center",
+      justifyContent: "center",
+      width: 48,
+      height: 48,
+      borderRadius: 4,
+      borderWidth: 0.5,
+      borderColor: theme.lowEmphasis,
+    },
+    buttonText: {
+      fontSize: 18,
+      fontWeight: "bold",
+      color: theme.lowEmphasis,
     },
   });

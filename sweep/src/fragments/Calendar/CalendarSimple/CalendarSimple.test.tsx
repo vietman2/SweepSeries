@@ -6,4 +6,8 @@ describe("<CalendarSimple />", () => {
   it("renders correctly", () => {
     renderWithProviders(<CalendarSimple calendar={sampleCalendars[0]} />);
   });
+
+  it("renders new calendar correctly (empty props)", () => {
+    renderWithProviders(<CalendarSimple />);
+  });
 });
