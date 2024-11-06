@@ -1,4 +1,9 @@
-import { CalendarType } from "./calendar";
+import { CalendarMemberType, CalendarType } from "./calendar";
 import { ScheduleSimpleType, ScheduleResponseType } from "./schedule";
 
-export { CalendarType, ScheduleSimpleType, ScheduleResponseType };
+export {
+  CalendarMemberType,
+  CalendarType,
+  ScheduleSimpleType,
+  ScheduleResponseType,
+};

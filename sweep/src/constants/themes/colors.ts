@@ -1,5 +1,6 @@
 export type ThemeColorType = {
   primary: string;
+  primaryContainer: string;
   secondary: string;
   background: string;
   backgroundGray: string;
@@ -12,6 +13,7 @@ export type ThemeColorType = {
 
 export const lightColors: ThemeColorType = {
   primary: "#14863E",
+  primaryContainer: "#EDFBE9",
   secondary: "#FC6900",
   background: "#FFFFFF",
   backgroundGray: "#F5F5F5",
@@ -24,6 +26,7 @@ export const lightColors: ThemeColorType = {
 
 export const darkColors: ThemeColorType = {
   primary: "#14863E",
+  primaryContainer: "#EDFBE9",
   secondary: "#FC6900",
   background: "#FFFFFF", // #262626
   backgroundGray: "#F5F5F5", // #1A1A1A
