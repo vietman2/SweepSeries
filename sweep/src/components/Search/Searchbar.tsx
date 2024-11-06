@@ -1,8 +1,8 @@
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 
+import { AppIcon } from "@components/Icons";
 import { useTheme } from "@contexts/theme";
 import { ThemeColorType } from "@themes/colors";
-import { AppIcon } from "@components/Icons";
 
 interface Props {
   placeholder: string;
