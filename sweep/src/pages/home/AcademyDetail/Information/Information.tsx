@@ -75,16 +75,16 @@ const createStyles = (theme: ThemeColorType) =>
     image: {
       width: "100%",
       height: 200,
-      marginTop: 5,
+      marginTop: 4,
     },
     horizontal: {
       flexDirection: "row",
       alignItems: "center",
-      marginVertical: 5,
-      paddingTop: 5,
+      marginVertical: 4,
+      paddingTop: 4,
     },
     address: {
       color: theme.highEmphasis,
-      marginLeft: 5,
+      marginLeft: 4,
     },
   });
