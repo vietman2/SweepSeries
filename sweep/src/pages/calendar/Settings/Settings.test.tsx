@@ -30,8 +30,6 @@ describe("<Settings />", () => {
     fireEvent.press(getAllByTestId("toggle")[0]);
     fireEvent.press(getAllByTestId("toggle")[1]);
     fireEvent.press(getByTestId("close-modal"));
-    fireEvent.press(getByTestId("close-modal"));
-    fireEvent.press(getByTestId("close-sheet"));
     fireEvent.press(getByTestId("확인"));
   });
 });

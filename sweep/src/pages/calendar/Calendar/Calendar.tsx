@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 import BottomSheet, {
   BottomSheetView,
@@ -16,7 +16,11 @@ import { AppIcon } from "@components/Icons";
 import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
-import { CalendarTitle, CalendarSimple } from "@fragments/Calendar";
+import {
+  CalendarButtons,
+  CalendarTitle,
+  CalendarSimple,
+} from "@fragments/Calendar";
 import { CalendarType, ScheduleResponseType } from "@models/calendar";
 import { sampleCalendars, sampleScheduleResponse } from "@testdata/calendar";
 import { ThemeColorType } from "@themes/colors";
@@ -27,6 +31,7 @@ export function Calendar() {
   const [calendars, setCalendars] = useState<CalendarType[]>([]);
   const [selectedMonth, setSelectedMonth] = useState<string>("");
 
+  const [buttonsOpen, setButtonsOpen] = useState<boolean>(false);
   const ref = useRef<BottomSheet>(null);
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -87,6 +92,14 @@ export function Calendar() {
 
   return (
     <>
+      <Pressable
+        style={[
+          StyleSheet.absoluteFill,
+          buttonsOpen && { backgroundColor: "#00000040", zIndex: 1 },
+        ]}
+        onPress={() => setButtonsOpen(false)}
+        testID="close-buttons"
+      />
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity
@@ -102,6 +115,7 @@ export function Calendar() {
             <AppIcon icon="settings" size={24} color={theme.primary} />
           </TouchableOpacity>
         </View>
+        <CalendarButtons open={buttonsOpen} setOpen={setButtonsOpen} />
         <Scroll>
           <CalendarComponent
             customHeader={CustomHeader}

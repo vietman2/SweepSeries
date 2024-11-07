@@ -2,6 +2,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
 
 import { SvgIconButton, TextButton, Toggle } from "@components/Buttons";
 import { useTheme } from "@contexts/theme";
@@ -12,6 +15,7 @@ import { ThemeColorType } from "@themes/colors";
 
 export function Settings() {
   const [calendar, setCalendar] = useState<CalendarType>();
+  const [selectedTime, setSelectedTime] = useState<Date>(new Date());
   const [isNotificationOn, setIsNotificationOn] = useState<boolean>(false);
   const [isDailyOn, setIsDailyOn] = useState<boolean>(false);
 
@@ -30,19 +34,19 @@ export function Settings() {
   };
 
   const handleCloseModal = () => {
-    if (isDailyOn) {
-      setIsDailyOn(false);
-    } else {
-      router.back();
-    }
-  };
-
-  const handleCloseSheet = () => {
-    setIsDailyOn(false);
+    router.back();
   };
 
   const handleConfirmTime = () => {
     bottomSheetRef.current?.close();
+  };
+
+  const handleTimeChange = (
+    event: DateTimePickerEvent,
+    selectedDate?: Date
+  ) => {
+    const currentDate = selectedDate || selectedTime;
+    setSelectedTime(currentDate);
   };
 
   useEffect(() => {
@@ -71,11 +75,6 @@ export function Settings() {
           testID="close-modal"
         />
         <View style={styles.modal}>
-          <Pressable
-            onPress={handleCloseSheet}
-            style={StyleSheet.absoluteFill}
-            testID="close-sheet"
-          />
           <View style={styles.content}>
             <View style={styles.wrapper}>
               <Text style={styles.subtitle}>공유하는 멤버</Text>
@@ -127,6 +126,12 @@ export function Settings() {
         <BottomSheetView style={styles.sheetContainer}>
           <View style={styles.timepickerwrapper}>
             <Text style={styles.sheetTitle}>알림 시간을 설정하세요.</Text>
+            <DateTimePicker
+              mode="time"
+              value={selectedTime}
+              onChange={handleTimeChange}
+              display="spinner"
+            />
           </View>
           <View style={styles.buttonContainer}>
             <View style={styles.buttonWrapper}>

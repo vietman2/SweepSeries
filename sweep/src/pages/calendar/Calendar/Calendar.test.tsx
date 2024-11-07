@@ -16,6 +16,7 @@ jest.mock("@gorhom/bottom-sheet", () => ({
   BottomSheetView: ({ children }: { children: React.ReactNode }) => children,
 }));
 jest.mock("@fragments/Calendar", () => ({
+  CalendarButtons: () => <div>CalendarButtons</div>,
   CalendarTitle: () => <div>CalendarTitle</div>,
   CalendarSimple: () => <div>CalendarSimple</div>,
 }));
@@ -43,5 +44,6 @@ describe("<Calendar />", () => {
     const { getByTestId } = renderWithProviders(<Calendar />);
 
     fireEvent.press(getByTestId("calendar-1"));
+    fireEvent.press(getByTestId("close-buttons"));
   });
 });
