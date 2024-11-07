@@ -3,6 +3,10 @@ import { Tabs } from "expo-router";
 import { AppIcon } from "@components/Icons";
 import { useAuth } from "@contexts/auth";
 
+export const unstable_settings = {
+  initialRouteName: "home",
+}
+
 export default function TabLayout() {
   const { mode } = useAuth();
 
