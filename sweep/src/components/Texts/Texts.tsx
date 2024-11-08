@@ -77,6 +77,7 @@ const createStyles = (theme: ThemeColorType) =>
       color: theme.lowEmphasis,
     },
     calloutLarge: {
+      marginHorizontal: 4,
       paddingHorizontal: 16,
       paddingVertical: 8,
       borderRadius: 8,
@@ -84,8 +85,8 @@ const createStyles = (theme: ThemeColorType) =>
       shadowColor: "black",
       shadowOffset: { width: 2, height: 4 },
       shadowOpacity: 0.24,
-      shadowRadius: 4,
-      elevation: 4,
+      shadowRadius: 1,
+      elevation: 1,
     },
     icon: {
       position: "absolute",
