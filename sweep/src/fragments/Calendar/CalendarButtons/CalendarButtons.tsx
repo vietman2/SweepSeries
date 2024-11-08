@@ -1,4 +1,5 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { router } from "expo-router";
 
 import { AppIcon } from "@components/Icons";
 import { Text } from "@components/Texts";
@@ -13,6 +14,11 @@ interface Props {
 export function CalendarButtons({ open, setOpen }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  const handleSchedulePress = () => {
+    router.push("/calendar/addschedule");
+    setOpen(false);
+  }
 
   return (
     <View style={styles.container}>
@@ -36,7 +42,7 @@ export function CalendarButtons({ open, setOpen }: Readonly<Props>) {
           </View>
           <View style={styles.wrapper}>
             <Text style={styles.text}>일정</Text>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={handleSchedulePress} testID="addschedule">
               <AppIcon
                 icon="calendar-pointer"
                 size={20}
