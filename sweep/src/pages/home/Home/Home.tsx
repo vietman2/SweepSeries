@@ -138,7 +138,13 @@ export function Home() {
           </View>
           <View style={styles.academies}>
             {academies.map((academy) => (
-              <AcademySimple key={academy.uuid} academy={academy} quote />
+              <TouchableOpacity
+                key={academy.uuid}
+                onPress={() => handleAcademySelect(academy)}
+                testID={`academy-detail-${academy.uuid}`}
+              >
+                <AcademySimple academy={academy} quote />
+              </TouchableOpacity>
             ))}
           </View>
         </View>
@@ -268,7 +274,7 @@ const createStyles = (theme: ThemeColorType) =>
     horizontal: {
       flexDirection: "row",
       marginTop: 16,
-      gap: 16,
+      gap: 8,
     },
     card: {
       flex: 1,
@@ -290,7 +296,7 @@ const createStyles = (theme: ThemeColorType) =>
       color: theme.highEmphasis,
     },
     cardSubtitle: {
-      fontSize: 16,
+      fontSize: 14,
       color: theme.mediumEmphasis,
     },
     cardIcon: {
