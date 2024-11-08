@@ -33,7 +33,7 @@ export function LikedAcademies() {
             {academies.map((academy) => (
               <View key={academy.uuid} style={styles.academy}>
                 <AcademySimple academy={academy} />
-                <Divider bold />
+                <Divider />
               </View>
             ))}
           </View>

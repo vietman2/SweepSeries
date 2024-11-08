@@ -14,6 +14,7 @@ export function AcademyDetail() {
       renderHeader={() => <AcademyProfile />}
       renderTabBar={(props) => <CollapsibleTab {...props} />}
       pagerProps={{ scrollEnabled: false }}
+      headerContainerStyle={{ shadowOpacity: 0 }}
       initialTabName="정보"
     >
       <Tabs.Tab name="정보">

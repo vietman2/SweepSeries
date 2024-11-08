@@ -84,7 +84,7 @@ const createStyles = (theme: ThemeColorType) =>
     },
     image: {
       flex: 1,
-      width: 300,
+      width: "60%",
       resizeMode: "contain",
     },
     wrapper: {
@@ -95,8 +95,8 @@ const createStyles = (theme: ThemeColorType) =>
     button: {
       alignItems: "center",
       justifyContent: "center",
-      width: 200,
-      height: 200,
+      width: 160,
+      height: 160,
       gap: 8,
       borderRadius: 30,
       backgroundColor: theme.background,
