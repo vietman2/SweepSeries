@@ -8,7 +8,6 @@ import { Stack, SplashScreen } from "expo-router";
 
 import { AuthProvider } from "@contexts/auth";
 import { ThemeProvider } from "@contexts/theme";
-import { SafeAreaView } from "react-native";
 
 SplashScreen.preventAutoHideAsync();
 

@@ -18,7 +18,7 @@ export function CalendarButtons({ open, setOpen }: Readonly<Props>) {
   const handleSchedulePress = () => {
     router.push("/calendar/addschedule");
     setOpen(false);
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -42,7 +42,11 @@ export function CalendarButtons({ open, setOpen }: Readonly<Props>) {
           </View>
           <View style={styles.wrapper}>
             <Text style={styles.text}>일정</Text>
-            <TouchableOpacity style={styles.button} onPress={handleSchedulePress} testID="addschedule">
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handleSchedulePress}
+              testID="addschedule"
+            >
               <AppIcon
                 icon="calendar-pointer"
                 size={20}
