@@ -22,8 +22,13 @@ jest.mock("@fragments/Calendar", () => ({
 }));
 
 describe("<Calendar />", () => {
-  it("renders correctly (month >= 10) and open settings", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
     jest.useFakeTimers();
+    jest.setSystemTime(new Date("2024-01-01").getTime());
+  });
+
+  it("renders correctly (month >= 10) and open settings", () => {
     jest.setSystemTime(new Date("2024-10-01").getTime());
 
     const { getByTestId } = renderWithProviders(<Calendar />);
@@ -32,9 +37,6 @@ describe("<Calendar />", () => {
   });
 
   it("renders correctly (month < 10)", () => {
-    jest.useFakeTimers();
-    jest.setSystemTime(new Date("2024-01-01").getTime());
-
     const { getByTestId } = renderWithProviders(<Calendar />);
 
     fireEvent.press(getByTestId("open-list"));
@@ -45,5 +47,11 @@ describe("<Calendar />", () => {
 
     fireEvent.press(getByTestId("calendar-1"));
     fireEvent.press(getByTestId("close-buttons"));
+  });
+
+  it("handles day navigate", () => {
+    const { getByTestId } = renderWithProviders(<Calendar />);
+
+    fireEvent.press(getByTestId("day-2024-11-01"));
   });
 });

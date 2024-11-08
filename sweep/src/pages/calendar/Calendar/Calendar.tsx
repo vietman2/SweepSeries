@@ -73,7 +73,21 @@ export function Calendar() {
   const dayComponent = ({ date }: { date: DateData }) => {
     const schedule = schedules?.[date.dateString];
 
-    return <CustomDay date={date} schedules={schedule} />;
+    const handleNavigation = () => {
+      router.push({
+        pathname: "/calendar/daily/[date]",
+        params: { date: date.dateString },
+      });
+    };
+
+    return (
+      <TouchableOpacity
+        onPress={handleNavigation}
+        testID={`day-${date.dateString}`}
+      >
+        <CustomDay date={date} schedules={schedule} />
+      </TouchableOpacity>
+    );
   };
 
   const renderBackdrop = useCallback(
@@ -129,7 +143,7 @@ export function Calendar() {
         index={-1}
         enableDynamicSizing
         backdropComponent={renderBackdrop}
-        containerStyle={{zIndex: 100}}
+        containerStyle={{ zIndex: 100 }}
       >
         <BottomSheetView style={styles.sheetContainer}>
           <Text style={styles.title}>캘린더 리스트</Text>
@@ -140,7 +154,7 @@ export function Calendar() {
                 style={[
                   styles.calendar,
                   selectedCalendar.id === calendar.id && {
-                    backgroundColor: theme.border,
+                    backgroundColor: theme.backgroundGray,
                   },
                 ]}
                 onPress={() => handleCalendarSelect(calendar)}
