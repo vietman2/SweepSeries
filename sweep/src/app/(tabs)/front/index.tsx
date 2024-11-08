@@ -1,12 +1,14 @@
-import { Dimensions, View } from "react-native";
+import { Dimensions } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 import { TabBar } from "@components/Tabs";
-import { CustomerManagement, EmployeeManagement, ProfileManagement, ReviewManagement } from "@pages/front";
-
-function Placeholder() {
-  return <View />;
-}
+import {
+  CustomerManagement,
+  EmployeeManagement,
+  ProfileManagement,
+  ProgramManagement,
+  ReviewManagement,
+} from "@pages/front";
 
 const Tab = createMaterialTopTabNavigator();
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
@@ -30,7 +32,7 @@ export default function Front() {
       />
       <Tab.Screen
         name="programs"
-        component={Placeholder}
+        component={ProgramManagement}
         options={{ title: "프로그램" }}
       />
       <Tab.Screen

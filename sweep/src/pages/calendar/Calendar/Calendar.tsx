@@ -1,27 +1,62 @@
-import { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
+import { router } from "expo-router";
+import BottomSheet, {
+  BottomSheetView,
+  BottomSheetBackdrop,
+  BottomSheetBackdropProps,
+} from "@gorhom/bottom-sheet";
 import {
   Calendar as CalendarComponent,
   DateData,
 } from "react-native-calendars";
 
 import { CustomDay, CustomHeader } from "@components/Calendars";
+import { AppIcon } from "@components/Icons";
 import { Scroll } from "@components/ScrollView";
+import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
-import { ScheduleResponseType } from "@models/calendar";
-import { sampleScheduleResponse } from "@testdata/calendar";
+import {
+  CalendarButtons,
+  CalendarTitle,
+  CalendarSimple,
+} from "@fragments/Calendar";
+import { CalendarType, ScheduleResponseType } from "@models/calendar";
+import { sampleCalendars, sampleScheduleResponse } from "@testdata/calendar";
 import { ThemeColorType } from "@themes/colors";
 
 export function Calendar() {
   const [schedules, setSchedules] = useState<ScheduleResponseType>();
+  const [selectedCalendar, setSelectedCalendar] = useState<CalendarType>();
+  const [calendars, setCalendars] = useState<CalendarType[]>([]);
   const [selectedMonth, setSelectedMonth] = useState<string>("");
 
+  const [buttonsOpen, setButtonsOpen] = useState<boolean>(false);
+  const ref = useRef<BottomSheet>(null);
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  const handleCalendarListPress = () => {
+    ref.current?.expand();
+  };
+
+  const handleCalendarSelect = (calendar: CalendarType) => {
+    setSelectedCalendar(calendar);
+    ref.current?.close();
+  };
+
+  const handleSettingsPress = () => {
+    router.push({
+      pathname: "/calendar/settings",
+      params: { calendarId: selectedCalendar?.id },
+    });
+  };
 
   useEffect(() => {
     // TODO: Fetch data from API
     setSchedules(sampleScheduleResponse);
+    setSelectedCalendar(sampleCalendars[0]);
+    setCalendars(sampleCalendars);
   }, [selectedMonth]);
 
   useEffect(() => {
@@ -41,14 +76,87 @@ export function Calendar() {
     return <CustomDay date={date} schedules={schedule} />;
   };
 
-  return (
-    <Scroll style={styles.container}>
-      <CalendarComponent
-        customHeader={CustomHeader}
-        dayComponent={dayComponent}
-        hideExtraDays
+  const renderBackdrop = useCallback(
+    (props: BottomSheetBackdropProps) => (
+      <BottomSheetBackdrop
+        {...props}
+        enableTouchThrough={false}
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
       />
-    </Scroll>
+    ),
+    []
+  );
+
+  if (!selectedCalendar) return null;
+
+  return (
+    <>
+      <Pressable
+        style={[
+          StyleSheet.absoluteFill,
+          buttonsOpen && { backgroundColor: "#00000040", zIndex: 1 },
+        ]}
+        onPress={() => setButtonsOpen(false)}
+        testID="close-buttons"
+      />
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity
+            onPress={handleCalendarListPress}
+            testID="open-list"
+          >
+            <CalendarTitle calendar={selectedCalendar} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleSettingsPress}
+            testID="open-settings"
+          >
+            <AppIcon icon="settings" size={24} color={theme.primary} />
+          </TouchableOpacity>
+        </View>
+        <CalendarButtons open={buttonsOpen} setOpen={setButtonsOpen} />
+        <Scroll>
+          <CalendarComponent
+            customHeader={CustomHeader}
+            dayComponent={dayComponent}
+            hideExtraDays
+          />
+        </Scroll>
+      </View>
+      <BottomSheet
+        ref={ref}
+        index={-1}
+        enableDynamicSizing
+        backdropComponent={renderBackdrop}
+        containerStyle={{zIndex: 100}}
+      >
+        <BottomSheetView style={styles.sheetContainer}>
+          <Text style={styles.title}>캘린더 리스트</Text>
+          <View style={styles.calendarList}>
+            {calendars.map((calendar) => (
+              <TouchableOpacity
+                key={calendar.id}
+                style={[
+                  styles.calendar,
+                  selectedCalendar.id === calendar.id && {
+                    backgroundColor: theme.border,
+                  },
+                ]}
+                onPress={() => handleCalendarSelect(calendar)}
+                testID={`calendar-${calendar.id}`}
+              >
+                <CalendarSimple calendar={calendar} />
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity style={styles.calendar}>
+              <CalendarSimple />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.void} />
+        </BottomSheetView>
+      </BottomSheet>
+    </>
   );
 }
 
@@ -57,5 +165,36 @@ const createStyles = (theme: ThemeColorType) =>
     container: {
       flex: 1,
       backgroundColor: theme.background,
+    },
+    header: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingTop: 64,
+      paddingBottom: 8,
+      paddingHorizontal: 16,
+      height: 100,
+      backgroundColor: theme.background,
+    },
+    sheetContainer: {
+      paddingTop: 8,
+      paddingHorizontal: 24,
+      gap: 8,
+    },
+    title: {
+      fontSize: 20,
+      fontWeight: "bold",
+      color: theme.primary,
+    },
+    calendarList: {
+      marginTop: 16,
+      gap: 8,
+    },
+    void: {
+      height: 24,
+    },
+    calendar: {
+      padding: 8,
+      borderRadius: 8,
     },
   });
