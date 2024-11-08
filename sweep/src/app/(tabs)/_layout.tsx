@@ -17,7 +17,6 @@ export default function TabLayout() {
         tabBarActiveTintColor: "#14863E",
         headerShown: false,
       }}
-      detachInactiveScreens={Platform.OS === "ios"}
     >
       <Tabs.Screen
         name="home"

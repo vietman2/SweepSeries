@@ -28,6 +28,12 @@ export default function CalendarLayout() {
           headerShadowVisible: false,
         }}
       />
+      <Stack.Screen
+        name="daily/[date]"
+        options={{
+          presentation: "modal",
+        }}
+      />
     </Stack>
   );
 }
