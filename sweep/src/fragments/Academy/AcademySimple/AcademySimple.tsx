@@ -21,7 +21,9 @@ export function AcademySimple({ academy, quote = false }: Readonly<Props>) {
         <Image style={styles.image} src={academy.cover_image} />
         <View style={styles.content}>
           <View style={styles.header}>
-            <Text style={styles.name}>{academy.name}</Text>
+            <Text style={styles.name} numberOfLines={2}>
+              {academy.name}
+            </Text>
             <AppIcon icon="heart" size={20} color={theme.primary} />
           </View>
           <View style={styles.rating}>
@@ -66,7 +68,9 @@ const createStyles = (theme: ThemeColorType) =>
       justifyContent: "space-between",
     },
     name: {
-      fontSize: 24,
+      flex: 1,
+      paddingRight: 8,
+      fontSize: 20,
       fontWeight: "bold",
     },
     rating: {
