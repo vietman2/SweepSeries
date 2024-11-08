@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import { Tabs } from "expo-router";
 
 import { AppIcon } from "@components/Icons";
@@ -5,7 +6,7 @@ import { useAuth } from "@contexts/auth";
 
 export const unstable_settings = {
   initialRouteName: "home",
-}
+};
 
 export default function TabLayout() {
   const { mode } = useAuth();
@@ -16,6 +17,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: "#14863E",
         headerShown: false,
       }}
+      detachInactiveScreens={Platform.OS === "ios"}
     >
       <Tabs.Screen
         name="home"
@@ -24,16 +26,14 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <AppIcon icon="home" color={color} />,
         }}
       />
-        <Tabs.Screen
-          name="front"
-          options={{
-            title: "프론트",
-            tabBarIcon: ({ color }) => (
-              <AppIcon icon="desk" color={color} />
-            ),
-            href: mode === "pro" ? "/front" : null,
-          }}
-        />
+      <Tabs.Screen
+        name="front"
+        options={{
+          title: "프론트",
+          tabBarIcon: ({ color }) => <AppIcon icon="desk" color={color} />,
+          href: mode === "pro" ? "/front" : null,
+        }}
+      />
       <Tabs.Screen
         name="calendar"
         options={{

@@ -1,5 +1,6 @@
 import "expo-dev-client";
 import "react-native-reanimated";
+import { configureReanimatedLogger } from "react-native-reanimated";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
@@ -7,8 +8,13 @@ import { Stack, SplashScreen } from "expo-router";
 
 import { AuthProvider } from "@contexts/auth";
 import { ThemeProvider } from "@contexts/theme";
+import { SafeAreaView } from "react-native";
 
 SplashScreen.preventAutoHideAsync();
+
+configureReanimatedLogger({
+  strict: false,
+});
 
 export const unstable_settings = {
   initialRouteName: "index",
