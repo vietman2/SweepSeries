@@ -129,6 +129,7 @@ export function Calendar() {
         index={-1}
         enableDynamicSizing
         backdropComponent={renderBackdrop}
+        containerStyle={{zIndex: 100}}
       >
         <BottomSheetView style={styles.sheetContainer}>
           <Text style={styles.title}>캘린더 리스트</Text>
