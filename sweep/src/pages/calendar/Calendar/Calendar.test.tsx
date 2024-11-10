@@ -36,10 +36,11 @@ describe("<Calendar />", () => {
     fireEvent.press(getByTestId("open-settings"));
   });
 
-  it("renders correctly (month < 10)", () => {
+  it("renders correctly (month < 10) and handles search", () => {
     const { getByTestId } = renderWithProviders(<Calendar />);
 
     fireEvent.press(getByTestId("open-list"));
+    fireEvent.press(getByTestId("search"));
   });
 
   it("handles calendar select", () => {

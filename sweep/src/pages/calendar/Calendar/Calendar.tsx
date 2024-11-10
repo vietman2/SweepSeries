@@ -45,6 +45,10 @@ export function Calendar() {
     ref.current?.close();
   };
 
+  const handleSearchPress = () => {
+    router.push("/calendar/search");
+  };
+
   const handleSettingsPress = () => {
     router.push({
       pathname: "/calendar/settings",
@@ -122,12 +126,17 @@ export function Calendar() {
           >
             <CalendarTitle calendar={selectedCalendar} />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handleSettingsPress}
-            testID="open-settings"
-          >
-            <AppIcon icon="settings" size={24} color={theme.primary} />
-          </TouchableOpacity>
+          <View style={styles.wrapper}>
+            <TouchableOpacity onPress={handleSearchPress} testID="search">
+              <AppIcon icon="search" size={20} color={theme.primary} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleSettingsPress}
+              testID="open-settings"
+            >
+              <AppIcon icon="settings" size={24} color={theme.primary} />
+            </TouchableOpacity>
+          </View>
         </View>
         <CalendarButtons open={buttonsOpen} setOpen={setButtonsOpen} />
         <Scroll>
@@ -189,6 +198,11 @@ const createStyles = (theme: ThemeColorType) =>
       paddingHorizontal: 16,
       height: 100,
       backgroundColor: theme.background,
+    },
+    wrapper: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 12,
     },
     sheetContainer: {
       paddingTop: 8,
