@@ -29,6 +29,27 @@ export default function CalendarLayout() {
         }}
       />
       <Stack.Screen
+        name="addtodo"
+        options={{
+          presentation: "modal",
+          headerShown: true,
+          headerTitle: "할 일 추가",
+          headerShadowVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="addmemo"
+        options={{
+          presentation: "modal",
+          headerShown: true,
+          headerTitle: "메모 추가",
+          headerShadowVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="search"
+      />
+      <Stack.Screen
         name="daily/[date]"
         options={{
           presentation: "modal",
