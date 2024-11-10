@@ -15,6 +15,16 @@ export function CalendarButtons({ open, setOpen }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  const handleMemoPress = () => {
+    router.push("/calendar/addmemo");
+    setOpen(false);
+  };
+
+  const handleTodoPress = () => {
+    router.push("/calendar/addtodo");
+    setOpen(false);
+  };
+
   const handleSchedulePress = () => {
     router.push("/calendar/addschedule");
     setOpen(false);
@@ -26,13 +36,21 @@ export function CalendarButtons({ open, setOpen }: Readonly<Props>) {
         <>
           <View style={styles.wrapper}>
             <Text style={styles.text}>메모</Text>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handleMemoPress}
+              testID="addmemo"
+            >
               <AppIcon icon="memo" size={20} color={theme.lowEmphasis} />
             </TouchableOpacity>
           </View>
           <View style={styles.wrapper}>
             <Text style={styles.text}>할 일</Text>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handleTodoPress}
+              testID="addtodo"
+            >
               <AppIcon
                 icon="check-circle"
                 size={20}
