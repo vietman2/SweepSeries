@@ -2,7 +2,7 @@ import { DatetimeHeader } from "./DatetimeHeader";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("react-native-svg", () => {
-  const { View } = require("react-native");
+  const { View } = jest.requireActual("react-native");
   return {
     __esModule: true,
     default: View,
