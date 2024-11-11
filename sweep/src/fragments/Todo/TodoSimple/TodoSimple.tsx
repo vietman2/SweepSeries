@@ -1,4 +1,5 @@
-import { StyleSheet, View } from "react-native";
+import { useState } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { AppIcon } from "@components/Icons";
 import { Text } from "@components/Texts";
@@ -11,21 +12,31 @@ interface Props {
 }
 
 export function TodoSimple({ todo }: Readonly<Props>) {
+  const [isDone, setIsDone] = useState(todo.isDone);
+
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  const handleToggle = () => {
+    setIsDone((prev) => !prev);
+  };
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={handleToggle}
+      testID="toggle"
+    >
       <View
         style={[
           styles.iconWrapper,
-          { backgroundColor: todo.isDone ? "#3AB6FF" : "white" },
+          { backgroundColor: isDone ? theme.primary : "white" },
         ]}
       >
         <AppIcon icon="check" size={14} color="white" />
       </View>
       <Text style={styles.text}>{todo.text}</Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -39,7 +50,7 @@ const createStyles = (theme: ThemeColorType) =>
     iconWrapper: {
       padding: 2,
       borderWidth: 1,
-      borderColor: "#3AB6FF",
+      borderColor: theme.primary,
       borderRadius: 20,
     },
     text: {
