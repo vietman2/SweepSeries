@@ -1,4 +1,3 @@
-import { AddMemo } from "./AddMemo/AddMemo";
 import { AddSchedule } from "./AddSchedule/AddSchedule";
 import { AddTodo } from "./AddTodo/AddTodo";
 import { Calendar } from "./Calendar/Calendar";
@@ -8,7 +7,6 @@ import { ReservationRequests } from "./ReservationRequests/ReservationRequests";
 import { Settings } from "./Settings/Settings";
 
 export {
-  AddMemo,
   AddSchedule,
   AddTodo,
   Calendar,

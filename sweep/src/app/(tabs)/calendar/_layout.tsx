@@ -37,15 +37,6 @@ export default function CalendarLayout() {
           headerShadowVisible: false,
         }}
       />
-      <Stack.Screen
-        name="addmemo"
-        options={{
-          presentation: "modal",
-          headerShown: true,
-          headerTitle: "메모 추가",
-          headerShadowVisible: false,
-        }}
-      />
       <Stack.Screen name="search" />
       <Stack.Screen name="requests" />
       <Stack.Screen

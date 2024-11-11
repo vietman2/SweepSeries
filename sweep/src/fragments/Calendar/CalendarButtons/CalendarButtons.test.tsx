@@ -32,7 +32,6 @@ describe("<CalendarButtons />", () => {
       <CalendarButtons open setOpen={jest.fn()} />
     );
 
-    fireEvent.press(getByTestId("addmemo"));
     fireEvent.press(getByTestId("addtodo"));
     fireEvent.press(getByTestId("addschedule"));
   });
