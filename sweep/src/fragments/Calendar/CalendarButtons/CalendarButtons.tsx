@@ -3,6 +3,7 @@ import { router } from "expo-router";
 
 import { AppIcon } from "@components/Icons";
 import { Text } from "@components/Texts";
+import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
 import { ThemeColorType } from "@themes/colors";
 
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export function CalendarButtons({ open, setOpen }: Readonly<Props>) {
+  const { mode } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -27,6 +29,11 @@ export function CalendarButtons({ open, setOpen }: Readonly<Props>) {
 
   const handleSchedulePress = () => {
     router.push("/calendar/addschedule");
+    setOpen(false);
+  };
+
+  const handleRequestPress = () => {
+    router.push("/calendar/requests");
     setOpen(false);
   };
 
@@ -61,35 +68,44 @@ export function CalendarButtons({ open, setOpen }: Readonly<Props>) {
           <View style={styles.wrapper}>
             <Text style={styles.text}>일정</Text>
             <TouchableOpacity
-              style={styles.button}
+              style={[
+                styles.button,
+                mode !== "pro" && { backgroundColor: theme.primary },
+              ]}
               onPress={handleSchedulePress}
               testID="addschedule"
             >
               <AppIcon
-                icon="calendar-pointer"
-                size={20}
-                color={theme.lowEmphasis}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.wrapper}>
-            <Text style={styles.text}>예약 추가</Text>
-            <TouchableOpacity style={styles.button}>
-              <AppIcon
                 icon="calendar-plus"
                 size={20}
-                color={theme.lowEmphasis}
+                color={mode === "pro" ? theme.lowEmphasis : theme.background}
               />
             </TouchableOpacity>
           </View>
-          <View style={styles.wrapper}>
-            <Text style={styles.text}>예약 승인</Text>
-            <TouchableOpacity
-              style={[styles.button, { backgroundColor: theme.primary }]}
-            >
-              <AppIcon icon="checkbox" size={20} color={theme.background} />
-            </TouchableOpacity>
-          </View>
+          {mode === "pro" && (
+            <>
+              <View style={styles.wrapper}>
+                <Text style={styles.text}>예약 추가</Text>
+                <TouchableOpacity style={styles.button}>
+                  <AppIcon
+                    icon="calendar-pointer"
+                    size={20}
+                    color={theme.lowEmphasis}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.wrapper}>
+                <Text style={styles.text}>예약 승인</Text>
+                <TouchableOpacity
+                  style={[styles.button, { backgroundColor: theme.primary }]}
+                  onPress={handleRequestPress}
+                  testID="requests"
+                >
+                  <AppIcon icon="checkbox" size={20} color={theme.background} />
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
         </>
       ) : (
         <TouchableOpacity
