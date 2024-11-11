@@ -19,16 +19,35 @@ interface Props {
   calendar: CalendarType;
 }
 
+const colorOptions = [
+  "#FF6B6B",
+  "#FFA07A",
+  "#98FB98",
+  "#B0E0E6",
+  "#FFD700",
+  "#E6E6FA",
+  "#87CEEB",
+  "#D8BFD8",
+];
+
 export function CalendarOptions({ calendar }: Readonly<Props>) {
   const [calendarName, setCalendarName] = useState<string>("");
+  const [calendarColor, setCalendarColor] = useState<string>("");
+
   const [nameModalOpen, setNameModalOpen] = useState<boolean>(false);
   const [colorModalOpen, setColorModalOpen] = useState<boolean>(false);
 
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  const handleColorSelect = (color: string) => {
+    setCalendarColor(color);
+    setColorModalOpen(false);
+  };
+
   useEffect(() => {
     setCalendarName(calendar.title);
+    setCalendarColor(calendar.color);
   }, [calendar]);
 
   return (
@@ -101,15 +120,27 @@ export function CalendarOptions({ calendar }: Readonly<Props>) {
             style={StyleSheet.absoluteFill}
             testID="close-color-modal"
           />
-          <View style={styles.modal}>
-            <Text style={styles.modalTitle}>캘린더 색상</Text>
-            <Text>색상 선택</Text>
-            <TouchableOpacity
-              onPress={() => setColorModalOpen(false)}
-              testID="cancel-color-modal"
-            >
-              <Text style={styles.buttonText}>취소</Text>
-            </TouchableOpacity>
+          <View style={styles.modal2}>
+            <Text style={styles.modalTitle}>캘린더 색상을 선택해주세요.</Text>
+            <View style={styles.colors}>
+              {colorOptions.map((color) => (
+                <TouchableOpacity
+                  key={color}
+                  onPress={() => handleColorSelect(color)}
+                  testID={`select-color-${color}`}
+                >
+                  <View style={[styles.color, { backgroundColor: color }]}>
+                    {calendarColor === color && (
+                      <AppIcon
+                        icon="check"
+                        size={20}
+                        color={theme.mediumEmphasis}
+                      />
+                    )}
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
         </View>
       </Modal>
@@ -190,5 +221,28 @@ const createStyles = (theme: ThemeColorType) =>
       fontSize: 16,
       fontWeight: "bold",
       color: theme.lowEmphasis,
+    },
+    modal2: {
+      alignItems: "center",
+      maxWidth: 280,
+      paddingHorizontal: 32,
+      paddingTop: 16,
+      paddingBottom: 24,
+      gap: 16,
+      backgroundColor: theme.background,
+      borderRadius: 16,
+    },
+    colors: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      justifyContent: "center",
+      gap: 16,
+    },
+    color: {
+      justifyContent: "center",
+      alignItems: "center",
+      width: 40,
+      height: 40,
+      borderRadius: 5,
     },
   });
