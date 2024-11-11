@@ -46,9 +46,8 @@ export default function CalendarLayout() {
           headerShadowVisible: false,
         }}
       />
-      <Stack.Screen
-        name="search"
-      />
+      <Stack.Screen name="search" />
+      <Stack.Screen name="requests" />
       <Stack.Screen
         name="daily/[date]"
         options={{

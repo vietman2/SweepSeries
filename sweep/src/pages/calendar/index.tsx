@@ -4,6 +4,7 @@ import { AddTodo } from "./AddTodo/AddTodo";
 import { Calendar } from "./Calendar/Calendar";
 import { CalendarSearch } from "./CalendarSearch/CalendarSearch";
 import { DailySchedule } from "./DailySchedule/DailySchedule";
+import { ReservationRequests } from "./ReservationRequests/ReservationRequests";
 import { Settings } from "./Settings/Settings";
 
 export {
@@ -13,5 +14,6 @@ export {
   Calendar,
   CalendarSearch,
   DailySchedule,
+  ReservationRequests,
   Settings,
 };
