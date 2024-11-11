@@ -21,6 +21,7 @@ export const sampleSchedules: ScheduleSimpleType[] = [
     detail: "코치: 홍길동",
     color: "#14863E",
     short_text: "길동 레슨 2",
+    note: "초등학교 6학년 / 포지션은 유격수\n야구한지 6개월 정도 됐는데 학부모가 타격 욕심이 큼"
   },
 ];
 
