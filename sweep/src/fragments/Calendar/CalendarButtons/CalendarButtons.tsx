@@ -37,7 +37,7 @@ export function CalendarButtons({ open, setOpen }: Readonly<Props>) {
       {open ? (
         <>
           <View style={styles.wrapper}>
-            <Text style={styles.text}>할 일</Text>
+            <Text style={styles.text}>할 일 추가</Text>
             <TouchableOpacity
               style={styles.button}
               onPress={handleTodoPress}
@@ -51,7 +51,7 @@ export function CalendarButtons({ open, setOpen }: Readonly<Props>) {
             </TouchableOpacity>
           </View>
           <View style={styles.wrapper}>
-            <Text style={styles.text}>일정</Text>
+            <Text style={styles.text}>일정 추가</Text>
             <TouchableOpacity
               style={[
                 styles.button,
