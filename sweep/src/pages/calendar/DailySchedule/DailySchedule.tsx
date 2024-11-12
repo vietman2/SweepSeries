@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 import { Divider } from "@components/Dividers";
@@ -33,6 +33,10 @@ export function DailySchedule() {
     setDiaryEditMode(!diaryEditMode);
   };
 
+  const handleSchedulePress = () => {
+    router.replace("/calendar/addschedule");
+  };
+
   useEffect(() => {
     setSchedules(sampleScheduleResponse[date]);
     setTodos(sampleTodos);
@@ -61,7 +65,7 @@ export function DailySchedule() {
       <View style={styles.content}>
         <View style={styles.header}>
           <Text style={styles.subtitle}>일정</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleSchedulePress} testID="schedule">
             <AppIcon icon="plus-circle" size={20} color={theme.primary} />
           </TouchableOpacity>
         </View>

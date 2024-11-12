@@ -4,6 +4,12 @@ import * as Router from "expo-router";
 import { DailySchedule } from "./DailySchedule";
 import { renderWithProviders } from "@utils/test-utils";
 
+jest.mock("expo-router", () => ({
+  useLocalSearchParams: jest.fn(),
+  router: {
+    replace: jest.fn(),
+  },
+}));
 jest.mock("@fragments/Schedule", () => ({
   ScheduleSimple: () => <div />,
 }));
@@ -17,7 +23,9 @@ describe("<DailySchedule />", () => {
       .spyOn(Router, "useLocalSearchParams")
       .mockReturnValue({ date: "2021-07-02" });
 
-    renderWithProviders(<DailySchedule />);
+    const { getByTestId } = renderWithProviders(<DailySchedule />);
+
+    fireEvent.press(getByTestId("schedule"));
   });
 
   it("should render schedules and handle edit mode", () => {
