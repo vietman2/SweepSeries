@@ -34,9 +34,25 @@ jest.mock("@react-native-community/datetimepicker", () => {
     DateTimePickerEvent: jest.fn(),
   };
 });
-jest.mock("@fragments/Datetime", () => ({
-  DatetimeHeader: () => null,
-}));
+jest.mock("@fragments/Schedule", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+
+  return {
+    DateTimeHeader: ({
+      handleEndMode,
+      handleStartMode,
+    }: {
+      handleEndMode: () => void;
+      handleStartMode: () => void;
+    }) => (
+      <>
+        <TouchableOpacity onPress={handleStartMode} testID="start" />
+        <TouchableOpacity onPress={handleEndMode} testID="end" />
+      </>
+    ),
+    ScheduleInput: () => null,
+  };
+});
 
 describe("<AddSchedule />", () => {
   it("renders correctly (ios)", () => {
@@ -44,8 +60,12 @@ describe("<AddSchedule />", () => {
 
     const { getByTestId } = renderWithProviders(<AddSchedule />);
 
+    fireEvent.press(getByTestId("start"));
     fireEvent.press(getByTestId("change-datetime"));
     fireEvent.press(getByTestId("cancel"));
+    fireEvent.press(getByTestId("end"));
+    fireEvent.press(getByTestId("change-datetime"));
+    fireEvent.press(getByTestId("all-day"));
   });
 
   it("renders correctly (android)", () => {
