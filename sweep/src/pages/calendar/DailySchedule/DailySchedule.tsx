@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 import { Divider } from "@components/Dividers";
 import { AppIcon } from "@components/Icons";
+import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
 import { ScheduleSimple } from "@fragments/Schedule";
@@ -24,6 +25,7 @@ export function DailySchedule() {
   const [dateObj, setDateObj] = useState<Date>();
 
   const [diaryEditMode, setDiaryEditMode] = useState<boolean>(false);
+  const [diaryContent, setDiaryContent] = useState<string>("");
 
   const { date } = useLocalSearchParams<{ date: string }>();
   const { theme } = useTheme();
@@ -44,6 +46,7 @@ export function DailySchedule() {
 
     if (parseInt(date.split("-")[2]) % 2 === 0) {
       setDiary(sampleDiary);
+      setDiaryContent(sampleDiary.content);
     }
   }, [date]);
 
@@ -55,63 +58,78 @@ export function DailySchedule() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>
-        {`${dateObj?.toLocaleDateString("ko-KR", {
-          month: "long",
-          day: "numeric",
-        })}. ${dateObj?.toLocaleDateString("ko-KR", { weekday: "short" })}`}
-      </Text>
-      <View style={styles.content}>
-        <View style={styles.header}>
-          <Text style={styles.subtitle}>일정</Text>
-          <TouchableOpacity onPress={handleSchedulePress} testID="schedule">
-            <AppIcon icon="plus-circle" size={20} color={theme.primary} />
-          </TouchableOpacity>
-        </View>
-        {isNoSchedule() ? (
-          <>
-            <Text style={styles.emptyText}>일정이 없습니다.</Text>
-            <Divider />
-          </>
-        ) : (
-          schedules.map((schedule) => (
-            <View key={schedule.id}>
-              <ScheduleSimple schedule={schedule} />
-              <Divider />
-            </View>
-          ))
-        )}
-      </View>
-      <View style={styles.content}>
-        <View style={styles.header}>
-          <Text style={styles.subtitle}>할 일</Text>
-          <TouchableOpacity>
-            <AppIcon icon="plus-circle" size={20} color={theme.primary} />
-          </TouchableOpacity>
-        </View>
-        {todos.map((todo) => (
-          <TodoSimple key={todo.id} todo={todo} />
-        ))}
-        <Divider />
-      </View>
-      <View style={styles.content}>
-        <View style={styles.header}>
-          <Text style={styles.subtitle}>다이어리</Text>
-          <TouchableOpacity onPress={handleModeToggle} testID="toggle-mode">
-            <AppIcon icon="plus-circle" size={20} color={theme.primary} />
-          </TouchableOpacity>
-        </View>
-        {diary ? (
-          <View style={styles.diary}>
-            <Text style={styles.diaryText}>{diary.content}</Text>
+    <Scroll style={styles.container} extraScrollHeight={16}>
+      <View style={styles.wrapper}>
+        <Text style={styles.title}>
+          {`${dateObj?.toLocaleDateString("ko-KR", {
+            month: "long",
+            day: "numeric",
+          })}. ${dateObj?.toLocaleDateString("ko-KR", { weekday: "short" })}`}
+        </Text>
+        <View style={styles.content}>
+          <View style={styles.header}>
+            <Text style={styles.subtitle}>일정</Text>
+            <TouchableOpacity onPress={handleSchedulePress} testID="schedule">
+              <AppIcon icon="plus-circle" size={20} color={theme.primary} />
+            </TouchableOpacity>
           </View>
-        ) : (
-          <Text style={styles.emptyText}>다이어리를 추가해주세요.</Text>
-        )}
+          {isNoSchedule() ? (
+            <>
+              <Text style={styles.emptyText}>일정이 없습니다.</Text>
+              <Divider />
+            </>
+          ) : (
+            schedules.map((schedule) => (
+              <View key={schedule.id}>
+                <ScheduleSimple schedule={schedule} />
+                <Divider />
+              </View>
+            ))
+          )}
+        </View>
+        <View style={styles.content}>
+          <View style={styles.header}>
+            <Text style={styles.subtitle}>할 일</Text>
+            <TouchableOpacity>
+              <AppIcon icon="plus-circle" size={20} color={theme.primary} />
+            </TouchableOpacity>
+          </View>
+          {todos.map((todo) => (
+            <TodoSimple key={todo.id} todo={todo} />
+          ))}
+          <Divider />
+        </View>
+        <View style={styles.content}>
+          <View style={styles.header}>
+            <Text style={styles.subtitle}>다이어리</Text>
+            <TouchableOpacity onPress={handleModeToggle} testID="toggle-mode">
+              <AppIcon icon="plus-circle" size={20} color={theme.primary} />
+            </TouchableOpacity>
+          </View>
+          {diaryEditMode ? (
+            <TextInput
+              value={diaryContent}
+              onChangeText={setDiaryContent}
+              placeholder="내용을 입력해주세요."
+              style={styles.textinput}
+              numberOfLines={10}
+              multiline
+            />
+          ) : (
+            <>
+              {diary ? (
+                <View style={styles.diary}>
+                  <Text style={styles.diaryText}>{diary.content}</Text>
+                </View>
+              ) : (
+                <Text style={styles.emptyText}>다이어리를 추가해주세요.</Text>
+              )}
+            </>
+          )}
+        </View>
       </View>
       <StatusBar style="inverted" />
-    </View>
+    </Scroll>
   );
 }
 
@@ -121,8 +139,10 @@ const createStyles = (theme: ThemeColorType) =>
       flex: 1,
       paddingVertical: 32,
       paddingHorizontal: 16,
-      gap: 16,
       backgroundColor: theme.background,
+    },
+    wrapper: {
+      gap: 16,
     },
     header: {
       flexDirection: "row",
@@ -158,5 +178,11 @@ const createStyles = (theme: ThemeColorType) =>
     diaryText: {
       fontSize: 14,
       lineHeight: 20,
+    },
+    textinput: {
+      padding: 16,
+      borderWidth: 1,
+      borderColor: theme.border,
+      borderRadius: 8,
     },
   });
