@@ -86,7 +86,7 @@ export function Home() {
               icon="calendar-pointer"
             />
             <Card title="프로필" subtitle="아카데미 소개" icon="user-pin" />
-            <Card title="리뷰 관리" subtitle="완성도 3/8" icon="" />
+            <Card title="대시보드" subtitle="다양한 통계" icon="dashboard" />
           </View>
         ) : (
           <View style={styles.content}>
