@@ -76,7 +76,11 @@ export function Home() {
     <>
       <Scroll style={styles.container} showsVerticalScrollIndicator={false}>
         {isAuthenticated && (
-          <AcademyCard mode={mode === "pro" ? "pro" : "normal"} />
+          <AcademyCard
+            mode={mode === "pro" ? "pro" : "normal"}
+            num_students={34}
+            num_requests={5}
+          />
         )}
         {mode === "pro" ? (
           <View style={styles.horizontal}>
