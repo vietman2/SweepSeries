@@ -1,4 +1,5 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { router } from "expo-router";
 
 import { VerticalDivider } from "@components/Dividers";
 import { Text } from "@components/Texts";
@@ -14,8 +15,17 @@ export function ScheduleSimple({ schedule }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  const handlePress = () => {
+    if (schedule.type === "레슨") {
+      router.replace({
+        pathname: "/calendar/lesson/[id]",
+        params: { id: schedule.id },
+      });
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={handlePress} testID={`schedule-simple-${schedule.id}`}>
       <Text style={styles.time}>{schedule.time}</Text>
       <View style={styles.horizontal}>
         <View style={[styles.chip, { backgroundColor: schedule.color }]}>
@@ -30,7 +40,7 @@ export function ScheduleSimple({ schedule }: Readonly<Props>) {
         </View>
       </View>
       {schedule.note && <Text style={styles.notes}>{schedule.note}</Text>}
-    </View>
+    </TouchableOpacity>
   );
 }
 
