@@ -59,7 +59,10 @@ export function AcademyProfile({ pro }: Readonly<Props>) {
           />
         </View>
         <View style={styles.header}>
-          <Text style={styles.title}>Catch B 아카데미</Text>
+          <View style={styles.titleWrapper}>
+            <Image src="https://picsum.photos/200" style={styles.logo} />
+            <Text style={styles.title}>Catch B 아카데미</Text>
+          </View>
           <View style={styles.horizontal}>
             <AppIcon icon="location" size={20} color={theme.lowEmphasis} />
             <Text style={styles.infoText}>
@@ -134,4 +137,15 @@ const createStyles = (theme: ThemeColorType) =>
     infoText: {
       color: theme.lowEmphasis,
     },
+    titleWrapper: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginBottom: 4,
+      gap: 8,
+    },
+    logo: {
+      width: 30,
+      height: 30,
+      borderRadius: 4,
+    }
   });
