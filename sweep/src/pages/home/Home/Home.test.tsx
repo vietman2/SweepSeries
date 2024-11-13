@@ -57,6 +57,7 @@ describe("<Home />", () => {
     const { getByTestId } = renderWithProviders(<Home />);
 
     fireEvent.press(getByTestId("academy-1"));
+    fireEvent.press(getByTestId("academy-detail-1"));
   });
 
   it("renders pro home correctly", () => {

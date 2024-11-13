@@ -37,10 +37,12 @@ describe("<MyPage />", () => {
   it("renders correctly when logged in and handles buttons", () => {
     const { getByTestId } = renderWithProviders(<MyPage />);
 
+    fireEvent.press(getByTestId("recent"));
     fireEvent.press(getByTestId("heart-outline"));
     fireEvent.press(getByTestId("chatbox-outline"));
     fireEvent.press(getByTestId("giftbox"));
     fireEvent.press(getByTestId("lightbulb"));
+    fireEvent.press(getByTestId("chat"));
     fireEvent.press(getByTestId("questionmark-circle"));
     fireEvent.press(getByTestId("bell"));
     fireEvent.press(getByTestId("person-minus"));
@@ -53,7 +55,7 @@ describe("<MyPage />", () => {
     fireEvent.press(getByTestId("logout"));
   });
 
-  it("renders correctly and handles logout with no dismiss", () => {
+  it("renders correctly and handles logout with dismiss", () => {
     jest.spyOn(router, "canDismiss").mockReturnValue(true);
     const { getByTestId } = renderWithProviders(<MyPage />);
 
@@ -66,6 +68,16 @@ describe("<MyPage />", () => {
       logout: jest.fn(),
       mode: "guest",
       isAuthenticated: false,
+    });
+    renderWithProviders(<MyPage />);
+  });
+
+  it("renders correctly when logged in as pro", () => {
+    jest.spyOn(AuthContext, "useAuth").mockReturnValue({
+      login: jest.fn(),
+      logout: jest.fn(),
+      mode: "pro",
+      isAuthenticated: true,
     });
     renderWithProviders(<MyPage />);
   });

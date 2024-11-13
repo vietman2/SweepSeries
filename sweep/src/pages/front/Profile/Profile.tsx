@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 
 import { Divider } from "@components/Dividers";
 import { AppIcon } from "@components/Icons";
@@ -33,19 +33,15 @@ export function ProfileManagement() {
       <AcademyProfile pro />
       <View style={styles.content}>
         <Divider bold />
-        <Subtitle title="아카데미 소개" />
         <Introduction introduction={academy.introduction} />
         <Divider />
-        <Subtitle title="운영시간" />
         <WorkingHours workingHours={academy.working_hours} />
         <Divider />
-        <Subtitle title="구비시설" />
         <Facilities facilities={academy.facilities} type="구비장비" />
         <Divider />
-        <Subtitle title="편의시설 및 서비스" />
         <Facilities facilities={academy.facilities} type="편의시설" />
         <Divider />
-        <Subtitle title="지도" />
+        <Text style={styles.subtitle}>지도</Text>
         <View>
           <Image source={{ uri: academy.map }} style={styles.image} />
           <View style={styles.horizontal}>
@@ -55,25 +51,6 @@ export function ProfileManagement() {
         </View>
       </View>
     </Scroll>
-  );
-}
-
-interface SubtitleProps {
-  title: string;
-}
-
-function Subtitle({ title }: Readonly<SubtitleProps>) {
-  const { theme } = useTheme();
-  const styles = createStyles(theme);
-
-  return (
-    <View style={styles.subtitleWrapper}>
-      <Text style={styles.subtitle}>{title}</Text>
-      <TouchableOpacity style={styles.editButton}>
-        <AppIcon icon="pencil" size={12} color={theme.primary} />
-        <Text style={styles.editText}>수정</Text>
-      </TouchableOpacity>
-    </View>
   );
 }
 
@@ -87,25 +64,10 @@ const createStyles = (theme: ThemeColorType) =>
       paddingHorizontal: 16,
       gap: 16,
     },
-    subtitleWrapper: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
-    },
     subtitle: {
       fontSize: 20,
       fontWeight: "bold",
       color: theme.highEmphasis,
-    },
-    editButton: {
-      flexDirection: "row",
-      alignItems: "center",
-      gap: 2,
-    },
-    editText: {
-      fontSize: 16,
-      color: theme.primary,
-      textAlignVertical: "center",
     },
     image: {
       width: "100%",

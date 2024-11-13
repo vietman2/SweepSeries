@@ -3,6 +3,29 @@
 jest.mock("react-native-svg/css", () => ({
   SvgCssUri: "SvgCssUri",
 }));
+jest.mock("@react-native-community/datetimepicker", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+
+  return {
+    __esModule: true,
+    default: ({
+      onChange,
+    }: {
+      onChange: (event: any, selectedDate?: Date) => void;
+    }) => {
+      return (
+        <>
+          <TouchableOpacity
+            onPress={() => onChange({}, new Date())}
+            testID="change-datetime"
+          />
+          <TouchableOpacity onPress={() => onChange({})} testID="cancel" />
+        </>
+      );
+    },
+    DateTimePickerEvent: jest.fn(),
+  };
+});
 jest.mock("@components/Buttons", () => ({
   SvgIconButton: ({ icon, onPress }: { icon: string; onPress: () => void }) => {
     const { TouchableOpacity } = jest.requireActual("react-native");
@@ -59,6 +82,7 @@ jest.mock("@components/Filters", () => {
 });
 jest.mock("@components/Icons", () => ({
   AppIcon: () => null,
+  CustomLogo: () => null,
   MainLogo: () => null,
   HorizontalLogo: () => null,
 }));
@@ -94,6 +118,28 @@ jest.mock("@components/Menus", () => {
             key={item.label}
           />
         ))}
+      </>
+    ),
+  };
+});
+jest.mock("@components/Modals", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+  return {
+    SimpleModal: ({
+      children,
+      buttonText,
+      hideModal,
+      onButtonPress,
+    }: {
+      buttonText: string;
+      children: React.ReactNode;
+      hideModal: () => void;
+      onButtonPress: () => void;
+    }) => (
+      <>
+        <TouchableOpacity testID="hide" onPress={hideModal} />
+        <TouchableOpacity testID={buttonText} onPress={onButtonPress} />
+        {children}
       </>
     ),
   };

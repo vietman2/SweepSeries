@@ -21,7 +21,7 @@ export function Filters({
   onSelect,
 }: Readonly<Props>) {
   return (
-    <ScrollView horizontal>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       {filters.map((filter) => (
         <TouchableOpacity key={filter} onPress={() => onSelect(filter)}>
           <Filter text={filter} isSelected={filter === selectedFilter} />

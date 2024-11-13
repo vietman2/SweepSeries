@@ -23,6 +23,11 @@ describe("<NormalCard />", () => {
 
 describe("<ProCard />", () => {
   it("renders correctly", () => {
-    renderWithProviders(<ProCard />);
+    renderWithProviders(
+      <>
+        <ProCard num_requests={0} num_students={0} />
+        <ProCard num_requests={1} num_students={1} />
+      </>
+    );
   });
 });

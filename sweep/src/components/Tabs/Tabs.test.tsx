@@ -1,3 +1,4 @@
+import { configureReanimatedLogger } from "react-native-reanimated";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { fireEvent, waitFor } from "@testing-library/react-native";
@@ -11,6 +12,10 @@ import { renderWithProviders } from "@utils/test-utils";
 const Tab = createMaterialTopTabNavigator();
 
 const MockComponent = () => <></>;
+
+configureReanimatedLogger({
+  strict: false,
+});
 
 describe("<CollapsibleTab />", () => {
   it("renders correctly", () => {
@@ -48,6 +53,32 @@ describe("<TabBar />", () => {
         <Tab.Navigator
           initialRouteName="example"
           tabBar={(props) => <TabBar {...props} />}
+        >
+          <Tab.Screen
+            name="example"
+            component={MockComponent}
+            options={{ title: "example" }}
+          />
+          <Tab.Screen
+            name="example2"
+            component={MockComponent}
+            options={{ title: "example2" }}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+    );
+
+    waitFor(() => fireEvent.press(getByTestId("example")));
+    waitFor(() => fireEvent.press(getByTestId("example2")));
+    fireEvent(getByTestId("example"), "onLongPress");
+  });
+  
+  it("renders scrollable correctly", () => {
+    const { getByTestId } = renderWithProviders(
+      <NavigationContainer>
+        <Tab.Navigator
+          initialRouteName="example"
+          tabBar={(props) => <TabBar {...props} scrollable />}
         >
           <Tab.Screen
             name="example"

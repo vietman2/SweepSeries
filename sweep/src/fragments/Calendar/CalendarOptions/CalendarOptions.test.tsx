@@ -19,6 +19,6 @@ describe("<CalendarOptions />", () => {
     fireEvent.press(getByTestId("open-color-modal"));
     fireEvent.press(getByTestId("close-color-modal"));
     fireEvent.press(getByTestId("open-color-modal"));
-    fireEvent.press(getByTestId("cancel-color-modal"));
+    fireEvent.press(getByTestId("select-color-#FF6B6B"));
   });
 });

@@ -68,7 +68,12 @@ export function NormalCard({ type = 1 }: Readonly<Props>) {
   );
 }
 
-export function ProCard() {
+interface PropProps {
+  num_students: number;
+  num_requests: number;
+}
+
+export function ProCard({ num_students, num_requests }: Readonly<PropProps>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -82,12 +87,19 @@ export function ProCard() {
         <View style={styles.horizontal}>
           <View style={styles.board}>
             <Text style={styles.subtitle}>총 수강생</Text>
-            <Text style={styles.text}>0</Text>
+            <Text style={styles.text}>{num_students}</Text>
           </View>
           <VerticalDivider width={1} />
           <View style={styles.board}>
             <Text style={styles.subtitle}>예약 승인 요청</Text>
-            <Text style={styles.text}>0</Text>
+            <Text
+              style={[
+                styles.text,
+                { color: num_requests > 0 ? "red" : theme.highEmphasis },
+              ]}
+            >
+              {num_requests}
+            </Text>
           </View>
         </View>
       </View>

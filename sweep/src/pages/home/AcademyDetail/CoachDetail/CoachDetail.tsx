@@ -76,6 +76,7 @@ const createStyles = (theme: ThemeColorType) =>
   StyleSheet.create({
     container: {
       flex: 1,
+      paddingTop: 24,
       paddingHorizontal: 16,
       gap: 16,
       backgroundColor: theme.background,
@@ -97,6 +98,7 @@ const createStyles = (theme: ThemeColorType) =>
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
+      marginTop: 8,
       gap: 8,
     },
     title: {

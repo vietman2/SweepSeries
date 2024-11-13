@@ -11,7 +11,7 @@ import { MainProfile } from "@fragments/Profile";
 import { ThemeColorType } from "@themes/colors";
 
 export function MyPage() {
-  const { isAuthenticated, logout } = useAuth();
+  const { mode, isAuthenticated, logout } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -60,7 +60,11 @@ export function MyPage() {
         <View style={styles.profile}>
           <MainProfile />
           <TextButton
-            text="아카데미/코치로 등록하기"
+            text={
+              mode === "pro"
+                ? "캐치비 베이스볼 아카데미"
+                : "아카데미/코치로 등록하기"
+            }
             onPress={() => {}}
             color={theme.primary}
             backgroundColor={theme.background}

@@ -48,9 +48,15 @@ export function CustomDay({ date, schedules }: Readonly<Props>) {
                   backgroundColor: schedule.color,
                 },
               ]}
-              key={schedule.text}
+              key={schedule.short_text}
             >
-              <Text style={styles.chipText} numberOfLines={1} ellipsizeMode="clip">{schedule.text}</Text>
+              <Text
+                style={styles.chipText}
+                numberOfLines={1}
+                ellipsizeMode="clip"
+              >
+                {schedule.short_text}
+              </Text>
             </View>
           ))}
         </View>

@@ -9,11 +9,13 @@ import { WorkingHours } from "./Information/WorkingHours/WorkingHours";
 interface Props {
   mode: "normal" | "pro";
   type?: 1 | 2;
+  num_students?: number;
+  num_requests?: number;
 }
 
-function AcademyCard({ mode, type = 1 }: Readonly<Props>) {
+function AcademyCard({ mode, type = 1, num_requests = 0, num_students = 0 }: Readonly<Props>) {
   if (mode === "pro") {
-    return <ProCard />;
+    return <ProCard num_requests={num_requests} num_students={num_students} />;
   } else {
     return <NormalCard type={type} />;
   }

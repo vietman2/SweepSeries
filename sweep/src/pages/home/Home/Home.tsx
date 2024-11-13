@@ -76,7 +76,11 @@ export function Home() {
     <>
       <Scroll style={styles.container} showsVerticalScrollIndicator={false}>
         {isAuthenticated && (
-          <AcademyCard mode={mode === "pro" ? "pro" : "normal"} />
+          <AcademyCard
+            mode={mode === "pro" ? "pro" : "normal"}
+            num_students={34}
+            num_requests={5}
+          />
         )}
         {mode === "pro" ? (
           <View style={styles.horizontal}>
@@ -86,7 +90,7 @@ export function Home() {
               icon="calendar-pointer"
             />
             <Card title="프로필" subtitle="아카데미 소개" icon="user-pin" />
-            <Card title="리뷰 관리" subtitle="완성도 3/8" icon="" />
+            <Card title="대시보드" subtitle="다양한 통계" icon="dashboard" />
           </View>
         ) : (
           <View style={styles.content}>
@@ -138,7 +142,13 @@ export function Home() {
           </View>
           <View style={styles.academies}>
             {academies.map((academy) => (
-              <AcademySimple key={academy.uuid} academy={academy} quote />
+              <TouchableOpacity
+                key={academy.uuid}
+                onPress={() => handleAcademySelect(academy)}
+                testID={`academy-detail-${academy.uuid}`}
+              >
+                <AcademySimple academy={academy} quote />
+              </TouchableOpacity>
             ))}
           </View>
         </View>
@@ -268,7 +278,7 @@ const createStyles = (theme: ThemeColorType) =>
     horizontal: {
       flexDirection: "row",
       marginTop: 16,
-      gap: 16,
+      gap: 8,
     },
     card: {
       flex: 1,
@@ -290,7 +300,7 @@ const createStyles = (theme: ThemeColorType) =>
       color: theme.highEmphasis,
     },
     cardSubtitle: {
-      fontSize: 16,
+      fontSize: 14,
       color: theme.mediumEmphasis,
     },
     cardIcon: {

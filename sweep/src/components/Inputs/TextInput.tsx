@@ -50,14 +50,14 @@ const createStyles = (theme: ThemeColorType) =>
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      marginVertical: 5,
-      paddingVertical: 10,
+      marginVertical: 4,
+      paddingVertical: 12,
       borderWidth: 1,
       borderColor: theme.border,
-      borderRadius: 5,
+      borderRadius: 4,
     },
     textinputarea: {
       flex: 1,
-      marginHorizontal: 10,
+      marginHorizontal: 8,
     },
   });
