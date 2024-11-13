@@ -59,6 +59,7 @@ jest.mock("@components/Filters", () => {
 });
 jest.mock("@components/Icons", () => ({
   AppIcon: () => null,
+  CustomLogo: () => null,
   MainLogo: () => null,
   HorizontalLogo: () => null,
 }));

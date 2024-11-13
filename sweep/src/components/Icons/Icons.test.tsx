@@ -1,5 +1,5 @@
 import { AppIcon } from "./AppIcon";
-import { MainLogo, HorizontalLogo } from "./Logo";
+import { CustomLogo, MainLogo, HorizontalLogo } from "./Logo";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.unmock("@components/Icons");
@@ -11,6 +11,14 @@ describe("<AppIcon />", () => {
 
   it("renders default size correctly", () => {
     renderWithProviders(<AppIcon icon="home" color="black" />);
+  });
+});
+
+describe("<CustomLogo />", () => {
+  it("renders correctly", () => {
+    renderWithProviders(
+      <CustomLogo image="image" text="text" color="black" />
+    );
   });
 });
 
