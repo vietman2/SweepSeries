@@ -179,8 +179,8 @@ const createStyles = (theme: ThemeColorType) =>
     },
     tabContainer: {
       flexDirection: "row",
-      borderBottomWidth: 0.5,
-      borderBottomColor: theme.lowEmphasis,
+      borderBottomWidth: 0.2,
+      borderBottomColor: theme.border,
     },
     tab: {
       flex: 1,
@@ -205,8 +205,8 @@ const createStyles = (theme: ThemeColorType) =>
     scrollableContainer: {
       flexDirection: "row",
       backgroundColor: theme.background,
-      borderBottomWidth: 0.5,
-      borderBottomColor: theme.lowEmphasis,
+      borderBottomWidth: 0.2,
+      borderBottomColor: theme.border,
     },
     scrollableTab: {
       alignItems: "center",

@@ -83,7 +83,7 @@ const createStyles = (theme: ThemeColorType) =>
       borderRadius: 8,
       backgroundColor: theme.backgroundGray,
       shadowColor: "black",
-      shadowOffset: { width: 2, height: 4 },
+      shadowOffset: { width: 1, height: 2 },
       shadowOpacity: 0.24,
       shadowRadius: 1,
       elevation: 1,

@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
   image: {
     width: 30,
     height: 30,
+    borderRadius: 4,
   },
   customText: {
     fontSize: 22,

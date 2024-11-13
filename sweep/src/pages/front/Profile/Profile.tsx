@@ -32,7 +32,7 @@ export function ProfileManagement() {
     <Scroll style={styles.container}>
       <AcademyProfile pro />
       <View style={styles.content}>
-        <Divider bold />
+        <Divider />
         <Introduction introduction={academy.introduction} />
         <Divider />
         <WorkingHours workingHours={academy.working_hours} />
