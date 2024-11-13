@@ -4,6 +4,7 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 
+import { TextButton } from "@components/Buttons";
 import { AppIcon } from "@components/Icons";
 import { TextInput } from "@components/Inputs";
 import { Scroll } from "@components/ScrollView";
@@ -66,65 +67,76 @@ export function AddSchedule() {
   }, []);
 
   return (
-    <Scroll style={styles.container}>
-      <View style={styles.inputWrapper}>
-        <TextInput
-          value={title}
-          onChangeText={setTitle}
-          placeholder="일정 제목을 입력하세요."
-        />
-      </View>
-      <DateTimeHeader
-        selectedEndDateTime={selectedEndDateTime}
-        selectedStartDateTime={selectedStartDateTime}
-        mode={mode}
-        handleEndMode={handleEndMode}
-        handleStartMode={handleStartMode}
-        isAllDay={isAllDay}
-      />
-      <View style={styles.pickerWrapper}>
-        <DateTimePicker
-          mode={getDateTimePickerMode()}
-          value={mode === "start" ? selectedStartDateTime : selectedEndDateTime}
-          onChange={handleDateTimeChange}
-          display="spinner"
-          textColor="#000"
-        />
-      </View>
-      <View style={styles.row}>
-        <TouchableOpacity
-          style={[styles.chip, isAllDay && { backgroundColor: theme.primary }]}
-          onPress={toggleAllDay}
-          testID="all-day"
-        >
-          <Text
-            style={[styles.chipText, isAllDay && { color: theme.background }]}
-          >
-            종일
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.inputs}>
-        <View style={styles.row}>
-          <AppIcon icon="clipboard" size={24} color={theme.mediumEmphasis} />
-          <View style={styles.wrapper}>
-            <TextInput
-              placeholder="설명을 입력하세요."
-              value={description}
-              onChangeText={setDescription}
-            />
-          </View>
+    <View style={styles.container}>
+      <Scroll style={styles.wrapper}>
+        <View style={styles.inputWrapper}>
+          <TextInput
+            value={title}
+            onChangeText={setTitle}
+            placeholder="일정 제목을 입력하세요."
+          />
         </View>
-        <ScheduleInput
-          icon="calendar-number-2"
-          text="Calendar 1"
-          onPress={() => {}}
+        <DateTimeHeader
+          selectedEndDateTime={selectedEndDateTime}
+          selectedStartDateTime={selectedStartDateTime}
+          mode={mode}
+          handleEndMode={handleEndMode}
+          handleStartMode={handleStartMode}
+          isAllDay={isAllDay}
         />
-        <ScheduleInput icon="clock" text="알림" onPress={() => {}} />
-        <ScheduleInput icon="palette" text="색상" onPress={() => {}} />
-        <ScheduleInput icon="repeat" text="반복" onPress={() => {}} />
+        <View style={styles.pickerWrapper}>
+          <DateTimePicker
+            mode={getDateTimePickerMode()}
+            value={
+              mode === "start" ? selectedStartDateTime : selectedEndDateTime
+            }
+            onChange={handleDateTimeChange}
+            display="spinner"
+            locale="ko-KR"
+            textColor="#000"
+          />
+        </View>
+        <View style={styles.row}>
+          <TouchableOpacity
+            style={[
+              styles.chip,
+              isAllDay && { backgroundColor: theme.primary },
+            ]}
+            onPress={toggleAllDay}
+            testID="all-day"
+          >
+            <Text
+              style={[styles.chipText, isAllDay && { color: theme.background }]}
+            >
+              종일
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.inputs}>
+          <View style={styles.row}>
+            <AppIcon icon="clipboard" size={24} color={theme.mediumEmphasis} />
+            <View style={styles.wrapper}>
+              <TextInput
+                placeholder="설명을 입력하세요."
+                value={description}
+                onChangeText={setDescription}
+              />
+            </View>
+          </View>
+          <ScheduleInput
+            icon="calendar-number-2"
+            text="Calendar 1"
+            onPress={() => {}}
+          />
+          <ScheduleInput icon="clock" text="알림" onPress={() => {}} />
+          <ScheduleInput icon="palette" text="색상" onPress={() => {}} />
+          <ScheduleInput icon="repeat" text="반복" onPress={() => {}} />
+        </View>
+      </Scroll>
+      <View style={styles.buttonContainer}>
+        <TextButton text="등록하기" onPress={() => {}} />
       </View>
-    </Scroll>
+    </View>
   );
 }
 
@@ -132,7 +144,11 @@ const createStyles = (theme: ThemeColorType) =>
   StyleSheet.create({
     container: {
       flex: 1,
+      paddingBottom: 36,
       backgroundColor: theme.background,
+    },
+    wrapper: {
+      flex: 1,
     },
     inputWrapper: {
       paddingHorizontal: 16,
@@ -165,12 +181,12 @@ const createStyles = (theme: ThemeColorType) =>
     inputs: {
       paddingHorizontal: 16,
     },
-    wrapper: {
-      flex: 1,
-    },
     row: {
       flexDirection: "row",
       alignItems: "center",
       gap: 8,
+    },
+    buttonContainer: {
+      paddingHorizontal: 16,
     },
   });
