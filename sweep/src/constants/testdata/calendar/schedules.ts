@@ -1,7 +1,4 @@
-import {
-  ScheduleSimpleType,
-  ScheduleResponseType,
-} from "@models/calendar";
+import { ScheduleSimpleType, ScheduleResponseType } from "@models/calendar";
 
 export const sampleSchedules: ScheduleSimpleType[] = [
   {
@@ -21,7 +18,16 @@ export const sampleSchedules: ScheduleSimpleType[] = [
     detail: "코치: 홍길동",
     color: "#14863E",
     short_text: "길동 레슨 2",
-    note: "초등학교 6학년 / 포지션은 유격수\n야구한지 6개월 정도 됐는데 학부모가 타격 욕심이 큼"
+    note: "초등학교 6학년 / 포지션은 유격수\n야구한지 6개월 정도 됐는데 학부모가 타격 욕심이 큼",
+  },
+  {
+    id: 3,
+    time: "오후 5시 ~ 오후 7시 (2시간)",
+    type: "일반",
+    name: "대관",
+    detail: "",
+    color: "#FF5833",
+    short_text: "캐치비 대관",
   },
 ];
 
@@ -66,7 +72,7 @@ export const sampleScheduleResponse: ScheduleResponseType = {
       detail: "코치: 홍길동",
       color: "#14863E",
       short_text: "길동 레슨 3",
-      note: "초등학교 6학년 / 포지션은 유격수\n야구한지 6개월 정도 됐는데 학부모가 타격 욕심이 큼"
+      note: "초등학교 6학년 / 포지션은 유격수\n야구한지 6개월 정도 됐는데 학부모가 타격 욕심이 큼",
     },
     {
       id: 5,
