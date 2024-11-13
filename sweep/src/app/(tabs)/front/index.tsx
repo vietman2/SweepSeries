@@ -5,6 +5,7 @@ import { TabBar } from "@components/Tabs";
 import {
   CustomerManagement,
   EmployeeManagement,
+  NoticeManagement,
   ProfileManagement,
   ProgramManagement,
   ReviewManagement,
@@ -18,7 +19,7 @@ export default function Front() {
     <Tab.Navigator
       initialRouteName="profile"
       initialLayout={{ width: screenWidth, height: screenHeight }}
-      tabBar={(props) => <TabBar {...props} />}
+      tabBar={(props) => <TabBar {...props} scrollable />}
       screenOptions={{
         tabBarScrollEnabled: true,
       }}
@@ -49,6 +50,11 @@ export default function Front() {
         name="employees"
         component={EmployeeManagement}
         options={{ title: "직원관리" }}
+      />
+      <Tab.Screen
+        name="notices"
+        component={NoticeManagement}
+        options={{ title: "소식관리" }}
       />
     </Tab.Navigator>
   );
