@@ -99,6 +99,28 @@ jest.mock("@components/Menus", () => {
     ),
   };
 });
+jest.mock("@components/Modals", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+  return {
+    SimpleModal: ({
+      children,
+      buttonText,
+      hideModal,
+      onButtonPress,
+    }: {
+      buttonText: string;
+      children: React.ReactNode;
+      hideModal: () => void;
+      onButtonPress: () => void;
+    }) => (
+      <>
+        <TouchableOpacity testID="hide" onPress={hideModal} />
+        <TouchableOpacity testID={buttonText} onPress={onButtonPress} />
+        {children}
+      </>
+    ),
+  };
+});
 jest.mock("@components/Progressbars", () => ({
   Progressbar: () => null,
 }));
