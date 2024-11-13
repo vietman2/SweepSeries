@@ -131,6 +131,7 @@ export function Settings() {
               value={selectedTime}
               onChange={handleTimeChange}
               display="spinner"
+              locale="ko-KR"
             />
           </View>
           <View style={styles.buttonContainer}>
