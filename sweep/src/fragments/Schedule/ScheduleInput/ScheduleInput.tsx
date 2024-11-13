@@ -3,7 +3,6 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { AppIcon } from "@components/Icons";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
-import { ThemeColorType } from "@themes/colors";
 
 interface Props {
   icon: string;
@@ -13,7 +12,6 @@ interface Props {
 
 export function ScheduleInput({ icon, text, onPress }: Readonly<Props>) {
   const { theme } = useTheme();
-  const styles = createStyles(theme);
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
@@ -26,19 +24,18 @@ export function ScheduleInput({ icon, text, onPress }: Readonly<Props>) {
   );
 }
 
-const createStyles = (theme: ThemeColorType) =>
-  StyleSheet.create({
-    container: {
-      flexDirection: "row",
-      alignItems: "center",
-      gap: 8,
-    },
-    row: {
-      flex: 1,
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
-      paddingHorizontal: 8,
-      paddingVertical: 16,
-    },
-  });
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  row: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 8,
+    paddingVertical: 16,
+  },
+});

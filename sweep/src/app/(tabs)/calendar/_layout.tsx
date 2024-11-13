@@ -1,7 +1,7 @@
 import { TouchableOpacity } from "react-native";
 import { Stack, router } from "expo-router";
 
-import { AppIcon, HorizontalLogo } from "@components/Icons";
+import { AppIcon } from "@components/Icons";
 import { useTheme } from "@contexts/theme";
 
 export const unstable_settings = {
