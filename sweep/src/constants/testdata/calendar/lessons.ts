@@ -1,6 +1,6 @@
 import { LessonDetailType } from "@models/calendar";
 
-export const sampleLessonDetail: LessonDetailType = {
+const sampleLessonDetail: LessonDetailType = {
   id: 1,
   date: "11월 01일. 화",
   time: "오전 9시 ~ 오전 11시 (2시간)",
@@ -14,7 +14,7 @@ export const sampleLessonDetail: LessonDetailType = {
     "레슨 내용: 상하체 분리 후 로테이션 수정\n레슨:\n- 레그 킥 이후 랜딩 동작 시 상하체 분리가 원활히 되지 않는 상태를 수정하고자 했음\n- 수정 전: 스윙 진행 시 팔꿈치가 오픈되며 배트의 중심점이 뒤에 남아있게 되고 손목이 덮힘\n- 수정 후: 안전한 랜딩 동작 수행 후 상체 돌림 현상이 줄어들고 히트 트랙 분석이 타구 속도 및 발사각이 조정됨",
 };
 
-export const sampleUpcomingLessonDetail: LessonDetailType = {
+const sampleUpcomingLessonDetail: LessonDetailType = {
   id: 2,
   date: "11월 30일. 토",
   time: "오전 9시 ~ 오전 11시 (2시간)",
@@ -26,3 +26,8 @@ export const sampleUpcomingLessonDetail: LessonDetailType = {
   note: "",
   feedback: "",
 };
+
+export const sampleLessons: LessonDetailType[] = [
+  sampleLessonDetail,
+  sampleUpcomingLessonDetail,
+];
