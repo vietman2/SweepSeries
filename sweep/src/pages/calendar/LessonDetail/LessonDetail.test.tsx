@@ -6,6 +6,9 @@ import { renderWithProviders } from "@utils/test-utils";
 jest.mock("expo-router", () => ({
   useLocalSearchParams: jest.fn(),
 }));
+jest.mock("@fragments/Lesson", () => ({
+  LessonHeader: () => <div>LessonHeader</div>,
+}));
 
 describe("<LessonDetail />", () => {
   it("renders correctly", () => {

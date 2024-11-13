@@ -2,16 +2,14 @@ import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 
-import { Divider, VerticalDivider } from "@components/Dividers";
+import { Divider } from "@components/Dividers";
 import { ErrorPage } from "@components/Fallbacks";
 import { AppIcon } from "@components/Icons";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
+import { LessonHeader } from "@fragments/Lesson";
 import { LessonDetailType } from "@models/calendar";
-import {
-  sampleLessonDetail,
-  sampleUpcomingLessonDetail,
-} from "@testdata/calendar";
+import { sampleLessons } from "@testdata/calendar";
 import { ThemeColorType } from "@themes/colors";
 
 export function LessonDetail() {
@@ -24,11 +22,11 @@ export function LessonDetail() {
 
   useEffect(() => {
     if (parseInt(id) % 2 === 0) {
-      setLesson(sampleLessonDetail);
+      setLesson(sampleLessons[1]);
     } else {
-      setLesson(sampleUpcomingLessonDetail);
+      setLesson(sampleLessons[0]);
     }
-  }, []);
+  }, [id]);
 
   if (lesson === undefined) {
     return <ErrorPage />;
@@ -36,43 +34,7 @@ export function LessonDetail() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.datetime}>
-          <Text style={styles.dateText}>{lesson.date}</Text>
-          <Text style={styles.timeText}>{lesson.time}</Text>
-        </View>
-        <View style={styles.horizontal}>
-          <View
-            style={[
-              styles.chip,
-              {
-                backgroundColor:
-                  lesson.status === "완료" ? lesson.color : theme.background,
-                borderColor: lesson.color,
-              },
-            ]}
-          >
-            <Text
-              style={[
-                styles.chipText,
-                {
-                  color:
-                    lesson.status === "완료" ? theme.background : lesson.color,
-                },
-              ]}
-            >
-              {lesson.status}
-            </Text>
-          </View>
-          <VerticalDivider color={lesson.color} width={2} />
-          <View style={styles.content}>
-            <Text style={styles.title}>{lesson.program}</Text>
-            <Text style={styles.detail}>
-              코치: {lesson.coach} 수강생: {lesson.player}
-            </Text>
-          </View>
-        </View>
-      </View>
+      <LessonHeader lesson={lesson} />
       {lesson.status === "완료" ? (
         <>
           <View style={styles.content}>
@@ -113,50 +75,8 @@ const createStyles = (theme: ThemeColorType) =>
       gap: 16,
       backgroundColor: theme.background,
     },
-    header: {
-      gap: 12,
-    },
-    datetime: {
-      flexDirection: "row",
-      alignItems: "baseline",
-      gap: 8,
-    },
-    dateText: {
-      fontSize: 20,
-      color: theme.mediumEmphasis,
-    },
-    timeText: {
-      fontSize: 14,
-      color: theme.lowEmphasis,
-    },
-    horizontal: {
-      flexDirection: "row",
-      alignItems: "center",
-      gap: 8,
-    },
-    chip: {
-      alignItems: "center",
-      justifyContent: "center",
-      paddingHorizontal: 8,
-      paddingVertical: 6,
-      borderRadius: 4,
-      borderWidth: 0.5,
-    },
-    chipText: {
-      fontWeight: "bold",
-      color: theme.background,
-    },
-    title: {
-      fontSize: 18,
-      fontWeight: "bold",
-      color: theme.highEmphasis,
-    },
     content: {
       gap: 8,
-    },
-    detail: {
-      fontSize: 14,
-      color: theme.lowEmphasis,
     },
     subtitle: {
       fontSize: 20,
