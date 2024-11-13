@@ -1,14 +1,33 @@
-import { Stack } from "expo-router";
+import { TouchableOpacity } from "react-native";
+import { Stack, router } from "expo-router";
+
+import { AppIcon, HorizontalLogo } from "@components/Icons";
+import { useTheme } from "@contexts/theme";
 
 export const unstable_settings = {
   initialRouteName: "index",
 };
 
 export default function CalendarLayout() {
+  const { theme } = useTheme();
+
+  const handleBackPress = () => {
+    router.back();
+  };
+
+  const BackButton = () => {
+    return (
+      <TouchableOpacity onPress={handleBackPress}>
+        <AppIcon icon="chevron-left" size={20} color={theme.highEmphasis} />
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <Stack
       screenOptions={{
         headerShown: false,
+        headerShadowVisible: false,
       }}
     >
       <Stack.Screen name="index" />
@@ -25,7 +44,6 @@ export default function CalendarLayout() {
           presentation: "modal",
           headerShown: true,
           headerTitle: "일정 추가",
-          headerShadowVisible: false,
         }}
       />
       <Stack.Screen
@@ -34,7 +52,6 @@ export default function CalendarLayout() {
           presentation: "modal",
           headerShown: true,
           headerTitle: "할 일 추가",
-          headerShadowVisible: false,
         }}
       />
       <Stack.Screen name="search" />
@@ -43,6 +60,14 @@ export default function CalendarLayout() {
         name="daily/[date]"
         options={{
           presentation: "modal",
+        }}
+      />
+      <Stack.Screen
+        name="lesson/[id]"
+        options={{
+          headerShown: true,
+          headerLeft: () => <BackButton />,
+          headerTitle: "레슨 상세",
         }}
       />
     </Stack>
