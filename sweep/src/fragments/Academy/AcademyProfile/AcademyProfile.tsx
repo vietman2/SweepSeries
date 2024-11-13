@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Dimensions,
   Image,
@@ -7,6 +8,7 @@ import {
 } from "react-native";
 
 import { AppIcon } from "@components/Icons";
+import { SimpleModal } from "@components/Modals";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
 import { ThemeColorType } from "@themes/colors";
@@ -18,39 +20,68 @@ interface Props {
 }
 
 export function AcademyProfile({ pro }: Readonly<Props>) {
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  const hideModal = () => {
+    setModalVisible(false);
+  };
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const editProfileImage = async () => {
+    hideModal();
+  };
+
   return (
-    <View style={styles.container} pointerEvents="none">
-      <View style={styles.wrapper}>
-        {pro && (
-          <TouchableOpacity style={styles.button}>
-            <AppIcon icon="images" size={20} color="white" />
-            <Text style={styles.buttonText}>대표 사진 변경</Text>
-          </TouchableOpacity>
-        )}
-        <Image
-          src={
-            "https://mblogthumb-phinf.pstatic.net/MjAyNDA4MTJfMTk1/MDAxNzIzNDcwMDkyNjI1.CIzE8pfUnv-yPLFphjW8gHScETczni_iOFx9lYYCxrwg.401U8w3xp21TmyobrG2pC1AbGA4kNXahLRe99Jog5Ysg.JPEG/IMG_8197.jpeg?type=w800"
-          }
-          style={styles.image}
-        />
-      </View>
-      <View style={styles.header}>
-        <Text style={styles.title}>Catch B 아카데미</Text>
-        <View style={styles.horizontal}>
-          <AppIcon icon="location" size={20} color={theme.lowEmphasis} />
-          <Text style={styles.infoText}>
-            인천시 서구 청라한내로 72번길 17, 416호
-          </Text>
+    <>
+      <View style={styles.container} pointerEvents={pro ? "box-none" : "none"}>
+        <View style={styles.wrapper}>
+          {pro && (
+            <TouchableOpacity
+              style={styles.button}
+              onPress={openModal}
+              testID="open-modal"
+            >
+              <AppIcon icon="images" size={20} color="white" />
+              <Text style={styles.buttonText}>대표 사진 변경</Text>
+            </TouchableOpacity>
+          )}
+          <Image
+            src={
+              "https://mblogthumb-phinf.pstatic.net/MjAyNDA4MTJfMTk1/MDAxNzIzNDcwMDkyNjI1.CIzE8pfUnv-yPLFphjW8gHScETczni_iOFx9lYYCxrwg.401U8w3xp21TmyobrG2pC1AbGA4kNXahLRe99Jog5Ysg.JPEG/IMG_8197.jpeg?type=w800"
+            }
+            style={styles.image}
+          />
         </View>
-        <View style={styles.horizontal}>
-          <AppIcon icon="star" size={20} color="#F2B517" />
-          <Text style={styles.infoText}>{(4.2).toFixed(2)} (42)</Text>
+        <View style={styles.header}>
+          <Text style={styles.title}>Catch B 아카데미</Text>
+          <View style={styles.horizontal}>
+            <AppIcon icon="location" size={20} color={theme.lowEmphasis} />
+            <Text style={styles.infoText}>
+              인천시 서구 청라한내로 72번길 17, 416호
+            </Text>
+          </View>
+          <View style={styles.horizontal}>
+            <AppIcon icon="star" size={20} color="#F2B517" />
+            <Text style={styles.infoText}>{(4.2).toFixed(2)} (42)</Text>
+          </View>
         </View>
       </View>
-    </View>
+      <SimpleModal
+        title="아카데미 로고 변경"
+        buttonText="저장하기"
+        visible={modalVisible}
+        hideModal={hideModal}
+        onButtonPress={editProfileImage}
+      >
+        <View />
+      </SimpleModal>
+    </>
   );
 }
 
@@ -76,7 +107,7 @@ const createStyles = (theme: ThemeColorType) =>
       bottom: 8,
       borderRadius: 8,
       backgroundColor: "#00000050",
-      zIndex: 1,
+      zIndex: 200,
     },
     buttonText: {
       color: "white",
