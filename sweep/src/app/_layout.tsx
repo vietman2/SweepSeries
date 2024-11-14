@@ -5,6 +5,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import { Stack, SplashScreen } from "expo-router";
+import axios from "axios";
 
 import { AuthProvider } from "@contexts/auth";
 import { ThemeProvider } from "@contexts/theme";
@@ -14,6 +15,8 @@ SplashScreen.preventAutoHideAsync();
 configureReanimatedLogger({
   strict: false,
 });
+
+axios.defaults.baseURL = process.env.EXPO_PUBLIC_API_URL;
 
 export const unstable_settings = {
   initialRouteName: "index",
