@@ -10,6 +10,7 @@ interface Props {
   secureTextEntry?: boolean;
   type?: "default" | "email-address" | "number-pad";
   multiline?: boolean;
+  returnKeyType?: "done" | "next";
 }
 
 export function TextInput({
@@ -19,6 +20,7 @@ export function TextInput({
   secureTextEntry = false,
   type = "default",
   multiline = false,
+  returnKeyType = "done",
 }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -35,6 +37,7 @@ export function TextInput({
           secureTextEntry={secureTextEntry}
           keyboardType={type}
           multiline={multiline}
+          returnKeyType={returnKeyType}
         />
       </View>
     </View>
