@@ -59,6 +59,26 @@ jest.mock("@components/Calendars", () => ({
   CustomHeader: () => null,
   CustomDay: () => null,
 }));
+jest.mock("@components/Checkbox", () => ({
+  Checkbox: ({
+    text,
+    onChange,
+    rightPress,
+  }: {
+    text: string;
+    onChange: () => void;
+    rightPress: () => void;
+  }) => {
+    const { TouchableOpacity } = jest.requireActual("react-native");
+
+    return (
+      <>
+        <TouchableOpacity onPress={onChange} testID={text} />
+        <TouchableOpacity onPress={rightPress} testID={`${text}-right`} />
+      </>
+    );
+  },
+}));
 jest.mock("@components/Dividers", () => ({
   Divider: () => null,
   VerticalDivider: () => null,
