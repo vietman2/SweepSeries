@@ -4,6 +4,12 @@ import { UsernameEmail } from "./UsernameEmail";
 import * as AuthAPI from "@services/auth/register";
 import { renderWithProviders } from "@utils/test-utils";
 
+jest.mock("expo-router", () => ({
+  router: {
+    push: jest.fn(),
+  },
+}));
+
 jest.mock("@components/Inputs", () => {
   const { TouchableOpacity } = jest.requireActual("react-native");
 
@@ -22,12 +28,6 @@ jest.mock("@components/Inputs", () => {
     ),
   };
 });
-jest.mock("expo-router", () => ({
-  router: {
-    push: jest.fn(),
-  },
-}));
-
 describe("<UsernameEmail />", () => {
   it("renders and handles check correctly", () => {
     jest

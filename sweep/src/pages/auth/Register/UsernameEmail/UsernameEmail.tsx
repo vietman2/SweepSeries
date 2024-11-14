@@ -24,7 +24,7 @@ export function UsernameEmail() {
     const response = await checkUsernameEmail(username, email);
 
     if (response.status === 200) {
-      router.push("/signup/2");
+      router.push("/signup/3");
     } else {
       setError(response.data.message);
     }
