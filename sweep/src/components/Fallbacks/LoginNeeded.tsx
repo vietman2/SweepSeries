@@ -44,6 +44,7 @@ const createStyles = (theme: ThemeColorType) =>
     text: {
       fontSize: 20,
       fontWeight: "bold",
+      color: theme.lowEmphasis,
     },
     button: {
       width: "100%",
