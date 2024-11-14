@@ -16,7 +16,8 @@ export function Terms() {
   const [notificationChecked, setNotificationChecked] =
     useState<boolean>(false);
 
-  const allChecked = ageChecked && termsChecked && privacyChecked && notificationChecked;
+  const allChecked =
+    ageChecked && termsChecked && privacyChecked && notificationChecked;
   const isButtonActive = ageChecked && termsChecked && privacyChecked;
 
   const toggleCheckAll = () => {
@@ -31,11 +32,11 @@ export function Terms() {
       setPrivacyChecked(true);
       setNotificationChecked(true);
     }
-  }
+  };
 
   const handleButtonPress = () => {
     router.push("/signup/2");
-  }
+  };
 
   const { theme } = useTheme();
   const styles = createStyles(theme);
