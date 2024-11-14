@@ -107,11 +107,20 @@ jest.mock("@components/Icons", () => ({
   HorizontalLogo: () => null,
 }));
 jest.mock("@components/Inputs", () => {
-  const { TextInput } = jest.requireActual("react-native");
+  const { TouchableOpacity } = jest.requireActual("react-native");
 
   return {
-    TextInput: ({ placeholder }: { placeholder: string }) => (
-      <TextInput testID={placeholder} />
+    TextInput: ({
+      onChangeText,
+      placeholder,
+    }: {
+      onChangeText: (value: string) => void;
+      placeholder: string;
+    }) => (
+      <TouchableOpacity
+        testID={placeholder}
+        onPress={() => onChangeText(placeholder)}
+      />
     ),
   };
 });

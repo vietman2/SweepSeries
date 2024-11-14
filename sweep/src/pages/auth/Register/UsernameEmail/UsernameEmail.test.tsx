@@ -10,24 +10,6 @@ jest.mock("expo-router", () => ({
   },
 }));
 
-jest.mock("@components/Inputs", () => {
-  const { TouchableOpacity } = jest.requireActual("react-native");
-
-  return {
-    TextInput: ({
-      onChangeText,
-      placeholder,
-    }: {
-      onChangeText: (value: string) => void;
-      placeholder: string;
-    }) => (
-      <TouchableOpacity
-        testID={placeholder}
-        onPress={() => onChangeText(placeholder)}
-      />
-    ),
-  };
-});
 describe("<UsernameEmail />", () => {
   it("renders and handles check correctly", () => {
     jest
