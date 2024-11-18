@@ -9,6 +9,24 @@ jest.mock("expo-router", () => ({
     push: jest.fn(),
   },
 }));
+jest.mock("@fragments/SignUp", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+
+  return {
+    SignUpForm: ({
+      children,
+      buttonOnPress,
+    }: {
+      children: React.ReactNode;
+      buttonOnPress: () => void;
+    }) => (
+      <>
+        {children}
+        <TouchableOpacity onPress={buttonOnPress} testID="button" />
+      </>
+    ),
+  };
+});
 
 describe("<UsernameEmail />", () => {
   it("renders and handles check correctly", () => {
@@ -20,7 +38,7 @@ describe("<UsernameEmail />", () => {
     waitFor(() => {
       fireEvent.press(getByTestId("로그인 시 사용할 아이디를 입력해주세요."));
       fireEvent.press(getByTestId("이메일을 입력해주세요."));
-      fireEvent.press(getByTestId("다음으로"));
+      fireEvent.press(getByTestId("button"));
     });
   });
 
@@ -30,6 +48,6 @@ describe("<UsernameEmail />", () => {
       .mockResolvedValue({ status: 400, data: { message: "bad request" } });
     const { getByTestId } = renderWithProviders(<UsernameEmail />);
 
-    waitFor(() => fireEvent.press(getByTestId("다음으로")));
+    waitFor(() => fireEvent.press(getByTestId("button")));
   });
 });
