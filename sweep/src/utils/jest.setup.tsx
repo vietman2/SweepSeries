@@ -237,3 +237,21 @@ jest.mock("@contexts/theme", () => ({
     colorScheme: "light",
   }),
 }));
+jest.mock("@fragments/SignUp", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+
+  return {
+    SignUpForm: ({
+      children,
+      buttonOnPress,
+    }: {
+      children: React.ReactNode;
+      buttonOnPress: () => void;
+    }) => (
+      <>
+        {children}
+        <TouchableOpacity onPress={buttonOnPress} testID="button" />
+      </>
+    ),
+  };
+});

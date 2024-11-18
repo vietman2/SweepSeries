@@ -4,25 +4,6 @@ import { Password } from "./Password";
 import * as AuthAPI from "@services/auth/register";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("@fragments/SignUp", () => {
-  const { TouchableOpacity } = jest.requireActual("react-native");
-
-  return {
-    SignUpForm: ({
-      children,
-      buttonOnPress,
-    }: {
-      children: React.ReactNode;
-      buttonOnPress: () => void;
-    }) => (
-      <>
-        {children}
-        <TouchableOpacity onPress={buttonOnPress} testID="button" />
-      </>
-    ),
-  };
-});
-
 describe("<Password />", () => {
   it("renders and handles checks correctly", () => {
     jest
