@@ -8,8 +8,6 @@ describe("<SignUpForm />", () => {
     buttonText: "button",
     buttonOnPress: jest.fn(),
     buttonDisabled: false,
-    loading: false,
-    error: false,
   };
 
   it("should render", () => {

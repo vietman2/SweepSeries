@@ -1,8 +1,8 @@
-import { StyleSheet, View } from "react-native";
+import { Keyboard, Pressable, StyleSheet, View } from "react-native";
 
 import { TextButton } from "@components/Buttons";
-import { Divider } from "@components/Dividers";
 import { ErrorPage, LoadingComponent } from "@components/Fallbacks";
+import { MainLogo } from "@components/Icons";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
 import { ThemeColorType } from "@themes/colors";
@@ -14,8 +14,8 @@ interface Props {
   buttonText: string;
   buttonOnPress: () => void;
   buttonDisabled: boolean;
-  loading: boolean;
-  error: boolean;
+  loading?: boolean;
+  error?: boolean;
 }
 
 export function SignUpForm({
@@ -25,8 +25,8 @@ export function SignUpForm({
   buttonText,
   buttonOnPress,
   buttonDisabled,
-  loading,
-  error,
+  loading = false,
+  error = false,
 }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -35,13 +35,15 @@ export function SignUpForm({
   if (error) return <ErrorPage />;
 
   return (
-    <View style={styles.container}>
+    <Pressable onPress={Keyboard.dismiss} style={styles.container}>
+      <View style={styles.background}>
+        <MainLogo color={theme.logo} blur />
+      </View>
       <View style={styles.page}>
         <View style={styles.header}>
           <Text style={styles.title}>{title}</Text>
           {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
         </View>
-        <Divider />
         {children}
       </View>
       <TextButton
@@ -51,7 +53,7 @@ export function SignUpForm({
         fontSize={18}
         active={!buttonDisabled}
       />
-    </View>
+    </Pressable>
   );
 }
 
@@ -62,6 +64,15 @@ const createStyles = (theme: ThemeColorType) =>
       paddingBottom: 36,
       paddingHorizontal: 16,
       backgroundColor: theme.background,
+    },
+    background: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      justifyContent: "center",
+      alignItems: "center",
     },
     page: {
       flex: 1,
