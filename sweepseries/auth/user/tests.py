@@ -39,54 +39,6 @@ class CheckUsernameEmailAPITestCase(APITestCase):
     def test_check_username_email_success(self):
         response = self.client.get(self.url, self.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-    """
-    def test_check_username_fail(self):
-        ## 1. username is already in use
-        self.client.post("/api/register/", self.data)
-        response = self.client.get(self.url, self.data2)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-        ## 2. username not included
-        self.data2["username"] = ""
-        response = self.client.get(self.url, self.data2)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-        ## 3. username invalid characters
-        self.data2["username"] = "test!"
-        response = self.client.get(self.url, self.data2)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-        ## 4. username too long
-        self.data2["username"] = "verylong1234verylong1234verylong1234 \
-                                    verylong1234verylong1234verylong1234 \
-                                    verylong1234verylong1234verylong1234 \
-                                    verylong1234verylong1234verylong1234verylong1234"
-        response = self.client.get(self.url, self.data2)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-        ## 5. username too short
-        self.data2["username"] = "a"
-        response = self.client.get(self.url, self.data2)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_check_email_fail(self):
-        self.data2["username"] = "test2"
-        self.data2["email"] = "test@test.com"
-        ## 1. email is already in use
-        self.client.post("/api/register/", self.data)
-        response = self.client.get(self.url, self.data2)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-        ## 2. email not included
-        self.data2["email"] = ""
-        response = self.client.get(self.url, self.data2)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-        ## 3. email invalid format
-        self.data2["email"] = "test"
-        response = self.client.get(self.url, self.data2)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-    """
 
 class CheckPasswordAPITestCase(APITestCase):
     def setUp(self):
