@@ -4,6 +4,25 @@ import { Password } from "./Password";
 import * as AuthAPI from "@services/auth/register";
 import { renderWithProviders } from "@utils/test-utils";
 
+jest.mock("@fragments/SignUp", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+
+  return {
+    SignUpForm: ({
+      children,
+      buttonOnPress,
+    }: {
+      children: React.ReactNode;
+      buttonOnPress: () => void;
+    }) => (
+      <>
+        {children}
+        <TouchableOpacity onPress={buttonOnPress} testID="button" />
+      </>
+    ),
+  };
+});
+
 describe("<Password />", () => {
   it("renders and handles checks correctly", () => {
     jest
@@ -14,7 +33,7 @@ describe("<Password />", () => {
     waitFor(() => {
       fireEvent.press(getByTestId("비밀번호를 입력해주세요."));
       fireEvent.press(getByTestId("비밀번호를 다시 한 번 입력해주세요."));
-      fireEvent.press(getByTestId("다음으로"));
+      fireEvent.press(getByTestId("button"));
     });
   });
 
@@ -24,6 +43,6 @@ describe("<Password />", () => {
       .mockResolvedValue({ status: 400, data: { message: "bad request" } });
     const { getByTestId } = renderWithProviders(<Password />);
 
-    waitFor(() => fireEvent.press(getByTestId("다음으로")));
+    waitFor(() => fireEvent.press(getByTestId("button")));
   });
 });
