@@ -8,3 +8,5 @@ from auth.agreements.views import AgreementViewSet
 router = DefaultRouter()
 
 router.register(r'agreements', AgreementViewSet, basename='agreements')
+
+urlpatterns = router.urls
