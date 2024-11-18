@@ -1,3 +1,4 @@
+import { getAgreements } from "./agreements";
 import { checkUsernameEmail, checkPassword } from "./register";
 
-export { checkUsernameEmail, checkPassword };
+export { getAgreements, checkUsernameEmail, checkPassword };
