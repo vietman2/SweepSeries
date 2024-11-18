@@ -35,7 +35,7 @@ export function Terms() {
   );
 
   const handleButtonPress = () => {
-    router.push("/signup/2");
+    router.push("/signup/3");
   };
 
   const isChecked = (id: number) => {
@@ -90,6 +90,7 @@ export function Terms() {
       loading={loading}
       error={error}
     >
+      <Divider />
       <Checkbox
         text="모두 동의 합니다."
         checked={allChecked}
