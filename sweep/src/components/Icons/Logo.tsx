@@ -6,9 +6,10 @@ import { useTheme } from "@contexts/theme";
 interface Props {
   size?: number;
   color?: string;
+  blur?: boolean;
 }
 
-export function MainLogo({ size = 160, color }: Readonly<Props>) {
+export function MainLogo({ size = 160, color, blur = false }: Readonly<Props>) {
   const { theme } = useTheme();
   color = color ?? theme.logo;
 
@@ -19,6 +20,7 @@ export function MainLogo({ size = 160, color }: Readonly<Props>) {
         width={size}
         height={size}
         color={color}
+        opacity={blur ? 0.3 : 1}
       />
     </View>
   );

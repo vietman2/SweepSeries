@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     ## Custom Apps
+    'auth.agreements.apps.AgreementsConfig',
     'auth.person.apps.PersonConfig',
     'auth.user.apps.UserConfig',
 
@@ -145,12 +146,12 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
-    #{
-    #    'NAME': 'auth.user.validators.MyPasswordValidator',
-    #},
+    {
+        'NAME': 'auth.user.validators.MyPasswordValidator',
+    },
 ]
 
-##AUTH_USER_MODEL='user.User'
+AUTH_USER_MODEL='user.User'
 PHONENUMBER_DEFAULT_REGION = 'KR'
 
 REST_FRAMEWORK = {

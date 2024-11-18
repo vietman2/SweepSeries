@@ -68,7 +68,7 @@ const createStyles = (theme: ThemeColorType) =>
       alignItems: "center",
       justifyContent: "center",
       paddingHorizontal: 16,
-      paddingVertical: 8,
+      paddingVertical: 12,
       borderRadius: 8,
       borderWidth: 1,
     },

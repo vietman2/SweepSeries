@@ -44,7 +44,7 @@ export function CalendarButtons({ open, setOpen }: Readonly<Props>) {
               testID="addtodo"
             >
               <AppIcon
-                icon="check-circle"
+                icon="check-circle-outline"
                 size={20}
                 color={theme.lowEmphasis}
               />

@@ -6,11 +6,12 @@ jest.unmock("@components/Icons");
 
 describe("<AppIcon />", () => {
   it("renders correctly", () => {
-    renderWithProviders(<AppIcon icon="home" color="black" size={24} />);
-  });
-
-  it("renders default size correctly", () => {
-    renderWithProviders(<AppIcon icon="home" color="black" />);
+    renderWithProviders(
+      <>
+        <AppIcon icon="home" color="black" size={24} />
+        <AppIcon icon="home" color="black" />
+      </>
+    );
   });
 });
 
@@ -24,7 +25,12 @@ describe("<CustomLogo />", () => {
 
 describe("<MainLogo />", () => {
   it("renders correctly", () => {
-    renderWithProviders(<MainLogo />);
+    renderWithProviders(
+      <>
+        <MainLogo />
+        <MainLogo blur />
+      </>
+    );
   });
 });
 

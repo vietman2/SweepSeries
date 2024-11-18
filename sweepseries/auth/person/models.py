@@ -7,7 +7,6 @@ from .utils import random_color_generator, random_nickname_generator
 class Person(models.Model):
     first_name          = models.CharField(max_length=150, blank=True)
     last_name           = models.CharField(max_length=150, blank=True)
-    email               = models.EmailField(unique=True)
     phone_number        = PhoneNumberField(unique=True)
 
     nickname            = models.CharField(max_length=150, default=random_nickname_generator)

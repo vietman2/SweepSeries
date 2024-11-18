@@ -59,6 +59,26 @@ jest.mock("@components/Calendars", () => ({
   CustomHeader: () => null,
   CustomDay: () => null,
 }));
+jest.mock("@components/Checkbox", () => ({
+  Checkbox: ({
+    text,
+    onChange,
+    rightPress,
+  }: {
+    text: string;
+    onChange: () => void;
+    rightPress: () => void;
+  }) => {
+    const { TouchableOpacity } = jest.requireActual("react-native");
+
+    return (
+      <>
+        <TouchableOpacity onPress={onChange} testID={text} />
+        <TouchableOpacity onPress={rightPress} testID={`${text}-right`} />
+      </>
+    );
+  },
+}));
 jest.mock("@components/Dividers", () => ({
   Divider: () => null,
   VerticalDivider: () => null,
@@ -87,11 +107,20 @@ jest.mock("@components/Icons", () => ({
   HorizontalLogo: () => null,
 }));
 jest.mock("@components/Inputs", () => {
-  const { TextInput } = jest.requireActual("react-native");
+  const { TouchableOpacity } = jest.requireActual("react-native");
 
   return {
-    TextInput: ({ placeholder }: { placeholder: string }) => (
-      <TextInput testID={placeholder} />
+    TextInput: ({
+      onChangeText,
+      placeholder,
+    }: {
+      onChangeText: (value: string) => void;
+      placeholder: string;
+    }) => (
+      <TouchableOpacity
+        testID={placeholder}
+        onPress={() => onChangeText(placeholder)}
+      />
     ),
   };
 });
@@ -208,3 +237,21 @@ jest.mock("@contexts/theme", () => ({
     colorScheme: "light",
   }),
 }));
+jest.mock("@fragments/SignUp", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+
+  return {
+    SignUpForm: ({
+      children,
+      buttonOnPress,
+    }: {
+      children: React.ReactNode;
+      buttonOnPress: () => void;
+    }) => (
+      <>
+        {children}
+        <TouchableOpacity onPress={buttonOnPress} testID="button" />
+      </>
+    ),
+  };
+});
