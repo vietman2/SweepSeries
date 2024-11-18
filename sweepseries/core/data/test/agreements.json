@@ -1,0 +1,46 @@
+[
+  {
+    "model": "agreements.agreement",
+    "pk": 1,
+    "fields": {
+      "created_at": "2024-11-18T10:14:06.943",
+      "updated_at": "2024-11-18T10:14:06.943",
+      "title": "Mandatory without content",
+      "content": "",
+      "required": true
+    }
+  },
+  {
+    "model": "agreements.agreement",
+    "pk": 2,
+    "fields": {
+      "created_at": "2024-11-18T10:14:31.290",
+      "updated_at": "2024-11-18T10:14:31.290",
+      "title": "Mandatory with content",
+      "content": ".",
+      "required": true
+    }
+  },
+  {
+    "model": "agreements.agreement",
+    "pk": 3,
+    "fields": {
+      "created_at": "2024-11-18T10:14:45.520",
+      "updated_at": "2024-11-18T10:14:45.520",
+      "title": "Optional without content",
+      "content": "",
+      "required": false
+    }
+  },
+  {
+    "model": "agreements.agreement",
+    "pk": 4,
+    "fields": {
+      "created_at": "2024-11-18T10:15:09.334",
+      "updated_at": "2024-11-18T10:15:09.334",
+      "title": "Optional with content",
+      "content": ".",
+      "required": false
+    }
+  }
+]
