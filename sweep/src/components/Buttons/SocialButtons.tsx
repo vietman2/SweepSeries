@@ -53,9 +53,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    height: 35,
-    marginTop: 10,
-    borderRadius: 5,
+    height: 40,
+    borderRadius: 4,
   },
   socialText: {
     fontSize: 18,
