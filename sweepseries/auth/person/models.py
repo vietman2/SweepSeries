@@ -20,6 +20,8 @@ class Person(models.Model):
     profile_image   = models.ImageField(null=True)
     default_color   = models.CharField(max_length=7, default=random_color_generator)
 
+    objects = models.Manager()
+
     @property
     def full_name(self):
         return f"{self.last_name}{self.first_name}"

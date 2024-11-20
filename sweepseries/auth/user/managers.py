@@ -13,7 +13,11 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, password=None, **extra_fields):
-        person = Person.objects.create(first_name='Admin', last_name='Admin', phone_number='010-1234-1234')
+        person = Person.objects.create(
+            first_name='Admin',
+            last_name='Admin',
+            phone_number='010-1234-1234'
+        )
         extra_fields['person'] = person
         user = self.create_user(password, **extra_fields)
         user.is_superuser = True
