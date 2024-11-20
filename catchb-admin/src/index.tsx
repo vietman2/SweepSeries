@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom/client";
 import axios from "axios";
 
-import App from "@pages/_layout/App";
+import App from "@pages/App";
 import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(
