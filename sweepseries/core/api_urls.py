@@ -5,15 +5,11 @@ from rest_framework.routers import DefaultRouter
 
 ## Auth
 from auth.agreements.views import AgreementViewSet
-from auth.user.views import CheckUsernameEmailView, CheckPasswordView#, RegisterView
 
 router = DefaultRouter()
 
 router.register(r'agreements', AgreementViewSet, basename='agreements')
 
-urlpatterns = [
-    path('check-username-email/', CheckUsernameEmailView.as_view(), name='check_username'),
-    path('check-password/', CheckPasswordView.as_view(), name='check_password'),
-]
+urlpatterns = []
 
 urlpatterns += router.urls

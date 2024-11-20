@@ -27,15 +27,11 @@ SECRET_KEY = config('SECRET_KEY')
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.auth',
+    'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    ## Custom Apps
-    'auth.agreements.apps.AgreementsConfig',
-    'auth.person.apps.PersonConfig',
-    'auth.user.apps.UserConfig',
 
     ## Third Party Apps
     "corsheaders",
@@ -50,6 +46,14 @@ INSTALLED_APPS = [
     "drf_spectacular",
     'django_extensions',
     'storages',
+
+    ## Core
+    'core',
+
+    ## Custom Apps
+    'auth.agreements.apps.AgreementsConfig',
+    'auth.person.apps.PersonConfig',
+    'auth.user.apps.UserConfig',
 ]
 
 MIDDLEWARE = [
