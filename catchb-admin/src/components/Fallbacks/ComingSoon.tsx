@@ -19,6 +19,5 @@ const Container = styled.div`
 
   color: ${({ theme }) => theme.colors.foreground300};
 
-  border-radius: 16px;
   background-color: ${({ theme }) => theme.colors.background300};
 `;

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 interface Props {
-  onRefresh: () => void;
+  onRefresh?: () => void;
   text?: string;
   label?: string;
 }
@@ -14,7 +14,7 @@ export function ErrorComponent({
   return (
     <Container>
       <div>{text}</div>
-      <RefreshButton onClick={onRefresh}>{label}</RefreshButton>
+      {onRefresh && <RefreshButton onClick={onRefresh}>{label}</RefreshButton>}
     </Container>
   );
 }
