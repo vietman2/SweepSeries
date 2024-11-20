@@ -36,7 +36,16 @@ const router = createBrowserRouter(
       <Route path="/login" element={<Placeholder />} />
       <Route path="/protected" element={<ProtectedRoutes />} />
     </>
-  )
+  ),
+  {
+    future: {
+      v7_skipActionErrorRevalidation: true,
+      v7_partialHydration: true,
+      v7_fetcherPersist: true,
+      v7_normalizeFormMethod: true,
+      v7_relativeSplatPath: true,
+    },
+  }
 );
 
 const GlobalStyles = createGlobalStyle`
@@ -72,7 +81,7 @@ function ThemedApp() {
   return (
     <StyledThemeProvider theme={{ colors: isDarkMode ? dark : light }}>
       <AuthProvider>
-        <RouterProvider router={router} />
+        <RouterProvider router={router} future={{ v7_startTransition: true }} />
       </AuthProvider>
     </StyledThemeProvider>
   );

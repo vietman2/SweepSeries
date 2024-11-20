@@ -1,10 +1,10 @@
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 
-import { ThemeProvider, useTheme } from './ThemeContext';
-import { renderWithProviders } from '@utils/test-utils';
+import { ThemeProvider, useTheme } from "./ThemeContext";
+import { renderWithProviders } from "@utils/test-utils";
 
-jest.unmock('@contexts/theme/ThemeContext');
+jest.unmock("@contexts/theme/ThemeContext");
 
 const TestComponent = () => {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -16,12 +16,14 @@ const TestComponent = () => {
   );
 };
 
-describe('<ThemeProvider />', () => {
+describe("<ThemeProvider />", () => {
   const Child = () => <div>Children</div>;
 
-  it('should render children', () => {
+  it("should render children", () => {
     const { getByText } = render(
-      <MemoryRouter>
+      <MemoryRouter
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
         <Routes>
           <Route
             path="/"
@@ -34,14 +36,15 @@ describe('<ThemeProvider />', () => {
         </Routes>
       </MemoryRouter>
     );
-    expect(getByText('Children')).toBeInTheDocument();
+    expect(getByText("Children")).toBeInTheDocument();
   });
 
   it("should initialize with light mode (isDarkMode = false)", () => {
     renderWithProviders(
       <ThemeProvider>
         <TestComponent />
-      </ThemeProvider>
+      </ThemeProvider>,
+      { withRouter: false }
     );
     expect(screen.getByText("Dark mode is off")).toBeInTheDocument();
   });
@@ -50,7 +53,8 @@ describe('<ThemeProvider />', () => {
     renderWithProviders(
       <ThemeProvider>
         <TestComponent />
-      </ThemeProvider>
+      </ThemeProvider>,
+      { withRouter: false }
     );
 
     const toggleButton = screen.getByText("Toggle Theme");

@@ -23,7 +23,14 @@ export const renderWithProviders = (
         <MyThemeProvider>
           <AuthProvider>
             {renderOptions.withRouter ? (
-              <BrowserRouter>{children}</BrowserRouter>
+              <BrowserRouter
+                future={{
+                  v7_startTransition: true,
+                  v7_relativeSplatPath: true,
+                }}
+              >
+                {children}
+              </BrowserRouter>
             ) : (
               children
             )}
@@ -34,10 +41,4 @@ export const renderWithProviders = (
   }
 
   return { ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
-};
-
-export const resizeWindow = (x: number, y: number) => {
-  window.innerWidth = x;
-  window.innerHeight = y;
-  window.dispatchEvent(new Event("resize"));
 };
