@@ -57,7 +57,6 @@ export function CustomLogo({ image, text, color }: Readonly<CustomProps>) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "center",
     justifyContent: "space-evenly",
     width: "100%",

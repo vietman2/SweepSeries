@@ -1,3 +1,3 @@
-import { MainPage } from "@pages/start";
+import { Login } from "@pages/auth";
 
-export default MainPage;
+export default Login;

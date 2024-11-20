@@ -70,7 +70,7 @@ const createStyles = (theme: ThemeColorType) =>
       paddingHorizontal: 16,
       paddingVertical: 12,
       borderRadius: 8,
-      borderWidth: 1,
+      borderWidth: 0.5,
     },
     text: {
       fontWeight: "bold",
