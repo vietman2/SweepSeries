@@ -3,7 +3,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import { AuthProvider, useAuth } from "./AuthContext";
 
-jest.unmock("@contexts/auth/AuthContext");
+jest.unmock("@contexts/auth");
 
 const TestComponent = () => {
   const { isAuthenticated, login, setToken, logout } = useAuth();

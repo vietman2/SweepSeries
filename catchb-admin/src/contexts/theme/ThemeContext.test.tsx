@@ -4,7 +4,7 @@ import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider, useTheme } from "./ThemeContext";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.unmock("@contexts/theme/ThemeContext");
+jest.unmock("@contexts/theme");
 
 const TestComponent = () => {
   const { isDarkMode, toggleTheme } = useTheme();

@@ -3,6 +3,8 @@ import { fireEvent, screen } from "@testing-library/react";
 import { TextInput } from "./TextInput";
 import { renderWithProviders } from "@utils/test-utils";
 
+jest.unmock("@components/Inputs");
+
 describe("<TextInput />", () => {
   it("renders an input element", () => {
     renderWithProviders(
