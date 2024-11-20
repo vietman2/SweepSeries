@@ -13,13 +13,10 @@ import {
 
 import { Login } from "@pages/Login";
 
+import { ComingSoon } from "@components/Fallbacks";
 import { AuthProvider, useAuth } from "@contexts/auth";
 import { ThemeProvider, useTheme } from "@contexts/theme";
 import { dark, light } from "@themes/themeColors";
-
-function Placeholder() {
-  return <div>Placeholder</div>;
-}
 
 const ProtectedRoutes = () => {
   const { isAuthenticated } = useAuth();
@@ -37,7 +34,7 @@ const router = createBrowserRouter(
       <Route path="/" element={<Navigate to="/home" />} />
       <Route path="/login" element={<Login />} />
       <Route element={<ProtectedRoutes />}>
-        <Route path="/home" element={<Placeholder />} />
+        <Route path="/home" element={<ComingSoon />} />
       </Route>
     </>
   ),

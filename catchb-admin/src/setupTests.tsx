@@ -4,6 +4,17 @@
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom";
 
+jest.mock("@components/Fallbacks", () => ({
+  ComingSoon: () => <div>ComingSoon</div>,
+  ErrorComponent: ({
+    onRefresh,
+    label,
+  }: {
+    onRefresh: () => void;
+    label: string;
+  }) => <button onClick={onRefresh}>{label}</button>,
+  Loading: () => <div>Loading</div>,
+}));
 jest.mock("@components/Icons", () => ({
   MainLogo: () => <div>MainLogo</div>,
 }));
