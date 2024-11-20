@@ -1,17 +1,22 @@
 import { useState } from "react";
-//import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { MainLogo } from "@components/Icons";
 import { TextInput } from "@components/Inputs";
+import { useAuth } from "@contexts/auth";
 
 export function Login() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const handleLogin = async () => {};
+  const handleLogin = async () => {
+    login();
+    navigate("/home");
+  };
 
   return (
     <Container>
