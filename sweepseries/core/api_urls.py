@@ -1,4 +1,4 @@
-from django.urls import path
+#from django.urls import path
 #from dj_rest_auth.jwt_auth import get_refresh_view
 from rest_framework.routers import DefaultRouter
 #from rest_framework_simplejwt.views import TokenVerifyView

@@ -5,4 +5,5 @@ class CoreConfig(AppConfig):
     name = 'core'
 
     def ready(self):
+        ## pylint: disable=#C0415, #W0611
         import core.admin
