@@ -11,6 +11,8 @@ import {
   createGlobalStyle,
 } from "styled-components";
 
+import { Login } from "@pages/Login";
+
 import { AuthProvider, useAuth } from "@contexts/auth";
 import { ThemeProvider, useTheme } from "@contexts/theme";
 import { dark, light } from "@themes/themeColors";
@@ -32,9 +34,11 @@ const ProtectedRoutes = () => {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<Placeholder />} />
-      <Route path="/login" element={<Placeholder />} />
-      <Route path="/protected" element={<ProtectedRoutes />} />
+      <Route path="/" element={<Navigate to="/home" />} />
+      <Route path="/login" element={<Login />} />
+      <Route element={<ProtectedRoutes />}>
+        <Route path="/home" element={<Placeholder />} />
+      </Route>
     </>
   ),
   {
@@ -49,19 +53,37 @@ const router = createBrowserRouter(
 );
 
 const GlobalStyles = createGlobalStyle`
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  * {
+    box-sizing: border-box;
+  }
+    
+  button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
+  div {
+    transition: background-color 0.3s ease-in-out;
+  }
+
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
 `;
 
 export default function App() {
