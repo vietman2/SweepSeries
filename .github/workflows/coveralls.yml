@@ -47,6 +47,8 @@ jobs:
           pipenv install --dev
           cd ../sweep
           yarn install
+          cd ../catchb-admin
+          yarn install
           cd ..
 
       - name: Backend Coverage
@@ -58,9 +60,18 @@ jobs:
           pipenv run coverage lcov
           cd ..
 
-      - name: Frontend Coverage
+      - name: Catch B Mobile App Coverage
         run: |
           cd sweep
+          yarn global add lcov-result-merger
+          yarn test --coverage --watchAll=false
+          cp coverage/lcov.info coverage.lcov
+          cd ..
+          lcov-result-merger '*/coverage.lcov' coverage.lcov --prepend-source-files --prepend-path-fix "."
+
+      - name: Catch B Admin Web Coverage
+        run: |
+          cd catchb-admin
           yarn global add lcov-result-merger
           yarn test --coverage --watchAll=false
           cp coverage/lcov.info coverage.lcov
