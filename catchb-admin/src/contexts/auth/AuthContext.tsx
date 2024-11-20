@@ -2,7 +2,7 @@ import {
   ReactNode,
   createContext,
   useContext,
-  useEffect,
+  //useEffect,
   useMemo,
   useState,
 } from "react";
@@ -21,7 +21,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-
+/*
   useEffect(() => {
     const interceptor = axios.interceptors.response.use(
       (response) => response,
@@ -44,7 +44,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     return () => {
       axios.interceptors.response.eject(interceptor);
     };
-  }, []);
+  }, []);*/
 
   const setToken = (accessToken: string) => {
     axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
