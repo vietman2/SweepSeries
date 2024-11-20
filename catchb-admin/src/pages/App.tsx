@@ -4,7 +4,6 @@ import {
   Route,
   RouterProvider,
   Navigate,
-  Outlet,
 } from "react-router-dom";
 import {
   ThemeProvider as StyledThemeProvider,
@@ -13,28 +12,22 @@ import {
 
 import { Login } from "@pages/Login";
 
-import { ComingSoon } from "@components/Fallbacks";
-import { AuthProvider, useAuth } from "@contexts/auth";
+import { RootLayout } from "./_layout";
+import { ComingSoon, ErrorComponent } from "@components/Fallbacks";
+import { AuthProvider } from "@contexts/auth";
 import { ThemeProvider, useTheme } from "@contexts/theme";
 import { dark, light } from "@themes/themeColors";
-
-const ProtectedRoutes = () => {
-  const { isAuthenticated } = useAuth();
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" />;
-  }
-
-  return <Outlet />;
-};
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<Navigate to="/home" />} />
       <Route path="/login" element={<Login />} />
-      <Route element={<ProtectedRoutes />}>
+      <Route element={<RootLayout />}>
         <Route path="/home" element={<ComingSoon />} />
+        <Route path="/users" element={<ComingSoon />} />
+        <Route path="/community" element={<ComingSoon />} />
+        <Route path="/*" element={<ErrorComponent />} />
       </Route>
     </>
   ),
