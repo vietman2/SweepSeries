@@ -15,12 +15,24 @@ class User(AbstractBaseUser):
     updated_at      = models.DateTimeField(auto_now=True)
 
     is_superuser    = models.BooleanField(default=False)
+    is_staff        = models.BooleanField(default=False)
     is_blocked      = models.BooleanField(default=False)
     is_active       = models.BooleanField(default=True)
 
     USERNAME_FIELD  = 'username'
 
+    def has_perm(self, perm, obj=None): # pylint: disable=unused-argument
+        return True
+
+    def has_module_perms(self, app_label):  # pylint: disable=unused-argument
+        return True
+
     objects         = UserManager()
+
+    def __str__(self):
+        return f"{self.username} ({self.person.full_name})" # pylint: disable=no-member
 
     class Meta:
         db_table    = 'user'
+        verbose_name = '회원'
+        verbose_name_plural = '회원'
