@@ -1,22 +1,61 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import { Loading } from "@components/Fallbacks";
 import { MainLogo } from "@components/Icons";
 import { TextInput } from "@components/Inputs";
 import { useAuth } from "@contexts/auth";
+import { login as loginRequest } from "@services/auth";
 
 export function Login() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { isAuthenticated, login } = useAuth();
 
   const handleLogin = async () => {
-    login();
-    navigate("/home");
+    setLoading(true);
+    const response = await loginRequest(username, password);
+
+    if (response) {
+      login(response.access);
+      navigate("/home");
+    } else {
+      window.alert("로그인에 실패했습니다.");
+    }
+
+    setLoading(false);
   };
+
+  useEffect(() => {
+    const handleEnterKey = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        handleLogin();
+      }
+    };
+
+    window.addEventListener("keydown", handleEnterKey);
+    return () => {
+      window.removeEventListener("keydown", handleEnterKey);
+    };
+  }, [handleLogin]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/home");
+    }
+  }, []);
+
+  if (loading) {
+    return (
+      <Container>
+        <Loading />
+      </Container>
+    );
+  }
 
   return (
     <Container>

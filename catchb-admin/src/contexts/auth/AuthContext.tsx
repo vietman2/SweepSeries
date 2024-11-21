@@ -2,15 +2,16 @@ import {
   ReactNode,
   createContext,
   useContext,
-  //useEffect,
+  useEffect,
   useMemo,
   useState,
 } from "react";
 import axios from "axios";
 
+import { refresh } from "@services/auth";
+
 interface AuthContextType {
-  login: () => void;
-  setToken: (accessToken: string) => void;
+  login: (accessToken: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
 }
@@ -21,7 +22,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-/*
+
   useEffect(() => {
     const interceptor = axios.interceptors.response.use(
       (response) => response,
@@ -35,6 +36,22 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           !originalRequest._retry
         ) {
           originalRequest._retry = true;
+
+          try {
+            const response = await refresh();
+            if (response && response.status === 200) {
+              const newAccessToken = response.data.access;
+              login(newAccessToken);
+
+              originalRequest.headers[
+                "Authorization"
+              ] = `Bearer ${newAccessToken}`;
+              return axios(originalRequest);
+            }
+          } catch (refreshError: any) {
+            logout();
+            return Promise.reject(refreshError);
+          }
         }
         return Promise.reject(error);
       }
@@ -44,13 +61,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     return () => {
       axios.interceptors.response.eject(interceptor);
     };
-  }, []);*/
+  }, []);
 
-  const setToken = (accessToken: string) => {
+  const login = (accessToken: string) => {
     axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-  };
-
-  const login = () => {
     setIsAuthenticated(true);
   };
 
@@ -60,7 +74,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const value = useMemo(
-    () => ({ login, setToken, logout, isAuthenticated }),
+    () => ({ login, logout, isAuthenticated }),
     [isAuthenticated]
   );
 
