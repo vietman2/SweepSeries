@@ -27,25 +27,29 @@ describe("<RootLayout />", () => {
       search: "",
       hash: "",
     });
-  });
-
-  it("handles navigation", () => {
     jest.spyOn(AuthContext, "useAuth").mockReturnValue({
       isAuthenticated: true,
       logout: jest.fn(),
-      setToken: jest.fn(),
       login: jest.fn(),
     });
+  });
+
+  it("handles navigation", () => {
     renderWithProviders(<RootLayout />);
     
     fireEvent.click(screen.getByText("회원 관리"));
+  });
+
+  it("handles logout", () => {
+    renderWithProviders(<RootLayout />);
+
+    fireEvent.click(screen.getByText("로그아웃"));
   });
 
   it("handles not logged in", () => {
     jest.spyOn(AuthContext, "useAuth").mockReturnValue({
       isAuthenticated: false,
       logout: jest.fn(),
-      setToken: jest.fn(),
       login: jest.fn(),
     });
     renderWithProviders(<RootLayout />);

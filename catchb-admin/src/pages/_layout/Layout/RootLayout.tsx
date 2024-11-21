@@ -28,6 +28,7 @@ export function RootLayout() {
 function Sidebar() {
   const [selectedPathName, setSelectedPathName] = useState<string>("");
 
+  const { logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -40,6 +41,11 @@ function Sidebar() {
 
   const handleTabClick = (path: string) => {
     navigate(path);
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
   };
 
   return (
@@ -58,6 +64,9 @@ function Sidebar() {
           </SidebarTab>
         ))}
       </SidebarContent>
+      <SidebarFooter>
+        <NavTab onClick={handleLogout}>로그아웃</NavTab>
+      </SidebarFooter>
     </SidebarContainer>
   );
 }
@@ -87,6 +96,8 @@ const Content = styled.div`
 `;
 
 const SidebarContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 260px;
   background-color: #262626;
   color: white;
@@ -116,19 +127,31 @@ const SidebarContent = styled.div`
   gap: 8px;
 `;
 
-const SidebarTab = styled.div<{ selected: boolean }>`
+const NavTab = styled.div`
   display: flex;
   align-items: center;
-  padding: ${({ selected }) => (selected ? "12px 16px" : "12px 4px")};
+  justify-content: center;
+  padding: 12px 4px;
 
   font-size: 16px;
   font-weight: bold;
-  color: ${({ theme }) => theme.colors.background500};
 
   border-radius: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f44336;
+  }
+`;
+
+const SidebarTab = styled(NavTab)<{ selected: boolean }>`
+  justify-content: flex-start;
+  padding: ${({ selected }) => (selected ? "12px 16px" : "12px 4px")};
+
+  color: ${({ theme }) => theme.colors.background500};
+
   background-color: ${({ theme, selected }) =>
     selected ? theme.colors.foreground500 : "transparent"};
-  cursor: pointer;
 
   transition: background-color 0.3s ease-in-out;
 
@@ -138,4 +161,12 @@ const SidebarTab = styled.div<{ selected: boolean }>`
 
     transition: padding 0.2s ease-in-out;
   }
+`;
+
+const SidebarFooter = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 16px 0;
+
+  border-top: 1px solid ${({ theme }) => theme.colors.borderLight};
 `;
