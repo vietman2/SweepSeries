@@ -133,7 +133,7 @@ describe("Axios Interceptor", () => {
     await waitFor(async () => {
       try {
         await axios.get("/test-endpoint");
-      } catch (err) {}
+      } catch {}
     });
 
     consoleErrorSpy.mockRestore();
@@ -162,7 +162,7 @@ describe("Axios Interceptor", () => {
     await waitFor(async () => {
       try {
         await axios.get("/test-endpoint");
-      } catch (err) {}
+      } catch {}
     });
   });
 
@@ -189,7 +189,7 @@ describe("Axios Interceptor", () => {
     await waitFor(async () => {
       try {
         await axios.get("/test-endpoint");
-      } catch (err) {}
+      } catch {}
     });
   });
 
@@ -214,7 +214,7 @@ describe("Axios Interceptor", () => {
     await waitFor(async () => {
       try {
         await axios.get("/test-endpoint");
-      } catch (err) {}
+      } catch {}
     });
   });
 });
