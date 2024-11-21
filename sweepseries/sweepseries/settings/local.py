@@ -21,6 +21,10 @@ DATABASES = {
 CORS_ALLOWED_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
 
 ## Storage
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY')
