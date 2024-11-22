@@ -4,6 +4,12 @@
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom";
 
+import { SubTabType } from "@navigation/tabs";
+
+jest.mock("@components/Dividers", () => ({
+  Divider: () => <div>Divider</div>,
+  VerticalDivider: () => <div>VerticalDivider</div>,
+}));
 jest.mock("@components/Fallbacks", () => ({
   ComingSoon: () => <div>ComingSoon</div>,
   ErrorComponent: ({
@@ -33,6 +39,23 @@ jest.mock("@components/Inputs", () => ({
       onChange={(e) => onChange(e.target.value)}
       data-testid={`textinput-${placeholder}`}
     />
+  ),
+}));
+jest.mock("@components/Tabs", () => ({
+  HeaderTabs: ({
+    tabs,
+    setActiveTab,
+  }: {
+    tabs: SubTabType[];
+    setActiveTab: (tab: SubTabType) => void;
+  }) => (
+    <>
+      {tabs.map((tab) => (
+        <button key={tab.path} onClick={() => setActiveTab(tab)}>
+          {tab.title}
+        </button>
+      ))}
+    </>
   ),
 }));
 
