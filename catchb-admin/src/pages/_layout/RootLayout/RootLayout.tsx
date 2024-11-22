@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { MainLogo } from "@components/Icons";
 import { useAuth } from "@contexts/auth";
 import { TabType, tabs } from "@navigation/tabs";
+import { logout as logoutRequest } from "@services/auth";
 
 export function RootLayout() {
   const { isAuthenticated } = useAuth();
@@ -43,9 +44,13 @@ function Sidebar() {
     navigate(path);
   };
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
+  const handleLogout = async () => {
+    const response = await logoutRequest();
+
+    if (response) {
+      logout();
+      navigate("/login");
+    }
   };
 
   return (

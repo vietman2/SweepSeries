@@ -3,6 +3,7 @@ import * as Router from "react-router-dom";
 
 import { RootLayout } from "./RootLayout";
 import * as AuthContext from "@contexts/auth";
+import * as AuthAPI from "@services/auth/auth";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("react-router-dom", () => ({
@@ -41,6 +42,14 @@ describe("<RootLayout />", () => {
   });
 
   it("handles logout", () => {
+    jest.spyOn(AuthAPI, "logout").mockResolvedValue(true);
+    renderWithProviders(<RootLayout />);
+
+    fireEvent.click(screen.getByText("로그아웃"));
+  });
+
+  it("handles logout fail", () => {
+    jest.spyOn(AuthAPI, "logout").mockResolvedValue(null);
     renderWithProviders(<RootLayout />);
 
     fireEvent.click(screen.getByText("로그아웃"));
