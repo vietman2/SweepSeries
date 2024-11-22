@@ -11,10 +11,14 @@ from auth.agreements.models import Agreement
 from auth.person.models import Person
 from auth.user.models import User
 
+## Community
+from community.tag.models import Tag
+
 admin.site.register(Agreement)
 admin.site.register(Person)
 admin.site.register(User)
 
+admin.site.register(Tag)
 
 unnecessary_models = [Group, EmailAddress, TokenProxy, OutstandingToken, BlacklistedToken]
 

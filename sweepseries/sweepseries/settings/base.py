@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'auth.agreements.apps.AgreementsConfig',
     'auth.person.apps.PersonConfig',
     'auth.user.apps.UserConfig',
+
+    'community.tag.apps.TagConfig',
 ]
 
 MIDDLEWARE = [
