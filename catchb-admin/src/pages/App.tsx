@@ -11,6 +11,7 @@ import {
   createGlobalStyle,
 } from "styled-components";
 
+import { CommunityContainer } from "@pages/Community";
 import { Login } from "@pages/Login";
 
 import { RootLayout } from "./_layout";
@@ -97,7 +98,7 @@ function AppRouter() {
         <Route element={<RootLayout />}>
           <Route path="/home" element={<ComingSoon />} />
           <Route path="/users" element={<ComingSoon />} />
-          <Route path="/community" element={<ComingSoon />} />
+          <Route path="/community/*" element={<CommunityContainer />} />
           <Route path="/*" element={<ErrorComponent />} />
         </Route>
       </>
