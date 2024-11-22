@@ -19,5 +19,5 @@ const Container = styled.div`
 
   color: ${({ theme }) => theme.colors.foreground300};
 
-  background-color: ${({ theme }) => theme.colors.background300};
+  background-color: ${({ theme }) => theme.colors.background700};
 `;
