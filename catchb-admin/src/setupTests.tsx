@@ -7,6 +7,11 @@ import "@testing-library/jest-dom";
 import { MenuOptionType } from "@models/app";
 import { SubTabType } from "@navigation/tabs";
 
+jest.mock("react-color-palette", () => ({
+  ColorPicker: () => <div>ColorPicker</div>,
+  useColor: (color: string) => [color, jest.fn()],
+}));
+jest.mock("react-color-palette/css", () => ({}));
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useNavigate: () => jest.fn(),
