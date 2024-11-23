@@ -6,9 +6,13 @@ import "@testing-library/jest-dom";
 
 import { MenuOptionType } from "@models/app";
 import { SubTabType } from "@navigation/tabs";
+import { ColorService } from "react-color-palette";
 
 jest.mock("react-color-palette", () => ({
   ColorPicker: () => <div>ColorPicker</div>,
+  ColorService: {
+    convert: jest.fn(),
+  },
   useColor: (color: string) => [color, jest.fn()],
 }));
 jest.mock("react-color-palette/css", () => ({}));
@@ -16,6 +20,7 @@ jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useNavigate: () => jest.fn(),
   useLocation: jest.fn(),
+  useParams: jest.fn(),
 }));
 jest.mock("@components/Dividers", () => ({
   Divider: () => <div>Divider</div>,
