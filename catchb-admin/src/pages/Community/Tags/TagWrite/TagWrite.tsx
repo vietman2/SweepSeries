@@ -94,6 +94,7 @@ export function TagWrite() {
         setIcon(icon);
         setColor(ColorService.convert("hex", color));
         setBgColor(ColorService.convert("hex", bgcolor));
+        setError(false);
       } else {
         setError(true);
       }

@@ -66,6 +66,7 @@ export function TagDetail() {
 
       if (response) {
         setTag(response);
+        setError(false);
       } else {
         setError(true);
       }
