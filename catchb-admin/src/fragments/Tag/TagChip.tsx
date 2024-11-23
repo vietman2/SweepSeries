@@ -4,13 +4,37 @@ import { TagType } from "@models/community";
 
 interface Props {
   tag: TagType;
+  small?: boolean;
 }
 
-export function TagChip({ tag }: Readonly<Props>) {
+export function TagChip({ tag, small = false }: Readonly<Props>) {
   return (
     <TagChipWrapper style={{ backgroundColor: tag.bgcolor }}>
       <img src={tag.icon} alt={tag.name} />
-      <div style={{ color: tag.color }}>{tag.name}</div>
+      {small ? null : <div style={{ color: tag.color }}>{tag.name}</div>}
+    </TagChipWrapper>
+  );
+}
+
+interface PreviewProps {
+  label: string;
+  icon: string;
+  color: string;
+  bgColor: string;
+  small?: boolean;
+}
+
+export function TagPreview({
+  label,
+  icon,
+  color,
+  bgColor,
+  small = false,
+}: Readonly<PreviewProps>) {
+  return (
+    <TagChipWrapper style={{ backgroundColor: bgColor }}>
+      {icon ? <img src={icon} alt={label} /> : <Placeholder />}
+      {small ? null : <div style={{ color }}>{label}</div>}
     </TagChipWrapper>
   );
 }
@@ -29,4 +53,12 @@ const TagChipWrapper = styled.div`
     width: 24px;
     height: 24px;
   }
+`;
+
+const Placeholder = styled.div`
+  width: 24px;
+  height: 24px;
+
+  border-radius: 50%;
+  background-color: #000;
 `;

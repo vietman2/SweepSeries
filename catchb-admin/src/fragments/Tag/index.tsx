@@ -1,3 +1,3 @@
-import { TagChip } from "./TagChip";
+import { TagChip, TagPreview } from "./TagChip";
 
-export { TagChip };
+export { TagChip, TagPreview };
