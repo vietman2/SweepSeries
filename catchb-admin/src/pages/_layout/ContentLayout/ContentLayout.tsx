@@ -50,6 +50,8 @@ const Container = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
+
+  background-color: ${({ theme }) => theme.colors.background500};
 `;
 
 const Content = styled.div`
