@@ -4,8 +4,14 @@
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom";
 
+import { MenuOptionType } from "@models/app";
 import { SubTabType } from "@navigation/tabs";
 
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: () => jest.fn(),
+  useLocation: jest.fn(),
+}));
 jest.mock("@components/Dividers", () => ({
   Divider: () => <div>Divider</div>,
   VerticalDivider: () => <div>VerticalDivider</div>,
@@ -22,6 +28,7 @@ jest.mock("@components/Fallbacks", () => ({
   Loading: () => <div>Loading</div>,
 }));
 jest.mock("@components/Icons", () => ({
+  AppIcon: ({ icon }: { icon: string }) => <span>{icon}</span>,
   MainLogo: () => <div>MainLogo</div>,
 }));
 jest.mock("@components/Inputs", () => ({
@@ -39,6 +46,29 @@ jest.mock("@components/Inputs", () => ({
       onChange={(e) => onChange(e.target.value)}
       data-testid={`textinput-${placeholder}`}
     />
+  ),
+}));
+jest.mock("@components/Menus", () => ({
+  Menu: ({
+    options,
+    toggleDropdown,
+  }: {
+    options: MenuOptionType[];
+    toggleDropdown: () => void;
+  }) => (
+    <div>
+      {options.map((option) => (
+        <button key={option.label} onClick={option.onClick}>
+          {option.label}
+        </button>
+      ))}
+      <button onClick={toggleDropdown} data-testid="toggle" />
+    </div>
+  ),
+}));
+jest.mock("@components/Modals", () => ({
+  SimpleModal: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
   ),
 }));
 jest.mock("@components/Tabs", () => ({
@@ -77,4 +107,10 @@ jest.mock("@contexts/theme", () => ({
     toggleTheme: jest.fn(),
     isDarkMode: false,
   }),
+}));
+jest.mock("@pages/_layout", () => ({
+  RootLayout: () => <div>RootLayout</div>,
+  ContentLayout: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
 }));

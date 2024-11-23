@@ -6,11 +6,6 @@ import * as AuthContext from "@contexts/auth";
 import * as AuthAPI from "@services/auth/auth";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: () => jest.fn(),
-  useLocation: jest.fn(),
-}));
 jest.mock("@contexts/auth", () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => (
     <>{children}</>

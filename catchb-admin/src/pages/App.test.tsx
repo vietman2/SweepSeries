@@ -24,9 +24,6 @@ jest.mock("@pages/Community", () => ({
 jest.mock("@pages/Login", () => ({
   Login: () => <div>Login</div>,
 }));
-jest.mock("./_layout", () => ({
-  RootLayout: () => <div>RootLayout</div>,
-}));
 
 describe("<App />", () => {
   beforeEach(() => {

@@ -4,6 +4,8 @@ import { ContentLayout } from "./ContentLayout";
 import { Home } from "@navigation/tabs";
 import { renderWithProviders } from "@utils/test-utils";
 
+jest.unmock("react-router-dom");
+
 describe("<ContentLayout />", () => {
   it("renders children", () => {
     renderWithProviders(<ContentLayout selectedTab={Home} />);
