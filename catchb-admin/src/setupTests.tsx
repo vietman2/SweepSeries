@@ -6,7 +6,6 @@ import "@testing-library/jest-dom";
 
 import { MenuOptionType } from "@models/app";
 import { SubTabType } from "@navigation/tabs";
-import { ColorService } from "react-color-palette";
 
 jest.mock("react-color-palette", () => ({
   ColorPicker: () => <div>ColorPicker</div>,
