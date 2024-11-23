@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { getTag, getTags, createTag, deleteTag } from "./tags";
+import { getTag, getTags, createTag, deleteTag, updateTag } from "./tags";
 
 describe("getTags", () => {
   it("should return an array of tags if the request is successful", async () => {
@@ -24,7 +24,7 @@ describe("getTag", () => {
   it("should return a tag object if the request is successful", async () => {
     jest.spyOn(axios, "get").mockResolvedValue({ data: {} });
 
-    const response =await getTag("1");
+    const response = await getTag("1");
 
     expect(response).toEqual({});
   });
@@ -48,7 +48,13 @@ describe("createTag", () => {
   it("should return a tag object if the request is successful", async () => {
     jest.spyOn(axios, "post").mockResolvedValue({ data: {} });
 
-    const response = await createTag("forum", "label", "icon", "color", "bgColor");
+    const response = await createTag(
+      "forum",
+      "label",
+      "icon",
+      "color",
+      "bgColor"
+    );
 
     expect(response).toEqual({});
   });
@@ -56,7 +62,13 @@ describe("createTag", () => {
   it("should return null if the request is unsuccessful", async () => {
     jest.spyOn(axios, "post").mockRejectedValue(new Error());
 
-    const response = await createTag("forum", "label", "icon", "color", "bgColor");
+    const response = await createTag(
+      "forum",
+      "label",
+      "icon",
+      "color",
+      "bgColor"
+    );
 
     expect(response).toBeNull();
   });
@@ -81,6 +93,36 @@ describe("deleteTag", () => {
     jest.spyOn(axios, "delete").mockRejectedValue(new Error());
 
     const response = await deleteTag("1");
+
+    expect(response).toBeNull();
+  });
+});
+
+describe("updateTag", () => {
+  it("should return a tag object if the request is successful", async () => {
+    jest.spyOn(axios, "patch").mockResolvedValue({ data: {} });
+
+    const response = await updateTag("1", "label", "icon", "color", "bgColor");
+
+    expect(response).toEqual({});
+  });
+
+  it("should return null if tagId is undefined", async () => {
+    const response = await updateTag(
+      undefined,
+      "label",
+      "icon",
+      "color",
+      "bgColor"
+    );
+
+    expect(response).toBeNull();
+  });
+
+  it("should return null if the request is unsuccessful", async () => {
+    jest.spyOn(axios, "patch").mockRejectedValue(new Error());
+
+    const response = await updateTag("1", "label", "icon", "color", "bgColor");
 
     expect(response).toBeNull();
   });

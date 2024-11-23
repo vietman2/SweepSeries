@@ -24,7 +24,13 @@ export const getTag = async (tagId: string | undefined) => {
   }
 };
 
-export const createTag = async (forum: string, label: string, icon: string, color: string, bgColor: string) => {
+export const createTag = async (
+  forum: string,
+  label: string,
+  icon: string,
+  color: string,
+  bgColor: string
+) => {
   try {
     const response = await axios.post(`/api/community/tags/`, {
       forum_name: forum,
@@ -38,7 +44,32 @@ export const createTag = async (forum: string, label: string, icon: string, colo
   } catch {
     return null;
   }
-}
+};
+
+export const updateTag = async (
+  tagId: string | undefined,
+  label: string,
+  icon: string,
+  color: string,
+  bgColor: string
+) => {
+  if (!tagId) {
+    return null;
+  }
+
+  try {
+    const response = await axios.patch(`/api/community/tags/${tagId}/`, {
+      name: label,
+      icon,
+      color,
+      bgcolor: bgColor,
+    });
+
+    return response.data;
+  } catch {
+    return null;
+  }
+};
 
 export const deleteTag = async (tagId: string | undefined) => {
   if (!tagId) {
