@@ -19,4 +19,4 @@ class Tag(models.Model):
         db_table = 'tag'
         verbose_name = '게시글 태그'
         verbose_name_plural = '게시글 태그'
-        ordering = ['name']
+        ordering = ['id']
