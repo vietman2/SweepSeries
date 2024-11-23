@@ -14,7 +14,7 @@ export function CommunityContainer() {
         <Route path="tags" element={<TagsLayout />}>
           <Route path="create" element={<TagWrite />} />
           <Route path=":tagId" element={<TagDetail />} />
-          <Route path=":tagId/edit" element={<ComingSoon />} />
+          <Route path=":tagId/edit" element={<TagWrite />} />
         </Route>
       </Route>
     </Routes>
