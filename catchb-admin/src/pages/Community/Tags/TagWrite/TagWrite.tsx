@@ -49,6 +49,7 @@ export function TagWrite() {
   const handleEditTag = async () => {
     const response = await updateTag(
       tagId,
+      selectedForum,
       label,
       icon,
       color.hex,

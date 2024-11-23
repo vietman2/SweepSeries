@@ -48,6 +48,7 @@ export const createTag = async (
 
 export const updateTag = async (
   tagId: string | undefined,
+  forum: string,
   label: string,
   icon: string,
   color: string,
@@ -58,7 +59,8 @@ export const updateTag = async (
   }
 
   try {
-    const response = await axios.patch(`/api/community/tags/${tagId}/`, {
+    const response = await axios.put(`/api/community/tags/${tagId}/`, {
+      forum_name: forum,
       name: label,
       icon,
       color,

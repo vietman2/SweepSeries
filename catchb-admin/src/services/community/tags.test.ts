@@ -100,9 +100,9 @@ describe("deleteTag", () => {
 
 describe("updateTag", () => {
   it("should return a tag object if the request is successful", async () => {
-    jest.spyOn(axios, "patch").mockResolvedValue({ data: {} });
+    jest.spyOn(axios, "put").mockResolvedValue({ data: {} });
 
-    const response = await updateTag("1", "label", "icon", "color", "bgColor");
+    const response = await updateTag("1", "forum", "label", "icon", "color", "bgColor");
 
     expect(response).toEqual({});
   });
@@ -110,6 +110,7 @@ describe("updateTag", () => {
   it("should return null if tagId is undefined", async () => {
     const response = await updateTag(
       undefined,
+      "forum",
       "label",
       "icon",
       "color",
@@ -120,9 +121,16 @@ describe("updateTag", () => {
   });
 
   it("should return null if the request is unsuccessful", async () => {
-    jest.spyOn(axios, "patch").mockRejectedValue(new Error());
+    jest.spyOn(axios, "put").mockRejectedValue(new Error());
 
-    const response = await updateTag("1", "label", "icon", "color", "bgColor");
+    const response = await updateTag(
+      "1",
+      "forum",
+      "label",
+      "icon",
+      "color",
+      "bgColor"
+    );
 
     expect(response).toBeNull();
   });

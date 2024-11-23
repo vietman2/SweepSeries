@@ -1,4 +1,5 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
+import * as Router from "react-router-dom";
 
 import { TagDetail } from "./TagDetail";
 import { sampleTags } from "@data/community";
@@ -13,6 +14,7 @@ describe("<TagDetail />", () => {
   beforeEach(() => {
     jest.spyOn(window, "alert").mockImplementation(() => {});
     jest.spyOn(window, "confirm").mockImplementation(() => true);
+    jest.spyOn(Router, "useParams").mockReturnValue({ tagId: "1" });
     jest.spyOn(TagsAPI, "getTag").mockResolvedValue(sampleTags[0]);
     jest.spyOn(TagsAPI, "deleteTag").mockResolvedValue(true);
   });
