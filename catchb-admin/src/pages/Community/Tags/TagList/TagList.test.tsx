@@ -1,4 +1,5 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
+import * as Router from "react-router-dom";
 
 import { TagList } from "./TagList";
 import { sampleTags } from "@data/community";
@@ -12,7 +13,19 @@ jest.mock("@fragments/Tag", () => ({
 describe("<TagList />", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.spyOn(TagsAPI, "getTags").mockResolvedValue({ 덕아웃: sampleTags });
+    jest.spyOn(Router, "useLocation").mockReturnValue({
+      pathname: "/community/tags",
+      search: "",
+      hash: "",
+      state: null,
+      key: "testKey",
+    });
+    jest.spyOn(TagsAPI, "getTags").mockResolvedValue({
+      덕아웃: sampleTags,
+      드래프트: [],
+      장터: [],
+      스틸: [],
+    });
   });
 
   it("handles API error correctly", async () => {
@@ -25,7 +38,34 @@ describe("<TagList />", () => {
     waitFor(() => fireEvent.click(screen.getByText("새로고침")));
   });
 
-  it("renders correctly", async () => {
+  it("handles background render correctly", async () => {
+    jest.spyOn(Router, "useLocation").mockReturnValue({
+      pathname: "/community/tags/create",
+      search: "",
+      hash: "",
+      state: null,
+      key: "testKey",
+    });
+    waitFor(() => renderWithProviders(<TagList />));
+  });
+
+  it("renders correctly and handles navigations", async () => {
+    renderWithProviders(<TagList />);
+
+    await waitFor(() => {
+      expect(screen.getByText("태그 추가")).toBeInTheDocument();
+    });
+
+    waitFor(() => fireEvent.click(screen.getByText("태그 추가")));
+  });
+
+  it("renders correctly and handles navigations", async () => {
+    jest.spyOn(TagsAPI, "getTags").mockResolvedValue({
+      덕아웃: [sampleTags[0]],
+      드래프트: [sampleTags[1]],
+      장터: [sampleTags[2]],
+      스틸: [sampleTags[3]],
+    });
     renderWithProviders(<TagList />);
 
     await waitFor(() => {
@@ -33,8 +73,10 @@ describe("<TagList />", () => {
     });
 
     waitFor(() => {
-      fireEvent.click(screen.getByText("태그 추가"));
       fireEvent.click(screen.getByTestId("tag-chip-1"));
+      fireEvent.click(screen.getByTestId("tag-chip-2"));
+      fireEvent.click(screen.getByTestId("tag-chip-3"));
+      fireEvent.click(screen.getByTestId("tag-chip-4"));
     });
   });
 });

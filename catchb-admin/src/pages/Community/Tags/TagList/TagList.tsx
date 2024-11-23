@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { ErrorComponent, Loading } from "@components/Fallbacks";
@@ -14,6 +14,7 @@ export function TagList() {
   const [error, setError] = useState<boolean>(false);
   const [refreshCount, setRefreshCount] = useState<number>(0);
 
+  const location = useLocation();
   const navigate = useNavigate();
 
   const handleRefresh = () => {
@@ -35,6 +36,7 @@ export function TagList() {
 
       if (response) {
         setTags(response);
+        setError(false);
       } else {
         setError(true);
       }
@@ -42,8 +44,10 @@ export function TagList() {
       setLoading(false);
     };
 
-    fetchTags();
-  }, [refreshCount]);
+    if (location.pathname === "/community/tags") {
+      fetchTags();
+    }
+  }, [refreshCount, location]);
 
   if (loading) {
     return (
@@ -70,7 +74,11 @@ export function TagList() {
         <div>덕아웃</div>
         <Chips>
           {tags["덕아웃"].map((tag) => (
-            <button key={tag.id} onClick={() => handleTagDetail(tag.id)} data-testid={`tag-chip-${tag.id}`}>
+            <button
+              key={tag.id}
+              onClick={() => handleTagDetail(tag.id)}
+              data-testid={`tag-chip-${tag.id}`}
+            >
               <TagChip key={tag.id} tag={tag} />
             </button>
           ))}
@@ -79,25 +87,43 @@ export function TagList() {
       <Wrapper>
         <div>드래프트</div>
         <Chips>
-          {/*tags["드래프트"].map((tag) => (
-            <TagChip key={tag.id} tag={tag} />
-          ))*/}
+          {tags["드래프트"].map((tag) => (
+            <button
+              key={tag.id}
+              onClick={() => handleTagDetail(tag.id)}
+              data-testid={`tag-chip-${tag.id}`}
+            >
+              <TagChip key={tag.id} tag={tag} />
+            </button>
+          ))}
         </Chips>
       </Wrapper>
       <Wrapper>
         <div>장터</div>
         <Chips>
-          {/*tags["장터"].map((tag) => (
-            <TagChip key={tag.id} tag={tag} />
-          ))*/}
+          {tags["장터"].map((tag) => (
+            <button
+              key={tag.id}
+              onClick={() => handleTagDetail(tag.id)}
+              data-testid={`tag-chip-${tag.id}`}
+            >
+              <TagChip key={tag.id} tag={tag} />
+            </button>
+          ))}
         </Chips>
       </Wrapper>
       <Wrapper>
         <div>스틸</div>
         <Chips>
-          {/*tags["스틸"].map((tag) => (
-            <TagChip key={tag.id} tag={tag} />
-          ))*/}
+          {tags["스틸"].map((tag) => (
+            <button
+              key={tag.id}
+              onClick={() => handleTagDetail(tag.id)}
+              data-testid={`tag-chip-${tag.id}`}
+            >
+              <TagChip key={tag.id} tag={tag} />
+            </button>
+          ))}
         </Chips>
       </Wrapper>
     </Container>
