@@ -18,6 +18,4 @@ const Container = styled.div`
   gap: 16px;
 
   color: ${({ theme }) => theme.colors.foreground300};
-
-  background-color: ${({ theme }) => theme.colors.background300};
 `;

@@ -11,6 +11,7 @@ import {
   createGlobalStyle,
 } from "styled-components";
 
+import { CommunityContainer } from "@pages/Community";
 import { Login } from "@pages/Login";
 
 import { RootLayout } from "./_layout";
@@ -21,6 +22,78 @@ import { refresh } from "@services/auth";
 import { dark, light } from "@themes/themeColors";
 
 const GlobalStyles = createGlobalStyle`
+  @font-face {
+    font-family: 'Freesentation';
+    src: url('/assets/fonts/Freesentation100.woff2') format('woff2'),
+    font-display: fallback;
+    font-style: normal;
+    font-weight: 100;
+  }
+
+  @font-face {
+    font-family: 'Freesentation';
+    src: url('/assets/fonts/Freesentation200.woff2') format('woff2'),
+    font-display: fallback;
+    font-style: normal;
+    font-weight: 200;
+  }
+
+  @font-face {
+    font-family: 'Freesentation';
+    src: url('/assets/fonts/Freesentation300.woff2') format('woff2'),
+    font-display: fallback;
+    font-style: normal;
+    font-weight: 300;
+  }
+
+  @font-face {
+    font-family: 'Freesentation';
+    src: url('/assets/fonts/Freesentation400.woff2') format('woff2'),
+    font-display: fallback;
+    font-style: normal;
+    font-weight: 400;
+  }
+
+  @font-face {
+    font-family: 'Freesentation';
+    src: url('/assets/fonts/Freesentation500.woff2') format('woff2'),
+    font-display: fallback;
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  @font-face {
+    font-family: 'Freesentation';
+    src: url('/assets/fonts/Freesentation600.woff2') format('woff2'),
+    font-display: fallback;
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  @font-face {
+    font-family: 'Freesentation';
+    src: url('/assets/fonts/Freesentation700.woff2') format('woff2'),
+    font-display: fallback;
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  @font-face {
+    font-family: 'Freesentation';
+    src: url('/assets/fonts/Freesentation800.woff2') format('woff2'),
+    font-display: fallback;
+    font-style: normal;
+    font-weight: 800;
+  }
+
+  @font-face {
+    font-family: 'Freesentation';
+    src: url('/assets/fonts/Freesentation900.woff2') format('woff2'),
+    font-display: fallback;
+    font-style: normal;
+    font-weight: 900;
+  }
+
   * {
     box-sizing: border-box;
   }
@@ -41,7 +114,7 @@ const GlobalStyles = createGlobalStyle`
 
   body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    font-family: 'Freesentation', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -97,7 +170,7 @@ function AppRouter() {
         <Route element={<RootLayout />}>
           <Route path="/home" element={<ComingSoon />} />
           <Route path="/users" element={<ComingSoon />} />
-          <Route path="/community" element={<ComingSoon />} />
+          <Route path="/community/*" element={<CommunityContainer />} />
           <Route path="/*" element={<ErrorComponent />} />
         </Route>
       </>

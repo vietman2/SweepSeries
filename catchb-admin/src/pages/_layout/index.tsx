@@ -1,3 +1,4 @@
-import { RootLayout } from "./Layout/RootLayout";
+import { ContentLayout } from "./ContentLayout/ContentLayout";
+import { RootLayout } from "./RootLayout/RootLayout";
 
-export { RootLayout };
+export { ContentLayout, RootLayout };

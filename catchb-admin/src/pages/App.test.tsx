@@ -18,11 +18,11 @@ jest.mock("@contexts/theme", () => ({
   ),
   useTheme: jest.fn(),
 }));
+jest.mock("@pages/Community", () => ({
+  CommunityContainer: () => <div>CommunityContainer</div>,
+}));
 jest.mock("@pages/Login", () => ({
   Login: () => <div>Login</div>,
-}));
-jest.mock("./_layout", () => ({
-  RootLayout: () => <div>RootLayout</div>,
 }));
 
 describe("<App />", () => {

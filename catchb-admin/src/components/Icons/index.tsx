@@ -1,3 +1,4 @@
+import { AppIcon } from "./AppIcon";
 import { MainLogo } from "./Logo";
 
-export { MainLogo };
+export { AppIcon, MainLogo };

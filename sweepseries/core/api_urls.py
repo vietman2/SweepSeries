@@ -6,9 +6,14 @@ from rest_framework.routers import DefaultRouter
 ## Auth
 from auth.agreements.views import AgreementViewSet
 
+## Community
+from community.tag.views import TagViewSet
+
 router = DefaultRouter()
 
 router.register(r'agreements', AgreementViewSet, basename='agreements')
+
+router.register(r'community/tags', TagViewSet, basename='tags')
 
 urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
