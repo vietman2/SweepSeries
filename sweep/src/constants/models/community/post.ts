@@ -1,3 +1,6 @@
+import { AuthorType } from "./author";
+import { CommentType } from "./comment";
+
 export type TagType = {
   id: number;
   forum_id: number;
@@ -9,17 +12,16 @@ export type TagType = {
 
 export type PostSimpleType = {
   id: number;
-  author_uuid: string;
-  author_nickname: string;
+  tag: TagType;
   title: string;
   content: string;
-  tag: TagType;
   image: string | null;
-  num_clicks: number;
+  created_at: string;
+  author: AuthorType;
+  num_views: number;
   num_comments: number;
   num_likes: number;
   is_liked: boolean;
-  created_at: string;
 };
 
 type ImageType = {
@@ -48,31 +50,4 @@ export type PostDetailType = {
 
   created_at: string;
   updated_at: string;
-};
-
-export type CommentType = {
-  id: number;
-  commenter_uuid: string;
-  commenter_nickname: string;
-  content: string;
-  created_at: string;
-  num_likes: number;
-  num_recomments: number;
-
-  recomments: ReCommentType[];
-
-  is_liked: boolean;
-  is_my_comment: boolean;
-};
-
-export type ReCommentType = {
-  id: number;
-  commenter_uuid: string;
-  commenter_nickname: string;
-  content: string;
-  created_at: string;
-  num_likes: number;
-
-  is_liked: boolean;
-  is_my_recomment: boolean;
 };
