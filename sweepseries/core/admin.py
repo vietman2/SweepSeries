@@ -9,6 +9,7 @@ from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, Bl
 ## Auth
 from auth.agreements.models import Agreement
 from auth.person.models import Person
+from auth.user.forms import UserAdmin
 from auth.user.models import User
 
 ## Community
@@ -16,7 +17,7 @@ from community.tag.models import Tag
 
 admin.site.register(Agreement)
 admin.site.register(Person)
-admin.site.register(User)
+admin.site.register(User, UserAdmin)
 
 admin.site.register(Tag)
 
