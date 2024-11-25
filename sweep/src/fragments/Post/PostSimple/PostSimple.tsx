@@ -1,11 +1,11 @@
 import { Image, StyleSheet, View } from "react-native";
 
-import { AuthorProfile } from "../AuthorProfile/AuthorProfile";
 import { Tag } from "../Tag/Tag";
 import { Divider } from "@components/Dividers";
 import { AppIcon } from "@components/Icons";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
+import { AuthorProfile } from "@fragments/Author";
 import { PostSimpleType } from "@models/community";
 import { ThemeColorType } from "@themes/colors";
 
