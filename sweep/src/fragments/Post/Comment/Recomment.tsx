@@ -12,13 +12,19 @@ import { useTheme } from "@contexts/theme";
 import { ReCommentType } from "@models/community";
 import { alert } from "@services/alert";
 import { ThemeColorType } from "@themes/colors";
+import { AuthorProfile } from "@fragments/Author";
 
 interface Props {
   recomment: ReCommentType;
   refresh: () => void;
+  first?: boolean;
 }
 
-export function Recomment({ recomment, refresh }: Readonly<Props>) {
+export function Recomment({
+  recomment,
+  refresh,
+  first = false,
+}: Readonly<Props>) {
   const [editedContent, setEditedContent] = useState<string>(recomment.content);
   const [like, setLike] = useState<boolean>(recomment.is_liked);
   const [numLikes, setNumLikes] = useState<number>(recomment.num_likes);
@@ -82,10 +88,10 @@ export function Recomment({ recomment, refresh }: Readonly<Props>) {
   return (
     <>
       <View style={styles.container}>
+        {first ? null : <Divider />}
         <View style={styles.horizontalFull}>
           <View style={styles.horizontal}>
-            <View style={styles.placeholder} />
-            <Text style={styles.grayText}>{recomment.commenter_nickname}</Text>
+            <AuthorProfile author={recomment.author} />
           </View>
           {isAuthenticated && (
             <PopupMenu items={actions}>
@@ -127,9 +133,6 @@ export function Recomment({ recomment, refresh }: Readonly<Props>) {
             <Text style={styles.likeText}>{numLikes}</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.dividerWrapper}>
-          <Divider />
-        </View>
       </View>
       <ReportModal
         visible={modalVisible}
@@ -145,9 +148,10 @@ const createStyles = (theme: ThemeColorType) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      marginLeft: 5,
-      paddingHorizontal: 5,
-      paddingBottom: 10,
+      marginLeft: 4,
+      paddingHorizontal: 4,
+      paddingBottom: 8,
+      gap: 4,
     },
     horizontalFull: {
       flexDirection: "row",
