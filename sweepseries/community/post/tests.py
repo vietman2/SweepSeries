@@ -29,6 +29,7 @@ class PostAPITest(APITestCase):
 
         ## 3. forum and search query
         response = self.client.get(self.url, {'forum': '덕아웃', 'search': 'test'})
+        self.assertEqual(response.status_code, 200)
 
     def test_list_time_since(self):
         ## 1. seconds ago
