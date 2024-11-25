@@ -19,7 +19,7 @@ class PostAPITest(APITestCase):
 
         response = self.client.get(self.url, {'forum': '마켓'})
         self.assertEqual(response.status_code, 200)
-    
+
         response = self.client.get(self.url, {'forum': '스틸'})
         self.assertEqual(response.status_code, 200)
 

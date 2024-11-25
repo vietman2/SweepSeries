@@ -40,7 +40,7 @@ class PostSimpleSerializer(serializers.ModelSerializer):
     def get_num_likes(self, obj):
         return obj.post_likes.count()
 
-    def get_num_comments(self, obj):
+    def get_num_comments(self, obj):    ## pylint: disable=unused-argument // TODO: Remove this
         return 0
         #return obj.comments.filter(is_deleted=False).count()
 
