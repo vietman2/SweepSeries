@@ -6,3 +6,10 @@ export const sampleAuthor: AuthorType = {
   nickname: "야구쟁이",
   introduction: "야구를 좋아하는 사람입니다.",
 };
+
+export const sampleAuthorNoImage: AuthorType = {
+  profile_image: "",
+  color: "#000000",
+  nickname: "야구쟁이",
+  introduction: "야구를 좋아하는 사람입니다.",
+};
