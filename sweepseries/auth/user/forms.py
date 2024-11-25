@@ -56,9 +56,9 @@ class UserAdmin(admin.ModelAdmin):
         ('Permissions', {'fields': ('is_staff', 'is_active')}),
     )
 
-    def get_form(self, request, obj=None, **kwargs):
+    def get_form(self, request, obj=None, change=False, **kwargs):
         if obj is None:
             kwargs['form'] = self.add_form
         else:
             kwargs['form'] = self.form
-        return super().get_form(request, obj, **kwargs)
+        return super().get_form(request, obj, change, **kwargs)
