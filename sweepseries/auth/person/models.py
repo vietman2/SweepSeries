@@ -9,7 +9,7 @@ class Person(models.Model):
     phone_number        = PhoneNumberField(unique=True)
 
     birth_date          = models.DateField(null=True)
-    gender          = models.CharField(
+    gender              = models.CharField(
         max_length=1,
         choices=GenderChoices.choices,
         default=GenderChoices.UNDEFINED
