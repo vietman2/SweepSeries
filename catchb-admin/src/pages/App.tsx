@@ -13,6 +13,7 @@ import {
 
 import { CommunityContainer } from "@pages/Community";
 import { Login } from "@pages/Login";
+import { MembersContainer } from "@pages/Members";
 
 import { RootLayout } from "./_layout";
 import { ComingSoon, ErrorComponent } from "@components/Fallbacks";
@@ -169,7 +170,7 @@ function AppRouter() {
         <Route path="/login" element={<Login />} />
         <Route element={<RootLayout />}>
           <Route path="/home" element={<ComingSoon />} />
-          <Route path="/users" element={<ComingSoon />} />
+          <Route path="/members/*" element={<MembersContainer />} />
           <Route path="/community/*" element={<CommunityContainer />} />
           <Route path="/*" element={<ErrorComponent />} />
         </Route>

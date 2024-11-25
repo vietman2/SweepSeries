@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'auth.agreements.apps.AgreementsConfig',
     'auth.person.apps.PersonConfig',
     'auth.user.apps.UserConfig',
+    'auth.userprofile.apps.UserprofileConfig',
 
     'community.tag.apps.TagConfig',
 ]
