@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getUsers = async () => {
   try {
-    const response = await axios.get(`/api/users/`);
+    const response = await axios.get(`/v1/users/`);
 
     return response.data;
   } catch {
@@ -16,7 +16,7 @@ export const getUserDetails = async (userId: string | undefined) => {
   }
 
   try {
-    const response = await axios.get(`/api/users/${userId}/`);
+    const response = await axios.get(`/v1/users/${userId}/`);
 
     return response.data;
   } catch {
@@ -26,7 +26,7 @@ export const getUserDetails = async (userId: string | undefined) => {
 
 export const getPeople = async () => {
   try {
-    const response = await axios.get(`/api/people/`);
+    const response = await axios.get(`/v1/people/`);
 
     return response.data;
   } catch {

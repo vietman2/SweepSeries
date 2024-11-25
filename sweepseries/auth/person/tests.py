@@ -7,7 +7,7 @@ class PersonAPITestCase(APITestCase):
     fixtures = ["core/data/test/users.json"]
 
     def setUp(self):
-        self.url = "/api/people/"
+        self.url = "/v1/people/"
         self.admin = User.objects.get(username="admin")
         self.normaluser = User.objects.get(username="normaluser")
 

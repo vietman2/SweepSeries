@@ -4,7 +4,7 @@ class TagAPITest(APITestCase):
     fixtures = ['core/data/test/community.json', 'core/data/test/users.json']
 
     def setUp(self):
-        self.url = '/api/tags/'
+        self.url = '/v1/tags/'
         self.create_data = {
             "forum_name": "덕아웃",
             "name": "test",
