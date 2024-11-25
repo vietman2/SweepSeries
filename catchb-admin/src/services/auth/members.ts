@@ -22,7 +22,7 @@ export const getUserDetails = async (userId: string | undefined) => {
   } catch {
     return null;
   }
-}
+};
 
 export const getPeople = async () => {
   try {
