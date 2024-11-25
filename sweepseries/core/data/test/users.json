@@ -65,5 +65,16 @@
       "is_blocked": false,
       "is_active": true
     }
+  },
+  {
+    "model": "userprofile.userprofile",
+    "pk": 1,
+    "fields": {
+      "user": "123e4567-e89b-12d3-a456-426614174000",
+      "nickname": "닉네임",
+      "profile_image": "",
+      "default_color": "#000000",
+      "introduction": "자기소개"
+    }
   }
 ]
