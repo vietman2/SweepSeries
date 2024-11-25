@@ -6,6 +6,10 @@ import * as MembersAPI from "@services/auth/members";
 import { renderWithProviders } from "@utils/test-utils";
 import { sampleUsers } from "@data/members";
 
+jest.mock("@fragments/User", () => ({
+  UserProfile: () => <div>User Profile</div>,
+}));
+
 describe("<UserDetail />", () => {
   beforeEach(() => {
     jest.spyOn(Router, "useParams").mockReturnValue({ tagId: "1" });

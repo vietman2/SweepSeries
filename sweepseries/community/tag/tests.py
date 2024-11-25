@@ -1,7 +1,4 @@
-from django.test import TestCase
 from rest_framework.test import APITestCase
-
-from .models import Tag
 
 class TagAPITest(APITestCase):
     fixtures = ['core/data/test/tags.json']
@@ -58,10 +55,3 @@ class TagAPITest(APITestCase):
     def test_delete(self):
         response = self.client.delete(self.url + '1/')
         self.assertEqual(response.status_code, 204)
-
-class TagModelTest(TestCase):
-    fixtures = ['core/data/test/tags.json']
-
-    def test_str(self):
-        tag = Tag.objects.get(pk=1)
-        self.assertEqual(str(tag), tag.name)

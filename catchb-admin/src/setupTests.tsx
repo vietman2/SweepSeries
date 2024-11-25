@@ -39,6 +39,7 @@ jest.mock("@components/Fallbacks", () => ({
 jest.mock("@components/Icons", () => ({
   AppIcon: ({ icon }: { icon: string }) => <span>{icon}</span>,
   MainLogo: () => <div>MainLogo</div>,
+  ProfileIcon: () => <div>ProfileIcon</div>,
 }));
 jest.mock("@components/Inputs", () => ({
   TextInput: ({

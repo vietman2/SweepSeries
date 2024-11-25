@@ -1,19 +1,21 @@
 from django.db import models
 from django.utils.timezone import now
 
+from auth.user.models import User
+from auth.userprofile.models import UserProfile
 from core.models import TimeStampedModel
 from .enums import ReportReason, ReviewStatus, ReportStatus
 
 class Like(models.Model):
-    user_uuid       = models.UUIDField(editable=False)
+    user        = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='likes')
 
-    liked_at        = models.DateTimeField(auto_now_add=True)
+    liked_at    = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         abstract = True
 
 class Report(TimeStampedModel):
-    report_user_uuid    = models.UUIDField()
+    report_user         = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reports')
     report_content      = models.TextField()
     report_reason       = models.CharField(
         max_length=2,

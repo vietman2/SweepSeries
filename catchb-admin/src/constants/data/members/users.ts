@@ -22,6 +22,20 @@ export const sampleUsers: UserType[] = [
     email: "john@doe.com",
     joined_at: "2024-11-01",
     person: samplePeople[0],
+    profiles: [
+      {
+        profile_image: "https://via.placeholder.com/150",
+        color: "#ff0000",
+        nickname: "John",
+        introduction: "Hello, I'm John.",
+      },
+      {
+        profile_image: "",
+        color: "#00ff00",
+        nickname: "Doe",
+        introduction: "Hello, I'm Doe.",
+      },
+    ],
   },
   {
     uuid: "2",
@@ -29,5 +43,6 @@ export const sampleUsers: UserType[] = [
     email: "jane@doe.com",
     joined_at: "2024-11-01",
     person: samplePeople[1],
+    profiles: [],
   },
 ];

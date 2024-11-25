@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from auth.person.serializers import PersonSerializer
+from auth.userprofile.serializers import UserProfileSerializer
 from .models import User
 
 class UserSerializer(serializers.ModelSerializer):
@@ -9,7 +10,8 @@ class UserSerializer(serializers.ModelSerializer):
     email       = serializers.EmailField(read_only=True)
     person      = PersonSerializer(read_only=True)
     joined_at   = serializers.DateTimeField(read_only=True, format='%Y-%m-%d')
+    profiles    = UserProfileSerializer(many=True)
 
     class Meta:
         model = User
-        fields = ['uuid', 'username', 'email', 'person', 'joined_at']
+        fields = ['uuid', 'username', 'email', 'person', 'joined_at', 'profiles']
