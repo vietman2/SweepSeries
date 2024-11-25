@@ -38,7 +38,7 @@ const Container = styled.div`
   font-size: 16px;
   color: ${({ theme }) => theme.colors.foreground700};
 
-  border-top: 1px solid ${({ theme }) => theme.colors.borderLight};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderLight};
 
   > div {
     display: flex;
