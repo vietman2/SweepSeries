@@ -39,10 +39,6 @@ export const User: TabType = {
       title: "미가입 회원",
       path: "/members/people",
     },
-    {
-      title: "관리자 계정",
-      path: "/members/admins",
-    },
   ],
 };
 
