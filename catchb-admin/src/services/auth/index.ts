@@ -1,4 +1,4 @@
 import { login, logout, refresh } from "./auth";
-import { getUsers } from "./members";
+import { getPeople, getUsers } from "./members";
 
-export { login, logout, refresh, getUsers };
+export { login, logout, refresh, getPeople, getUsers };

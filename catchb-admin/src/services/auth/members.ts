@@ -9,3 +9,13 @@ export const getUsers = async () => {
     return null;
   }
 };
+
+export const getPeople = async () => {
+  try {
+    const response = await axios.get(`/api/people/`);
+
+    return response.data;
+  } catch {
+    return null;
+  }
+};
