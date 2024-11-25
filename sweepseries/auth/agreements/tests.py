@@ -5,7 +5,7 @@ class AgreementsAPITestCase(APITestCase):
     fixtures = ["core/data/test/agreements.json"]
 
     def setUp(self):
-        self.url = "/api/agreements/"
+        self.url = "/v1/agreements/"
 
     def test_agreements_list(self):
         response = self.client.get(self.url)

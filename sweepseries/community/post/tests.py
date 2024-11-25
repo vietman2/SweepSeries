@@ -7,7 +7,7 @@ class PostAPITest(APITestCase):
     fixtures = ['core/data/test/community.json', 'core/data/test/users.json']
 
     def setUp(self):
-        self.url = '/api/posts/'
+        self.url = '/v1/posts/'
 
     def test_list(self):
         ## 1. forum only
