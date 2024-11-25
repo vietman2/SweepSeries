@@ -15,3 +15,13 @@ export async function getPosts(forum?: string, tag?: number, search?: string) {
     return null;
   }
 }
+
+export async function getPostDetail(id: string) {
+  try {
+    const response = await axios.get(`/v1/posts/${id}/`);
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}

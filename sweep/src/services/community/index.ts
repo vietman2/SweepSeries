@@ -1,4 +1,4 @@
-import { getPosts } from "./posts";
+import { getPostDetail, getPosts } from "./posts";
 import { getTags } from "./tags";
 
-export { getPosts, getTags };
+export { getPostDetail, getPosts, getTags };
