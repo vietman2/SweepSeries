@@ -1,5 +1,5 @@
-import * as Router from "react-router-dom";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
+import * as Router from "react-router-dom";
 
 import { UserList } from "./UserList";
 import { sampleUsers } from "@data/members";

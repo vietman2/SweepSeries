@@ -1,5 +1,5 @@
-import { sampleUsers } from "@data/members";
 import { UserSimpleHeader, UserSimple } from "./UserSimple";
+import { sampleUsers } from "@data/members";
 import { renderWithProviders } from "@utils/test-utils";
 
 describe("<UserSimpleHeader />", () => {
