@@ -1,7 +1,8 @@
+import { AuthorType } from "./author";
+
 export type CommentType = {
   id: number;
-  commenter_uuid: string;
-  commenter_nickname: string;
+  author: AuthorType;
   content: string;
   created_at: string;
   num_likes: number;
@@ -15,8 +16,7 @@ export type CommentType = {
 
 export type ReCommentType = {
   id: number;
-  commenter_uuid: string;
-  commenter_nickname: string;
+  author: AuthorType;
   content: string;
   created_at: string;
   num_likes: number;
