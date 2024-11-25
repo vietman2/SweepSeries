@@ -3,7 +3,7 @@ from django.db import models
 from .utils import random_color_generator, random_nickname_generator
 
 class UserProfile(models.Model):
-    user            = models.OneToOneField('user.User', on_delete=models.CASCADE)
+    user            = models.ForeignKey('user.User', on_delete=models.CASCADE)
     nickname        = models.CharField(max_length=150, default=random_nickname_generator)
     profile_image   = models.ImageField(null=True)
     default_color   = models.CharField(max_length=7, default=random_color_generator)
