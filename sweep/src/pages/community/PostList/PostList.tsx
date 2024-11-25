@@ -56,7 +56,7 @@ export function PostList({ mode }: Readonly<Props>) {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await getPosts(mode);
+      const response = await getPosts(mode, selectedTag?.id, searchQuery);
 
       if (response) {
         setPosts(response.posts);
