@@ -1,12 +1,21 @@
-import { fireEvent } from "@testing-library/react-native";
+import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { PostList } from "./PostList";
+import * as AuthContext from "@contexts/auth";
+import * as PostsAPI from "@services/community/posts";
 import { renderWithProviders } from "@utils/test-utils";
+import { samplePosts, sampleTags } from "@testdata/community";
 
 jest.mock("expo-router", () => ({
   router: {
     push: jest.fn(),
   },
+}));
+jest.mock("@contexts/auth", () => ({
+  AuthProvider: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  useAuth: jest.fn(),
 }));
 jest.mock("@fragments/Post", () => ({
   PostSimple: () => null,
@@ -14,22 +23,59 @@ jest.mock("@fragments/Post", () => ({
 }));
 
 describe("<PostList />", () => {
-  it("renders and handles tag press", () => {
-    const { getByTestId } = renderWithProviders(<PostList mode="덕아웃" />);
-
-    fireEvent.press(getByTestId("MLB"));
-    fireEvent.press(getByTestId("MLB"));
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(AuthContext, "useAuth").mockReturnValue({
+      isAuthenticated: true,
+      login: jest.fn(),
+      logout: jest.fn(),
+      mode: "pro",
+    });
+    jest
+      .spyOn(PostsAPI, "getPosts")
+      .mockResolvedValue({ posts: samplePosts, tags: sampleTags });
   });
 
-  it("handles post press", () => {
+  it("handles fetch post error correctly", async () => {
+    jest.spyOn(PostsAPI, "getPosts").mockResolvedValue(null);
     const { getByTestId } = renderWithProviders(<PostList mode="덕아웃" />);
 
-    fireEvent.press(getByTestId("post-id-2"));
+    await waitFor(() => {
+      fireEvent.press(getByTestId("error"));
+    });
   });
 
-  it("handles search", () => {
+  it("renders and handles tag press", async () => {
+    const { getByTestId } = await waitFor(() =>
+      renderWithProviders(<PostList mode="덕아웃" />)
+    );
+
+    waitFor(() => {
+      fireEvent.press(getByTestId("MLB"));
+      fireEvent.press(getByTestId("MLB"));
+    });
+  });
+
+  it("handles post press", async () => {
     const { getByTestId } = renderWithProviders(<PostList mode="덕아웃" />);
 
-    fireEvent.press(getByTestId("search"));
+    await waitFor(() => {
+      fireEvent.press(getByTestId("post-id-2"));
+      fireEvent.press(getByTestId("pencil"));
+    });
+  });
+
+  it("renders without being logged in", async () => {
+    jest.spyOn(AuthContext, "useAuth").mockReturnValue({
+      isAuthenticated: false,
+      login: jest.fn(),
+      logout: jest.fn(),
+      mode: "guest",
+    });
+    const { getByTestId } = renderWithProviders(<PostList mode="덕아웃" />);
+
+    await waitFor(() => {
+      fireEvent.press(getByTestId("post-id-2"));
+    });
   });
 });

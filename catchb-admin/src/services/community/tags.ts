@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getTags = async () => {
   try {
-    const response = await axios.get(`/api/community/tags/`);
+    const response = await axios.get(`/api/tags/`);
 
     return response.data;
   } catch {
@@ -16,7 +16,7 @@ export const getTag = async (tagId: string | undefined) => {
   }
 
   try {
-    const response = await axios.get(`/api/community/tags/${tagId}/`);
+    const response = await axios.get(`/api/tags/${tagId}/`);
 
     return response.data;
   } catch {
@@ -32,7 +32,7 @@ export const createTag = async (
   bgColor: string
 ) => {
   try {
-    const response = await axios.post(`/api/community/tags/`, {
+    const response = await axios.post(`/api/tags/`, {
       forum_name: forum,
       name: label,
       icon,
@@ -59,7 +59,7 @@ export const updateTag = async (
   }
 
   try {
-    const response = await axios.put(`/api/community/tags/${tagId}/`, {
+    const response = await axios.put(`/api/tags/${tagId}/`, {
       forum_name: forum,
       name: label,
       icon,
@@ -79,7 +79,7 @@ export const deleteTag = async (tagId: string | undefined) => {
   }
 
   try {
-    await axios.delete(`/api/community/tags/${tagId}/`);
+    await axios.delete(`/api/tags/${tagId}/`);
 
     return true;
   } catch {

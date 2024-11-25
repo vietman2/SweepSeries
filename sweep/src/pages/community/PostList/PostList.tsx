@@ -3,13 +3,14 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 
 import { SvgIconButton } from "@components/Buttons";
+import { ErrorPage, LoadingComponent } from "@components/Fallbacks";
 import { Scroll, ScrollView } from "@components/ScrollView";
 import { Searchbar } from "@components/Search";
 import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
 import { PostSimple, Tag } from "@fragments/Post";
 import { PostSimpleType, TagType } from "@models/community";
-import { samplePosts, sampleTags } from "@testdata/community";
+import { getPosts } from "@services/community";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
@@ -22,7 +23,7 @@ export function PostList({ mode }: Readonly<Props>) {
   const [tagChoices, setTagChoices] = useState<TagType[]>([]);
   const [selectedTag, setSelectedTag] = useState<TagType | null>(null);
 
-  //const [error, setError] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshCount, setRefreshCount] = useState<number>(0);
 
@@ -49,27 +50,30 @@ export function PostList({ mode }: Readonly<Props>) {
     }
   };
 
-  const fetchPosts = async () => {
-    setLoading(true);
-    // TODO: fetch posts from the backend
-    console.log(mode); // 덕아웃, 드래프트, 마켓
-    if (!selectedTag) setPosts(samplePosts);
-    else if (selectedTag === sampleTags[0]) {
-      setPosts([samplePosts[0]]);
-    } else {
-      setPosts([samplePosts[1], samplePosts[2]]);
-    }
-    setTagChoices([sampleTags[0], sampleTags[1]]);
-    setLoading(false);
-  };
-
   const handleCreatePost = () => {
     // router.push("/community/create");
   };
 
   useEffect(() => {
+    const fetchPosts = async () => {
+      const response = await getPosts(mode);
+
+      if (response) {
+        setPosts(response.posts);
+        setTagChoices(response.tags);
+        setError(false);
+      } else {
+        setError(true);
+      }
+
+      setLoading(false);
+    };
+
     fetchPosts();
-  }, [refreshCount, selectedTag]);
+  }, [refreshCount, selectedTag, mode]);
+
+  if (loading) return <LoadingComponent />;
+  if (error) return <ErrorPage onRefresh={handleRefresh} />;
 
   return (
     <>

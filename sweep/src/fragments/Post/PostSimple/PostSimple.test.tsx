@@ -2,6 +2,9 @@ import { PostSimple } from "./PostSimple";
 import { samplePosts } from "@testdata/community";
 import { renderWithProviders } from "@utils/test-utils";
 
+jest.mock("../AuthorProfile/AuthorProfile", () => ({
+  AuthorProfile: () => null,
+}));
 jest.mock("../Tag/Tag", () => ({
   Tag: () => null,
 }));

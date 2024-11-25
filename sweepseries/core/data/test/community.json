@@ -1,0 +1,71 @@
+[
+  {
+    "model": "post.image",
+    "pk": 1,
+    "fields": {
+      "created_at": "2024-07-21T01:44:17.103",
+      "updated_at": "2024-07-21T01:44:17.103",
+      "is_deleted": false,
+      "deleted_at": null,
+      "image": "/path/image.jpg"
+    }
+  },
+  {
+    "model": "post.post",
+    "pk": 2024072300000001,
+    "fields": {
+      "created_at": "2024-07-21T01:44:48.656",
+      "updated_at": "2024-07-21T11:54:14.349",
+      "is_deleted": false,
+      "deleted_at": null,
+      "forum": 1,
+      "author": 1,
+      "title": "제목 1",
+      "content": "내용 1",
+      "tag": 1,
+      "num_views": 2,
+      "is_under_review": false,
+      "images": [1]
+    }
+  },
+  {
+    "model": "post.post",
+    "pk": 2024072300000002,
+    "fields": {
+      "created_at": "2024-07-21T01:44:48.656",
+      "updated_at": "2024-07-21T11:54:14.349",
+      "is_deleted": false,
+      "deleted_at": null,
+      "forum": 2,
+      "author": 1,
+      "title": "제목 1",
+      "content": "내용 1내용 1내용 1내용 1내용 1내용 1내용 1내용 1내용 1내용 1내용 1내용 1내용 1내용 1내용 1내용 1내용 1내용 1내용 1내용 1",
+      "tag": 2,
+      "num_views": 2,
+      "is_under_review": false,
+      "images": []
+    }
+  },
+  {
+    "model": "tag.tag",
+    "pk": 1,
+    "fields": {
+      "forum": 1,
+      "name": "Tag 1",
+      "icon": "https://via.placeholder.com/150",
+      "color": "#ffffff",
+      "bgcolor": "#000000"
+    }
+  },
+  {
+    "model": "tag.tag",
+    "pk": 2,
+    "fields": {
+      "forum": 1,
+      "name": "Tag 2",
+      "icon": "https://via.placeholder.com/150",
+      "color": "#000000",
+      "bgcolor": "#ffffff"
+    }
+  }
+]

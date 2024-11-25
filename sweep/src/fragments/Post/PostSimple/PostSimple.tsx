@@ -1,5 +1,6 @@
 import { Image, StyleSheet, View } from "react-native";
 
+import { AuthorProfile } from "../AuthorProfile/AuthorProfile";
 import { Tag } from "../Tag/Tag";
 import { Divider } from "@components/Dividers";
 import { AppIcon } from "@components/Icons";
@@ -19,30 +20,29 @@ export function PostSimple({ post }: Readonly<Props>) {
   return (
     <View style={styles.container}>
       <Divider />
-      <View style={styles.horizontal}>
-        <View style={styles.main}>
-          <Tag tag={post.tag} />
-          <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
-            {post.title}
-          </Text>
-          <Text style={styles.content} numberOfLines={3} ellipsizeMode="tail">
-            {post.content}
-          </Text>
-          <Text style={styles.grayText}>{post.created_at}</Text>
+      <View style={styles.main}>
+        <Tag tag={post.tag} />
+        <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+          {post.title}
+        </Text>
+        <View style={styles.horizontal}>
+          <View style={styles.left}>
+            <Text style={styles.content} numberOfLines={3} ellipsizeMode="tail">
+              {post.content}
+            </Text>
+            <Text style={styles.grayText}>{post.created_at}</Text>
+          </View>
+          {post.image !== null ? (
+            <Image src={post.image} style={styles.image} />
+          ) : null}
         </View>
-        {post.image !== null ? (
-          <Image src={post.image} style={styles.image} />
-        ) : null}
       </View>
       <View style={styles.bottomBar}>
-        <View style={styles.horizontal}>
-          <View style={styles.placeholder} />
-          <Text style={styles.authorText}>{post.author_nickname}</Text>
-        </View>
+        <AuthorProfile author={post.author} />
         <View style={styles.horizontal}>
           <View style={styles.count}>
             <AppIcon icon="eye" size={18} color={theme.lowEmphasis} />
-            <Text style={styles.countText}>{post.num_clicks}</Text>
+            <Text style={styles.countText}>{post.num_views}</Text>
           </View>
           <View style={styles.count}>
             <AppIcon icon="heart" size={16} color={theme.lowEmphasis} />
@@ -72,6 +72,9 @@ const createStyles = (theme: ThemeColorType) =>
       fontSize: 20,
       marginVertical: 8,
     },
+    left: {
+      flex: 1,
+    },
     content: {
       fontSize: 14,
       marginTop: 4,
@@ -95,13 +98,6 @@ const createStyles = (theme: ThemeColorType) =>
       alignItems: "center",
       gap: 4,
     },
-    placeholder: {
-      width: 18,
-      height: 18,
-      marginRight: 5,
-      borderRadius: 9,
-      backgroundColor: theme.lowEmphasis,
-    },
     image: {
       width: 75,
       height: 75,
@@ -118,8 +114,5 @@ const createStyles = (theme: ThemeColorType) =>
     },
     countText: {
       color: "gray",
-    },
-    authorText: {
-      color: theme.highEmphasis,
     },
   });

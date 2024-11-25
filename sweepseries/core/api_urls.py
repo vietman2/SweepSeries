@@ -9,6 +9,7 @@ from auth.person.views import PersonViewSet
 from auth.user.views import UserViewSet
 
 ## Community
+from community.post.views import PostViewSet
 from community.tag.views import TagViewSet
 
 router = DefaultRouter()
@@ -17,7 +18,8 @@ router.register(r'agreements', AgreementViewSet, basename='agreements')
 router.register(r'people', PersonViewSet, basename='people')
 router.register(r'users', UserViewSet, basename='users')
 
-router.register(r'community/tags', TagViewSet, basename='tags')
+router.register(r'posts', PostViewSet, basename='posts')
+router.register(r'tags', TagViewSet, basename='tags')
 
 urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
