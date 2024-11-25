@@ -4,10 +4,14 @@ export const samplePeople: PersonType[] = [
   {
     full_name: "John Doe",
     phone_number: "123456",
+    birth_date: "1990-01-01",
+    gender: "M",
   },
   {
     full_name: "Jane Doe",
     phone_number: "654321",
+    birth_date: "2000-01-01",
+    gender: "F",
   },
 ];
 
