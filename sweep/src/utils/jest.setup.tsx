@@ -83,12 +83,18 @@ jest.mock("@components/Dividers", () => ({
   Divider: () => null,
   VerticalDivider: () => null,
 }));
-jest.mock("@components/Fallbacks", () => ({
-  Empty: () => null,
-  ErrorPage: () => null,
-  LoadingComponent: () => null,
-  LoginNeeded: () => null,
-}));
+jest.mock("@components/Fallbacks", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+
+  return {
+    Empty: () => null,
+    ErrorPage: ({ onRefresh }: { onRefresh: () => void }) => (
+      <TouchableOpacity onPress={onRefresh} testID="error" />
+    ),
+    LoadingComponent: () => "LoadingComponent",
+    LoginNeeded: () => null,
+  };
+});
 jest.mock("@components/Filters", () => {
   const { TouchableOpacity } = jest.requireActual("react-native");
 
@@ -223,9 +229,10 @@ jest.mock("@contexts/auth", () => ({
     <div>{children}</div>
   ),
   useAuth: () => ({
+    isAuthenticated: false,
     login: jest.fn(),
     logout: jest.fn(),
-    token: "token",
+    mode: "guest",
   }),
 }));
 jest.mock("@contexts/theme", () => ({
