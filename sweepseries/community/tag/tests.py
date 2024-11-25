@@ -1,10 +1,10 @@
 from rest_framework.test import APITestCase
 
 class TagAPITest(APITestCase):
-    fixtures = ['core/data/test/tags.json']
+    fixtures = ['core/data/test/community.json', 'core/data/test/users.json']
 
     def setUp(self):
-        self.url = '/api/community/tags/'
+        self.url = '/api/tags/'
         self.create_data = {
             "forum_name": "덕아웃",
             "name": "test",

@@ -17,7 +17,7 @@ router.register(r'agreements', AgreementViewSet, basename='agreements')
 router.register(r'people', PersonViewSet, basename='people')
 router.register(r'users', UserViewSet, basename='users')
 
-router.register(r'community/tags', TagViewSet, basename='tags')
+router.register(r'tags', TagViewSet, basename='tags')
 
 urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
