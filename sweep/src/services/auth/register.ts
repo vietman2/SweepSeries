@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function checkUsernameEmail(username: string, email: string) {
   try {
-    const response = await axios.get("/api/check-username-email/", {
+    const response = await axios.get("/v1/check-username-email/", {
       params: {
         username,
         email,
@@ -30,7 +30,7 @@ export async function checkUsernameEmail(username: string, email: string) {
 
 export async function checkPassword(password: string, password2: string) {
   try {
-    const response = await axios.post("/api/check-password/", {
+    const response = await axios.post("/v1/check-password/", {
       password,
       password2,
     });
