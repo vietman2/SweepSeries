@@ -55,7 +55,11 @@ const Container = styled.div`
   }
 
   > div:first-child {
-   width: 320px;
+    width: 320px;
+  }
+
+  > div:nth-child(4) {
+    width: 240px;
   }
 
   > div:last-child {
@@ -67,4 +71,3 @@ const Header = styled(Container)`
   font-weight: 700;
   color: ${({ theme }) => theme.colors.foreground900};
 `;
-
