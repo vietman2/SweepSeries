@@ -28,9 +28,22 @@ export const Home: TabType = {
 
 export const User: TabType = {
   title: "회원 관리",
-  path: "/users",
-  pathName: "users",
-  subtabs: [],
+  path: "/members",
+  pathName: "members",
+  subtabs: [
+    {
+      title: "유저 목록",
+      path: "/members/users",
+    },
+    {
+      title: "미가입 회원",
+      path: "/members/people",
+    },
+    {
+      title: "관리자 계정",
+      path: "/members/admins",
+    },
+  ],
 };
 
 export const Community: TabType = {
