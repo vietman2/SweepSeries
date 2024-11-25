@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import { Divider } from "@components/Dividers";
 import { ErrorComponent, Loading } from "@components/Fallbacks";
+import { UserProfile } from "@fragments/User";
 import { UserType } from "@models/members";
 import { getUserDetails } from "@services/auth";
 
@@ -94,6 +95,9 @@ export function UserDetail() {
       <Divider />
       <Profiles>
         <Subtitle>프로필 (커뮤니티)</Subtitle>
+        {user.profiles.map((profile) => (
+          <UserProfile key={profile.nickname} profile={profile} />
+        ))}
       </Profiles>
     </Container>
   );
@@ -149,7 +153,7 @@ const Row = styled.div`
 
 const Profiles = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 12px;
 `;
 
