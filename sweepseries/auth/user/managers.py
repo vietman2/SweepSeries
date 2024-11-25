@@ -1,6 +1,7 @@
 from django.contrib.auth.base_user import BaseUserManager
 
 from auth.person.models import Person
+from auth.userprofile.models import UserProfile
 
 class UserManager(BaseUserManager):
     def create_user(self, password=None, **extra_fields):
@@ -24,5 +25,7 @@ class UserManager(BaseUserManager):
         user.is_staff = True
 
         user.save(using=self._db)
+
+        UserProfile.objects.create(user=user)
 
         return user
