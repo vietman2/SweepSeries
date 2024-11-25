@@ -5,6 +5,8 @@ from rest_framework.routers import DefaultRouter
 
 ## Auth
 from auth.agreements.views import AgreementViewSet
+from auth.person.views import PersonViewSet
+from auth.user.views import UserViewSet
 
 ## Community
 from community.tag.views import TagViewSet
@@ -12,6 +14,8 @@ from community.tag.views import TagViewSet
 router = DefaultRouter()
 
 router.register(r'agreements', AgreementViewSet, basename='agreements')
+router.register(r'people', PersonViewSet, basename='people')
+router.register(r'users', UserViewSet, basename='users')
 
 router.register(r'community/tags', TagViewSet, basename='tags')
 
