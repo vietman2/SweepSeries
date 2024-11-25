@@ -14,10 +14,10 @@ describe("getPosts", () => {
     expect(result).toEqual(posts);
   });
     
-  it("should fetch posts with forum", async () => {
+  it("should fetch posts with queries", async () => {
     jest.spyOn(axios, "get").mockResolvedValue(response);
 
-    const result = await getPosts("forum");
+    const result = await getPosts("forum", 1, "search");
 
     expect(result).toEqual(posts);
   });

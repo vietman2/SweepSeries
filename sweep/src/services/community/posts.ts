@@ -1,10 +1,12 @@
 import axios from "axios";
 
-export async function getPosts(forum?: string) {
+export async function getPosts(forum?: string, tag?: number, search?: string) {
   try {
     const response = await axios.get("/api/posts/", {
-      params: forum && {
+      params: {
         forum,
+        tag,
+        search,
       },
     });
 
