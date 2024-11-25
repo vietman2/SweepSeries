@@ -1,5 +1,6 @@
 import { AppIcon } from "./AppIcon";
 import { MainLogo } from "./Logo";
+import { ProfileIcon } from "./ProfileIcon";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.unmock("@components/Icons");
@@ -21,5 +22,11 @@ describe("<AppIcon />", () => {
 describe("<MainLogo />", () => {
   it("renders correctly", () => {
     renderWithProviders(<MainLogo />);
+  });
+});
+
+describe("<ProfileIcon />", () => {
+  it("renders correctly", () => {
+    renderWithProviders(<ProfileIcon size={16} color="white" />);
   });
 });
