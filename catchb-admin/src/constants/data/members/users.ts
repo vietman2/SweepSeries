@@ -30,7 +30,7 @@ export const sampleUsers: UserType[] = [
         introduction: "Hello, I'm John.",
       },
       {
-        profile_image: "https://via.placeholder.com/150",
+        profile_image: "",
         color: "#00ff00",
         nickname: "Doe",
         introduction: "Hello, I'm Doe.",
