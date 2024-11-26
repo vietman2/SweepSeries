@@ -93,5 +93,15 @@
       "author": 1,
       "content": "대댓글 내용 1"
     }
+  },
+  {
+    "model": "post.postcontentview",
+    "pk": 1,
+    "fields": {
+      "post": 2024072300000002,
+      "user": "2",
+      "viewed_first_at": "2024-07-21T01:44:49.078",
+      "viewed_last_at": "2024-07-23T11:54:14.365"
+    }
   }
 ]
