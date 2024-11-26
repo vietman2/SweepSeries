@@ -9,6 +9,7 @@ class RecommentSerializer(serializers.ModelSerializer):
     created_at      = serializers.SerializerMethodField()
     num_likes       = serializers.SerializerMethodField()
     is_liked        = serializers.SerializerMethodField()
+    is_author       = serializers.SerializerMethodField()
 
     class Meta:
         model = ReComment
@@ -19,6 +20,7 @@ class RecommentSerializer(serializers.ModelSerializer):
             'created_at',
             'num_likes',
             'is_liked',
+            'is_author'
         ]
 
     def get_created_at(self, obj):
@@ -28,8 +30,16 @@ class RecommentSerializer(serializers.ModelSerializer):
         return obj.recomment_likes.count()
 
     def get_is_liked(self, obj):
-        user = self.context['user']
-        return obj.recomment_likes.filter(user=user).exists()
+        profile = self.context.get('profile', None)
+        if not profile:
+            return False
+        return obj.recomment_likes.filter(user=profile).exists()
+
+    def get_is_author(self, obj):
+        profile = self.context.get('profile', None)
+        if not profile:
+            return False
+        return obj.author.user == profile.user
 
 class CommentSerializer(serializers.ModelSerializer):
     author          = UserProfileSerializer()
@@ -37,6 +47,7 @@ class CommentSerializer(serializers.ModelSerializer):
     num_likes       = serializers.SerializerMethodField()
     num_recomments  = serializers.SerializerMethodField()
     is_liked        = serializers.SerializerMethodField()
+    is_author       = serializers.SerializerMethodField()
     recomments      = serializers.SerializerMethodField()
 
     class Meta:
@@ -49,6 +60,7 @@ class CommentSerializer(serializers.ModelSerializer):
             'num_likes',
             'num_recomments',
             'is_liked',
+            'is_author',
             'recomments'
         ]
 
@@ -62,16 +74,22 @@ class CommentSerializer(serializers.ModelSerializer):
         return obj.recomments.filter(is_deleted=False).count()
 
     def get_is_liked(self, obj):
-        user = self.context.get('user', None)
-        if not user:
+        profile = self.context.get('profile', None)
+        if not profile:
             return False
-        return obj.comment_likes.filter(user_uuid=user).exists()
+        return obj.comment_likes.filter(user=profile).exists()
+
+    def get_is_author(self, obj):
+        profile = self.context.get('profile', None)
+        if not profile:
+            return False
+        return obj.author.user == profile.user
 
     def get_recomments(self, obj):
         recomments = obj.recomments.filter(is_deleted=False, recomment_reports__isnull=True)
         recomments.order_by('-created_at')
 
         serializer = RecommentSerializer(recomments, many=True)
-        serializer.context['user'] = self.context.get('user', None)
+        serializer.context['profile'] = self.context.get('profile', None)
 
         return serializer.data
