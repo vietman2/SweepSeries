@@ -4,9 +4,10 @@ import axios from "axios";
 import { refresh } from "@services/auth";
 
 interface AuthContextType {
-  login: (mode: "pro" | "normal") => void;
+  login: (mode: "pro" | "normal", profileIndex: number) => void;
   logout: () => void;
   mode: "pro" | "normal" | "guest";
+  selectedProfileId: number | null;
   isAuthenticated: boolean;
 }
 
@@ -16,6 +17,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [mode, setMode] = useState<"pro" | "normal" | "guest">("guest");
+  const [selectedProfileId, setSelectedProfileId] = useState<number | null>(
+    null
+  );
 
   useEffect(() => {
     const interceptor = axios.interceptors.response.use(
@@ -56,18 +60,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     };
   }, []);
 
-  const login = (mode: "pro" | "normal") => {
+  const login = (mode: "pro" | "normal", profileIndex: number) => {
     setMode(mode);
+    setSelectedProfileId(profileIndex);
   };
 
   const logout = () => {
     setMode("guest");
+    setSelectedProfileId(null);
   };
 
   const isAuthenticated = mode !== "guest";
 
   const value = useMemo(
-    () => ({ mode, login, logout, isAuthenticated }),
+    () => ({ mode, login, logout, isAuthenticated, selectedProfileId }),
     [mode]
   );
 
