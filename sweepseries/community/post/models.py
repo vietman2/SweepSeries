@@ -14,7 +14,7 @@ class Image(TimeStampedModel):
     objects = models.Manager()
 
     class Meta:
-        db_table = 'image'
+        db_table = 'post_image'
 
 class Post(TimeStampedModel):
     id              = CustomAutoField()
@@ -67,5 +67,5 @@ class PostContentView(models.Model):
     objects = models.Manager()
 
     class Meta:
-        db_table = 'content_view'
+        db_table = 'post_content_view'
         unique_together = ('post', 'user')
