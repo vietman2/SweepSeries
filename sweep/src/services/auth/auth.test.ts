@@ -45,7 +45,7 @@ describe("logout", () => {
 
     const result = await logout();
 
-    expect(result).toBe(false);
+    expect(result).toBe(null);
   });
 });
 
