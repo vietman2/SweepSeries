@@ -1,7 +1,6 @@
 from django.utils import timezone
 from rest_framework import serializers
 
-from auth.userprofile.models import UserProfile
 from auth.userprofile.serializers import UserProfileSerializer
 from community.comment.serializers import CommentSerializer
 from community.tag.serializers import TagSerializer
@@ -18,13 +17,12 @@ class PostSimpleSerializer(serializers.ModelSerializer):
     num_likes       = serializers.SerializerMethodField()
     num_comments    = serializers.SerializerMethodField()
     is_liked        = serializers.SerializerMethodField()
-    is_author       = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
         fields = [
             'id', 'tag', 'title', 'content', 'image', 'created_at', 'author',
-            'num_views', 'num_likes', 'num_comments', 'is_liked', 'is_author'
+            'num_views', 'num_likes', 'num_comments', 'is_liked'
         ]
 
     def get_content(self, obj):
@@ -48,12 +46,8 @@ class PostSimpleSerializer(serializers.ModelSerializer):
         return obj.comments.filter(is_deleted=False).count()
 
     def get_is_liked(self, obj):
-        user = self.context['user']
+        user = self.context['profile']
         return obj.post_likes.filter(user=user).exists()
-
-    def get_is_author(self, obj):
-        user = self.context['user']
-        return obj.author.user == user
 
 class PostImageSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
@@ -74,13 +68,14 @@ class PostDetailSerializer(serializers.ModelSerializer):
     num_likes       = serializers.SerializerMethodField()
     num_comments    = serializers.SerializerMethodField()
     is_liked        = serializers.SerializerMethodField()
+    is_author       = serializers.SerializerMethodField()
     comments        = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
         fields = [
             "id", "tag", "author", "created_at", "title", "content", "images",
-            "num_views", "num_likes", "num_comments", "comments", "is_liked"
+            "num_views", "num_likes", "num_comments", "comments", "is_liked", 'is_author'
         ]
 
     def get_created_at(self, obj):
@@ -98,6 +93,12 @@ class PostDetailSerializer(serializers.ModelSerializer):
             return False
 
         return obj.post_likes.filter(user=profile).exists()
+
+    def get_is_author(self, obj):
+        profile = self.context.get('profile', None)
+        if profile is None:
+            return False
+        return obj.author.user == profile.user
 
     def increment_clicks(self):
         ## TODO: Implement Redis to prevent multiple clicks
@@ -123,7 +124,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
         comments.order_by('-created_at')
 
         serializer = CommentSerializer(comments, many=True)
-        serializer.context['uuid'] = self.context.get('uuid', None)
+        serializer.context['profile'] = self.context.get('profile', None)
 
         ## TODO: Think about pagination
         return serializer.data
