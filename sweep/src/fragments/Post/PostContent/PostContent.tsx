@@ -37,12 +37,12 @@ export function PostContent({ post, refresh }: Readonly<Props>) {
 
   const loginAlert = () => {
     alert("로그인이 필요합니다.", "로그인 후 이용해주세요.", () => {}, "확인");
-  }
+  };
 
   const handleEditSubmit = () => {}; // TODO: integrate with the backend
   const removePost = () => {}; // TODO: integrate with the backend
   const handleReportSubmit = () => {}; // TODO: integrate with the backend
-  
+
   const handleLike = async () => {
     if (!isAuthenticated) {
       loginAlert();
@@ -87,9 +87,7 @@ export function PostContent({ post, refresh }: Readonly<Props>) {
         { label: "삭제하기", onPress: handleDeletePress },
       ]);
     } else {
-      setActions([
-        { label: "신고하기", onPress: handleReportPress },
-      ]);
+      setActions([{ label: "신고하기", onPress: handleReportPress }]);
     }
   }, []);
 
@@ -157,7 +155,11 @@ export function PostContent({ post, refresh }: Readonly<Props>) {
             <AppIcon icon="eye" size={20} color={theme.lowEmphasis} />
             <Text style={styles.countText}>{post.num_views}</Text>
           </View>
-          <TouchableOpacity onPress={handleLike} style={styles.count} testID="like">
+          <TouchableOpacity
+            onPress={handleLike}
+            style={styles.count}
+            testID="like"
+          >
             {post.is_liked ? (
               <AppIcon icon="heart" size={16} color={theme.primary} />
             ) : (
