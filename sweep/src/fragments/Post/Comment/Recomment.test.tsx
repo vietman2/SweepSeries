@@ -3,6 +3,7 @@ import { fireEvent } from "@testing-library/react-native";
 import { Recomment } from "./Recomment";
 import * as AuthContext from "@contexts/auth";
 import * as AlertAPI from "@services/alert/alert";
+import * as RecommentsAPI from "@services/community/recomments";
 import { sampleRecomments } from "@testdata/community";
 import { renderWithProviders } from "@utils/test-utils";
 
@@ -63,5 +64,38 @@ describe("<Recomment />", () => {
     );
 
     fireEvent.press(getByTestId("삭제하기"));
+  });
+
+  it("handles like request", () => {
+    jest.spyOn(RecommentsAPI, "likeRecomment").mockResolvedValueOnce(true);
+    const { getByTestId } = renderWithProviders(
+      <Recomment recomment={sampleRecomments[0]} refresh={jest.fn()} />
+    );
+
+    fireEvent.press(getByTestId("like"));
+  });
+
+  it("handles like fail", () => {
+    jest.spyOn(RecommentsAPI, "likeRecomment").mockResolvedValueOnce(null);
+    const { getByTestId } = renderWithProviders(
+      <Recomment recomment={sampleRecomments[0]} refresh={jest.fn()} />
+    );
+
+    fireEvent.press(getByTestId("like"));
+  });
+
+  it("handles unauthorized", () => {
+    jest.spyOn(AuthContext, "useAuth").mockReturnValue({
+      login: jest.fn(),
+      logout: jest.fn(),
+      mode: "guest",
+      isAuthenticated: false,
+      selectedProfileId: null,
+    });
+    const { getByTestId } = renderWithProviders(
+      <Recomment recomment={sampleRecomments[0]} refresh={jest.fn()} />
+    );
+
+    fireEvent.press(getByTestId("like"));
   });
 });
