@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-//import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 
 import { ErrorPage } from "@components/Fallbacks";
 import { AppIcon } from "@components/Icons";
@@ -17,11 +17,11 @@ import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
 import { Comment, PostContent } from "@fragments/Post";
 import { PostDetailType } from "@models/community";
+import { getPostDetail } from "@services/community";
 import { ThemeColorType } from "@themes/colors";
-import { samplePostDetail } from "@testdata/community";
 
 export function PostDetail() {
-  //  const { id } = useLocalSearchParams();
+  const { id } = useLocalSearchParams<{ id: string }>();
   const [post, setPost] = useState<PostDetailType>();
   const [newComment, setNewComment] = useState<string>("");
   const [commentMode, setCommentMode] = useState<boolean>(true);
@@ -29,7 +29,7 @@ export function PostDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [refreshCount, setRefreshCount] = useState<number>(0);
-  
+
   const { isAuthenticated } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -47,17 +47,15 @@ export function PostDetail() {
 
   const fetchPost = async () => {
     setLoading(true);
-    //const response = await getPostDetail(postId, token);
 
-    //if (response.status === 200) {
-    //  setPost(response.data);
-    //  setError(false);
-    //} else {
-    //  setError(true);
-    //}
+    const response = await getPostDetail(id);
 
-    setPost(samplePostDetail);
-    setError(false);
+    if (response) {
+      setPost(response);
+      setError(false);
+    } else {
+      setError(true);
+    }
 
     setLoading(false);
   };
@@ -87,12 +85,13 @@ export function PostDetail() {
             <PostContent post={post} />
             {post.comments.length > 0 ? (
               <View style={styles.comments}>
-                {post.comments.map((comment) => (
+                {post.comments.map((comment, index) => (
                   <Comment
                     comment={comment}
                     enterRecomment={enterRecommentMode}
                     refresh={handleRefresh}
                     recommentMode={!commentMode}
+                    first={index === 0}
                     key={comment.id}
                   />
                 ))}
@@ -100,7 +99,6 @@ export function PostDetail() {
             ) : null}
           </Pressable>
         </ScrollView>
-
         {commentMode && isAuthenticated ? (
           <View style={styles.newcomment}>
             <View style={styles.placeholder} />

@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'auth.user.apps.UserConfig',
     'auth.userprofile.apps.UserprofileConfig',
 
+    'community.comment.apps.CommentConfig',
     'community.post.apps.PostConfig',
     'community.tag.apps.TagConfig',
 ]

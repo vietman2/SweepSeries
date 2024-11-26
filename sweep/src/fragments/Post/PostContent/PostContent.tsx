@@ -10,6 +10,7 @@ import { GSScroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
 import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
+import { AuthorProfile } from "@fragments/Author";
 import { PostDetailType } from "@models/community";
 import { alert } from "@services/alert";
 import { ThemeColorType } from "@themes/colors";
@@ -63,7 +64,7 @@ export function PostContent({ post }: Readonly<Props>) {
   };
 
   useEffect(() => {
-    if (post.is_my_post) {
+    if (post.is_author) {
       setActions([
         { label: "신고하기", onPress: handleReportPress },
         { label: "차단하기", onPress: onBlock },
@@ -86,9 +87,8 @@ export function PostContent({ post }: Readonly<Props>) {
         </View>
         <View style={styles.horizontal}>
           <View style={styles.horizontal}>
-            <View style={styles.placeholder} />
-            <Text style={styles.authorText}>{post.author_nickname}</Text>
-            <Text style={styles.grayText}>{`  ${post.created_at}`}</Text>
+            <AuthorProfile author={post.author} />
+            <Text style={styles.grayText}>{`${post.created_at}`}</Text>
           </View>
           {isAuthenticated && (
             <PopupMenu items={actions}>
@@ -141,7 +141,7 @@ export function PostContent({ post }: Readonly<Props>) {
         <View style={styles.footer}>
           <View style={styles.count}>
             <AppIcon icon="eye" size={20} color={theme.lowEmphasis} />
-            <Text style={styles.countText}>{post.num_clicks}</Text>
+            <Text style={styles.countText}>{post.num_views}</Text>
           </View>
           <TouchableOpacity onPress={likePost} style={styles.count}>
             {post.is_liked ? (
@@ -224,6 +224,7 @@ const createStyles = (theme: ThemeColorType) =>
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
+      gap: 8,
     },
     placeholder: {
       width: 24,

@@ -10,6 +10,7 @@ import { PopupMenu } from "@components/Menus";
 import { Text } from "@components/Texts";
 import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
+import { AuthorProfile } from "@fragments/Author";
 import { CommentType } from "@models/community";
 import { alert } from "@services/alert";
 import { ThemeColorType } from "@themes/colors";
@@ -19,6 +20,7 @@ interface CommentProps {
   recommentMode: boolean;
   enterRecomment: () => void;
   refresh: () => void;
+  first?: boolean;
 }
 
 export function Comment({
@@ -26,6 +28,7 @@ export function Comment({
   recommentMode,
   enterRecomment,
   refresh,
+  first = false,
 }: Readonly<CommentProps>) {
   const [newComment, setNewComment] = useState<string>("");
   const [editedContent, setEditedContent] = useState<string>(comment.content);
@@ -107,7 +110,7 @@ export function Comment({
   return (
     <>
       <View>
-        <Divider />
+        {first ? null : <Divider />}
         <View
           style={[
             styles.comment,
@@ -121,8 +124,7 @@ export function Comment({
         >
           <View style={styles.horizontalFull}>
             <View style={styles.horizontal}>
-              <View style={styles.placeholder} />
-              <Text style={styles.grayText}>{comment.commenter_nickname}</Text>
+              <AuthorProfile author={comment.author} />
             </View>
             {isAuthenticated && (
               <PopupMenu items={actions}>
@@ -188,11 +190,12 @@ export function Comment({
           <View style={styles.recomments}>
             <AppIcon icon="downright" color={theme.lowEmphasis} size={20} />
             <View style={styles.recomment}>
-              {comment.recomments.map((recomment) => (
+              {comment.recomments.map((recomment, index) => (
                 <Recomment
                   key={recomment.id}
                   recomment={recomment}
                   refresh={refresh}
+                  first={index === 0}
                 />
               ))}
             </View>
@@ -231,6 +234,7 @@ const createStyles = (theme: ThemeColorType) =>
       paddingVertical: 4,
       paddingLeft: 8,
       paddingRight: 4,
+      gap: 4,
       borderRadius: 4,
     },
     horizontalFull: {
@@ -283,7 +287,7 @@ const createStyles = (theme: ThemeColorType) =>
     recomments: {
       flex: 1,
       flexDirection: "row",
-      marginBottom: 8,
+      marginVertical: 8,
       paddingLeft: 16,
     },
     recomment: {

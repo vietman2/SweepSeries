@@ -76,8 +76,7 @@ export const samplePosts: PostSimpleType[] = [
 
 export const samplePostDetail: PostDetailType = {
   id: 1,
-  author_uuid: "uuid",
-  author_nickname: "작성자",
+  author: sampleAuthor,
   title: "야구 장비 추천 좀 부탁드립니다!",
   content:
     "야구 보러 갈 때마다 경기장 음식을 꼭 먹어야하는데, 다들 경기장에서 자주 먹는 음식이 있나요? 추천해주시면 다음에 시도해보려고요!",
@@ -87,13 +86,11 @@ export const samplePostDetail: PostDetailType = {
     { id: 2, url: "https://via.placeholder.com/150" },
     { id: 3, url: "https://via.placeholder.com/150" },
   ],
-  forum: "덕아웃",
   created_at: "5분 전",
-  updated_at: "5분 전",
   num_comments: 1,
   num_likes: 1,
-  num_clicks: 1,
+  num_views: 1,
   is_liked: true,
-  is_my_post: true,
+  is_author: false,
   comments: sampleComments,
 };

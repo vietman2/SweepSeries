@@ -1,10 +1,10 @@
+import { sampleAuthor } from "./authors";
 import { CommentType, ReCommentType } from "@models/community";
 
 export const sampleRecomments: ReCommentType[] = [
   {
     id: 1,
-    commenter_uuid: "uuid",
-    commenter_nickname: "대댓글쓴이",
+    author: sampleAuthor,
     content: "대댓글 내용입니다.",
     created_at: "5분 전",
     num_likes: 1,
@@ -13,8 +13,7 @@ export const sampleRecomments: ReCommentType[] = [
   },
   {
     id: 2,
-    commenter_uuid: "uuid",
-    commenter_nickname: "대댓글쓴이",
+    author: sampleAuthor,
     content: "대댓글 내용입니다.",
     created_at: "5분 전",
     num_likes: 1,
@@ -26,8 +25,7 @@ export const sampleRecomments: ReCommentType[] = [
 export const sampleComments: CommentType[] = [
   {
     id: 1,
-    commenter_uuid: "uuid",
-    commenter_nickname: "댓글쓴이",
+    author: sampleAuthor,
     content: "댓글 내용입니다.",
     created_at: "5분 전",
     num_likes: 1,

@@ -31,23 +31,17 @@ type ImageType = {
 
 export type PostDetailType = {
   id: number;
-  forum: string;
-  author_uuid: string;
-  author_nickname: string;
+  tag: TagType;
+  author: AuthorType;
+  created_at: string;
   title: string;
   content: string;
-
-  tag: TagType;
   images: ImageType[];
-  comments: CommentType[];
 
-  num_comments: number;
-  num_clicks: number;
+  num_views: number;
   num_likes: number;
-
+  num_comments: number;
+  comments: CommentType[];
   is_liked: boolean;
-  is_my_post: boolean;
-
-  created_at: string;
-  updated_at: string;
+  is_author: boolean;
 };

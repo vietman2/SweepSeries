@@ -15,6 +15,9 @@ jest.mock("@contexts/auth", () => ({
   ),
   useAuth: jest.fn(),
 }));
+jest.mock("@fragments/Author", () => ({
+  AuthorProfile: () => null,
+}));
 
 describe("<Recomment />", () => {
   beforeEach(() => {

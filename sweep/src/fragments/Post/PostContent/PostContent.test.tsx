@@ -18,6 +18,9 @@ jest.mock("@contexts/auth", () => ({
   ),
   useAuth: jest.fn(),
 }));
+jest.mock("@fragments/Author", () => ({
+  AuthorProfile: () => null,
+}));
 
 describe("<PostContent />", () => {
   beforeEach(() => {
@@ -41,7 +44,11 @@ describe("<PostContent />", () => {
 
   it("renders correctly and enter edit mode", async () => {
     const { getByTestId, getByText } = await waitFor(() =>
-      renderWithProviders(<PostContent post={samplePostDetail} />)
+      renderWithProviders(
+        <PostContent
+          post={{ ...samplePostDetail, is_author: true, is_liked: false }}
+        />
+      )
     );
 
     fireEvent.press(getByTestId("수정하기"));
@@ -50,7 +57,9 @@ describe("<PostContent />", () => {
 
   it("handles delete correctly", async () => {
     const { getByTestId } = await waitFor(() =>
-      renderWithProviders(<PostContent post={samplePostDetail} />)
+      renderWithProviders(
+        <PostContent post={{ ...samplePostDetail, is_author: true }} />
+      )
     );
 
     fireEvent.press(getByTestId("삭제하기"));

@@ -67,5 +67,18 @@
       "color": "#000000",
       "bgcolor": "#ffffff"
     }
+  },
+  {
+    "model": "comment.comment",
+    "pk": 1,
+    "fields": {
+      "created_at": "2024-07-24T16:49:45.505",
+      "updated_at": "2024-07-24T16:49:45.505",
+      "is_deleted": false,
+      "deleted_at": null,
+      "post": 2024072300000001,
+      "author": 1,
+      "content": "댓글 내용 1"
+    }
   }
 ]

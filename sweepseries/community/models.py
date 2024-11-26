@@ -7,7 +7,7 @@ from core.models import TimeStampedModel
 from .enums import ReportReason, ReviewStatus, ReportStatus
 
 class Like(models.Model):
-    user        = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='likes')
+    user        = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
 
     liked_at    = models.DateTimeField(auto_now_add=True)
 
@@ -15,7 +15,7 @@ class Like(models.Model):
         abstract = True
 
 class Report(TimeStampedModel):
-    report_user         = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reports')
+    report_user         = models.ForeignKey(User, on_delete=models.CASCADE)
     report_content      = models.TextField()
     report_reason       = models.CharField(
         max_length=2,
