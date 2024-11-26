@@ -1,9 +1,10 @@
 import axios from "axios";
 
-export async function getPosts(forum?: string, tag?: number, search?: string) {
+export async function getPosts(selectedProfileId: number | null, forum?: string, tag?: number, search?: string) {
   try {
     const response = await axios.get("/v1/posts/", {
       params: {
+        profile: selectedProfileId,
         forum,
         tag,
         search,
@@ -16,9 +17,13 @@ export async function getPosts(forum?: string, tag?: number, search?: string) {
   }
 }
 
-export async function getPostDetail(id: string) {
+export async function getPostDetail(id: string, selectedProfileId: number | null) {
   try {
-    const response = await axios.get(`/v1/posts/${id}/`);
+    const response = await axios.get(`/v1/posts/${id}/`, {
+      params: selectedProfileId && {
+        profile: selectedProfileId,
+      },
+    });
 
     return response.data;
   } catch {
