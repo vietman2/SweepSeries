@@ -11,7 +11,7 @@ export type TagType = {
 };
 
 export type PostSimpleType = {
-  id: number;
+  id: string;
   tag: TagType;
   title: string;
   content: string;
@@ -30,7 +30,7 @@ type ImageType = {
 };
 
 export type PostDetailType = {
-  id: number;
+  id: string;
   tag: TagType;
   author: AuthorType;
   created_at: string;
