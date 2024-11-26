@@ -80,6 +80,13 @@
           }
         }
       ],
+      [
+        "expo-secure-store",
+        {
+          "configureAndroidBackup": true,
+          "faceIDPermission": "Allow Catch B to access your Face ID biometric data."
+        }
+      ],
       "expo-router"
     ]
   }
