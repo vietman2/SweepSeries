@@ -27,7 +27,7 @@ export const logout = async () => {
 
     return true;
   } catch {
-    return false;
+    return null;
   }
 };
 
