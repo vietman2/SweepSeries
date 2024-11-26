@@ -14,7 +14,6 @@ class RecommentSerializer(serializers.ModelSerializer):
         model = ReComment
         fields = [
             'id',
-            'comment',
             'author',
             'content',
             'created_at',
@@ -44,7 +43,6 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = [
             'id',
-            'post',
             'author',
             'content',
             'created_at',
@@ -64,7 +62,9 @@ class CommentSerializer(serializers.ModelSerializer):
         return obj.recomments.filter(is_deleted=False).count()
 
     def get_is_liked(self, obj):
-        user = self.context['user']
+        user = self.context.get('user', None)
+        if not user:
+            return False
         return obj.comment_likes.filter(user_uuid=user).exists()
 
     def get_recomments(self, obj):
