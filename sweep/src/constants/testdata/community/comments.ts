@@ -9,7 +9,7 @@ export const sampleRecomments: ReCommentType[] = [
     created_at: "5분 전",
     num_likes: 1,
     is_liked: false,
-    is_my_recomment: true,
+    is_author: true,
   },
   {
     id: 2,
@@ -18,7 +18,7 @@ export const sampleRecomments: ReCommentType[] = [
     created_at: "5분 전",
     num_likes: 1,
     is_liked: false,
-    is_my_recomment: false,
+    is_author: false,
   },
 ];
 
@@ -32,6 +32,6 @@ export const sampleComments: CommentType[] = [
     num_recomments: 2,
     recomments: sampleRecomments,
     is_liked: true,
-    is_my_comment: true,
+    is_author: true,
   },
 ];

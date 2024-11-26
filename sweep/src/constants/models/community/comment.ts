@@ -11,7 +11,7 @@ export type CommentType = {
   recomments: ReCommentType[];
 
   is_liked: boolean;
-  is_my_comment: boolean;
+  is_author: boolean;
 };
 
 export type ReCommentType = {
@@ -22,5 +22,5 @@ export type ReCommentType = {
   num_likes: number;
 
   is_liked: boolean;
-  is_my_recomment: boolean;
+  is_author: boolean;
 };
