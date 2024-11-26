@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { getPostDetail, getPosts } from "./posts";
+import { getPostDetail, getPosts, likePost } from "./posts";
 
 describe("getPosts", () => {
   const posts = [{ id: 1, title: "Test Post" }];
@@ -47,6 +47,24 @@ describe("getPostDetail", () => {
     jest.spyOn(axios, "get").mockRejectedValue(null);
 
     const result = await getPostDetail("1", null);
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("likePost", () => {
+  it("should like post", async () => {
+    jest.spyOn(axios, "post").mockResolvedValue({});
+
+    const result = await likePost("1", 1);
+
+    expect(result).toEqual(true);
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "post").mockRejectedValue(null);
+
+    const result = await likePost("1", null);
 
     expect(result).toBeNull();
   });

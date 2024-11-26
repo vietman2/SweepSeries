@@ -1,4 +1,13 @@
-import { getPostDetail, getPosts } from "./posts";
+import { likeComment } from "./comments";
+import { likeRecomment } from "./recomments";
+import { getPostDetail, getPosts, likePost } from "./posts";
 import { getTags } from "./tags";
 
-export { getPostDetail, getPosts, getTags };
+export {
+  getPostDetail,
+  getPosts,
+  likePost,
+  getTags,
+  likeComment,
+  likeRecomment,
+};

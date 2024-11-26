@@ -30,3 +30,15 @@ export async function getPostDetail(id: string, selectedProfileId: number | null
     return null;
   }
 }
+
+export async function likePost(id: string, selectedProfileId: number | null) {
+  try {
+    await axios.post(`/v1/posts/${id}/like/`, {
+      profile: selectedProfileId,
+    });
+
+    return true;
+  } catch {
+    return null;
+  }
+}
