@@ -13,7 +13,7 @@ from community.tag.models import Tag
 from community.tag.serializers import TagSerializer
 from community.utils import get_forum
 from .models import Post
-from .serializers import PostSimpleSerializer
+from .serializers import PostSimpleSerializer, PostDetailSerializer
 
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.filter(is_deleted=False)
@@ -64,4 +64,10 @@ class PostViewSet(ModelViewSet):
 
     @extend_schema(summary='게시글 상세 조회', tags=['게시글'])
     def retrieve(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        instance = self.get_object()
+        serializer = PostDetailSerializer(instance)
+        user = request.user if request.user.is_authenticated else None
+        serializer.context['user'] = user
+        serializer.increment_clicks()
+
+        return Response(serializer.data, status=status.HTTP_200_OK)

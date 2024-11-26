@@ -1,6 +1,7 @@
 from django.utils import timezone
 from rest_framework.test import APITestCase
 
+from auth.user.models import User
 from .models import Post
 
 class PostAPITest(APITestCase):
@@ -8,6 +9,7 @@ class PostAPITest(APITestCase):
 
     def setUp(self):
         self.url = '/v1/posts/'
+        self.normaluser = User.objects.get(username="normaluser")
 
     def test_list(self):
         ## 1. forum only
@@ -85,5 +87,11 @@ class PostAPITest(APITestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_retrieve(self):
-        response = self.client.get(self.url + '1/')
-        self.assertEqual(response.status_code, 405)
+        ## 1. guest
+        response = self.client.get(self.url + '2024072300000001/')
+        self.assertEqual(response.status_code, 200)
+
+        ## 2. user
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.get(self.url + '2024072300000001/')
+        self.assertEqual(response.status_code, 200)
