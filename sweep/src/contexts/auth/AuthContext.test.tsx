@@ -12,7 +12,7 @@ const TestComponent = () => {
   const { login, logout } = useAuth();
 
   const handleLogin = () => {
-    login("pro");
+    login("pro", 1);
   };
 
   return (
@@ -78,7 +78,7 @@ describe("Axios Interceptor", () => {
     await waitFor(async () => {
       try {
         await axios.get("/test-endpoint");
-      } catch (err) {}
+      } catch {}
     });
   });
 
@@ -105,7 +105,7 @@ describe("Axios Interceptor", () => {
     await waitFor(async () => {
       try {
         await axios.get("/test-endpoint");
-      } catch (err) {}
+      } catch {}
     });
   });
 
@@ -132,7 +132,7 @@ describe("Axios Interceptor", () => {
     await waitFor(async () => {
       try {
         await axios.get("/test-endpoint");
-      } catch (err) {}
+      } catch {}
     });
   });
 
@@ -157,7 +157,7 @@ describe("Axios Interceptor", () => {
     await waitFor(async () => {
       try {
         await axios.get("/test-endpoint");
-      } catch (err) {}
+      } catch {}
     });
   });
 });
