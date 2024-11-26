@@ -27,7 +27,7 @@ export function PostList({ mode }: Readonly<Props>) {
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshCount, setRefreshCount] = useState<number>(0);
 
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, selectedProfileId } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -56,7 +56,7 @@ export function PostList({ mode }: Readonly<Props>) {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await getPosts(mode, selectedTag?.id, searchQuery);
+      const response = await getPosts(selectedProfileId, mode, selectedTag?.id, searchQuery);
 
       if (response) {
         setPosts(response.posts);

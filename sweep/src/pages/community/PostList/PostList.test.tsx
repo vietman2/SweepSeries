@@ -30,6 +30,7 @@ describe("<PostList />", () => {
       login: jest.fn(),
       logout: jest.fn(),
       mode: "pro",
+      selectedProfileId: 1,
     });
     jest
       .spyOn(PostsAPI, "getPosts")
@@ -71,6 +72,7 @@ describe("<PostList />", () => {
       login: jest.fn(),
       logout: jest.fn(),
       mode: "guest",
+      selectedProfileId: null,
     });
     const { getByTestId } = renderWithProviders(<PostList mode="덕아웃" />);
 
