@@ -9,6 +9,7 @@ from rest_framework.viewsets import ModelViewSet
 from drf_spectacular.utils import extend_schema
 
 #from community.permissions import IsOwner
+from auth.userprofile.models import UserProfile
 from community.tag.models import Tag
 from community.tag.serializers import TagSerializer
 from community.utils import get_forum
@@ -66,8 +67,18 @@ class PostViewSet(ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = PostDetailSerializer(instance)
+
         user = request.user if request.user.is_authenticated else None
-        serializer.context['user'] = user
+        profile_param = request.query_params.get('profile', None)
+
+        profile_obj = UserProfile.objects.get(pk=profile_param) if profile_param else None
+
+        if profile_obj:
+            if profile_obj.user != user:
+                return Response({'message': "권한이 없습니다."}, status=status.HTTP_403_FORBIDDEN)
+
+            serializer.context['profile'] = profile_obj
+
         serializer.increment_clicks()
 
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -93,29 +93,25 @@ class PostDetailSerializer(serializers.ModelSerializer):
         return obj.comments.filter(is_deleted=False).count()
 
     def get_is_liked(self, obj):
-        user = self.context.get('user', None)
-        if user is None:
+        profile = self.context.get('profile', None)
+        if profile is None:
             return False
 
-        profiles = UserProfile.objects.filter(user=user)
-
-        if profiles.exists():
-            user = profiles.first()
-        return obj.post_likes.filter(user=user).exists()
+        return obj.post_likes.filter(user=profile).exists()
 
     def increment_clicks(self):
         ## TODO: Implement Redis to prevent multiple clicks
         self.instance.num_views += 1
         self.instance.save()
 
-        if self.context.get('uuid', None) is not None:
-            self.content_viewed(self.context['uuid'])
+        if self.context.get('profile', None) is not None:
+            self.content_viewed(self.context['profile'])
 
-    def content_viewed(self, user_uuid):
-        view_obj = PostContentView.objects.filter(post=self.instance, user_uuid=user_uuid).first()
+    def content_viewed(self, profile):
+        view_obj = PostContentView.objects.filter(post=self.instance, user=profile).first()
 
         if view_obj is None:
-            PostContentView.objects.create(post=self.instance, user_uuid=user_uuid)
+            PostContentView.objects.create(post=self.instance, user=profile)
         else:
             view_obj.viewed_last_at = timezone.now()
             view_obj.save()

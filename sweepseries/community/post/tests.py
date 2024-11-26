@@ -2,6 +2,7 @@ from django.utils import timezone
 from rest_framework.test import APITestCase
 
 from auth.user.models import User
+from auth.userprofile.models import UserProfile
 from .models import Post
 
 class PostAPITest(APITestCase):
@@ -10,6 +11,7 @@ class PostAPITest(APITestCase):
     def setUp(self):
         self.url = '/v1/posts/'
         self.normaluser = User.objects.get(username="normaluser")
+        self.profile = UserProfile.objects.get(pk=2)
 
     def test_list(self):
         ## 1. forum only
@@ -91,7 +93,18 @@ class PostAPITest(APITestCase):
         response = self.client.get(self.url + '2024072300000001/')
         self.assertEqual(response.status_code, 200)
 
-        ## 2. user
+        ## 2. user (view for the first time)
         self.client.force_authenticate(user=self.normaluser)
-        response = self.client.get(self.url + '2024072300000001/')
+        response = self.client.get(self.url + '2024072300000001/', {'profile': self.profile.pk})
         self.assertEqual(response.status_code, 200)
+
+        ## 3. user (view again)
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.get(self.url + '2024072300000002/', {'profile': self.profile.pk})
+        self.assertEqual(response.status_code, 200)
+
+    def test_retrieve_fail(self):
+        ## 1. user and profile mismatch
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.get(self.url + '2024072300000001/', {'profile': 1})
+        self.assertEqual(response.status_code, 403)
