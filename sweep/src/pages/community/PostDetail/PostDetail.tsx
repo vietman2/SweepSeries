@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 
-import { ErrorPage } from "@components/Fallbacks";
+import { ErrorPage, LoadingComponent } from "@components/Fallbacks";
 import { AppIcon } from "@components/Icons";
 import { TextInput } from "@components/Inputs";
 import { ScrollView } from "@components/ScrollView";
@@ -70,8 +70,8 @@ export function PostDetail() {
     fetchPost();
   }, [refreshCount]);
 
-  if (error || post === undefined)
-    return <ErrorPage onRefresh={handleRefresh} />;
+  if (error) return <ErrorPage onRefresh={handleRefresh} />;
+  if (post === undefined) return <LoadingComponent />;
 
   return (
     <>
@@ -82,7 +82,7 @@ export function PostDetail() {
       >
         <ScrollView refreshing={loading} onRefresh={handleRefresh}>
           <Pressable onPress={handleRecommentCancel} testID="cancel">
-            <PostContent post={post} />
+            <PostContent post={post} refresh={handleRefresh} />
             {post.comments.length > 0 ? (
               <View style={styles.comments}>
                 {post.comments.map((comment, index) => (
