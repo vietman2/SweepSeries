@@ -13,13 +13,15 @@ import { useTheme } from "@contexts/theme";
 import { AuthorProfile } from "@fragments/Author";
 import { PostDetailType } from "@models/community";
 import { alert } from "@services/alert";
+import { likePost } from "@services/community";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
   post: PostDetailType;
+  refresh: () => void;
 }
 
-export function PostContent({ post }: Readonly<Props>) {
+export function PostContent({ post, refresh }: Readonly<Props>) {
   const [editedTitle, setEditedTitle] = useState<string>(post.title);
   const [editedContent, setEditedContent] = useState<string>(post.content);
 
@@ -29,14 +31,30 @@ export function PostContent({ post }: Readonly<Props>) {
     { label: string; onPress: () => void }[]
   >([]);
 
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, selectedProfileId } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  const loginAlert = () => {
+    alert("로그인이 필요합니다.", "로그인 후 이용해주세요.", () => {}, "확인");
+  }
+
   const handleEditSubmit = () => {}; // TODO: integrate with the backend
   const removePost = () => {}; // TODO: integrate with the backend
-  const likePost = () => {}; // TODO: integrate with the backend
   const handleReportSubmit = () => {}; // TODO: integrate with the backend
+  
+  const handleLike = async () => {
+    if (!isAuthenticated) {
+      loginAlert();
+      return;
+    }
+
+    const response = await likePost(post.id, selectedProfileId);
+
+    if (response) {
+      refresh();
+    }
+  };
 
   const cancelEdit = () => {
     setEditedTitle(post.title);
@@ -139,7 +157,7 @@ export function PostContent({ post }: Readonly<Props>) {
             <AppIcon icon="eye" size={20} color={theme.lowEmphasis} />
             <Text style={styles.countText}>{post.num_views}</Text>
           </View>
-          <TouchableOpacity onPress={likePost} style={styles.count}>
+          <TouchableOpacity onPress={handleLike} style={styles.count} testID="like">
             {post.is_liked ? (
               <AppIcon icon="heart" size={16} color={theme.primary} />
             ) : (
