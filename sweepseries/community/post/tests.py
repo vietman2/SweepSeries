@@ -108,3 +108,30 @@ class PostAPITest(APITestCase):
         self.client.force_authenticate(user=self.normaluser)
         response = self.client.get(self.url + '2024072300000001/', {'profile': 1})
         self.assertEqual(response.status_code, 403)
+
+    def test_like(self):
+        like_url = self.url + '2024072300000001/like/'
+        ## 1. like
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.post(like_url, {'profile': self.profile.pk})
+        self.assertEqual(response.status_code, 200)
+
+        ## 2. unlike
+        response = self.client.post(like_url, {'profile': self.profile.pk})
+        self.assertEqual(response.status_code, 200)
+
+    def test_like_fail(self):
+        like_url = self.url + '2024072300000001/like/'
+        ## 1. unauthenticated
+        response = self.client.post(like_url)
+        self.assertEqual(response.status_code, 403)
+
+        ## 2. no profile
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.post(like_url)
+        self.assertEqual(response.status_code, 400)
+
+        ## 3. invalid profile
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.post(like_url, {'profile': 1})
+        self.assertEqual(response.status_code, 400)
