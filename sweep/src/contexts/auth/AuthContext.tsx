@@ -1,7 +1,10 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import axios from "axios";
+
+import { refresh } from "@services/auth";
 
 interface AuthContextType {
-  login: (mode: "pro" | "normal" | "guest") => void;
+  login: (mode: "pro" | "normal") => void;
   logout: () => void;
   mode: "pro" | "normal" | "guest";
   isAuthenticated: boolean;
@@ -13,75 +16,60 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [mode, setMode] = useState<"pro" | "normal" | "guest">("guest");
-  const [token, setToken] = useState<string | null>(null);
-  /*
-    useEffect(() => {
-      const interceptor = axios.interceptors.response.use(
-        (response) => response,
-        async (error) => {
-          const originalRequest = error.config;
 
-          if (
-            error.response &&
-            error.response.status === 403 &&
-            error.response.data.code === "token_not_valid" &&
-            !originalRequest._retry
-          ) {
-            originalRequest._retry = true;
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        const originalRequest = error.config;
 
-            try {
-              const response = await refresh();
-              if (response && response.status === 200) {
-                const newAccessToken = response.data.access;
-                setToken(newAccessToken);
+        if (
+          error.response &&
+          error.response.status === 403 &&
+          error.response.data.code === "token_not_valid" &&
+          !originalRequest._retry
+        ) {
+          originalRequest._retry = true;
 
-                originalRequest.headers[
-                  "Authorization"
-                ] = `Bearer ${newAccessToken}`;
-                return axios(originalRequest);
-              }
-            } catch (refreshError: any) {
-              logout();
-              return Promise.reject(refreshError);
+          try {
+            const response = await refresh();
+            if (response) {
+              const newAccessToken = response;
+
+              originalRequest.headers[
+                "Authorization"
+              ] = `Bearer ${newAccessToken}`;
+              return axios(originalRequest);
             }
+          } catch (refreshError: any) {
+            logout();
+            return Promise.reject(refreshError);
           }
-          return Promise.reject(error);
         }
-      );
+        return Promise.reject(error);
+      }
+    );
 
-      // Remove the interceptor when AuthProvider unmounts
-      return () => {
-        axios.interceptors.response.eject(interceptor);
-      };
-    }, []);
+    // Remove the interceptor when AuthProvider unmounts
+    return () => {
+      axios.interceptors.response.eject(interceptor);
+    };
+  }, []);
 
-  const setToken = (accessToken: string) => {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-  };
-
-  const login = (user: UserProfileType) => {
-    setUser(user);
-    localStorage.setItem("user_id", user.uuid);
-  };
-
-  const logout = () => {
-    setUser(null);
-    delete axios.defaults.headers.common["Authorization"];
-    localStorage.removeItem("user_id");
-  };
-*/
-  const login = (mode: "pro" | "normal" | "guest") => {
+  const login = (mode: "pro" | "normal") => {
     setMode(mode);
-    setToken("token");
   };
- 
+
   const logout = () => {
-    setToken(null);
+    setMode("guest");
   };
 
-  const isAuthenticated = token !== null;
+  const isAuthenticated = mode !== "guest";
 
-  const value = useMemo(() => ({ mode, login, logout, isAuthenticated }), [mode, token]);
+  const value = useMemo(
+    () => ({ mode, login, logout, isAuthenticated }),
+    [mode]
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
