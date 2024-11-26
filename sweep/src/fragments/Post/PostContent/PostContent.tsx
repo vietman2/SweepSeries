@@ -33,7 +33,6 @@ export function PostContent({ post }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  const onBlock = () => {};
   const handleEditSubmit = () => {}; // TODO: integrate with the backend
   const removePost = () => {}; // TODO: integrate with the backend
   const likePost = () => {}; // TODO: integrate with the backend
@@ -66,15 +65,12 @@ export function PostContent({ post }: Readonly<Props>) {
   useEffect(() => {
     if (post.is_author) {
       setActions([
-        { label: "신고하기", onPress: handleReportPress },
-        { label: "차단하기", onPress: onBlock },
         { label: "수정하기", onPress: onEditPress },
         { label: "삭제하기", onPress: handleDeletePress },
       ]);
     } else {
       setActions([
         { label: "신고하기", onPress: handleReportPress },
-        { label: "차단하기", onPress: onBlock },
       ]);
     }
   }, []);

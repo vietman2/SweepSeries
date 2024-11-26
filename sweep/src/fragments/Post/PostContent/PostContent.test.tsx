@@ -30,6 +30,7 @@ describe("<PostContent />", () => {
       logout: jest.fn(),
       mode: "normal",
       isAuthenticated: true,
+      selectedProfileId: 1,
     });
     jest
       .spyOn(AlertAPI, "alert")
