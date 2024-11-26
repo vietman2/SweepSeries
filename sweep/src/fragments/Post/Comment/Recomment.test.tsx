@@ -27,6 +27,7 @@ describe("<Recomment />", () => {
       logout: jest.fn(),
       mode: "normal",
       isAuthenticated: true,
+      selectedProfileId: 1,
     });
     jest
       .spyOn(AlertAPI, "alert")
@@ -50,7 +51,7 @@ describe("<Recomment />", () => {
 
   it("handles report", () => {
     const { getByTestId } = renderWithProviders(
-      <Recomment recomment={sampleRecomments[0]} refresh={jest.fn()} />
+      <Recomment recomment={{...sampleRecomments[0], is_author: false}} refresh={jest.fn()} />
     );
 
     fireEvent.press(getByTestId("신고하기"));

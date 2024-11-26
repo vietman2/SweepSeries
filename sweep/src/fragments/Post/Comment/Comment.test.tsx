@@ -30,6 +30,7 @@ describe("<Comment />", () => {
       logout: jest.fn(),
       mode: "normal",
       isAuthenticated: true,
+      selectedProfileId: 1,
     });
     jest
       .spyOn(AlertAPI, "alert")
@@ -59,7 +60,7 @@ describe("<Comment />", () => {
   it("handles report", () => {
     const { getByTestId } = renderWithProviders(
       <Comment
-        comment={sampleComments[0]}
+        comment={{...sampleComments[0], is_author: false}}
         recommentMode
         enterRecomment={jest.fn()}
         refresh={jest.fn()}

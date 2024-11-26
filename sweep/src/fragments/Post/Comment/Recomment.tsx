@@ -69,18 +69,13 @@ export function Recomment({
   };
 
   useEffect(() => {
-    if (recomment.is_my_recomment) {
+    if (recomment.is_author) {
       setActions([
-        { label: "신고하기", onPress: handleReportPress },
-        { label: "차단하기", onPress: () => {} },
         { label: "수정하기", onPress: handleToggleEditMode },
         { label: "삭제하기", onPress: handleDeletePress },
       ]);
     } else {
-      setActions([
-        { label: "신고하기", onPress: handleReportPress },
-        { label: "차단하기", onPress: () => {} },
-      ]);
+      setActions([{ label: "신고하기", onPress: handleReportPress }]);
     }
     setNumLikes(recomment.num_likes);
   }, []);

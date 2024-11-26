@@ -85,17 +85,14 @@ export function Comment({
   };
 
   useEffect(() => {
-    if (comment.is_my_comment) {
+    if (comment.is_author) {
       setActions([
-        { label: "신고하기", onPress: handleReportPress },
-        { label: "차단하기", onPress: () => {} },
         { label: "수정하기", onPress: handleToggleEditMode },
         { label: "삭제하기", onPress: handleDeletePress },
       ]);
     } else {
       setActions([
         { label: "신고하기", onPress: handleReportPress },
-        { label: "차단하기", onPress: () => {} },
       ]);
     }
     setNumLikes(comment.num_likes);
