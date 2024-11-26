@@ -3,6 +3,7 @@ import { fireEvent } from "@testing-library/react-native";
 import { Comment } from "./Comment";
 import * as AuthContext from "@contexts/auth";
 import * as AlertAPI from "@services/alert/alert";
+import * as CommentsAPI from "@services/community/comments";
 import { sampleComments } from "@testdata/community";
 import { renderWithProviders } from "@utils/test-utils";
 
@@ -60,7 +61,7 @@ describe("<Comment />", () => {
   it("handles report", () => {
     const { getByTestId } = renderWithProviders(
       <Comment
-        comment={{...sampleComments[0], is_author: false}}
+        comment={{ ...sampleComments[0], is_author: false }}
         recommentMode
         enterRecomment={jest.fn()}
         refresh={jest.fn()}
@@ -94,5 +95,53 @@ describe("<Comment />", () => {
     );
 
     fireEvent.press(getByTestId("recomment"));
+  });
+
+  it("handles comment like", () => {
+    jest.spyOn(CommentsAPI, "likeComment").mockResolvedValue(true);
+    const { getByTestId } = renderWithProviders(
+      <Comment
+        comment={sampleComments[0]}
+        recommentMode
+        enterRecomment={jest.fn()}
+        refresh={jest.fn()}
+      />
+    );
+
+    fireEvent.press(getByTestId("like"));
+  });
+
+  it("handles like fail", () => {
+    jest.spyOn(CommentsAPI, "likeComment").mockResolvedValue(null);
+    const { getByTestId } = renderWithProviders(
+      <Comment
+        comment={sampleComments[0]}
+        recommentMode
+        enterRecomment={jest.fn()}
+        refresh={jest.fn()}
+      />
+    );
+
+    fireEvent.press(getByTestId("like"));
+  });
+
+  it("handles unauthorized", () => {
+    jest.spyOn(AuthContext, "useAuth").mockReturnValue({
+      login: jest.fn(),
+      logout: jest.fn(),
+      mode: "guest",
+      isAuthenticated: false,
+      selectedProfileId: null,
+    });
+    const { getByTestId } = renderWithProviders(
+      <Comment
+        comment={sampleComments[0]}
+        recommentMode
+        enterRecomment={jest.fn()}
+        refresh={jest.fn()}
+      />
+    );
+
+    fireEvent.press(getByTestId("like"));
   });
 });

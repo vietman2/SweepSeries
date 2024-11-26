@@ -13,6 +13,7 @@ import { useTheme } from "@contexts/theme";
 import { AuthorProfile } from "@fragments/Author";
 import { CommentType } from "@models/community";
 import { alert } from "@services/alert";
+import { likeComment } from "@services/community";
 import { ThemeColorType } from "@themes/colors";
 
 interface CommentProps {
@@ -32,8 +33,6 @@ export function Comment({
 }: Readonly<CommentProps>) {
   const [newComment, setNewComment] = useState<string>("");
   const [editedContent, setEditedContent] = useState<string>(comment.content);
-  const [like, setLike] = useState<boolean>(comment.is_liked);
-  const [numLikes, setNumLikes] = useState<number>(comment.num_likes);
 
   const [actions, setActions] = useState<
     { label: string; onPress: () => void }[]
@@ -42,9 +41,13 @@ export function Comment({
   const [selected, setSelected] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, selectedProfileId } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  const loginAlert = () => {
+    alert("로그인이 필요합니다.", "로그인 후 이용해주세요.", () => {}, "확인");
+  };
 
   const handleToggleEditMode = () => {
     setEditMode(!editMode);
@@ -54,10 +57,19 @@ export function Comment({
     setModalVisible(true);
   };
 
-  const handleCommentLike = () => {
-    // TODO: integrate with the backend
-    setLike(!like);
+  const handleCommentLike = async () => {
+    if (!isAuthenticated) {
+      loginAlert();
+      return;
+    }
+
+    const response = await likeComment(comment.id, selectedProfileId);
+
+    if (response) {
+      refresh();
+    }
   };
+
   const postRecomment = async () => {}; // TODO: integrate with the backend
   const removeComment = async () => {}; // TODO: integrate with the backend
   const patchComment = () => {}; // TODO: integrate with the backend
@@ -95,7 +107,6 @@ export function Comment({
         { label: "신고하기", onPress: handleReportPress },
       ]);
     }
-    setNumLikes(comment.num_likes);
   }, []);
 
   useEffect(() => {
@@ -158,11 +169,11 @@ export function Comment({
               testID="like"
             >
               <AppIcon
-                icon={like ? "heart" : "heart-outline"}
-                color={like ? theme.primary : theme.lowEmphasis}
+                icon={comment.is_liked ? "heart" : "heart-outline"}
+                color={comment.is_liked ? theme.primary : theme.lowEmphasis}
                 size={12}
               />
-              <Text style={styles.likeText}>{numLikes}</Text>
+              <Text style={styles.likeText}>{comment.num_likes}</Text>
             </TouchableOpacity>
             <View style={styles.horizontal}>
               <AppIcon
