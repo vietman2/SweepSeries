@@ -30,7 +30,7 @@ export function PostDetail() {
   const [error, setError] = useState(false);
   const [refreshCount, setRefreshCount] = useState<number>(0);
 
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, selectedProfileId } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -48,7 +48,7 @@ export function PostDetail() {
   const fetchPost = async () => {
     setLoading(true);
 
-    const response = await getPostDetail(id);
+    const response = await getPostDetail(id, selectedProfileId);
 
     if (response) {
       setPost(response);

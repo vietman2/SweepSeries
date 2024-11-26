@@ -33,6 +33,7 @@ describe("<PostDetail />", () => {
       login: jest.fn(),
       logout: jest.fn(),
       mode: "pro",
+      selectedProfileId: 1,
     });
     jest.spyOn(PostsAPI, "getPostDetail").mockResolvedValue(samplePostDetail);
   });
@@ -75,6 +76,7 @@ describe("<PostDetail />", () => {
       login: jest.fn(),
       logout: jest.fn(),
       mode: "guest",
+      selectedProfileId: null,
     });
     const { getByTestId } = renderWithProviders(<PostDetail />);
 
