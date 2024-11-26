@@ -2,7 +2,6 @@ from rest_framework.test import APITestCase
 
 from auth.user.models import User
 from auth.userprofile.models import UserProfile
-from .models import Comment, ReComment
 
 class CommentAPITest(APITestCase):
     fixtures = ['core/data/test/community.json', 'core/data/test/users.json']

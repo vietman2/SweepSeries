@@ -54,6 +54,8 @@ class PostReport(Report):
 class PostLike(Like):
     post            = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_likes')
 
+    objects = models.Manager()
+
     class Meta:
         db_table = 'post_like'
         unique_together = ('post', 'user')
