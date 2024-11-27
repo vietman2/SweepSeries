@@ -1,15 +1,18 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
+import * as Router from "expo-router";
 
 import { PostList } from "./PostList";
 import * as AuthContext from "@contexts/auth";
 import * as PostsAPI from "@services/community/posts";
-import { renderWithProviders } from "@utils/test-utils";
+import { sampleAuthor } from "@testdata/auth";
 import { samplePosts, sampleTags } from "@testdata/community";
+import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("expo-router", () => ({
   router: {
     push: jest.fn(),
   },
+  useFocusEffect: jest.fn(),
 }));
 jest.mock("@contexts/auth", () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => (
@@ -30,7 +33,7 @@ describe("<PostList />", () => {
       login: jest.fn(),
       logout: jest.fn(),
       mode: "pro",
-      selectedProfileId: 1,
+      selectedProfile: sampleAuthor,
     });
     jest
       .spyOn(PostsAPI, "getPosts")
@@ -47,6 +50,7 @@ describe("<PostList />", () => {
   });
 
   it("renders and handles tag press", async () => {
+    jest.spyOn(Router, "useFocusEffect").mockImplementationOnce((cb) => cb());
     const { getByTestId } = await waitFor(() =>
       renderWithProviders(<PostList mode="덕아웃" />)
     );
@@ -72,7 +76,7 @@ describe("<PostList />", () => {
       login: jest.fn(),
       logout: jest.fn(),
       mode: "guest",
-      selectedProfileId: null,
+      selectedProfile: null,
     });
     const { getByTestId } = renderWithProviders(<PostList mode="덕아웃" />);
 

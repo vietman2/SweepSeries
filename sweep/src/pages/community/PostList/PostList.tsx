@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 
 import { SvgIconButton } from "@components/Buttons";
 import { ErrorPage, LoadingComponent } from "@components/Fallbacks";
@@ -71,6 +71,12 @@ export function PostList({ mode }: Readonly<Props>) {
 
     fetchPosts();
   }, [refreshCount, selectedTag, mode]);
+
+  useFocusEffect(
+    useCallback(() => {
+      handleRefresh();
+    }, [])
+  );
 
   if (loading) return <LoadingComponent />;
   if (error) return <ErrorPage onRefresh={handleRefresh} />;
