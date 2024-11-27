@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { router } from "expo-router";
 
 import { ReportModal } from "../Report/ReportModal";
 import { Tag } from "../Tag/Tag";
@@ -13,7 +14,7 @@ import { useTheme } from "@contexts/theme";
 import { AuthorProfile } from "@fragments/Author";
 import { PostDetailType } from "@models/community";
 import { alert } from "@services/alert";
-import { likePost } from "@services/community";
+import { deletePost, likePost } from "@services/community";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
@@ -31,7 +32,7 @@ export function PostContent({ post, refresh }: Readonly<Props>) {
     { label: string; onPress: () => void }[]
   >([]);
 
-  const { isAuthenticated, selectedProfileId } = useAuth();
+  const { isAuthenticated, selectedProfile } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -40,7 +41,17 @@ export function PostContent({ post, refresh }: Readonly<Props>) {
   };
 
   const handleEditSubmit = () => {}; // TODO: integrate with the backend
-  const removePost = () => {}; // TODO: integrate with the backend
+
+  const removePost = async () => {
+    const response = await deletePost(post.id);
+
+    if (response) {
+      router.back();
+    } else {
+      alert("삭제 실패", "게시글을 삭제하는 데 실패했습니다.");
+    }
+  };
+
   const handleReportSubmit = () => {}; // TODO: integrate with the backend
 
   const handleLike = async () => {
@@ -49,7 +60,7 @@ export function PostContent({ post, refresh }: Readonly<Props>) {
       return;
     }
 
-    const response = await likePost(post.id, selectedProfileId);
+    const response = await likePost(post.id, selectedProfile?.id);
 
     if (response) {
       refresh();

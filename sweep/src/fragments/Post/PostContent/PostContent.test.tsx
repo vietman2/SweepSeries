@@ -4,9 +4,15 @@ import { PostContent } from "./PostContent";
 import * as AuthContext from "@contexts/auth";
 import * as AlertAPI from "@services/alert/alert";
 import * as PostsAPI from "@services/community/posts";
+import { sampleAuthor } from "@testdata/auth";
 import { samplePostDetail } from "@testdata/community";
 import { renderWithProviders } from "@utils/test-utils";
 
+jest.mock("expo-router", () => ({
+  router: {
+    back: jest.fn(),
+  },
+}));
 jest.mock("../Report/ReportModal", () => ({
   ReportModal: () => null,
 }));
@@ -31,7 +37,7 @@ describe("<PostContent />", () => {
       logout: jest.fn(),
       mode: "normal",
       isAuthenticated: true,
-      selectedProfileId: 1,
+      selectedProfile: sampleAuthor,
     });
     jest
       .spyOn(AlertAPI, "alert")
@@ -59,6 +65,21 @@ describe("<PostContent />", () => {
   });
 
   it("handles delete correctly", async () => {
+    jest.spyOn(PostsAPI, "deletePost").mockResolvedValueOnce(true);
+    const { getByTestId } = await waitFor(() =>
+      renderWithProviders(
+        <PostContent
+          post={{ ...samplePostDetail, is_author: true }}
+          refresh={jest.fn()}
+        />
+      )
+    );
+
+    fireEvent.press(getByTestId("삭제하기"));
+  });
+
+  it("handles delete fail", async () => {
+    jest.spyOn(PostsAPI, "deletePost").mockResolvedValueOnce(null);
     const { getByTestId } = await waitFor(() =>
       renderWithProviders(
         <PostContent
@@ -109,7 +130,7 @@ describe("<PostContent />", () => {
       logout: jest.fn(),
       mode: "guest",
       isAuthenticated: false,
-      selectedProfileId: null,
+      selectedProfile: null,
     });
     const { getByTestId } = await waitFor(() =>
       renderWithProviders(
