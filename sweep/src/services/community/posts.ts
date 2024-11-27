@@ -16,7 +16,10 @@ export async function getPosts(forum?: string, tag?: number, search?: string) {
   }
 }
 
-export async function getPostDetail(id: string, selectedProfileId: number | null) {
+export async function getPostDetail(
+  id: string,
+  selectedProfileId: number | null
+) {
   try {
     const response = await axios.get(`/v1/posts/${id}/`, {
       params: selectedProfileId && {
@@ -40,7 +43,23 @@ export async function deletePost(id: string) {
   }
 }
 
-export async function likePost(id: string, selectedProfileId: number | undefined) {
+export async function editPost(id: string, title: string, content: string) {
+  try {
+    await axios.patch(`/v1/posts/${id}/`, {
+      title,
+      content,
+    });
+
+    return true;
+  } catch {
+    return null;
+  }
+}
+
+export async function likePost(
+  id: string,
+  selectedProfileId: number | undefined
+) {
   if (!selectedProfileId) return null;
 
   try {

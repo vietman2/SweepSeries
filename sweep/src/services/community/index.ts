@@ -12,11 +12,18 @@ import {
   likeRecomment,
   reportRecomment,
 } from "./recomments";
-import { deletePost, getPostDetail, getPosts, likePost } from "./posts";
+import {
+  deletePost,
+  editPost,
+  getPostDetail,
+  getPosts,
+  likePost,
+} from "./posts";
 import { getTags } from "./tags";
 
 export {
   deletePost,
+  editPost,
   getPostDetail,
   getPosts,
   likePost,

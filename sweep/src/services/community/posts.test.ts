@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { getPostDetail, getPosts, deletePost, likePost } from "./posts";
+import { getPostDetail, getPosts, deletePost, editPost, likePost } from "./posts";
 
 describe("getPosts", () => {
   const posts = [{ id: 1, title: "Test Post" }];
@@ -65,6 +65,24 @@ describe("deletePost", () => {
     jest.spyOn(axios, "delete").mockRejectedValue(null);
 
     const result = await deletePost("1");
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("editPost", () => {
+  it("should edit post", async () => {
+    jest.spyOn(axios, "patch").mockResolvedValue({});
+
+    const result = await editPost("1", "title", "content");
+
+    expect(result).toEqual(true);
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "patch").mockRejectedValue(null);
+
+    const result = await editPost("1", "title", "content");
 
     expect(result).toBeNull();
   });
