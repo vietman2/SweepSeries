@@ -1,13 +1,14 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 
+import { UserProfileType } from "@models/auth";
 import { refresh } from "@services/auth";
 
 interface AuthContextType {
-  login: (mode: "pro" | "normal", profileIndex: number) => void;
+  login: (mode: "pro" | "normal", profile: UserProfileType) => void;
   logout: () => void;
   mode: "pro" | "normal" | "guest";
-  selectedProfileId: number | null;
+  selectedProfile: UserProfileType | null;
   isAuthenticated: boolean;
 }
 
@@ -17,9 +18,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [mode, setMode] = useState<"pro" | "normal" | "guest">("guest");
-  const [selectedProfileId, setSelectedProfileId] = useState<number | null>(
-    null
-  );
+  const [selectedProfile, setSelectedProfile] =
+    useState<UserProfileType | null>(null);
 
   useEffect(() => {
     const interceptor = axios.interceptors.response.use(
@@ -60,20 +60,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     };
   }, []);
 
-  const login = (mode: "pro" | "normal", profileIndex: number) => {
+  const login = (mode: "pro" | "normal", profile: UserProfileType) => {
     setMode(mode);
-    setSelectedProfileId(profileIndex);
+    setSelectedProfile(profile);
   };
 
   const logout = () => {
     setMode("guest");
-    setSelectedProfileId(null);
+    setSelectedProfile(null);
   };
 
   const isAuthenticated = mode !== "guest";
 
   const value = useMemo(
-    () => ({ mode, login, logout, isAuthenticated, selectedProfileId }),
+    () => ({ mode, login, logout, isAuthenticated, selectedProfile }),
     [mode]
   );
 

@@ -5,6 +5,7 @@ import MockAdapter from "axios-mock-adapter";
 
 import { AuthProvider, useAuth } from "./AuthContext";
 import * as AuthAPI from "@services/auth/auth";
+import { sampleAuthor } from "@testdata/auth";
 
 jest.unmock("@contexts/auth");
 
@@ -12,7 +13,7 @@ const TestComponent = () => {
   const { login, logout } = useAuth();
 
   const handleLogin = () => {
-    login("pro", 1);
+    login("pro", sampleAuthor);
   };
 
   return (
