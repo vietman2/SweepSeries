@@ -19,44 +19,50 @@ class CommentAPITest(APITestCase):
             'content': 'test comment',
         }
 
+    def test_unauthenticated(self):
+        response = self.client.post(self.url, self.data)
+        self.assertEqual(response.status_code, 403)
+
+        response = self.client.delete(f'{self.url}1/')
+        self.assertEqual(response.status_code, 403)
+
+        response = self.client.post(f'{self.url}1/like/', {'profile': self.profile.id})
+        self.assertEqual(response.status_code, 403)
+
     def test_create(self):
         self.client.force_authenticate(user=self.normaluser)
         response = self.client.post(self.url, self.data)
         self.assertEqual(response.status_code, 201)
 
     def test_create_fail(self):
-        ## 1. unauthenticated
-        response = self.client.post(self.url, self.data)
-        self.assertEqual(response.status_code, 403)
-
-        ## 2. no data
         self.client.force_authenticate(user=self.normaluser)
+        ## 1. no data
         response = self.client.post(self.url)
         self.assertEqual(response.status_code, 400)
 
-        ## 3. no post
+        ## 2. no post
         data = self.data.copy()
         data.pop('post')
         response = self.client.post(self.url, data)
         self.assertEqual(response.status_code, 400)
 
-        ## 4. post dne
+        ## 3. post dne
         data['post'] = 100
         response = self.client.post(self.url, data)
         self.assertEqual(response.status_code, 400)
 
-        ## 5. no profile
+        ## 4. no profile
         data = self.data.copy()
         data.pop('profile')
         response = self.client.post(self.url, data)
         self.assertEqual(response.status_code, 400)
 
-        ## 6. profile dne
+        ## 5. profile dne
         data['profile'] = 100
         response = self.client.post(self.url, data)
         self.assertEqual(response.status_code, 400)
 
-        ## 7. profile and user mismatch
+        ## 6. profile and user mismatch
         data['profile'] = 1
         response = self.client.post(self.url, data)
         self.assertEqual(response.status_code, 400)
@@ -67,11 +73,7 @@ class CommentAPITest(APITestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_delete_fail(self):
-        ## 1. unauthenticated
-        response = self.client.delete(f'{self.url}1/')
-        self.assertEqual(response.status_code, 403)
-
-        ## 2. not owner
+        ## 1. not owner
         self.client.force_authenticate(user=self.normaluser)
         response = self.client.delete(f'{self.url}2/')
         self.assertEqual(response.status_code, 403)
@@ -89,13 +91,8 @@ class CommentAPITest(APITestCase):
 
     def test_like_fail(self):
         like_url = '/v1/comments/1/like/'
-
-        ## 1. like without login
-        response = self.client.post(like_url, {'profile': self.profile.id})
-        self.assertEqual(response.status_code, 403)
-
         self.client.force_authenticate(user=self.normaluser)
-        ## 2. like without profile
+        ## 1. like without profile
         response = self.client.post(like_url)
         self.assertEqual(response.status_code, 400)
 
