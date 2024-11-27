@@ -12,6 +12,7 @@ export type CommentType = {
 
   is_liked: boolean;
   is_author: boolean;
+  is_deleted: boolean;
 };
 
 export type ReCommentType = {
@@ -23,4 +24,5 @@ export type ReCommentType = {
 
   is_liked: boolean;
   is_author: boolean;
+  is_deleted: boolean;
 };
