@@ -10,7 +10,9 @@ from drf_spectacular.utils import extend_schema
 from auth.userprofile.models import UserProfile
 from community.permissions import IsOwner
 from .models import Comment, CommentLike, ReComment, ReCommentLike
-from .serializers import CommentSerializer, RecommentSerializer
+from .serializers import (
+    CommentSerializer, CommentReportSerializer, RecommentSerializer, RecommentReportSerializer
+)
 
 class CommentViewSet(ModelViewSet):
     queryset = Comment.objects.all()
@@ -85,6 +87,22 @@ class CommentViewSet(ModelViewSet):
 
         return Response({"message": "좋아요가 등록되었습니다."}, status=status.HTTP_200_OK)
 
+    @action(detail=True, methods=['post'])
+    @extend_schema(summary='댓글 신고', tags=['댓글'])
+    def report(self, request, pk=None):   ## pylint: disable=W0613
+        comment = self.get_object()
+        user = request.user
+
+        serializer = CommentReportSerializer(data=request.data)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            serializer.report(comment, user)
+        except ValidationError as e:
+            return Response({"message": e.detail}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message": "댓글이 신고되었습니다."}, status=status.HTTP_201_CREATED)
+
 class ReCommentViewSet(ModelViewSet):
     queryset = ReComment.objects.all()
     serializer_class = RecommentSerializer
@@ -157,3 +175,19 @@ class ReCommentViewSet(ModelViewSet):
         ReCommentLike.objects.create(recomment=recomment, user=user_profile)
 
         return Response({"message": "좋아요가 등록되었습니다."}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['post'])
+    @extend_schema(summary='대댓글 신고', tags=['대댓글'])
+    def report(self, request, pk=None):   ## pylint: disable=W0613
+        recomment = self.get_object()
+        user = request.user
+
+        serializer = RecommentReportSerializer(data=request.data)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            serializer.report(recomment, user)
+        except ValidationError as e:
+            return Response({"message": e.detail}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message": "대댓글이 신고되었습니다."}, status=status.HTTP_201_CREATED)

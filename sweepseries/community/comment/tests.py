@@ -18,6 +18,10 @@ class CommentAPITest(APITestCase):
             'profile': self.profile.id,
             'content': 'test comment',
         }
+        self.report_data = {
+            'report_reason': '욕설/비방',
+            'report_content': '욕설이 있어요',
+        }
 
     def test_unauthenticated(self):
         response = self.client.post(self.url, self.data)
@@ -30,6 +34,12 @@ class CommentAPITest(APITestCase):
         self.assertEqual(response.status_code, 403)
 
         response = self.client.post(f'{self.url}1/like/', {'profile': self.profile.id})
+        self.assertEqual(response.status_code, 403)
+
+        response = self.client.post(f'{self.url}1/like/', {'profile': self.profile.id})
+        self.assertEqual(response.status_code, 403)
+
+        response = self.client.post(f'{self.url}1/report/', self.report_data)
         self.assertEqual(response.status_code, 403)
 
     def test_create(self):
@@ -114,6 +124,28 @@ class CommentAPITest(APITestCase):
         response = self.client.post(like_url, {'profile': 1})
         self.assertEqual(response.status_code, 400)
 
+    def test_report(self):
+        self.client.force_authenticate(user=self.normaluser)
+        report_url = '/v1/comments/1/report/'
+        response = self.client.post(report_url, self.report_data)
+        self.assertEqual(response.status_code, 201)
+
+    def test_report_fail(self):
+        report_url = '/v1/comments/1/report/'
+        self.client.force_authenticate(user=self.normaluser)
+        ## 1. no data
+        response = self.client.post(report_url)
+        self.assertEqual(response.status_code, 400)
+
+        ## 2. invalid report_reason
+        response = self.client.post(report_url, {'report_reason': "invalid"})
+        self.assertEqual(response.status_code, 400)
+
+        ## 3. already reported
+        response = self.client.post(report_url, self.report_data)
+        response = self.client.post(report_url, self.report_data)
+        self.assertEqual(response.status_code, 400)
+
 class ReCommentAPITest(APITestCase):
     fixtures = ['core/data/test/community.json', 'core/data/test/users.json']
 
@@ -126,6 +158,10 @@ class ReCommentAPITest(APITestCase):
             'comment': self.comment.id,
             'profile': self.profile.id,
             'content': 'test recomment',
+        }
+        self.report_data = {
+            'report_reason': '폭력/협박/위협',
+            'report_content': '욕설이 있어요',
         }
 
     def test_create(self):
@@ -225,4 +261,26 @@ class ReCommentAPITest(APITestCase):
 
         ## 2. like with wrong profile
         response = self.client.post(like_url, {'profile': 1})
+        self.assertEqual(response.status_code, 400)
+
+    def test_report(self):
+        self.client.force_authenticate(user=self.normaluser)
+        report_url = '/v1/recomments/1/report/'
+        response = self.client.post(report_url, self.report_data)
+        self.assertEqual(response.status_code, 201)
+
+    def test_report_fail(self):
+        report_url = '/v1/recomments/1/report/'
+        self.client.force_authenticate(user=self.normaluser)
+        ## 1. no data
+        response = self.client.post(report_url)
+        self.assertEqual(response.status_code, 400)
+
+        ## 2. invalid report_reason
+        response = self.client.post(report_url, {'report_reason': "invalid"})
+        self.assertEqual(response.status_code, 400)
+
+        ## 3. already reported
+        response = self.client.post(report_url, self.report_data)
+        response = self.client.post(report_url, self.report_data)
         self.assertEqual(response.status_code, 400)
