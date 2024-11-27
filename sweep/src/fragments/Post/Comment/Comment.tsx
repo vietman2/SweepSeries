@@ -13,7 +13,11 @@ import { useTheme } from "@contexts/theme";
 import { AuthorProfile } from "@fragments/Author";
 import { CommentType } from "@models/community";
 import { alert } from "@services/alert";
-import { likeComment } from "@services/community";
+import {
+  createRecomment,
+  deleteComment,
+  likeComment,
+} from "@services/community";
 import { ThemeColorType } from "@themes/colors";
 
 interface CommentProps {
@@ -40,8 +44,8 @@ export function Comment({
   const [editMode, setEditMode] = useState<boolean>(false);
   const [selected, setSelected] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  
-  const { isAuthenticated, selectedProfileId } = useAuth();
+
+  const { isAuthenticated, selectedProfile } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -58,25 +62,45 @@ export function Comment({
   };
 
   const handleCommentLike = async () => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated || !selectedProfile) {
       loginAlert();
       return;
     }
 
-    const response = await likeComment(comment.id, selectedProfileId);
+    const response = await likeComment(comment.id, selectedProfile.id);
 
     if (response) {
       refresh();
     }
   };
 
-  const postRecomment = async () => {}; // TODO: integrate with the backend
-  const removeComment = async () => {}; // TODO: integrate with the backend
+  const postRecomment = async () => {
+    const response = await createRecomment(
+      comment.id,
+      newComment,
+      selectedProfile?.id
+    );
+
+    if (response) {
+      refresh();
+      setNewComment("");
+    } else {
+      alert("답글 작성 실패", "오류가 발생했습니다.");
+    }
+  };
+
+  const removeComment = async () => {
+    const response = await deleteComment(comment.id);
+
+    if (response) {
+      refresh();
+    } else {
+      alert("댓글 삭제 실패", "오류가 발생했습니다.");
+    }
+  };
+
   const patchComment = () => {}; // TODO: integrate with the backend
-  const handleReportSubmit = async (
-    selectedReason: string,
-    detail: string
-  ) => {
+  const handleReportSubmit = async (selectedReason: string, detail: string) => {
     // TODO: integrate with the backend
     console.log(selectedReason, detail);
   };
@@ -97,15 +121,14 @@ export function Comment({
   };
 
   useEffect(() => {
+    if (comment.is_deleted) return;
     if (comment.is_author) {
       setActions([
         { label: "수정하기", onPress: handleToggleEditMode },
         { label: "삭제하기", onPress: handleDeletePress },
       ]);
     } else {
-      setActions([
-        { label: "신고하기", onPress: handleReportPress },
-      ]);
+      setActions([{ label: "신고하기", onPress: handleReportPress }]);
     }
   }, []);
 
@@ -134,7 +157,7 @@ export function Comment({
             <View style={styles.horizontal}>
               <AuthorProfile author={comment.author} />
             </View>
-            {isAuthenticated && (
+            {isAuthenticated && actions.length > 0 && (
               <PopupMenu items={actions}>
                 <AppIcon icon="dots" color={theme.lowEmphasis} size={16} />
               </PopupMenu>
@@ -211,7 +234,7 @@ export function Comment({
         ) : null}
         {selected && recommentMode ? (
           <View style={styles.newcomment}>
-            <View style={styles.placeholder} />
+            <AuthorProfile author={selectedProfile} imageOnly />
             <View style={styles.textinput}>
               <TextInput
                 value={newComment}
@@ -281,6 +304,7 @@ const createStyles = (theme: ThemeColorType) =>
       flexDirection: "row",
       alignItems: "center",
       paddingHorizontal: 8,
+      gap: 4,
       backgroundColor: theme.background,
     },
     likeIcon: {

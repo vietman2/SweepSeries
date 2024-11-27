@@ -1,18 +1,32 @@
-import { fireEvent } from "@testing-library/react-native";
+import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { Comment } from "./Comment";
 import * as AuthContext from "@contexts/auth";
 import * as AlertAPI from "@services/alert/alert";
 import * as CommentsAPI from "@services/community/comments";
+import * as ReCommentsAPI from "@services/community/recomments";
 import { sampleComments } from "@testdata/community";
 import { renderWithProviders } from "@utils/test-utils";
+import { sampleAuthor } from "@testdata/auth";
 
 jest.mock("./Recomment", () => ({
   Recomment: () => null,
 }));
-jest.mock("../Report/ReportModal", () => ({
-  ReportModal: () => null,
-}));
+jest.mock("../Report/ReportModal", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+  return {
+    ReportModal: ({
+      onSubmit,
+    }: {
+      onSubmit: (selectedReason: string, detail: string) => void;
+    }) => (
+      <TouchableOpacity
+        testID="report"
+        onPress={() => onSubmit("spam", "spam")}
+      />
+    ),
+  };
+});
 jest.mock("@contexts/auth", () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => (
     <>{children}</>
@@ -31,7 +45,7 @@ describe("<Comment />", () => {
       logout: jest.fn(),
       mode: "normal",
       isAuthenticated: true,
-      selectedProfileId: 1,
+      selectedProfile: sampleAuthor,
     });
     jest
       .spyOn(AlertAPI, "alert")
@@ -68,10 +82,15 @@ describe("<Comment />", () => {
       />
     );
 
-    fireEvent.press(getByTestId("신고하기"));
+    waitFor(() => {
+      fireEvent.press(getByTestId("신고하기"));
+      fireEvent.press(getByTestId("report"));
+    });
   });
 
-  it("handles delete", () => {
+  it("handles recomment write and comment delete", () => {
+    jest.spyOn(CommentsAPI, "deleteComment").mockResolvedValue(true);
+    jest.spyOn(ReCommentsAPI, "createRecomment").mockResolvedValue(true);
     const { getByTestId } = renderWithProviders(
       <Comment
         comment={sampleComments[0]}
@@ -81,10 +100,16 @@ describe("<Comment />", () => {
       />
     );
 
-    fireEvent.press(getByTestId("삭제하기"));
+    waitFor(() => {
+      fireEvent.press(getByTestId("recomment"));
+      fireEvent.press(getByTestId("send"));
+      fireEvent.press(getByTestId("삭제하기"));
+    });
   });
 
-  it("handles recomment write", () => {
+  it("handles recomment write and comment delete fail", () => {
+    jest.spyOn(CommentsAPI, "deleteComment").mockResolvedValue(null);
+    jest.spyOn(ReCommentsAPI, "createRecomment").mockResolvedValue(null);
     const { getByTestId } = renderWithProviders(
       <Comment
         comment={sampleComments[0]}
@@ -94,7 +119,11 @@ describe("<Comment />", () => {
       />
     );
 
-    fireEvent.press(getByTestId("recomment"));
+    waitFor(() => {
+      fireEvent.press(getByTestId("recomment"));
+      fireEvent.press(getByTestId("send"));
+      fireEvent.press(getByTestId("삭제하기"));
+    });
   });
 
   it("handles comment like", () => {
@@ -131,17 +160,20 @@ describe("<Comment />", () => {
       logout: jest.fn(),
       mode: "guest",
       isAuthenticated: false,
-      selectedProfileId: null,
+      selectedProfile: null,
     });
     const { getByTestId } = renderWithProviders(
       <Comment
-        comment={sampleComments[0]}
+        comment={sampleComments[1]}
         recommentMode
         enterRecomment={jest.fn()}
         refresh={jest.fn()}
+        first
       />
     );
 
-    fireEvent.press(getByTestId("like"));
+    waitFor(() => {
+      fireEvent.press(getByTestId("like"));
+    });
   });
 });
