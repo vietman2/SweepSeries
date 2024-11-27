@@ -56,3 +56,20 @@ export async function likeRecomment(
     return null;
   }
 }
+
+export async function reportRecomment(
+  id: number,
+  reason: string,
+  content: string
+) {
+  try {
+    await axios.post(`/v1/recomments/${id}/report/`, {
+      report_reason: reason,
+      report_content: content,
+    });
+
+    return true;
+  } catch {
+    return null;
+  }
+}

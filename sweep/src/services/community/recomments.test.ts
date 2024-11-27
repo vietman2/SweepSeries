@@ -5,6 +5,7 @@ import {
   deleteRecomment,
   editRecomment,
   likeRecomment,
+  reportRecomment,
 } from "./recomments";
 
 describe("createRecomment", () => {
@@ -80,6 +81,24 @@ describe("likeComment", () => {
     jest.spyOn(axios, "post").mockRejectedValue(null);
 
     const result = await likeRecomment(1, null);
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("reportRecomment", () => {
+  it("should report recomment", async () => {
+    jest.spyOn(axios, "post").mockResolvedValue({});
+
+    const result = await reportRecomment(1, "reason", "content");
+
+    expect(result).toEqual(true);
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "post").mockRejectedValue(null);
+
+    const result = await reportRecomment(1, "reason", "content");
 
     expect(result).toBeNull();
   });
