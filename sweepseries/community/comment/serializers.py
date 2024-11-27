@@ -1,27 +1,37 @@
 from rest_framework import serializers
 
+from auth.userprofile.models import UserProfile
 from auth.userprofile.serializers import UserProfileSerializer
+from community.post.models import Post
 from community.utils import get_time_since_created
 from .models import Comment, ReComment
 
 class RecommentSerializer(serializers.ModelSerializer):
-    author          = UserProfileSerializer()
-    created_at      = serializers.SerializerMethodField()
-    num_likes       = serializers.SerializerMethodField()
-    is_liked        = serializers.SerializerMethodField()
-    is_author       = serializers.SerializerMethodField()
+    id              = serializers.IntegerField(read_only=True)
+    author          = UserProfileSerializer(read_only=True)
+    created_at      = serializers.SerializerMethodField(read_only=True)
+    num_likes       = serializers.SerializerMethodField(read_only=True)
+    is_liked        = serializers.SerializerMethodField(read_only=True)
+    is_author       = serializers.SerializerMethodField(read_only=True)
+    is_deleted      = serializers.BooleanField(read_only=True)
+
+    comment         = serializers.IntegerField(write_only=True)
+    profile         = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = ReComment
         fields = [
-            'id',
-            'author',
-            'content',
-            'created_at',
-            'num_likes',
-            'is_liked',
-            'is_author'
+            'id', 'author', 'content', 'created_at', 'num_likes',
+            'is_liked', 'is_author', 'is_deleted', 'comment', 'profile'
         ]
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+
+        if instance.is_deleted:
+            representation['content'] = "삭제된 답글입니다."
+
+        return representation
 
     def get_created_at(self, obj):
         return get_time_since_created(obj.created_at)
@@ -41,28 +51,64 @@ class RecommentSerializer(serializers.ModelSerializer):
             return False
         return obj.author.user == profile.user
 
+    def validate_comment(self, value):
+        if not Comment.objects.filter(id=value, is_deleted=False).exists():
+            raise serializers.ValidationError("오류가 발생했습니다.")
+
+        comment = Comment.objects.get(id=value)
+
+        return comment
+    
+    def validate_profile(self, value):
+        if not UserProfile.objects.filter(id=value).exists():
+            raise serializers.ValidationError("오류가 발생했습니다.")
+
+        user_profile = UserProfile.objects.get(id=value)
+        if not user_profile.user == self.context.get('user', None):
+            raise serializers.ValidationError("프로필을 다시 선택해주세요.")
+
+        return user_profile
+
+    def create(self, validated_data):
+        comment = validated_data.pop('comment')
+        profile = validated_data.pop('profile')
+
+        recomment = ReComment.objects.create(
+            **validated_data,
+            author=profile,
+            comment=comment
+        )
+
+        return recomment
+
 class CommentSerializer(serializers.ModelSerializer):
-    author          = UserProfileSerializer()
-    created_at      = serializers.SerializerMethodField()
-    num_likes       = serializers.SerializerMethodField()
-    num_recomments  = serializers.SerializerMethodField()
-    is_liked        = serializers.SerializerMethodField()
-    is_author       = serializers.SerializerMethodField()
-    recomments      = serializers.SerializerMethodField()
+    id              = serializers.IntegerField(read_only=True)
+    author          = UserProfileSerializer(read_only=True)
+    created_at      = serializers.SerializerMethodField(read_only=True)
+    num_likes       = serializers.SerializerMethodField(read_only=True)
+    num_recomments  = serializers.SerializerMethodField(read_only=True)
+    is_liked        = serializers.SerializerMethodField(read_only=True)
+    is_author       = serializers.SerializerMethodField(read_only=True)
+    is_deleted      = serializers.BooleanField(read_only=True)
+    recomments      = serializers.SerializerMethodField(read_only=True)
+
+    post            = serializers.IntegerField(write_only=True)
+    profile         = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = Comment
         fields = [
-            'id',
-            'author',
-            'content',
-            'created_at',
-            'num_likes',
-            'num_recomments',
-            'is_liked',
-            'is_author',
-            'recomments'
+            'id', 'author', 'content', 'created_at','num_likes', 'num_recomments',
+            'is_liked', 'is_author', 'is_deleted', 'recomments', 'post', 'profile'
         ]
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+
+        if instance.is_deleted:
+            representation['content'] = "삭제된 댓글입니다."
+
+        return representation
 
     def get_created_at(self, obj):
         return get_time_since_created(obj.created_at)
@@ -86,10 +132,40 @@ class CommentSerializer(serializers.ModelSerializer):
         return obj.author.user == profile.user
 
     def get_recomments(self, obj):
-        recomments = obj.recomments.filter(is_deleted=False, recomment_reports__isnull=True)
+        recomments = obj.recomments.all()
         recomments.order_by('-created_at')
 
         serializer = RecommentSerializer(recomments, many=True)
         serializer.context['profile'] = self.context.get('profile', None)
 
         return serializer.data
+
+    def validate_post(self, value):
+        if not Post.objects.filter(id=value, is_deleted=False).exists():
+            raise serializers.ValidationError("오류가 발생했습니다.")
+
+        post = Post.objects.get(id=value)
+
+        return post
+
+    def validate_profile(self, value):
+        if not UserProfile.objects.filter(id=value).exists():
+            raise serializers.ValidationError("오류가 발생했습니다.")
+
+        user_profile = UserProfile.objects.get(id=value)
+        if not user_profile.user == self.context.get('user', None):
+            raise serializers.ValidationError("프로필을 다시 선택해주세요.")
+
+        return user_profile
+
+    def create(self, validated_data):
+        post = validated_data.pop('post')
+        profile = validated_data.pop('profile')
+
+        comment = Comment.objects.create(
+            **validated_data,
+            author=profile,
+            post=post
+        )
+
+        return comment
