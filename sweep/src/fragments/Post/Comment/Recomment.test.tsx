@@ -2,7 +2,6 @@ import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { Recomment } from "./Recomment";
 import * as AuthContext from "@contexts/auth";
-import * as AlertAPI from "@services/alert/alert";
 import * as RecommentsAPI from "@services/community/recomments";
 import { sampleAuthor } from "@testdata/auth";
 import { sampleRecomments } from "@testdata/community";
@@ -43,15 +42,6 @@ describe("<Recomment />", () => {
       isAuthenticated: true,
       selectedProfile: sampleAuthor,
     });
-    jest
-      .spyOn(AlertAPI, "alert")
-      .mockImplementation(
-        (title: string, message: string, onPress?: () => void) => {
-          if (onPress) {
-            onPress();
-          }
-        }
-      );
   });
 
   it("renders correctly and handles edit mode", () => {

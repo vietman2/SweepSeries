@@ -3,7 +3,6 @@ import { fireEvent } from "@testing-library/react-native";
 import * as Clipboard from "expo-clipboard";
 
 import { CustomerService } from "./CustomerService";
-import * as AlertAPI from "@services/alert/alert";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("@fragments/Inquiry", () => ({
@@ -13,15 +12,6 @@ jest.mock("@fragments/Inquiry", () => ({
 describe("<CustomerService />", () => {
   beforeEach(() => {
     jest.spyOn(Clipboard, "setStringAsync").mockImplementationOnce(jest.fn());
-    jest
-      .spyOn(AlertAPI, "alert")
-      .mockImplementation(
-        (title: string, message: string, onPress?: () => void) => {
-          if (onPress) {
-            onPress();
-          }
-        }
-      );
   });
 
   it("renders correctly", () => {

@@ -2,7 +2,6 @@ import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { PostContent } from "./PostContent";
 import * as AuthContext from "@contexts/auth";
-import * as AlertAPI from "@services/alert/alert";
 import * as PostsAPI from "@services/community/posts";
 import { sampleAuthor } from "@testdata/auth";
 import { samplePostDetail } from "@testdata/community";
@@ -39,15 +38,6 @@ describe("<PostContent />", () => {
       isAuthenticated: true,
       selectedProfile: sampleAuthor,
     });
-    jest
-      .spyOn(AlertAPI, "alert")
-      .mockImplementation(
-        (title: string, message: string, onPress?: () => void) => {
-          if (onPress) {
-            onPress();
-          }
-        }
-      );
   });
 
   it("renders correctly and enter edit mode", async () => {
