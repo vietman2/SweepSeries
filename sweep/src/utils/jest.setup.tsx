@@ -255,6 +255,24 @@ jest.mock("@contexts/theme", () => ({
     colorScheme: "light",
   }),
 }));
+jest.mock("@fragments/Author", () => ({
+  AuthorProfile: () => null,
+}));
+jest.mock("@fragments/Post/Report/ReportModal", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+  return {
+    ReportModal: ({
+      onSubmit,
+    }: {
+      onSubmit: (selectedReason: string, detail: string) => void;
+    }) => (
+      <TouchableOpacity
+        testID="report"
+        onPress={() => onSubmit("spam", "spam")}
+      />
+    ),
+  };
+});
 jest.mock("@fragments/SignUp", () => {
   const { TouchableOpacity } = jest.requireActual("react-native");
 

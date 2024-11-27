@@ -11,29 +11,11 @@ import { renderWithProviders } from "@utils/test-utils";
 jest.mock("./Recomment", () => ({
   Recomment: () => null,
 }));
-jest.mock("../Report/ReportModal", () => {
-  const { TouchableOpacity } = jest.requireActual("react-native");
-  return {
-    ReportModal: ({
-      onSubmit,
-    }: {
-      onSubmit: (selectedReason: string, detail: string) => void;
-    }) => (
-      <TouchableOpacity
-        testID="report"
-        onPress={() => onSubmit("spam", "spam")}
-      />
-    ),
-  };
-});
 jest.mock("@contexts/auth", () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => (
     <>{children}</>
   ),
   useAuth: jest.fn(),
-}));
-jest.mock("@fragments/Author", () => ({
-  AuthorProfile: () => null,
 }));
 
 describe("<Comment />", () => {
@@ -62,7 +44,7 @@ describe("<Comment />", () => {
       fireEvent.press(getByTestId("신고하기"));
       fireEvent.press(getByTestId("report"));
     });
-  }
+  };
 
   it("handles report", () => {
     jest.spyOn(CommentsAPI, "reportComment").mockResolvedValue(true);
@@ -72,7 +54,7 @@ describe("<Comment />", () => {
 
   it("handles report", () => {
     jest.spyOn(CommentsAPI, "reportComment").mockResolvedValue(null);
-    
+
     report();
   });
 

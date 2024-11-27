@@ -12,9 +12,6 @@ jest.mock("expo-router", () => ({
     back: jest.fn(),
   },
 }));
-jest.mock("../Report/ReportModal", () => ({
-  ReportModal: () => null,
-}));
 jest.mock("../Tag/Tag", () => ({
   Tag: () => null,
 }));
@@ -23,9 +20,6 @@ jest.mock("@contexts/auth", () => ({
     <>{children}</>
   ),
   useAuth: jest.fn(),
-}));
-jest.mock("@fragments/Author", () => ({
-  AuthorProfile: () => null,
 }));
 
 describe("<PostContent />", () => {

@@ -3,6 +3,8 @@ import { fireEvent } from "@testing-library/react-native";
 import { ReportModal } from "./ReportModal";
 import { renderWithProviders } from "@utils/test-utils";
 
+jest.unmock("@fragments/Post/Report/ReportModal");
+
 describe("<ReportModal />", () => {
   it("renders and hide modal", () => {
     const { getByTestId } = renderWithProviders(

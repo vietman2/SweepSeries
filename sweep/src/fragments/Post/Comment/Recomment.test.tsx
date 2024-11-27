@@ -7,29 +7,11 @@ import { sampleAuthor } from "@testdata/auth";
 import { sampleRecomments } from "@testdata/community";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("../Report/ReportModal", () => {
-  const { TouchableOpacity } = jest.requireActual("react-native");
-  return {
-    ReportModal: ({
-      onSubmit,
-    }: {
-      onSubmit: (selectedReason: string, detail: string) => void;
-    }) => (
-      <TouchableOpacity
-        testID="report"
-        onPress={() => onSubmit("inappropriate", "inappropriate")}
-      />
-    ),
-  };
-});
 jest.mock("@contexts/auth", () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => (
     <>{children}</>
   ),
   useAuth: jest.fn(),
-}));
-jest.mock("@fragments/Author", () => ({
-  AuthorProfile: () => null,
 }));
 
 describe("<Recomment />", () => {
