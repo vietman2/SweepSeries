@@ -75,8 +75,8 @@ class RecommentSerializer(serializers.ModelSerializer):
             instance.content = validated_data['content']
             instance.save()
             return instance
-        else:
-            raise serializers.ValidationError("오류가 발생했습니다.")
+
+        raise serializers.ValidationError("오류가 발생했습니다.")
 
     def create(self, validated_data):
         comment = validated_data.pop('comment')
@@ -172,8 +172,8 @@ class CommentSerializer(serializers.ModelSerializer):
             instance.content = validated_data['content']
             instance.save()
             return instance
-        else:
-            raise serializers.ValidationError("오류가 발생했습니다.")
+
+        raise serializers.ValidationError("오류가 발생했습니다.")
 
     def create(self, validated_data):
         post = validated_data.pop('post')
