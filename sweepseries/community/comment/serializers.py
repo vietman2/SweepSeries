@@ -58,7 +58,7 @@ class RecommentSerializer(serializers.ModelSerializer):
         comment = Comment.objects.get(id=value)
 
         return comment
-    
+
     def validate_profile(self, value):
         if not UserProfile.objects.filter(id=value).exists():
             raise serializers.ValidationError("오류가 발생했습니다.")

@@ -74,6 +74,7 @@ class CommentAPITest(APITestCase):
         ## 2. not owner
         self.client.force_authenticate(user=self.normaluser)
         response = self.client.delete(f'{self.url}2/')
+        self.assertEqual(response.status_code, 403)
 
     def test_like(self):
         self.client.force_authenticate(user=self.normaluser)
@@ -138,7 +139,7 @@ class ReCommentAPITest(APITestCase):
         self.assertEqual(response.status_code, 400)
 
         ## 4. comment dne
-        data['comment'] = 100
+        data['comment'] = 0
         response = self.client.post(self.url, data)
         self.assertEqual(response.status_code, 400)
 
@@ -149,7 +150,7 @@ class ReCommentAPITest(APITestCase):
         self.assertEqual(response.status_code, 400)
 
         ## 6. profile dne
-        data['profile'] = 100
+        data['profile'] = 0
         response = self.client.post(self.url, data)
         self.assertEqual(response.status_code, 400)
 
@@ -171,6 +172,7 @@ class ReCommentAPITest(APITestCase):
         ## 2. not owner
         self.client.force_authenticate(user=self.normaluser)
         response = self.client.delete(f'{self.url}2/')
+        self.assertEqual(response.status_code, 403)
 
     def test_like(self):
         self.client.force_authenticate(user=self.normaluser)
