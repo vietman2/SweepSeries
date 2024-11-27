@@ -16,13 +16,12 @@ class PostSimpleSerializer(serializers.ModelSerializer):
     author          = UserProfileSerializer()
     num_likes       = serializers.SerializerMethodField()
     num_comments    = serializers.SerializerMethodField()
-    is_liked        = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
         fields = [
-            'id', 'tag', 'title', 'content', 'image', 'created_at', 'author',
-            'num_views', 'num_likes', 'num_comments', 'is_liked'
+            'id', 'tag', 'title', 'content', 'image', 'created_at',
+            'author', 'num_views', 'num_likes', 'num_comments'
         ]
 
     def get_content(self, obj):
@@ -43,11 +42,12 @@ class PostSimpleSerializer(serializers.ModelSerializer):
         return obj.post_likes.count()
 
     def get_num_comments(self, obj):
-        return obj.comments.filter(is_deleted=False).count()
+        count = 0
+        comments = obj.comments.all()
+        for comment in comments:
+            count += comment.recomments.count()
 
-    def get_is_liked(self, obj):
-        user = self.context['profile']
-        return obj.post_likes.filter(user=user).exists()
+        return count + comments.count()
 
 class PostImageSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
@@ -85,7 +85,12 @@ class PostDetailSerializer(serializers.ModelSerializer):
         return obj.post_likes.count()
 
     def get_num_comments(self, obj):
-        return obj.comments.filter(is_deleted=False).count()
+        count = 0
+        comments = obj.comments.all()
+        for comment in comments:
+            count += comment.recomments.count()
+
+        return count + comments.count()
 
     def get_is_liked(self, obj):
         profile = self.context.get('profile', None)
@@ -120,7 +125,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
         return True
 
     def get_comments(self, obj):
-        comments = obj.comments.filter(is_deleted=False, comment_reports__isnull=True)
+        comments = obj.comments.all()
         comments.order_by('-created_at')
 
         serializer = CommentSerializer(comments, many=True)

@@ -50,7 +50,6 @@ class PostViewSet(ModelViewSet):
             queryset = Post.objects.filter(q).order_by('-created_at')
 
             serializer = PostSimpleSerializer(queryset, many=True)
-            serializer.context['profile'] = request.query_params.get('profile', None)
 
             tags = Tag.objects.filter(forum=forum)
             tags = TagSerializer(tags, many=True).data
