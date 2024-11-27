@@ -16,6 +16,7 @@ import {
   deleteRecomment,
   editRecomment,
   likeRecomment,
+  reportRecomment,
 } from "@services/community";
 import { ThemeColorType } from "@themes/colors";
 
@@ -67,9 +68,19 @@ export function Recomment({
     }
   };
 
-  const handleReportSubmit = async () => {
-    // TODO: integrate with the backend
-    refresh();
+  const handleReportSubmit = async (selectedReason: string, detail: string) => {
+    const response = await reportRecomment(
+      recomment.id,
+      selectedReason,
+      detail
+    );
+
+    if (response) {
+      setModalVisible(false);
+      alert("신고 완료", "신고가 정상적으로 접수되었습니다.");
+    } else {
+      alert("신고 실패", "다시 시도해주세요.");
+    }
   };
 
   const handleLike = async () => {
