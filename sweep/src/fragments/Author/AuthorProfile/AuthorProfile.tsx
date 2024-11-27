@@ -3,16 +3,21 @@ import { Image, StyleSheet, View } from "react-native";
 import { AppIcon } from "@components/Icons";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
-import { AuthorType } from "@models/community";
+import { UserProfileType } from "@models/auth";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
-  author: AuthorType;
+  author: UserProfileType | null;
+  imageOnly?: boolean;
 }
 
-export function AuthorProfile({ author }: Readonly<Props>) {
+export function AuthorProfile({ author, imageOnly = false }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  if (!author) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
@@ -23,7 +28,7 @@ export function AuthorProfile({ author }: Readonly<Props>) {
           <AppIcon icon="default_profile" size={24} color={author.color} />
         </View>
       )}
-      <Text style={styles.authorText}>{author.nickname}</Text>
+      {imageOnly ? null : <Text style={styles.authorText}>{author.nickname}</Text>}
     </View>
   );
 }
