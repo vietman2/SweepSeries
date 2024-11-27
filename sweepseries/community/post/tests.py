@@ -109,6 +109,22 @@ class PostAPITest(APITestCase):
         response = self.client.get(self.url + '2024072300000001/', {'profile': 1})
         self.assertEqual(response.status_code, 403)
 
+    def test_destroy(self):
+        ## 1. delete
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.delete(self.url + '2024072300000002/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_destroy_fail(self):
+        ## 1. unauthenticated
+        response = self.client.delete(self.url + '2024072300000002/')
+        self.assertEqual(response.status_code, 403)
+
+        ## 2. not owner
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.delete(self.url + '2024072300000001/')
+        self.assertEqual(response.status_code, 403)
+
     def test_like(self):
         like_url = self.url + '2024072300000001/like/'
         ## 1. like

@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from drf_spectacular.utils import extend_schema
 
-#from community.permissions import IsOwner
+from community.permissions import IsOwner
 from auth.userprofile.models import UserProfile
 from community.tag.models import Tag
 from community.tag.serializers import TagSerializer
@@ -19,18 +19,18 @@ from .serializers import PostSimpleSerializer, PostDetailSerializer
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.filter(is_deleted=False)
     serializer_class = PostSimpleSerializer
-    http_method_names = ['get', 'post']
+    http_method_names = ['get', 'post', 'delete']
 
     def get_permissions(self):
         login_needed = ['create', 'partial_update', 'destroy', 'like']
-        #must_be_owner = ['partial_update', 'destroy']
+        must_be_owner = ['partial_update', 'destroy']
 
         permissions = []
 
         if self.action in login_needed:
             permissions.append(IsAuthenticated())
-        """if self.action in must_be_owner:
-            permissions.append(IsOwner())"""
+        if self.action in must_be_owner:
+            permissions.append(IsOwner())
 
         return permissions
 
@@ -79,6 +79,14 @@ class PostViewSet(ModelViewSet):
         serializer.increment_clicks()
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(summary='게시글 삭제', tags=['게시글'])
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.is_deleted = True
+        instance.save()
+
+        return Response({'message': "게시글이 삭제되었습니다."}, status=status.HTTP_200_OK)
 
     @extend_schema(summary='게시글 좋아요', tags=['게시글'])
     @action(detail=True, methods=['post'])
