@@ -8,6 +8,7 @@ import { Scroll } from "@components/ScrollView";
 import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
 import { MainProfile } from "@fragments/Profile";
+import { logout as logoutRequest } from "@services/auth";
 import { ThemeColorType } from "@themes/colors";
 
 export function MyPage() {
@@ -44,11 +45,15 @@ export function MyPage() {
   };
 
   const handleEventsPress = () => {};
-  const handleLogoutPress = () => {
-    // TODO: integrate logout with the backend
-    logout();
-    if (router.canDismiss()) router.dismissAll();
-    router.replace("/");
+
+  const handleLogoutPress = async () => {
+    const response = await logoutRequest();
+
+    if (response) {
+      logout();
+      if (router.canDismiss()) router.dismissAll();
+      router.replace("/");
+    }
   };
   const handleDeleteAccountPress = () => {};
 

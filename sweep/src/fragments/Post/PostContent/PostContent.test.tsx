@@ -2,10 +2,16 @@ import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { PostContent } from "./PostContent";
 import * as AuthContext from "@contexts/auth";
-import * as AlertAPI from "@services/alert/alert";
+import * as PostsAPI from "@services/community/posts";
+import { sampleAuthor } from "@testdata/auth";
 import { samplePostDetail } from "@testdata/community";
 import { renderWithProviders } from "@utils/test-utils";
 
+jest.mock("expo-router", () => ({
+  router: {
+    back: jest.fn(),
+  },
+}));
 jest.mock("../Report/ReportModal", () => ({
   ReportModal: () => null,
 }));
@@ -30,16 +36,8 @@ describe("<PostContent />", () => {
       logout: jest.fn(),
       mode: "normal",
       isAuthenticated: true,
+      selectedProfile: sampleAuthor,
     });
-    jest
-      .spyOn(AlertAPI, "alert")
-      .mockImplementation(
-        (title: string, message: string, onPress?: () => void) => {
-          if (onPress) {
-            onPress();
-          }
-        }
-      );
   });
 
   it("renders correctly and enter edit mode", async () => {
@@ -47,6 +45,7 @@ describe("<PostContent />", () => {
       renderWithProviders(
         <PostContent
           post={{ ...samplePostDetail, is_author: true, is_liked: false }}
+          refresh={jest.fn()}
         />
       )
     );
@@ -56,9 +55,27 @@ describe("<PostContent />", () => {
   });
 
   it("handles delete correctly", async () => {
+    jest.spyOn(PostsAPI, "deletePost").mockResolvedValueOnce(true);
     const { getByTestId } = await waitFor(() =>
       renderWithProviders(
-        <PostContent post={{ ...samplePostDetail, is_author: true }} />
+        <PostContent
+          post={{ ...samplePostDetail, is_author: true }}
+          refresh={jest.fn()}
+        />
+      )
+    );
+
+    fireEvent.press(getByTestId("삭제하기"));
+  });
+
+  it("handles delete fail", async () => {
+    jest.spyOn(PostsAPI, "deletePost").mockResolvedValueOnce(null);
+    const { getByTestId } = await waitFor(() =>
+      renderWithProviders(
+        <PostContent
+          post={{ ...samplePostDetail, is_author: true }}
+          refresh={jest.fn()}
+        />
       )
     );
 
@@ -67,9 +84,50 @@ describe("<PostContent />", () => {
 
   it("handles report correctly", async () => {
     const { getByTestId } = await waitFor(() =>
-      renderWithProviders(<PostContent post={samplePostDetail} />)
+      renderWithProviders(
+        <PostContent post={samplePostDetail} refresh={jest.fn()} />
+      )
     );
 
     fireEvent.press(getByTestId("신고하기"));
+  });
+
+  it("handles like correctly", async () => {
+    jest.spyOn(PostsAPI, "likePost").mockResolvedValueOnce(true);
+    const { getByTestId } = await waitFor(() =>
+      renderWithProviders(
+        <PostContent post={samplePostDetail} refresh={jest.fn()} />
+      )
+    );
+
+    fireEvent.press(getByTestId("like"));
+  });
+
+  it("handles like fail correctly", async () => {
+    jest.spyOn(PostsAPI, "likePost").mockResolvedValueOnce(null);
+    const { getByTestId } = await waitFor(() =>
+      renderWithProviders(
+        <PostContent post={samplePostDetail} refresh={jest.fn()} />
+      )
+    );
+
+    fireEvent.press(getByTestId("like"));
+  });
+
+  it("handles not logged in", async () => {
+    jest.spyOn(AuthContext, "useAuth").mockReturnValue({
+      login: jest.fn(),
+      logout: jest.fn(),
+      mode: "guest",
+      isAuthenticated: false,
+      selectedProfile: null,
+    });
+    const { getByTestId } = await waitFor(() =>
+      renderWithProviders(
+        <PostContent post={samplePostDetail} refresh={jest.fn()} />
+      )
+    );
+
+    fireEvent.press(getByTestId("like"));
   });
 });

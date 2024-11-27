@@ -1,6 +1,6 @@
-import { sampleAuthor } from "./authors";
 import { sampleComments } from "./comments";
 import { TagType, PostSimpleType, PostDetailType } from "@models/community";
+import { sampleAuthor } from "@testdata/auth";
 
 export const sampleTags: TagType[] = [
   {
@@ -31,7 +31,7 @@ export const sampleTags: TagType[] = [
 
 export const samplePosts: PostSimpleType[] = [
   {
-    id: 1,
+    id: "1",
     author: sampleAuthor,
     title: "야구 장비 추천 좀 부탁드립니다!",
     content:
@@ -42,10 +42,9 @@ export const samplePosts: PostSimpleType[] = [
     num_comments: 1,
     num_likes: 1,
     num_views: 1,
-    is_liked: true,
   },
   {
-    id: 2,
+    id: "2",
     author: sampleAuthor,
     title: "야구장에서 먹는 음식, 뭐가 제일 맛있나요?",
     content:
@@ -56,10 +55,9 @@ export const samplePosts: PostSimpleType[] = [
     num_comments: 1,
     num_likes: 1,
     num_views: 1,
-    is_liked: false,
   },
   {
-    id: 3,
+    id: "3",
     author: sampleAuthor,
     title: "야구 규칙 중에서 헷갈리는 부분 질문드립니다",
     content:
@@ -70,12 +68,11 @@ export const samplePosts: PostSimpleType[] = [
     num_comments: 1,
     num_likes: 1,
     num_views: 1,
-    is_liked: true,
   },
 ];
 
 export const samplePostDetail: PostDetailType = {
-  id: 1,
+  id: "1",
   author: sampleAuthor,
   title: "야구 장비 추천 좀 부탁드립니다!",
   content:
@@ -92,5 +89,5 @@ export const samplePostDetail: PostDetailType = {
   num_views: 1,
   is_liked: true,
   is_author: false,
-  comments: sampleComments,
+  comments: [sampleComments[0]],
 };

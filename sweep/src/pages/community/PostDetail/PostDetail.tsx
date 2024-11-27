@@ -9,15 +9,17 @@ import {
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 
-import { ErrorPage } from "@components/Fallbacks";
+import { ErrorPage, LoadingComponent } from "@components/Fallbacks";
 import { AppIcon } from "@components/Icons";
 import { TextInput } from "@components/Inputs";
 import { ScrollView } from "@components/ScrollView";
 import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
+import { AuthorProfile } from "@fragments/Author";
 import { Comment, PostContent } from "@fragments/Post";
 import { PostDetailType } from "@models/community";
-import { getPostDetail } from "@services/community";
+import { alert } from "@services/alert";
+import { getPostDetail, createComment } from "@services/community";
 import { ThemeColorType } from "@themes/colors";
 
 export function PostDetail() {
@@ -30,7 +32,7 @@ export function PostDetail() {
   const [error, setError] = useState(false);
   const [refreshCount, setRefreshCount] = useState<number>(0);
 
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, selectedProfile } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -48,7 +50,10 @@ export function PostDetail() {
   const fetchPost = async () => {
     setLoading(true);
 
-    const response = await getPostDetail(id);
+    const response = await getPostDetail(
+      id,
+      selectedProfile ? selectedProfile.id : null
+    );
 
     if (response) {
       setPost(response);
@@ -64,14 +69,26 @@ export function PostDetail() {
     setCommentMode(false);
   };
 
-  const postComment = () => {};
+  const postComment = async () => {
+    const response = await createComment(
+      post?.id,
+      newComment,
+      selectedProfile?.id
+    );
+
+    if (response) {
+      handleRefresh();
+    } else {
+      alert("댓글 작성 실패", "오류가 발생했습니다.");
+    }
+  };
 
   useEffect(() => {
     fetchPost();
   }, [refreshCount]);
 
-  if (error || post === undefined)
-    return <ErrorPage onRefresh={handleRefresh} />;
+  if (error) return <ErrorPage onRefresh={handleRefresh} />;
+  if (post === undefined) return <LoadingComponent />;
 
   return (
     <>
@@ -82,7 +99,7 @@ export function PostDetail() {
       >
         <ScrollView refreshing={loading} onRefresh={handleRefresh}>
           <Pressable onPress={handleRecommentCancel} testID="cancel">
-            <PostContent post={post} />
+            <PostContent post={post} refresh={handleRefresh} />
             {post.comments.length > 0 ? (
               <View style={styles.comments}>
                 {post.comments.map((comment, index) => (
@@ -101,7 +118,7 @@ export function PostDetail() {
         </ScrollView>
         {commentMode && isAuthenticated ? (
           <View style={styles.newcomment}>
-            <View style={styles.placeholder} />
+            <AuthorProfile author={selectedProfile} imageOnly />
             <View style={styles.textinput}>
               <TextInput
                 value={newComment}
@@ -133,7 +150,8 @@ const createStyles = (theme: ThemeColorType) =>
     newcomment: {
       flexDirection: "row",
       alignItems: "center",
-      paddingHorizontal: 10,
+      paddingHorizontal: 12,
+      gap: 4,
       backgroundColor: theme.background,
     },
     placeholder: {
@@ -145,6 +163,6 @@ const createStyles = (theme: ThemeColorType) =>
     },
     textinput: {
       flex: 1,
-      marginHorizontal: 5,
+      marginHorizontal: 4,
     },
   });

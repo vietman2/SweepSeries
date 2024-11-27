@@ -1,4 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import * as AlertAPI from "@services/alert/alert";
+
+jest
+  .spyOn(AlertAPI, "alert")
+  .mockImplementation(
+    (title: string, message: string, onPress?: () => void) => {
+      if (onPress) {
+        onPress();
+      }
+    }
+  );
 
 jest.mock("react-native-svg/css", () => ({
   SvgCssUri: "SvgCssUri",

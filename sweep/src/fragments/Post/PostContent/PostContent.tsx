@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { router } from "expo-router";
 
 import { ReportModal } from "../Report/ReportModal";
 import { Tag } from "../Tag/Tag";
@@ -13,13 +14,15 @@ import { useTheme } from "@contexts/theme";
 import { AuthorProfile } from "@fragments/Author";
 import { PostDetailType } from "@models/community";
 import { alert } from "@services/alert";
+import { deletePost, likePost } from "@services/community";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
   post: PostDetailType;
+  refresh: () => void;
 }
 
-export function PostContent({ post }: Readonly<Props>) {
+export function PostContent({ post, refresh }: Readonly<Props>) {
   const [editedTitle, setEditedTitle] = useState<string>(post.title);
   const [editedContent, setEditedContent] = useState<string>(post.content);
 
@@ -29,15 +32,40 @@ export function PostContent({ post }: Readonly<Props>) {
     { label: string; onPress: () => void }[]
   >([]);
 
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, selectedProfile } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  const onBlock = () => {};
+  const loginAlert = () => {
+    alert("로그인이 필요합니다.", "로그인 후 이용해주세요.", () => {}, "확인");
+  };
+
   const handleEditSubmit = () => {}; // TODO: integrate with the backend
-  const removePost = () => {}; // TODO: integrate with the backend
-  const likePost = () => {}; // TODO: integrate with the backend
+
+  const removePost = async () => {
+    const response = await deletePost(post.id);
+
+    if (response) {
+      router.back();
+    } else {
+      alert("삭제 실패", "게시글을 삭제하는 데 실패했습니다.");
+    }
+  };
+
   const handleReportSubmit = () => {}; // TODO: integrate with the backend
+
+  const handleLike = async () => {
+    if (!isAuthenticated) {
+      loginAlert();
+      return;
+    }
+
+    const response = await likePost(post.id, selectedProfile?.id);
+
+    if (response) {
+      refresh();
+    }
+  };
 
   const cancelEdit = () => {
     setEditedTitle(post.title);
@@ -66,16 +94,11 @@ export function PostContent({ post }: Readonly<Props>) {
   useEffect(() => {
     if (post.is_author) {
       setActions([
-        { label: "신고하기", onPress: handleReportPress },
-        { label: "차단하기", onPress: onBlock },
         { label: "수정하기", onPress: onEditPress },
         { label: "삭제하기", onPress: handleDeletePress },
       ]);
     } else {
-      setActions([
-        { label: "신고하기", onPress: handleReportPress },
-        { label: "차단하기", onPress: onBlock },
-      ]);
+      setActions([{ label: "신고하기", onPress: handleReportPress }]);
     }
   }, []);
 
@@ -143,7 +166,11 @@ export function PostContent({ post }: Readonly<Props>) {
             <AppIcon icon="eye" size={20} color={theme.lowEmphasis} />
             <Text style={styles.countText}>{post.num_views}</Text>
           </View>
-          <TouchableOpacity onPress={likePost} style={styles.count}>
+          <TouchableOpacity
+            onPress={handleLike}
+            style={styles.count}
+            testID="like"
+          >
             {post.is_liked ? (
               <AppIcon icon="heart" size={16} color={theme.primary} />
             ) : (

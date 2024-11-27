@@ -1,10 +1,10 @@
 import axios from "axios";
 
-import { getPostDetail, getPosts } from "./posts";
+import { getPostDetail, getPosts, deletePost, likePost } from "./posts";
 
 describe("getPosts", () => {
-    const posts = [{ id: 1, title: "Test Post" }];
-    const response = { data: posts };
+  const posts = [{ id: 1, title: "Test Post" }];
+  const response = { data: posts };
 
   it("should fetch posts", async () => {
     jest.spyOn(axios, "get").mockResolvedValue(response);
@@ -13,7 +13,7 @@ describe("getPosts", () => {
 
     expect(result).toEqual(posts);
   });
-    
+
   it("should fetch posts with queries", async () => {
     jest.spyOn(axios, "get").mockResolvedValue(response);
 
@@ -32,13 +32,13 @@ describe("getPosts", () => {
 });
 
 describe("getPostDetail", () => {
-    const post = { id: 1, title: "Test Post" };
-    const response = { data: post };
+  const post = { id: 1, title: "Test Post" };
+  const response = { data: post };
 
   it("should fetch post detail", async () => {
     jest.spyOn(axios, "get").mockResolvedValue(response);
 
-    const result = await getPostDetail("1");
+    const result = await getPostDetail("1", 1);
 
     expect(result).toEqual(post);
   });
@@ -46,7 +46,51 @@ describe("getPostDetail", () => {
   it("should return null on error", async () => {
     jest.spyOn(axios, "get").mockRejectedValue(null);
 
-    const result = await getPostDetail("1");
+    const result = await getPostDetail("1", null);
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("deletePost", () => {
+  it("should delete post", async () => {
+    jest.spyOn(axios, "delete").mockResolvedValue({});
+
+    const result = await deletePost("1");
+
+    expect(result).toEqual(true);
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "delete").mockRejectedValue(null);
+
+    const result = await deletePost("1");
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("likePost", () => {
+  it("should like post", async () => {
+    jest.spyOn(axios, "post").mockResolvedValue({});
+
+    const result = await likePost("1", 1);
+
+    expect(result).toEqual(true);
+  });
+
+  it("should return null if param is undefined", async () => {
+    jest.spyOn(axios, "post").mockResolvedValue({});
+
+    const result = await likePost("1", undefined);
+
+    expect(result).toBeNull();
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "post").mockRejectedValue(null);
+
+    const result = await likePost("1", 1);
 
     expect(result).toBeNull();
   });

@@ -16,11 +16,39 @@ export async function getPosts(forum?: string, tag?: number, search?: string) {
   }
 }
 
-export async function getPostDetail(id: string) {
+export async function getPostDetail(id: string, selectedProfileId: number | null) {
   try {
-    const response = await axios.get(`/v1/posts/${id}/`);
+    const response = await axios.get(`/v1/posts/${id}/`, {
+      params: selectedProfileId && {
+        profile: selectedProfileId,
+      },
+    });
 
     return response.data;
+  } catch {
+    return null;
+  }
+}
+
+export async function deletePost(id: string) {
+  try {
+    await axios.delete(`/v1/posts/${id}/`);
+
+    return true;
+  } catch {
+    return null;
+  }
+}
+
+export async function likePost(id: string, selectedProfileId: number | undefined) {
+  if (!selectedProfileId) return null;
+
+  try {
+    await axios.post(`/v1/posts/${id}/like/`, {
+      profile: selectedProfileId,
+    });
+
+    return true;
   } catch {
     return null;
   }

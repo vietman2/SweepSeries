@@ -80,6 +80,8 @@ class CommentLike(Like):
         related_name='comment_likes'
     )
 
+    objects = models.Manager()
+
     class Meta:
         db_table = 'comment_like'
         unique_together = ('comment', 'user')
@@ -90,6 +92,8 @@ class ReCommentLike(Like):
         on_delete=models.CASCADE,
         related_name='recomment_likes'
     )
+
+    objects = models.Manager()
 
     class Meta:
         db_table = 'recomment_like'

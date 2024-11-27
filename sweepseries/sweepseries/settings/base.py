@@ -104,7 +104,7 @@ REST_AUTH = {
     'JWT_AUTH_COOKIE_USE_CSRF' : True,
     'SESSION_LOGIN': False,
 
-    ##'USER_DETAILS_SERIALIZER': 'auth.userprofile.serializers.UserSerializer',
+    'USER_DETAILS_SERIALIZER': 'auth.user.serializers.UserAuthSerializer',
 }
 
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'

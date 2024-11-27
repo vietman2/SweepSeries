@@ -1,4 +1,12 @@
 import { getAgreements } from "./agreements";
+import { login, logout, refresh } from "./auth";
 import { checkUsernameEmail, checkPassword } from "./register";
 
-export { getAgreements, checkUsernameEmail, checkPassword };
+export {
+  login,
+  logout,
+  refresh,
+  getAgreements,
+  checkUsernameEmail,
+  checkPassword,
+};

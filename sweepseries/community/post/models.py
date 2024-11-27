@@ -14,7 +14,7 @@ class Image(TimeStampedModel):
     objects = models.Manager()
 
     class Meta:
-        db_table = 'image'
+        db_table = 'post_image'
 
 class Post(TimeStampedModel):
     id              = CustomAutoField()
@@ -54,6 +54,8 @@ class PostReport(Report):
 class PostLike(Like):
     post            = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_likes')
 
+    objects = models.Manager()
+
     class Meta:
         db_table = 'post_like'
         unique_together = ('post', 'user')
@@ -67,5 +69,5 @@ class PostContentView(models.Model):
     objects = models.Manager()
 
     class Meta:
-        db_table = 'content_view'
+        db_table = 'post_content_view'
         unique_together = ('post', 'user')

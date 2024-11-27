@@ -9,10 +9,11 @@ import { PopupMenu } from "@components/Menus";
 import { Text } from "@components/Texts";
 import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
+import { AuthorProfile } from "@fragments/Author";
 import { ReCommentType } from "@models/community";
 import { alert } from "@services/alert";
+import { deleteRecomment, likeRecomment } from "@services/community";
 import { ThemeColorType } from "@themes/colors";
-import { AuthorProfile } from "@fragments/Author";
 
 interface Props {
   recomment: ReCommentType;
@@ -26,8 +27,6 @@ export function Recomment({
   first = false,
 }: Readonly<Props>) {
   const [editedContent, setEditedContent] = useState<string>(recomment.content);
-  const [like, setLike] = useState<boolean>(recomment.is_liked);
-  const [numLikes, setNumLikes] = useState<number>(recomment.num_likes);
 
   const [actions, setActions] = useState<
     { label: string; onPress: () => void }[]
@@ -35,21 +34,43 @@ export function Recomment({
   const [editMode, setEditMode] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, selectedProfile } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  const patchRecomment = async () => {}; // TODO: integrate with the backend
-  const handleLike = async () => {
-    // TODO: integrate with the backend
-    setLike(!like);
+  const loginAlert = () => {
+    alert("로그인이 필요합니다.", "로그인 후 이용해주세요.", () => {}, "확인");
   };
-  const removeRecomment = async () => {}; // TODO: integrate with the backend
+
+  const patchRecomment = async () => {}; // TODO: integrate with the backend
+
+  const removeRecomment = async () => {
+    const response = await deleteRecomment(recomment.id);
+
+    if (response) {
+      refresh();
+    } else {
+      alert("댓글 삭제 실패", "다시 시도해주세요.");
+    }
+  };
+
   const handleReportSubmit = async () => {
     // TODO: integrate with the backend
     refresh();
   };
 
+  const handleLike = async () => {
+    if (!isAuthenticated || !selectedProfile) {
+      loginAlert();
+      return;
+    }
+
+    const response = await likeRecomment(recomment.id, selectedProfile.id);
+
+    if (response) {
+      refresh();
+    }
+  };
   const handleReportPress = () => {
     setModalVisible(true);
   };
@@ -69,20 +90,15 @@ export function Recomment({
   };
 
   useEffect(() => {
-    if (recomment.is_my_recomment) {
+    if (recomment.is_deleted) return;
+    if (recomment.is_author) {
       setActions([
-        { label: "신고하기", onPress: handleReportPress },
-        { label: "차단하기", onPress: () => {} },
         { label: "수정하기", onPress: handleToggleEditMode },
         { label: "삭제하기", onPress: handleDeletePress },
       ]);
     } else {
-      setActions([
-        { label: "신고하기", onPress: handleReportPress },
-        { label: "차단하기", onPress: () => {} },
-      ]);
+      setActions([{ label: "신고하기", onPress: handleReportPress }]);
     }
-    setNumLikes(recomment.num_likes);
   }, []);
 
   return (
@@ -93,7 +109,7 @@ export function Recomment({
           <View style={styles.horizontal}>
             <AuthorProfile author={recomment.author} />
           </View>
-          {isAuthenticated && (
+          {isAuthenticated && actions.length > 0 && (
             <PopupMenu items={actions}>
               <AppIcon icon="dots" color={theme.lowEmphasis} size={16} />
             </PopupMenu>
@@ -126,11 +142,11 @@ export function Recomment({
             testID="like"
           >
             <AppIcon
-              icon={like ? "heart" : "heart-outline"}
-              color={like ? theme.primary : theme.lowEmphasis}
+              icon={recomment.is_liked ? "heart" : "heart-outline"}
+              color={recomment.is_liked ? theme.primary : theme.lowEmphasis}
               size={12}
             />
-            <Text style={styles.likeText}>{numLikes}</Text>
+            <Text style={styles.likeText}>{recomment.num_likes}</Text>
           </TouchableOpacity>
         </View>
       </View>
