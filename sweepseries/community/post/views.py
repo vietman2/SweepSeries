@@ -8,8 +8,8 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from drf_spectacular.utils import extend_schema
 
-from community.permissions import IsOwner
 from auth.userprofile.models import UserProfile
+from community.permissions import IsOwner
 from community.tag.models import Tag
 from community.tag.serializers import TagSerializer
 from community.utils import get_forum
@@ -90,7 +90,7 @@ class PostViewSet(ModelViewSet):
 
     @extend_schema(summary='게시글 좋아요', tags=['게시글'])
     @action(detail=True, methods=['post'])
-    def like(self, request, *args, **kwargs):
+    def like(self, request, *args, **kwargs):   ## pylint: disable=unused-argument
         instance = self.get_object()
         profile_id = request.data.get('profile', None)
 
