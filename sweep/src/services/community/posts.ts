@@ -1,10 +1,9 @@
 import axios from "axios";
 
-export async function getPosts(selectedProfileId: number | null, forum?: string, tag?: number, search?: string) {
+export async function getPosts(forum?: string, tag?: number, search?: string) {
   try {
     const response = await axios.get("/v1/posts/", {
       params: {
-        profile: selectedProfileId,
         forum,
         tag,
         search,

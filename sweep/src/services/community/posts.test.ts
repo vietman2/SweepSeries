@@ -9,7 +9,7 @@ describe("getPosts", () => {
   it("should fetch posts", async () => {
     jest.spyOn(axios, "get").mockResolvedValue(response);
 
-    const result = await getPosts(null);
+    const result = await getPosts();
 
     expect(result).toEqual(posts);
   });
@@ -17,7 +17,7 @@ describe("getPosts", () => {
   it("should fetch posts with queries", async () => {
     jest.spyOn(axios, "get").mockResolvedValue(response);
 
-    const result = await getPosts(1, "forum", 1, "search");
+    const result = await getPosts("forum", 1, "search");
 
     expect(result).toEqual(posts);
   });
@@ -25,7 +25,7 @@ describe("getPosts", () => {
   it("should return null on error", async () => {
     jest.spyOn(axios, "get").mockRejectedValue(null);
 
-    const result = await getPosts(null);
+    const result = await getPosts();
 
     expect(result).toBeNull();
   });
