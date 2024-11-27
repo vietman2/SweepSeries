@@ -48,9 +48,6 @@ describe("<Recomment />", () => {
     const { getByTestId } = renderWithProviders(
       <Recomment recomment={sampleRecomments[0]} refresh={jest.fn()} />
     );
-
-    fireEvent.press(getByTestId("수정하기"));
-    fireEvent.press(getByTestId("close"));
   });
 
   it("handles report", () => {
@@ -69,6 +66,7 @@ describe("<Recomment />", () => {
 
   it("handles like and delete", () => {
     jest.spyOn(RecommentsAPI, "likeRecomment").mockResolvedValueOnce(true);
+    jest.spyOn(RecommentsAPI, "editRecomment").mockResolvedValueOnce(true);
     jest.spyOn(RecommentsAPI, "deleteRecomment").mockResolvedValueOnce(true);
     const { getByTestId } = renderWithProviders(
       <Recomment recomment={sampleRecomments[0]} refresh={jest.fn()} />
@@ -77,11 +75,14 @@ describe("<Recomment />", () => {
     waitFor(() => {
       fireEvent.press(getByTestId("like"));
       fireEvent.press(getByTestId("삭제하기"));
+      fireEvent.press(getByTestId("수정하기"));
+      fireEvent.press(getByTestId("patch"));
     });
   });
 
   it("handles like and delete fail", () => {
     jest.spyOn(RecommentsAPI, "likeRecomment").mockResolvedValueOnce(null);
+    jest.spyOn(RecommentsAPI, "editRecomment").mockResolvedValueOnce(null);
     jest.spyOn(RecommentsAPI, "deleteRecomment").mockResolvedValueOnce(null);
     const { getByTestId } = renderWithProviders(
       <Recomment recomment={sampleRecomments[0]} refresh={jest.fn()} />
@@ -90,6 +91,10 @@ describe("<Recomment />", () => {
     waitFor(() => {
       fireEvent.press(getByTestId("like"));
       fireEvent.press(getByTestId("삭제하기"));
+      fireEvent.press(getByTestId("수정하기"));
+      fireEvent.press(getByTestId("close"));
+      fireEvent.press(getByTestId("수정하기"));
+      fireEvent.press(getByTestId("patch"));
     });
   });
 
