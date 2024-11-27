@@ -56,7 +56,7 @@ describe("<Recomment />", () => {
       fireEvent.press(getByTestId("신고하기"));
       fireEvent.press(getByTestId("report"));
     });
-  }
+  };
 
   it("handles report", () => {
     jest.spyOn(RecommentsAPI, "reportRecomment").mockResolvedValueOnce(true);
@@ -66,7 +66,7 @@ describe("<Recomment />", () => {
 
   it("handles report fail", () => {
     jest.spyOn(RecommentsAPI, "reportRecomment").mockResolvedValueOnce(null);
-    
+
     report();
   });
 
