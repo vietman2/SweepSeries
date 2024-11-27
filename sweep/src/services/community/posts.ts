@@ -30,7 +30,19 @@ export async function getPostDetail(id: string, selectedProfileId: number | null
   }
 }
 
-export async function likePost(id: string, selectedProfileId: number | null) {
+export async function deletePost(id: string) {
+  try {
+    await axios.delete(`/v1/posts/${id}/`);
+
+    return true;
+  } catch {
+    return null;
+  }
+}
+
+export async function likePost(id: string, selectedProfileId: number | undefined) {
+  if (!selectedProfileId) return null;
+
   try {
     await axios.post(`/v1/posts/${id}/like/`, {
       profile: selectedProfileId,
