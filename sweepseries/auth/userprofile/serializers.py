@@ -4,6 +4,7 @@ from rest_framework.serializers import ModelSerializer
 from .models import UserProfile
 
 class UserProfileSerializer(ModelSerializer):
+    id              = serializers.IntegerField(read_only=True)
     profile_image   = serializers.ImageField(use_url=True, read_only=True)
     color           = serializers.CharField(source='default_color', read_only=True)
     nickname        = serializers.CharField(read_only=True)
@@ -12,6 +13,7 @@ class UserProfileSerializer(ModelSerializer):
     class Meta:
         model = UserProfile
         fields = [
+            "id",
             "profile_image",
             "color",
             "nickname",
