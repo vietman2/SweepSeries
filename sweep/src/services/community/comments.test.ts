@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { createComment, deleteComment, likeComment } from "./comments";
+import { createComment, deleteComment, editComment, likeComment } from "./comments";
 
 describe("createComment", () => {
   it("should create comment", async () => {
@@ -39,6 +39,24 @@ describe("deleteComment", () => {
     jest.spyOn(axios, "delete").mockRejectedValue(null);
 
     const result = await deleteComment(1);
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("editComment", () => {
+  it("should edit comment", async () => {
+    jest.spyOn(axios, "patch").mockResolvedValue({});
+
+    const result = await editComment(1, "content");
+
+    expect(result).toEqual(true);
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "patch").mockRejectedValue(null);
+
+    const result = await editComment(1, "content");
 
     expect(result).toBeNull();
   });

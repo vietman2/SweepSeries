@@ -1,5 +1,5 @@
-import { createComment, deleteComment, likeComment } from "./comments";
-import { createRecomment, deleteRecomment, likeRecomment } from "./recomments";
+import { createComment, deleteComment, editComment, likeComment } from "./comments";
+import { createRecomment, deleteRecomment, editRecomment, likeRecomment } from "./recomments";
 import { deletePost, getPostDetail, getPosts, likePost } from "./posts";
 import { getTags } from "./tags";
 
@@ -11,8 +11,10 @@ export {
   getTags,
   createComment,
   deleteComment,
+  editComment,
   likeComment,
   createRecomment,
   deleteRecomment,
+  editRecomment,
   likeRecomment,
 };

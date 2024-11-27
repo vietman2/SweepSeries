@@ -30,6 +30,18 @@ export async function deleteRecomment(id: number) {
   }
 }
 
+export async function editRecomment(id: number, content: string) {
+  try {
+    await axios.patch(`/v1/recomments/${id}/`, {
+      content,
+    });
+
+    return true;
+  } catch {
+    return null;
+  }
+}
+
 export async function likeRecomment(
   id: number,
   selectedProfileId: number | null
