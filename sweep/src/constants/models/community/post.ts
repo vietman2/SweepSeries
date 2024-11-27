@@ -1,5 +1,5 @@
-import { AuthorType } from "./author";
 import { CommentType } from "./comment";
+import { UserProfileType } from "@models/auth";
 
 export type TagType = {
   id: number;
@@ -17,11 +17,10 @@ export type PostSimpleType = {
   content: string;
   image: string | null;
   created_at: string;
-  author: AuthorType;
+  author: UserProfileType;
   num_views: number;
   num_comments: number;
   num_likes: number;
-  is_liked: boolean;
 };
 
 type ImageType = {
@@ -32,7 +31,7 @@ type ImageType = {
 export type PostDetailType = {
   id: string;
   tag: TagType;
-  author: AuthorType;
+  author: UserProfileType;
   created_at: string;
   title: string;
   content: string;

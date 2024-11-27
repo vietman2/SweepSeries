@@ -1,6 +1,6 @@
-import { sampleAuthor } from "./authors";
 import { sampleComments } from "./comments";
 import { TagType, PostSimpleType, PostDetailType } from "@models/community";
+import { sampleAuthor } from "@testdata/auth";
 
 export const sampleTags: TagType[] = [
   {
@@ -42,7 +42,6 @@ export const samplePosts: PostSimpleType[] = [
     num_comments: 1,
     num_likes: 1,
     num_views: 1,
-    is_liked: true,
   },
   {
     id: "2",
@@ -56,7 +55,6 @@ export const samplePosts: PostSimpleType[] = [
     num_comments: 1,
     num_likes: 1,
     num_views: 1,
-    is_liked: false,
   },
   {
     id: "3",
@@ -70,7 +68,6 @@ export const samplePosts: PostSimpleType[] = [
     num_comments: 1,
     num_likes: 1,
     num_views: 1,
-    is_liked: true,
   },
 ];
 

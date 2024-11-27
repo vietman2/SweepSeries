@@ -1,5 +1,5 @@
-import { sampleAuthor } from "./authors";
 import { CommentType, ReCommentType } from "@models/community";
+import { sampleAuthor } from "@testdata/auth";
 
 export const sampleRecomments: ReCommentType[] = [
   {

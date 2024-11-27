@@ -1,8 +1,8 @@
-import { AuthorType } from "./author";
+import { UserProfileType } from "@models/auth";
 
 export type CommentType = {
   id: number;
-  author: AuthorType;
+  author: UserProfileType;
   content: string;
   created_at: string;
   num_likes: number;
@@ -16,7 +16,7 @@ export type CommentType = {
 
 export type ReCommentType = {
   id: number;
-  author: AuthorType;
+  author: UserProfileType;
   content: string;
   created_at: string;
   num_likes: number;
