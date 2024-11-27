@@ -34,7 +34,8 @@ describe("<PostContent />", () => {
     });
   });
 
-  it("renders correctly and enter edit mode", async () => {
+  it("renders and handles edit correctly", async () => {
+    jest.spyOn(PostsAPI, "editPost").mockResolvedValueOnce(true);
     const { getByTestId, getByText } = await waitFor(() =>
       renderWithProviders(
         <PostContent
@@ -44,8 +45,29 @@ describe("<PostContent />", () => {
       )
     );
 
-    fireEvent.press(getByTestId("수정하기"));
-    fireEvent.press(getByText("취소"));
+    waitFor(() => {
+      fireEvent.press(getByTestId("수정하기"));
+      fireEvent.press(getByText("취소"));
+      fireEvent.press(getByTestId("수정하기"));
+      fireEvent.press(getByText("수정"));
+    });
+  });
+
+  it("handles fail", async () => {
+    jest.spyOn(PostsAPI, "editPost").mockResolvedValueOnce(null);
+    const { getByTestId, getByText } = await waitFor(() =>
+      renderWithProviders(
+        <PostContent
+          post={{ ...samplePostDetail, is_author: true, is_liked: false }}
+          refresh={jest.fn()}
+        />
+      )
+    );
+
+    waitFor(() => {
+      fireEvent.press(getByTestId("수정하기"));
+      fireEvent.press(getByText("수정"));
+    });
   });
 
   it("handles delete correctly", async () => {

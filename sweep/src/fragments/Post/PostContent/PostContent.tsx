@@ -14,7 +14,7 @@ import { useTheme } from "@contexts/theme";
 import { AuthorProfile } from "@fragments/Author";
 import { PostDetailType } from "@models/community";
 import { alert } from "@services/alert";
-import { deletePost, likePost } from "@services/community";
+import { deletePost, editPost, likePost } from "@services/community";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
@@ -40,7 +40,16 @@ export function PostContent({ post, refresh }: Readonly<Props>) {
     alert("로그인이 필요합니다.", "로그인 후 이용해주세요.", () => {}, "확인");
   };
 
-  const handleEditSubmit = () => {}; // TODO: integrate with the backend
+  const handleEditSubmit = async () => {
+    const response = await editPost(post.id, editedTitle, editedContent);
+
+    if (response) {
+      refresh();
+      setEditMode(false);
+    } else {
+      alert("수정 실패", "게시글을 수정하는 데 실패했습니다.");
+    }
+  };
 
   const removePost = async () => {
     const response = await deletePost(post.id);
