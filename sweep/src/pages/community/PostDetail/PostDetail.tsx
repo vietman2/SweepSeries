@@ -15,9 +15,11 @@ import { TextInput } from "@components/Inputs";
 import { ScrollView } from "@components/ScrollView";
 import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
+import { AuthorProfile } from "@fragments/Author";
 import { Comment, PostContent } from "@fragments/Post";
 import { PostDetailType } from "@models/community";
-import { getPostDetail } from "@services/community";
+import { alert } from "@services/alert";
+import { getPostDetail, createComment } from "@services/community";
 import { ThemeColorType } from "@themes/colors";
 
 export function PostDetail() {
@@ -30,7 +32,7 @@ export function PostDetail() {
   const [error, setError] = useState(false);
   const [refreshCount, setRefreshCount] = useState<number>(0);
 
-  const { isAuthenticated, selectedProfileId } = useAuth();
+  const { isAuthenticated, selectedProfile } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -48,7 +50,10 @@ export function PostDetail() {
   const fetchPost = async () => {
     setLoading(true);
 
-    const response = await getPostDetail(id, selectedProfileId);
+    const response = await getPostDetail(
+      id,
+      selectedProfile ? selectedProfile.id : null
+    );
 
     if (response) {
       setPost(response);
@@ -64,7 +69,19 @@ export function PostDetail() {
     setCommentMode(false);
   };
 
-  const postComment = () => {};
+  const postComment = async () => {
+    const response = await createComment(
+      post?.id,
+      newComment,
+      selectedProfile?.id
+    );
+
+    if (response) {
+      handleRefresh();
+    } else {
+      alert("댓글 작성 실패", "오류가 발생했습니다.");
+    }
+  };
 
   useEffect(() => {
     fetchPost();
@@ -101,7 +118,7 @@ export function PostDetail() {
         </ScrollView>
         {commentMode && isAuthenticated ? (
           <View style={styles.newcomment}>
-            <View style={styles.placeholder} />
+            <AuthorProfile author={selectedProfile} imageOnly />
             <View style={styles.textinput}>
               <TextInput
                 value={newComment}
@@ -133,7 +150,8 @@ const createStyles = (theme: ThemeColorType) =>
     newcomment: {
       flexDirection: "row",
       alignItems: "center",
-      paddingHorizontal: 10,
+      paddingHorizontal: 12,
+      gap: 4,
       backgroundColor: theme.background,
     },
     placeholder: {
@@ -145,6 +163,6 @@ const createStyles = (theme: ThemeColorType) =>
     },
     textinput: {
       flex: 1,
-      marginHorizontal: 5,
+      marginHorizontal: 4,
     },
   });

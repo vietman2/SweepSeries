@@ -3,7 +3,9 @@ import * as Router from "expo-router";
 
 import { PostDetail } from "./PostDetail";
 import * as AuthContext from "@contexts/auth";
+import * as CommentsAPI from "@services/community/comments";
 import * as PostsAPI from "@services/community/posts";
+import { sampleAuthor } from "@testdata/auth";
 import { samplePostDetail } from "@testdata/community";
 import { renderWithProviders } from "@utils/test-utils";
 
@@ -12,6 +14,9 @@ jest.mock("@contexts/auth", () => ({
     <div>{children}</div>
   ),
   useAuth: jest.fn(),
+}));
+jest.mock("@fragments/Author", () => ({
+  AuthorProfile: () => null,
 }));
 jest.mock("@fragments/Post", () => {
   const { TouchableOpacity } = jest.requireActual("react-native");
@@ -33,7 +38,7 @@ describe("<PostDetail />", () => {
       login: jest.fn(),
       logout: jest.fn(),
       mode: "pro",
-      selectedProfileId: 1,
+      selectedProfile: sampleAuthor,
     });
     jest.spyOn(PostsAPI, "getPostDetail").mockResolvedValue(samplePostDetail);
   });
@@ -61,6 +66,20 @@ describe("<PostDetail />", () => {
     await waitFor(() => fireEvent.press(getByTestId("refresh")));
   });
 
+  it("handles create comment", async () => {
+    jest.spyOn(CommentsAPI, "createComment").mockResolvedValue(true);
+    const { getByTestId } = renderWithProviders(<PostDetail />);
+
+    await waitFor(() => fireEvent.press(getByTestId("new-comment")));
+  });
+
+  it("handles create comment fail", async () => {
+    jest.spyOn(CommentsAPI, "createComment").mockResolvedValue(null);
+    const { getByTestId } = renderWithProviders(<PostDetail />);
+
+    await waitFor(() => fireEvent.press(getByTestId("new-comment")));
+  });
+
   it("handles recomment mode", async () => {
     const { getByTestId } = renderWithProviders(<PostDetail />);
 
@@ -76,7 +95,7 @@ describe("<PostDetail />", () => {
       login: jest.fn(),
       logout: jest.fn(),
       mode: "guest",
-      selectedProfileId: null,
+      selectedProfile: null,
     });
     const { getByTestId } = renderWithProviders(<PostDetail />);
 
