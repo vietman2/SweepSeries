@@ -18,6 +18,7 @@ import {
   deleteComment,
   editComment,
   likeComment,
+  reportComment,
 } from "@services/community";
 import { ThemeColorType } from "@themes/colors";
 
@@ -112,8 +113,14 @@ export function Comment({
   };
 
   const handleReportSubmit = async (selectedReason: string, detail: string) => {
-    // TODO: integrate with the backend
-    console.log(selectedReason, detail);
+    const response = await reportComment(comment.id, selectedReason, detail);
+
+    if (response) {
+      setModalVisible(false);
+      alert("신고 완료", "신고가 정상적으로 접수되었습니다.");
+    } else {
+      alert("신고하기 실패", "오류가 발생했습니다.");
+    }
   };
 
   const handleRecommentPress = () => {
