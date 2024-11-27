@@ -48,19 +48,7 @@ describe("<Comment />", () => {
     });
   });
 
-  it("renders and handles edit mode", () => {
-    const { getByTestId } = renderWithProviders(
-      <Comment
-        comment={sampleComments[0]}
-        recommentMode={false}
-        enterRecomment={jest.fn()}
-        refresh={jest.fn()}
-      />
-    );
-  });
-
-  it("handles report", () => {
-    jest.spyOn(CommentsAPI, "reportComment").mockResolvedValue(true);
+  const report = () => {
     const { getByTestId } = renderWithProviders(
       <Comment
         comment={{ ...sampleComments[0], is_author: false }}
@@ -74,23 +62,18 @@ describe("<Comment />", () => {
       fireEvent.press(getByTestId("신고하기"));
       fireEvent.press(getByTestId("report"));
     });
+  }
+
+  it("handles report", () => {
+    jest.spyOn(CommentsAPI, "reportComment").mockResolvedValue(true);
+
+    report();
   });
 
   it("handles report", () => {
     jest.spyOn(CommentsAPI, "reportComment").mockResolvedValue(null);
-    const { getByTestId } = renderWithProviders(
-      <Comment
-        comment={{ ...sampleComments[0], is_author: false }}
-        recommentMode
-        enterRecomment={jest.fn()}
-        refresh={jest.fn()}
-      />
-    );
-
-    waitFor(() => {
-      fireEvent.press(getByTestId("신고하기"));
-      fireEvent.press(getByTestId("report"));
-    });
+    
+    report();
   });
 
   it("handles recomment write, edit and comment delete", () => {
