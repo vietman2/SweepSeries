@@ -35,6 +35,24 @@ class UserAPITestCase(APITestCase):
         response = self.client.get(self.url + str(self.normaluser.uuid) + "/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_login(self):
+        person = Person.objects.create(
+            first_name='Test',
+            last_name='User',
+            phone_number='010-1234-1234'
+        )
+        User.objects.create_user(
+            username="testuser",
+            email="ad@min.com",
+            password="testuser",
+            person=person
+        )
+        response = self.client.post("/v1/login/", {
+            "username": "testuser",
+            "password": "testuser"
+        })
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 class UserModelTest(TestCase):
     fixtures = ["core/data/test/users.json"]
 
