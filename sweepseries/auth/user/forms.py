@@ -22,11 +22,7 @@ class CustomUserCreationForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data['password'])
-        if commit:
-            user.save()
-        else:
-            return user
-
+        user.save()
         UserProfile.objects.create(user=user)
 
         return user
