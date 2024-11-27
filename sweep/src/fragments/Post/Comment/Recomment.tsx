@@ -12,7 +12,7 @@ import { useTheme } from "@contexts/theme";
 import { AuthorProfile } from "@fragments/Author";
 import { ReCommentType } from "@models/community";
 import { alert } from "@services/alert";
-import { likeRecomment } from "@services/community";
+import { deleteRecomment, likeRecomment } from "@services/community";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
@@ -34,7 +34,7 @@ export function Recomment({
   const [editMode, setEditMode] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
-  const { isAuthenticated, selectedProfileId } = useAuth();
+  const { isAuthenticated, selectedProfile } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -43,19 +43,29 @@ export function Recomment({
   };
 
   const patchRecomment = async () => {}; // TODO: integrate with the backend
-  const removeRecomment = async () => {}; // TODO: integrate with the backend
+
+  const removeRecomment = async () => {
+    const response = await deleteRecomment(recomment.id);
+
+    if (response) {
+      refresh();
+    } else {
+      alert("댓글 삭제 실패", "다시 시도해주세요.");
+    }
+  };
+
   const handleReportSubmit = async () => {
     // TODO: integrate with the backend
     refresh();
   };
 
   const handleLike = async () => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated || !selectedProfile) {
       loginAlert();
       return;
     }
 
-    const response = await likeRecomment(recomment.id, selectedProfileId);
+    const response = await likeRecomment(recomment.id, selectedProfile.id);
 
     if (response) {
       refresh();
@@ -80,6 +90,7 @@ export function Recomment({
   };
 
   useEffect(() => {
+    if (recomment.is_deleted) return;
     if (recomment.is_author) {
       setActions([
         { label: "수정하기", onPress: handleToggleEditMode },
@@ -98,7 +109,7 @@ export function Recomment({
           <View style={styles.horizontal}>
             <AuthorProfile author={recomment.author} />
           </View>
-          {isAuthenticated && (
+          {isAuthenticated && actions.length > 0 && (
             <PopupMenu items={actions}>
               <AppIcon icon="dots" color={theme.lowEmphasis} size={16} />
             </PopupMenu>

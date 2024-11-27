@@ -1,15 +1,28 @@
-import { fireEvent } from "@testing-library/react-native";
+import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { Recomment } from "./Recomment";
 import * as AuthContext from "@contexts/auth";
 import * as AlertAPI from "@services/alert/alert";
 import * as RecommentsAPI from "@services/community/recomments";
+import { sampleAuthor } from "@testdata/auth";
 import { sampleRecomments } from "@testdata/community";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("../Report/ReportModal", () => ({
-  ReportModal: () => null,
-}));
+jest.mock("../Report/ReportModal", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+  return {
+    ReportModal: ({
+      onSubmit,
+    }: {
+      onSubmit: (selectedReason: string, detail: string) => void;
+    }) => (
+      <TouchableOpacity
+        testID="report"
+        onPress={() => onSubmit("inappropriate", "inappropriate")}
+      />
+    ),
+  };
+});
 jest.mock("@contexts/auth", () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => (
     <>{children}</>
@@ -28,7 +41,7 @@ describe("<Recomment />", () => {
       logout: jest.fn(),
       mode: "normal",
       isAuthenticated: true,
-      selectedProfileId: 1,
+      selectedProfile: sampleAuthor,
     });
     jest
       .spyOn(AlertAPI, "alert")
@@ -52,36 +65,42 @@ describe("<Recomment />", () => {
 
   it("handles report", () => {
     const { getByTestId } = renderWithProviders(
-      <Recomment recomment={{...sampleRecomments[0], is_author: false}} refresh={jest.fn()} />
+      <Recomment
+        recomment={{ ...sampleRecomments[0], is_author: false }}
+        refresh={jest.fn()}
+      />
     );
 
-    fireEvent.press(getByTestId("신고하기"));
+    waitFor(() => {
+      fireEvent.press(getByTestId("신고하기"));
+      fireEvent.press(getByTestId("report"));
+    });
   });
 
-  it("handles delete", () => {
-    const { getByTestId } = renderWithProviders(
-      <Recomment recomment={sampleRecomments[0]} refresh={jest.fn()} />
-    );
-
-    fireEvent.press(getByTestId("삭제하기"));
-  });
-
-  it("handles like request", () => {
+  it("handles like and delete", () => {
     jest.spyOn(RecommentsAPI, "likeRecomment").mockResolvedValueOnce(true);
+    jest.spyOn(RecommentsAPI, "deleteRecomment").mockResolvedValueOnce(true);
     const { getByTestId } = renderWithProviders(
       <Recomment recomment={sampleRecomments[0]} refresh={jest.fn()} />
     );
 
-    fireEvent.press(getByTestId("like"));
+    waitFor(() => {
+      fireEvent.press(getByTestId("like"));
+      fireEvent.press(getByTestId("삭제하기"));
+    });
   });
 
-  it("handles like fail", () => {
+  it("handles like and delete fail", () => {
     jest.spyOn(RecommentsAPI, "likeRecomment").mockResolvedValueOnce(null);
+    jest.spyOn(RecommentsAPI, "deleteRecomment").mockResolvedValueOnce(null);
     const { getByTestId } = renderWithProviders(
       <Recomment recomment={sampleRecomments[0]} refresh={jest.fn()} />
     );
 
-    fireEvent.press(getByTestId("like"));
+    waitFor(() => {
+      fireEvent.press(getByTestId("like"));
+      fireEvent.press(getByTestId("삭제하기"));
+    });
   });
 
   it("handles unauthorized", () => {
@@ -90,10 +109,10 @@ describe("<Recomment />", () => {
       logout: jest.fn(),
       mode: "guest",
       isAuthenticated: false,
-      selectedProfileId: null,
+      selectedProfile: null,
     });
     const { getByTestId } = renderWithProviders(
-      <Recomment recomment={sampleRecomments[0]} refresh={jest.fn()} />
+      <Recomment recomment={sampleRecomments[1]} refresh={jest.fn()} first />
     );
 
     fireEvent.press(getByTestId("like"));

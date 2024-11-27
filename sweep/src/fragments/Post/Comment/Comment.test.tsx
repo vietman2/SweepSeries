@@ -5,9 +5,9 @@ import * as AuthContext from "@contexts/auth";
 import * as AlertAPI from "@services/alert/alert";
 import * as CommentsAPI from "@services/community/comments";
 import * as ReCommentsAPI from "@services/community/recomments";
+import { sampleAuthor } from "@testdata/auth";
 import { sampleComments } from "@testdata/community";
 import { renderWithProviders } from "@utils/test-utils";
-import { sampleAuthor } from "@testdata/auth";
 
 jest.mock("./Recomment", () => ({
   Recomment: () => null,
