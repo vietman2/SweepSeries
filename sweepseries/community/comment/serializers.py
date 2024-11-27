@@ -69,6 +69,14 @@ class RecommentSerializer(serializers.ModelSerializer):
 
         return user_profile
 
+    def update(self, instance, validated_data):
+        if 'content' in validated_data:
+            instance.content = validated_data['content']
+            instance.save()
+            return instance
+        else:
+            raise serializers.ValidationError("오류가 발생했습니다.")
+
     def create(self, validated_data):
         comment = validated_data.pop('comment')
         profile = validated_data.pop('profile')
@@ -157,6 +165,14 @@ class CommentSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("프로필을 다시 선택해주세요.")
 
         return user_profile
+
+    def update(self, instance, validated_data):
+        if 'content' in validated_data:
+            instance.content = validated_data['content']
+            instance.save()
+            return instance
+        else:
+            raise serializers.ValidationError("오류가 발생했습니다.")
 
     def create(self, validated_data):
         post = validated_data.pop('post')

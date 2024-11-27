@@ -23,6 +23,9 @@ class CommentAPITest(APITestCase):
         response = self.client.post(self.url, self.data)
         self.assertEqual(response.status_code, 403)
 
+        response = self.client.patch(f'{self.url}1/', {'content': 'edited comment'})
+        self.assertEqual(response.status_code, 403)
+
         response = self.client.delete(f'{self.url}1/')
         self.assertEqual(response.status_code, 403)
 
@@ -69,7 +72,7 @@ class CommentAPITest(APITestCase):
 
     def test_delete(self):
         self.client.force_authenticate(user=self.post.author.user)
-        response = self.client.delete(f'{self.url}1/')
+        response = self.client.delete(f'{self.url}2/')
         self.assertEqual(response.status_code, 200)
 
     def test_delete_fail(self):
@@ -77,6 +80,17 @@ class CommentAPITest(APITestCase):
         self.client.force_authenticate(user=self.normaluser)
         response = self.client.delete(f'{self.url}2/')
         self.assertEqual(response.status_code, 403)
+
+    def test_edit(self):
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.patch(f'{self.url}1/', {'content': 'edited comment'})
+        self.assertEqual(response.status_code, 200)
+
+    def test_edit_fail(self):
+        ## no content
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.patch(f'{self.url}1/')
+        self.assertEqual(response.status_code, 400)
 
     def test_like(self):
         self.client.force_authenticate(user=self.normaluser)
@@ -170,6 +184,21 @@ class ReCommentAPITest(APITestCase):
         self.client.force_authenticate(user=self.normaluser)
         response = self.client.delete(f'{self.url}2/')
         self.assertEqual(response.status_code, 403)
+
+    def test_edit(self):
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.patch(f'{self.url}1/', {'content': 'edited recomment'})
+        self.assertEqual(response.status_code, 200)
+
+    def test_edit_fail(self):
+        ## 1. unauthenticated
+        response = self.client.patch(f'{self.url}1/', {'content': 'edited recomment'})
+        self.assertEqual(response.status_code, 403)
+
+        ## 2. no content
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.patch(f'{self.url}1/')
+        self.assertEqual(response.status_code, 400)
 
     def test_like(self):
         self.client.force_authenticate(user=self.normaluser)

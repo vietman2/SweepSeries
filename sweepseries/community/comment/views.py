@@ -15,7 +15,7 @@ from .serializers import CommentSerializer, RecommentSerializer
 class CommentViewSet(ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    http_method_names = ['post', 'delete']
+    http_method_names = ['post', 'delete', 'patch']
 
     def get_permissions(self):
         must_be_author = ['partial_update', 'destroy']
@@ -39,6 +39,19 @@ class CommentViewSet(ModelViewSet):
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @extend_schema(summary='댓글 수정', tags=['댓글'])
+    def partial_update(self, request, *args, **kwargs):
+        comment = self.get_object()
+        serializer = self.get_serializer(comment, data=request.data, partial=True)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        except ValidationError as e:
+            return Response({"message": e.detail}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema(summary='댓글 삭제', tags=['댓글'])
     def destroy(self, request, *args, **kwargs):
@@ -75,7 +88,7 @@ class CommentViewSet(ModelViewSet):
 class ReCommentViewSet(ModelViewSet):
     queryset = ReComment.objects.all()
     serializer_class = RecommentSerializer
-    http_method_names = ['post', 'delete']
+    http_method_names = ['post', 'delete', 'patch']
 
     def get_permissions(self):
         must_be_author = ['partial_update', 'destroy']
@@ -99,6 +112,19 @@ class ReCommentViewSet(ModelViewSet):
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @extend_schema(summary='대댓글 수정', tags=['대댓글'])
+    def partial_update(self, request, *args, **kwargs):
+        recomment = self.get_object()
+        serializer = self.get_serializer(recomment, data=request.data, partial=True)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        except ValidationError as e:
+            return Response({"message": e.detail}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema(summary='대댓글 삭제', tags=['대댓글'])
     def destroy(self, request, *args, **kwargs):
