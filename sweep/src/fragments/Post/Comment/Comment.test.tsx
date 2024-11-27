@@ -57,9 +57,6 @@ describe("<Comment />", () => {
         refresh={jest.fn()}
       />
     );
-
-    fireEvent.press(getByTestId("수정하기"));
-    fireEvent.press(getByTestId("close"));
   });
 
   it("handles report", () => {
@@ -78,8 +75,9 @@ describe("<Comment />", () => {
     });
   });
 
-  it("handles recomment write and comment delete", () => {
+  it("handles recomment write, edit and comment delete", () => {
     jest.spyOn(CommentsAPI, "deleteComment").mockResolvedValue(true);
+    jest.spyOn(CommentsAPI, "editComment").mockResolvedValue(true);
     jest.spyOn(ReCommentsAPI, "createRecomment").mockResolvedValue(true);
     const { getByTestId } = renderWithProviders(
       <Comment
@@ -93,12 +91,15 @@ describe("<Comment />", () => {
     waitFor(() => {
       fireEvent.press(getByTestId("recomment"));
       fireEvent.press(getByTestId("send"));
+      fireEvent.press(getByTestId("수정하기"));
+      fireEvent.press(getByTestId("patch"));
       fireEvent.press(getByTestId("삭제하기"));
     });
   });
 
-  it("handles recomment write and comment delete fail", () => {
+  it("handles recomment write, edit and comment delete fail", () => {
     jest.spyOn(CommentsAPI, "deleteComment").mockResolvedValue(null);
+    jest.spyOn(CommentsAPI, "editComment").mockResolvedValue(null);
     jest.spyOn(ReCommentsAPI, "createRecomment").mockResolvedValue(null);
     const { getByTestId } = renderWithProviders(
       <Comment
@@ -112,6 +113,10 @@ describe("<Comment />", () => {
     waitFor(() => {
       fireEvent.press(getByTestId("recomment"));
       fireEvent.press(getByTestId("send"));
+      fireEvent.press(getByTestId("수정하기"));
+      fireEvent.press(getByTestId("close"));
+      fireEvent.press(getByTestId("수정하기"));
+      fireEvent.press(getByTestId("patch"));
       fireEvent.press(getByTestId("삭제하기"));
     });
   });
