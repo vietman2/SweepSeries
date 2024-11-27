@@ -133,3 +133,15 @@ class PostDetailSerializer(serializers.ModelSerializer):
 
         ## TODO: Think about pagination
         return serializer.data
+
+class PostWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['tag', 'title', 'content']
+
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get('title', instance.title)
+        instance.content = validated_data.get('content', instance.content)
+        instance.save()
+
+        return instance

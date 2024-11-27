@@ -12,6 +12,10 @@ class PostAPITest(APITestCase):
         self.url = '/v1/posts/'
         self.normaluser = User.objects.get(username="normaluser")
         self.profile = UserProfile.objects.get(pk=2)
+        self.edit_data = {
+            'title': 'test',
+            'content': 'test',
+        }
 
     def test_list(self):
         ## 1. forum only
@@ -108,6 +112,40 @@ class PostAPITest(APITestCase):
         self.client.force_authenticate(user=self.normaluser)
         response = self.client.get(self.url + '2024072300000001/', {'profile': 1})
         self.assertEqual(response.status_code, 403)
+
+    def test_partial_update(self):
+        ## 1. update
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.patch(self.url + '2024072300000002/', self.edit_data)
+        self.assertEqual(response.status_code, 200)
+
+    def test_partial_update_fail(self):
+        ## 1. unauthenticated
+        response = self.client.patch(self.url + '2024072300000002/', self.edit_data)
+        self.assertEqual(response.status_code, 403)
+
+        ## 2. not owner
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.patch(self.url + '2024072300000001/', self.edit_data)
+        self.assertEqual(response.status_code, 403)
+
+        ## 3. invalid data: empty title
+        data = self.edit_data.copy()
+        data['title'] = ''
+        response = self.client.patch(self.url + '2024072300000002/', data)
+        self.assertEqual(response.status_code, 400)
+
+        ## 4. invalid data: empty content
+        data = self.edit_data.copy()
+        data['content'] = ''
+        response = self.client.patch(self.url + '2024072300000002/', data)
+        self.assertEqual(response.status_code, 400)
+
+        ## 5. invalid data: title too long
+        data = self.edit_data.copy()
+        data['title'] = 'a' * 41
+        response = self.client.patch(self.url + '2024072300000002/', data)
+        self.assertEqual(response.status_code, 400)
 
     def test_destroy(self):
         ## 1. delete
