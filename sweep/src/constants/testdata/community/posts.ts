@@ -89,5 +89,5 @@ export const samplePostDetail: PostDetailType = {
   num_views: 1,
   is_liked: true,
   is_author: false,
-  comments: sampleComments,
+  comments: [sampleComments[0]],
 };
