@@ -70,8 +70,7 @@ describe("<PostContent />", () => {
     });
   });
 
-  it("handles delete correctly", async () => {
-    jest.spyOn(PostsAPI, "deletePost").mockResolvedValueOnce(true);
+  const deleteAction = async () => {
     const { getByTestId } = await waitFor(() =>
       renderWithProviders(
         <PostContent
@@ -82,34 +81,42 @@ describe("<PostContent />", () => {
     );
 
     fireEvent.press(getByTestId("삭제하기"));
+  };
+
+  it("handles delete correctly", async () => {
+    jest.spyOn(PostsAPI, "deletePost").mockResolvedValueOnce(true);
+    await deleteAction();
   });
 
   it("handles delete fail", async () => {
     jest.spyOn(PostsAPI, "deletePost").mockResolvedValueOnce(null);
-    const { getByTestId } = await waitFor(() =>
-      renderWithProviders(
-        <PostContent
-          post={{ ...samplePostDetail, is_author: true }}
-          refresh={jest.fn()}
-        />
-      )
-    );
-
-    fireEvent.press(getByTestId("삭제하기"));
+    await deleteAction();
   });
 
-  it("handles report correctly", async () => {
+  const reportAction = async () => {
     const { getByTestId } = await waitFor(() =>
       renderWithProviders(
         <PostContent post={samplePostDetail} refresh={jest.fn()} />
       )
     );
 
-    fireEvent.press(getByTestId("신고하기"));
+    waitFor(() => {
+      fireEvent.press(getByTestId("신고하기"));
+      fireEvent.press(getByTestId("report"));
+    });
+  }
+
+  it("handles report correctly", async () => {
+    jest.spyOn(PostsAPI, "reportPost").mockResolvedValueOnce(true);
+    await reportAction();
   });
 
-  it("handles like correctly", async () => {
-    jest.spyOn(PostsAPI, "likePost").mockResolvedValueOnce(true);
+  it("handles report fail", async () => {
+    jest.spyOn(PostsAPI, "reportPost").mockResolvedValueOnce(null);
+    await reportAction();
+  });
+
+  const likeAction = async () => {
     const { getByTestId } = await waitFor(() =>
       renderWithProviders(
         <PostContent post={samplePostDetail} refresh={jest.fn()} />
@@ -117,17 +124,16 @@ describe("<PostContent />", () => {
     );
 
     fireEvent.press(getByTestId("like"));
+  }
+
+  it("handles like correctly", async () => {
+    jest.spyOn(PostsAPI, "likePost").mockResolvedValueOnce(true);
+    await likeAction();
   });
 
   it("handles like fail correctly", async () => {
     jest.spyOn(PostsAPI, "likePost").mockResolvedValueOnce(null);
-    const { getByTestId } = await waitFor(() =>
-      renderWithProviders(
-        <PostContent post={samplePostDetail} refresh={jest.fn()} />
-      )
-    );
-
-    fireEvent.press(getByTestId("like"));
+    await likeAction();
   });
 
   it("handles not logged in", async () => {

@@ -14,7 +14,7 @@ import { useTheme } from "@contexts/theme";
 import { AuthorProfile } from "@fragments/Author";
 import { PostDetailType } from "@models/community";
 import { alert } from "@services/alert";
-import { deletePost, editPost, likePost } from "@services/community";
+import { deletePost, editPost, likePost, reportPost } from "@services/community";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
@@ -61,7 +61,18 @@ export function PostContent({ post, refresh }: Readonly<Props>) {
     }
   };
 
-  const handleReportSubmit = () => {}; // TODO: integrate with the backend
+  const handleReportSubmit = async (reason: string, detail: string) => {
+    const response = await reportPost(post.id, reason, detail);
+
+    if (response) {
+      setModalVisible(false);
+      alert("신고 완료", "신고가 접수되었습니다.");
+      return true;
+    } else {
+      alert("신고 실패", "오류가 발생했습니다.");
+      return false;
+    }
+  };
 
   const handleLike = async () => {
     if (!isAuthenticated) {
