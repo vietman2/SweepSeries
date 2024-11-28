@@ -109,7 +109,7 @@ describe("<Comment />", () => {
     const { getByTestId } = renderWithProviders(
       <Comment
         comment={sampleComments[0]}
-        recommentMode
+        recommentMode={false}
         enterRecomment={jest.fn()}
         refresh={jest.fn()}
       />
@@ -123,7 +123,7 @@ describe("<Comment />", () => {
     const { getByTestId } = renderWithProviders(
       <Comment
         comment={sampleComments[0]}
-        recommentMode
+        recommentMode={false}
         enterRecomment={jest.fn()}
         refresh={jest.fn()}
       />
@@ -143,7 +143,7 @@ describe("<Comment />", () => {
     const { getByTestId } = renderWithProviders(
       <Comment
         comment={sampleComments[1]}
-        recommentMode
+        recommentMode={false}
         enterRecomment={jest.fn()}
         refresh={jest.fn()}
         first

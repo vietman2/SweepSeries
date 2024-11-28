@@ -24,6 +24,10 @@ class PostAPITest(APITestCase):
             'title': 'test',
             'content': 'test',
         }
+        self.report_data = {
+            'report_reason': '도배/스팸/광고',
+            'report_content': 'test',
+        }
 
     def test_list(self):
         ## 1. forum only
@@ -239,4 +243,30 @@ class PostAPITest(APITestCase):
         ## 3. invalid profile
         self.client.force_authenticate(user=self.normaluser)
         response = self.client.post(like_url, {'profile': 1})
+        self.assertEqual(response.status_code, 400)
+
+    def test_report(self):
+        report_url = self.url + '2024072300000001/report/'
+        ## 1. report
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.post(report_url, self.report_data)
+        self.assertEqual(response.status_code, 200)
+
+    def test_report_fail(self):
+        report_url = self.url + '2024072300000001/report/'
+        ## 1. unauthenticated
+        response = self.client.post(report_url, self.report_data)
+        self.assertEqual(response.status_code, 403)
+
+        ## 2. invalid reason
+        self.client.force_authenticate(user=self.normaluser)
+        data = self.report_data.copy()
+        data['report_reason'] = 'invalid'
+        response = self.client.post(report_url, data)
+        self.assertEqual(response.status_code, 400)
+
+        ## 3. already reported
+        self.client.force_authenticate(user=self.normaluser)
+        self.client.post(report_url, self.report_data)
+        response = self.client.post(report_url, self.report_data)
         self.assertEqual(response.status_code, 400)

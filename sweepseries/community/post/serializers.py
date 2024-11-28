@@ -4,10 +4,11 @@ from rest_framework import serializers
 from auth.userprofile.models import UserProfile
 from auth.userprofile.serializers import UserProfileSerializer
 from community.comment.serializers import CommentSerializer
+from community.enums import ReportReason
 from community.tag.serializers import TagSerializer
 from community.utils import get_time_since_created, get_forum
 from core.utils import get_presigned_url
-from .models import Post, PostContentView, Image
+from .models import Post, PostContentView, PostReport, Image
 
 class PostSimpleSerializer(serializers.ModelSerializer):
     tag             = TagSerializer()
@@ -164,3 +165,31 @@ class PostWriteSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+class PostReportSerializer(serializers.ModelSerializer):
+    report_content  = serializers.CharField(write_only=True)
+    report_reason   = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = PostReport
+        fields = ["report_content", "report_reason"]
+
+    def validate_report_reason(self, value):
+        for reason in ReportReason:
+            if value == reason.label:
+                return value
+
+        raise serializers.ValidationError('유효하지 않은 신고 사유입니다.')
+
+    def report_post(self, post, user):
+        if PostReport.objects.filter(post=post, report_user=user).exists():
+            raise serializers.ValidationError('이미 신고한 게시글입니다.')
+
+        report = PostReport.objects.create(
+            post=post,
+            report_user=user,
+            report_content=self.validated_data['report_content'],
+            report_reason=self.validated_data['report_reason']
+        )
+
+        return report

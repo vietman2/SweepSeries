@@ -24,11 +24,13 @@ export function AuthorProfile({ author, imageOnly = false }: Readonly<Props>) {
       {author.profile_image ? (
         <Image src={author.profile_image} style={styles.image} />
       ) : (
-        <View style={styles.iconWrapper}>
+        <View style={[styles.iconWrapper, { backgroundColor: author.color }]}>
           <AppIcon icon="default_profile" size={24} color={author.color} />
         </View>
       )}
-      {imageOnly ? null : <Text style={styles.authorText}>{author.nickname}</Text>}
+      {imageOnly ? null : (
+        <Text style={styles.authorText}>{author.nickname}</Text>
+      )}
     </View>
   );
 }

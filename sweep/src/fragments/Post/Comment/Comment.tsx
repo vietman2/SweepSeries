@@ -118,8 +118,10 @@ export function Comment({
     if (response) {
       setModalVisible(false);
       alert("신고 완료", "신고가 정상적으로 접수되었습니다.");
+      return true;
     } else {
       alert("신고하기 실패", "오류가 발생했습니다.");
+      return false;
     }
   };
 

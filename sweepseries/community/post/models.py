@@ -48,6 +48,8 @@ class PostReport(Report):
         related_name='post_reports'
     )
 
+    objects = models.Manager()
+
     class Meta:
         db_table = 'post_report'
 

@@ -32,13 +32,26 @@ describe("<ReportModal />", () => {
     fireEvent.press(getByTestId("폭력/협박/위협"));
   });
   
-  it("handles submit", () => {
+  it("handles submit success", () => {
     const { getByTestId } = renderWithProviders(
       <ReportModal
         visible
         setVisible={jest.fn()}
         content="asdf"
-        onSubmit={jest.fn()}
+        onSubmit={jest.fn().mockResolvedValue(true)}
+      />
+    );
+
+    fireEvent.press(getByTestId("신고하기"));
+  });
+  
+  it("handles submit fail", () => {
+    const { getByTestId } = renderWithProviders(
+      <ReportModal
+        visible
+        setVisible={jest.fn()}
+        content="asdf"
+        onSubmit={jest.fn().mockResolvedValue(false)}
       />
     );
 

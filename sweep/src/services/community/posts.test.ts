@@ -7,6 +7,7 @@ import {
   deletePost,
   editPost,
   likePost,
+  reportPost,
 } from "./posts";
 
 describe("getPosts", () => {
@@ -149,6 +150,24 @@ describe("likePost", () => {
     jest.spyOn(axios, "post").mockRejectedValue(null);
 
     const result = await likePost("1", 1);
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("reportPost", () => {
+  it("should report post", async () => {
+    jest.spyOn(axios, "post").mockResolvedValue({});
+
+    const result = await reportPost("1", "reason", "detail");
+
+    expect(result).toEqual(true);
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "post").mockRejectedValue(null);
+
+    const result = await reportPost("1", "reason", "detail");
 
     expect(result).toBeNull();
   });
