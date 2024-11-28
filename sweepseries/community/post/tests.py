@@ -12,6 +12,13 @@ class PostAPITest(APITestCase):
         self.url = '/v1/posts/'
         self.normaluser = User.objects.get(username="normaluser")
         self.profile = UserProfile.objects.get(pk=2)
+        self.create_data = {
+            'forum': '덕아웃',
+            'tag': 1,
+            'title': 'test',
+            'content': 'test',
+            'author': 2,
+        }
         self.edit_data = {
             'title': 'test',
             'content': 'test',
@@ -112,6 +119,34 @@ class PostAPITest(APITestCase):
         self.client.force_authenticate(user=self.normaluser)
         response = self.client.get(self.url + '2024072300000001/', {'profile': 1})
         self.assertEqual(response.status_code, 403)
+
+    def test_create(self):
+        ## 1. create
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.post(self.url, self.create_data)
+        self.assertEqual(response.status_code, 201)
+
+    def test_create_fail(self):
+        ## 1. unauthenticated
+        response = self.client.post(self.url, self.create_data)
+        self.assertEqual(response.status_code, 403)
+
+        ## 2. invalid data: no data
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 400)
+
+        ## 3. invalid profile: DNE
+        data = self.create_data.copy()
+        data['author'] = 1234
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 400)
+
+        ## 4. invalid profile: not user
+        data = self.create_data.copy()
+        data['author'] = 1
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 400)
 
     def test_partial_update(self):
         ## 1. update

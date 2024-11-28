@@ -80,6 +80,21 @@ class PostViewSet(ModelViewSet):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(summary='게시글 작성', tags=['게시글'])
+    def create(self, request, *args, **kwargs):
+        serializer = PostWriteSerializer(data=request.data)
+        serializer.context['user'] = request.user
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        except ValidationError as e:
+            return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        detail_serializer = PostDetailSerializer(serializer.instance)
+
+        return Response(detail_serializer.data, status=status.HTTP_201_CREATED)
+
     @extend_schema(summary='게시글 수정', tags=['게시글'])
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()
