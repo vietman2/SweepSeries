@@ -14,7 +14,9 @@ from community.tag.models import Tag
 from community.tag.serializers import TagSerializer
 from community.utils import get_forum
 from .models import Post, PostLike
-from .serializers import PostSimpleSerializer, PostDetailSerializer, PostWriteSerializer
+from .serializers import (
+    PostSimpleSerializer, PostDetailSerializer, PostWriteSerializer, PostReportSerializer
+)
 
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.filter(is_deleted=False)
@@ -22,7 +24,7 @@ class PostViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'delete', 'patch']
 
     def get_permissions(self):
-        login_needed = ['create', 'partial_update', 'destroy', 'like']
+        login_needed = ['create', 'partial_update', 'destroy', 'like', 'report']
         must_be_owner = ['partial_update', 'destroy']
 
         permissions = []
@@ -138,3 +140,19 @@ class PostViewSet(ModelViewSet):
         PostLike.objects.create(post=instance, user=user_profile)
 
         return Response({'message': "좋아요 처리가 완료되었습니다."}, status=status.HTTP_200_OK)
+
+    @extend_schema(summary='게시글 신고', tags=['게시글'])
+    @action(detail=True, methods=['post'])
+    def report(self, request, *args, **kwargs):   ## pylint: disable=unused-argument
+        instance = self.get_object()
+        user = request.user
+
+        serializer = PostReportSerializer(data=request.data)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            serializer.report_post(instance, user)
+        except ValidationError as e:
+            return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({'message': "신고가 완료되었습니다."}, status=status.HTTP_200_OK)
