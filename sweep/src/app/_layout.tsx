@@ -43,7 +43,7 @@ export default function RootLayout() {
     const getImagePickerPermissions = async () => {
       await ImagePicker.requestMediaLibraryPermissionsAsync();
       await ImagePicker.requestCameraPermissionsAsync();
-    }
+    };
 
     getImagePickerPermissions();
   }, [loaded]);

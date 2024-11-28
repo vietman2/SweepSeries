@@ -19,12 +19,12 @@ import { getTags, createPost } from "@services/community";
 import { ThemeColorType } from "@themes/colors";
 
 const forums = ["덕아웃", "드래프트", "마켓"];
-
+/*
 type ImageAssetType = {
   id: number;
   url: string;
   fileName: string | undefined | null;
-};
+};*/
 
 export function PostCreate() {
   const [title, setTitle] = useState<string>("");
