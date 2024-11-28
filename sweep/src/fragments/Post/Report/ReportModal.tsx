@@ -26,7 +26,7 @@ interface Props {
   visible: boolean;
   setVisible: (visible: boolean) => void;
   content: string;
-  onSubmit: (selectedReason: string, detail: string) => void;
+  onSubmit: (selectedReason: string, detail: string) => Promise<boolean>;
 }
 
 export function ReportModal({ visible, setVisible, content, onSubmit }: Props) {
@@ -49,8 +49,9 @@ export function ReportModal({ visible, setVisible, content, onSubmit }: Props) {
   };
 
   const handleSubmitPress = async () => {
-    onSubmit(selectedReason, detail);
-    hideModal();
+    const result = await onSubmit(selectedReason, detail);
+
+    if (result) hideModal();
   };
 
   return (
