@@ -5,6 +5,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+ADMIN_PAGE_URL = 'http://localhost:3000'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
