@@ -142,7 +142,7 @@ class CommentAPITest(APITestCase):
         self.assertEqual(response.status_code, 400)
 
         ## 3. already reported
-        response = self.client.post(report_url, self.report_data)
+        self.client.post(report_url, self.report_data)
         response = self.client.post(report_url, self.report_data)
         self.assertEqual(response.status_code, 400)
 
@@ -281,6 +281,6 @@ class ReCommentAPITest(APITestCase):
         self.assertEqual(response.status_code, 400)
 
         ## 3. already reported
-        response = self.client.post(report_url, self.report_data)
+        self.client.post(report_url, self.report_data)
         response = self.client.post(report_url, self.report_data)
         self.assertEqual(response.status_code, 400)

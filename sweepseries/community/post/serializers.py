@@ -153,7 +153,7 @@ class PostWriteSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("오류가 발생했습니다.")
 
         user_profile = UserProfile.objects.get(id=value)
-        if not user_profile.user == self.context.get('user', None):
+        if user_profile.user != self.context.get('user', None):
             raise serializers.ValidationError("프로필을 다시 선택해주세요.")
 
         return user_profile
