@@ -33,6 +33,32 @@ export async function getPostDetail(
   }
 }
 
+export async function createPost(
+  title: string,
+  content: string,
+  forum: string,
+  tag: number | undefined,
+  images: string[],
+  selectedProfileId: number | undefined
+) {
+  if (!tag) return null;
+
+  try {
+    const response = await axios.post("/v1/posts/", {
+      title,
+      content,
+      forum,
+      tag,
+      images,
+      author: selectedProfileId,
+    });
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
 export async function deletePost(id: string) {
   try {
     await axios.delete(`/v1/posts/${id}/`);

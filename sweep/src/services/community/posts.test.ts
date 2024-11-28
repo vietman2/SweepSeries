@@ -1,6 +1,13 @@
 import axios from "axios";
 
-import { getPostDetail, getPosts, deletePost, editPost, likePost } from "./posts";
+import {
+  getPostDetail,
+  getPosts,
+  createPost,
+  deletePost,
+  editPost,
+  likePost,
+} from "./posts";
 
 describe("getPosts", () => {
   const posts = [{ id: 1, title: "Test Post" }];
@@ -47,6 +54,39 @@ describe("getPostDetail", () => {
     jest.spyOn(axios, "get").mockRejectedValue(null);
 
     const result = await getPostDetail("1", null);
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("createPost", () => {
+  it("should create post", async () => {
+    jest.spyOn(axios, "post").mockResolvedValue({ data: { id: 1 } });
+
+    const result = await createPost("title", "content", "forum", 1, [], 1);
+
+    expect(result).toEqual({ id: 1 });
+  });
+
+  it("should return null if tag is undefined", async () => {
+    jest.spyOn(axios, "post").mockResolvedValue({});
+
+    const result = await createPost(
+      "title",
+      "content",
+      "forum",
+      undefined,
+      [],
+      1
+    );
+
+    expect(result).toBeNull();
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "post").mockRejectedValue(null);
+
+    const result = await createPost("title", "content", "forum", 1, [], 1);
 
     expect(result).toBeNull();
   });

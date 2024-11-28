@@ -13,6 +13,7 @@ import {
   reportRecomment,
 } from "./recomments";
 import {
+  createPost,
   deletePost,
   editPost,
   getPostDetail,
@@ -22,6 +23,7 @@ import {
 import { getTags } from "./tags";
 
 export {
+  createPost,
   deletePost,
   editPost,
   getPostDetail,
