@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.admin import AdminSite
 from django.test import TestCase, RequestFactory
 from rest_framework import status
@@ -35,23 +36,63 @@ class UserAPITestCase(APITestCase):
         response = self.client.get(self.url + str(self.normaluser.uuid) + "/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_login(self):
-        person = Person.objects.create(
+class LoginAPITestCase(APITestCase):
+    def setUp(self):
+        self.url = "/v1/login/"
+        user_person = Person.objects.create(
             first_name='Test',
             last_name='User',
             phone_number='010-1234-1234'
         )
-        User.objects.create_user(
-            username="testuser",
-            email="ad@min.com",
-            password="testuser",
-            person=person
+        self.user = User.objects.create_user(
+            username="user",
+            email="us@er.com",
+            password="user123!",
+            is_superuser=False,
+            person=user_person
         )
-        response = self.client.post("/v1/login/", {
-            "username": "testuser",
-            "password": "testuser"
+        admin_person = Person.objects.create(
+            first_name='Admin',
+            last_name='User',
+            phone_number='010-4321-4321'
+        )
+        self.admin = User.objects.create_user(
+            username="admin",
+            email="ad@min.com",
+            password="admin123!",
+            is_superuser=True,
+            person=admin_person
+        )
+
+    def test_login(self):
+        ## 1. normal
+        response = self.client.post(self.url, {
+            "username": "user",
+            "password": "user123!"
         })
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        ## 2. admin in admin page
+        response = self.client.post(self.url, {
+            "username": "admin",
+            "password": "admin123!"
+        }, HTTP_ORIGIN=settings.ADMIN_PAGE_URL)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_login_fail(self):
+        ## 1. wrong password
+        response = self.client.post(self.url, {
+            "username": "user",
+            "password": "wrongpassword"
+        })
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        ## 2. normal user in admin page
+        response = self.client.post(self.url, {
+            "username": "user",
+            "password": "user123!"
+        }, HTTP_ORIGIN=settings.ADMIN_PAGE_URL)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 class UserModelTest(TestCase):
     fixtures = ["core/data/test/users.json"]
