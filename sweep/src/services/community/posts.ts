@@ -98,3 +98,20 @@ export async function likePost(
     return null;
   }
 }
+
+export async function reportPost(
+  id: string,
+  selectedReason: string,
+  detail: string
+) {
+  try {
+    await axios.post(`/v1/posts/${id}/report/`, {
+      report_reason: selectedReason,
+      report_content: detail,
+    });
+
+    return true;
+  } catch {
+    return null;
+  }
+}

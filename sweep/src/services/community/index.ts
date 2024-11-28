@@ -19,6 +19,7 @@ import {
   getPostDetail,
   getPosts,
   likePost,
+  reportPost,
 } from "./posts";
 import { getTags } from "./tags";
 
@@ -29,6 +30,7 @@ export {
   getPostDetail,
   getPosts,
   likePost,
+  reportPost,
   getTags,
   createComment,
   deleteComment,
