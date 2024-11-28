@@ -3,6 +3,7 @@ from rest_framework.test import APITestCase
 
 from auth.user.models import User
 from auth.userprofile.models import UserProfile
+from community.comment.models import Comment, ReComment
 from .models import Post
 
 class PostAPITest(APITestCase):
@@ -122,6 +123,21 @@ class PostAPITest(APITestCase):
 
     def test_create(self):
         ## 1. create
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.post(self.url, self.create_data)
+        self.assertEqual(response.status_code, 201)
+
+        ## 2. create with tag 3
+        data = self.create_data.copy()
+        data['tag'] = 3
+        data['forum'] = '드래프트'
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 201)
+
+    def test_create_primary_key(self):
+        ReComment.objects.all().delete()
+        Comment.objects.all().delete()
+        Post.objects.all().delete()
         self.client.force_authenticate(user=self.normaluser)
         response = self.client.post(self.url, self.create_data)
         self.assertEqual(response.status_code, 201)
