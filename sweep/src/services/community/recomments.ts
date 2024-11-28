@@ -30,6 +30,18 @@ export async function deleteRecomment(id: number) {
   }
 }
 
+export async function editRecomment(id: number, content: string) {
+  try {
+    await axios.patch(`/v1/recomments/${id}/`, {
+      content,
+    });
+
+    return true;
+  } catch {
+    return null;
+  }
+}
+
 export async function likeRecomment(
   id: number,
   selectedProfileId: number | null
@@ -37,6 +49,23 @@ export async function likeRecomment(
   try {
     await axios.post(`/v1/recomments/${id}/like/`, {
       profile: selectedProfileId,
+    });
+
+    return true;
+  } catch {
+    return null;
+  }
+}
+
+export async function reportRecomment(
+  id: number,
+  reason: string,
+  content: string
+) {
+  try {
+    await axios.post(`/v1/recomments/${id}/report/`, {
+      report_reason: reason,
+      report_content: content,
     });
 
     return true;

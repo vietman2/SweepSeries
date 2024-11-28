@@ -1,5 +1,5 @@
 import { sampleComments, sampleRecomments } from "./comments";
-import { samplePostDetail, samplePosts, sampleTags } from "./posts";
+import { samplePostDetail, samplePosts, sampleTags, sampleTagResponse } from "./posts";
 
 export {
   sampleComments,
@@ -7,4 +7,5 @@ export {
   samplePostDetail,
   samplePosts,
   sampleTags,
+  sampleTagResponse,
 };

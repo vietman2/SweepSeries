@@ -2,9 +2,10 @@ from rest_framework import serializers
 
 from auth.userprofile.models import UserProfile
 from auth.userprofile.serializers import UserProfileSerializer
+from community.enums import ReportReason
 from community.post.models import Post
 from community.utils import get_time_since_created
-from .models import Comment, ReComment
+from .models import Comment, CommentReport, ReComment, ReCommentReport
 
 class RecommentSerializer(serializers.ModelSerializer):
     id              = serializers.IntegerField(read_only=True)
@@ -68,6 +69,14 @@ class RecommentSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("프로필을 다시 선택해주세요.")
 
         return user_profile
+
+    def update(self, instance, validated_data):
+        if 'content' in validated_data:
+            instance.content = validated_data['content']
+            instance.save()
+            return instance
+
+        raise serializers.ValidationError("오류가 발생했습니다.")
 
     def create(self, validated_data):
         comment = validated_data.pop('comment')
@@ -158,6 +167,14 @@ class CommentSerializer(serializers.ModelSerializer):
 
         return user_profile
 
+    def update(self, instance, validated_data):
+        if 'content' in validated_data:
+            instance.content = validated_data['content']
+            instance.save()
+            return instance
+
+        raise serializers.ValidationError("오류가 발생했습니다.")
+
     def create(self, validated_data):
         post = validated_data.pop('post')
         profile = validated_data.pop('profile')
@@ -169,3 +186,59 @@ class CommentSerializer(serializers.ModelSerializer):
         )
 
         return comment
+
+class CommentReportSerializer(serializers.ModelSerializer):
+    report_content  = serializers.CharField(write_only=True)
+    report_reason   = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = CommentReport
+        fields = ["report_content", "report_reason"]
+
+    def validate_report_reason(self, value):
+        for reason in ReportReason:
+            if value == reason.label:
+                return value
+
+        raise serializers.ValidationError('유효하지 않은 신고 사유입니다.')
+
+    def report(self, comment, user):
+        if CommentReport.objects.filter(report_user=user, comment=comment).exists():
+            raise serializers.ValidationError('이미 신고한 댓글입니다.')
+
+        report = CommentReport.objects.create(
+            report_user=user,
+            comment=comment,
+            report_content=self.validated_data['report_content'],
+            report_reason=self.validated_data['report_reason']
+        )
+
+        return report
+
+class RecommentReportSerializer(serializers.ModelSerializer):
+    report_content  = serializers.CharField(write_only=True)
+    report_reason   = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = ReCommentReport
+        fields = ["report_content", "report_reason"]
+
+    def validate_report_reason(self, value):
+        for reason in ReportReason:
+            if value == reason.label:
+                return value
+
+        raise serializers.ValidationError('유효하지 않은 신고 사유입니다.')
+
+    def report(self, recomment, user):
+        if ReCommentReport.objects.filter(report_user=user, recomment=recomment).exists():
+            raise serializers.ValidationError('이미 신고한 답글입니다.')
+
+        report = ReCommentReport.objects.create(
+            report_user=user,
+            recomment=recomment,
+            report_content=self.validated_data['report_content'],
+            report_reason=self.validated_data['report_reason']
+        )
+
+        return report

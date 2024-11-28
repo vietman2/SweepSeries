@@ -1,8 +1,8 @@
 from django.db.models import Q
-#from django.utils import timezone
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.decorators import action
-#from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -14,12 +14,12 @@ from community.tag.models import Tag
 from community.tag.serializers import TagSerializer
 from community.utils import get_forum
 from .models import Post, PostLike
-from .serializers import PostSimpleSerializer, PostDetailSerializer
+from .serializers import PostSimpleSerializer, PostDetailSerializer, PostWriteSerializer
 
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.filter(is_deleted=False)
     serializer_class = PostSimpleSerializer
-    http_method_names = ['get', 'post', 'delete']
+    http_method_names = ['get', 'post', 'delete', 'patch']
 
     def get_permissions(self):
         login_needed = ['create', 'partial_update', 'destroy', 'like']
@@ -80,10 +80,39 @@ class PostViewSet(ModelViewSet):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(summary='게시글 작성', tags=['게시글'])
+    def create(self, request, *args, **kwargs):
+        serializer = PostWriteSerializer(data=request.data)
+        serializer.context['user'] = request.user
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        except ValidationError as e:
+            return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        detail_serializer = PostDetailSerializer(serializer.instance)
+
+        return Response(detail_serializer.data, status=status.HTTP_201_CREATED)
+
+    @extend_schema(summary='게시글 수정', tags=['게시글'])
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = PostWriteSerializer(instance, data=request.data, partial=True)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        except ValidationError as e:
+            return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     @extend_schema(summary='게시글 삭제', tags=['게시글'])
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.is_deleted = True
+        instance.deleted_at = timezone.now()
         instance.save()
 
         return Response({'message': "게시글이 삭제되었습니다."}, status=status.HTTP_200_OK)

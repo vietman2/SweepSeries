@@ -1,12 +1,8 @@
 import axios from "axios";
 
-export const getTags = async (forum: string) => {
+export const getTags = async () => {
   try {
-    const response = await axios.get(`/v1/tags/`, {
-      params: {
-        forum,
-      },
-    });
+    const response = await axios.get(`/v1/tags/`);
 
     return response.data;
   } catch {

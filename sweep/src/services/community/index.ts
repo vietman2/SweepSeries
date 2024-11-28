@@ -1,18 +1,43 @@
-import { createComment, deleteComment, likeComment } from "./comments";
-import { createRecomment, deleteRecomment, likeRecomment } from "./recomments";
-import { deletePost, getPostDetail, getPosts, likePost } from "./posts";
+import {
+  createComment,
+  deleteComment,
+  editComment,
+  likeComment,
+  reportComment,
+} from "./comments";
+import {
+  createRecomment,
+  deleteRecomment,
+  editRecomment,
+  likeRecomment,
+  reportRecomment,
+} from "./recomments";
+import {
+  createPost,
+  deletePost,
+  editPost,
+  getPostDetail,
+  getPosts,
+  likePost,
+} from "./posts";
 import { getTags } from "./tags";
 
 export {
+  createPost,
   deletePost,
+  editPost,
   getPostDetail,
   getPosts,
   likePost,
   getTags,
   createComment,
   deleteComment,
+  editComment,
   likeComment,
+  reportComment,
   createRecomment,
   deleteRecomment,
+  editRecomment,
   likeRecomment,
+  reportRecomment,
 };

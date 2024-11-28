@@ -51,7 +51,7 @@ export function PostList({ mode }: Readonly<Props>) {
   };
 
   const handleCreatePost = () => {
-    // router.push("/community/create");
+    router.push("/community/create");
   };
 
   useEffect(() => {

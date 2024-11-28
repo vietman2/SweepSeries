@@ -1,4 +1,7 @@
+from django.conf import settings
 from django.db.models import Q
+from django.utils import timezone
+from dj_rest_auth.views import LoginView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -29,3 +32,20 @@ class UserViewSet(ModelViewSet):
         serializer = self.get_serializer(instance)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class UserLoginView(LoginView):
+    def post(self, request, *args, **kwargs):
+        admin_page_url = settings.ADMIN_PAGE_URL
+        if request.META.get('HTTP_ORIGIN') == admin_page_url:
+            q = Q()
+            q &= Q(username=request.data['username'], is_superuser=True)
+            if not User.objects.filter(q).exists():
+                return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        response = super().post(request, *args, **kwargs)
+
+        user = User.objects.get(username=request.data['username'])
+        user.last_login = timezone.now()
+        user.save()
+
+        return response

@@ -33,6 +33,13 @@ export default function CommunityLayout() {
         }}
       />
       <Stack.Screen
+        name="create"
+        options={{
+          headerLeft: () => <BackButton />,
+          headerTitle: "글쓰기",
+        }}
+      />
+      <Stack.Screen
         name="[id]"
         options={{
           headerLeft: () => <BackButton />,

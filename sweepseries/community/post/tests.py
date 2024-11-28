@@ -3,6 +3,7 @@ from rest_framework.test import APITestCase
 
 from auth.user.models import User
 from auth.userprofile.models import UserProfile
+from community.comment.models import Comment, ReComment
 from .models import Post
 
 class PostAPITest(APITestCase):
@@ -12,6 +13,17 @@ class PostAPITest(APITestCase):
         self.url = '/v1/posts/'
         self.normaluser = User.objects.get(username="normaluser")
         self.profile = UserProfile.objects.get(pk=2)
+        self.create_data = {
+            'forum': '덕아웃',
+            'tag': 1,
+            'title': 'test',
+            'content': 'test',
+            'author': 2,
+        }
+        self.edit_data = {
+            'title': 'test',
+            'content': 'test',
+        }
 
     def test_list(self):
         ## 1. forum only
@@ -108,6 +120,83 @@ class PostAPITest(APITestCase):
         self.client.force_authenticate(user=self.normaluser)
         response = self.client.get(self.url + '2024072300000001/', {'profile': 1})
         self.assertEqual(response.status_code, 403)
+
+    def test_create(self):
+        ## 1. create
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.post(self.url, self.create_data)
+        self.assertEqual(response.status_code, 201)
+
+        ## 2. create with tag 3
+        data = self.create_data.copy()
+        data['tag'] = 3
+        data['forum'] = '드래프트'
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 201)
+
+    def test_create_primary_key(self):
+        ReComment.objects.all().delete()
+        Comment.objects.all().delete()
+        Post.objects.all().delete()
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.post(self.url, self.create_data)
+        self.assertEqual(response.status_code, 201)
+
+    def test_create_fail(self):
+        ## 1. unauthenticated
+        response = self.client.post(self.url, self.create_data)
+        self.assertEqual(response.status_code, 403)
+
+        ## 2. invalid data: no data
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 400)
+
+        ## 3. invalid profile: DNE
+        data = self.create_data.copy()
+        data['author'] = 1234
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 400)
+
+        ## 4. invalid profile: not user
+        data = self.create_data.copy()
+        data['author'] = 1
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 400)
+
+    def test_partial_update(self):
+        ## 1. update
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.patch(self.url + '2024072300000002/', self.edit_data)
+        self.assertEqual(response.status_code, 200)
+
+    def test_partial_update_fail(self):
+        ## 1. unauthenticated
+        response = self.client.patch(self.url + '2024072300000002/', self.edit_data)
+        self.assertEqual(response.status_code, 403)
+
+        ## 2. not owner
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.patch(self.url + '2024072300000001/', self.edit_data)
+        self.assertEqual(response.status_code, 403)
+
+        ## 3. invalid data: empty title
+        data = self.edit_data.copy()
+        data['title'] = ''
+        response = self.client.patch(self.url + '2024072300000002/', data)
+        self.assertEqual(response.status_code, 400)
+
+        ## 4. invalid data: empty content
+        data = self.edit_data.copy()
+        data['content'] = ''
+        response = self.client.patch(self.url + '2024072300000002/', data)
+        self.assertEqual(response.status_code, 400)
+
+        ## 5. invalid data: title too long
+        data = self.edit_data.copy()
+        data['title'] = 'a' * 41
+        response = self.client.patch(self.url + '2024072300000002/', data)
+        self.assertEqual(response.status_code, 400)
 
     def test_destroy(self):
         ## 1. delete

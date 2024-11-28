@@ -69,6 +69,17 @@
     }
   },
   {
+    "model": "tag.tag",
+    "pk": 3,
+    "fields": {
+      "forum": 2,
+      "name": "Tag 3",
+      "icon": "https://via.placeholder.com/150",
+      "color": "#123456",
+      "bgcolor": "#fedcba"
+    }
+  },
+  {
     "model": "comment.comment",
     "pk": 1,
     "fields": {
@@ -77,7 +88,7 @@
       "is_deleted": false,
       "deleted_at": null,
       "post": 2024072300000001,
-      "author": 1,
+      "author": 2,
       "content": "댓글 내용 1"
     }
   },
@@ -116,7 +127,7 @@
       "is_deleted": false,
       "deleted_at": null,
       "comment": 1,
-      "author": 1,
+      "author": 2,
       "content": "대댓글 내용 1"
     }
   },
@@ -143,7 +154,7 @@
       "deleted_at": "2024-07-27T16:48:45.122",
       "comment": 1,
       "author": 1,
-      "content": "대댓글 내용 1"
+      "content": "삭제된 대댓글 내용 1"
     }
   },
   {

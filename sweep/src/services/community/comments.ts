@@ -30,6 +30,18 @@ export async function deleteComment(id: number) {
   }
 }
 
+export async function editComment(id: number, content: string) {
+  try {
+    await axios.patch(`/v1/comments/${id}/`, {
+      content,
+    });
+
+    return true;
+  } catch {
+    return null;
+  }
+}
+
 export async function likeComment(
   id: number,
   selectedProfileId: number | null
@@ -37,6 +49,23 @@ export async function likeComment(
   try {
     await axios.post(`/v1/comments/${id}/like/`, {
       profile: selectedProfileId,
+    });
+
+    return true;
+  } catch {
+    return null;
+  }
+}
+
+export async function reportComment(
+  id: number,
+  reason: string,
+  content: string
+) {
+  try {
+    await axios.post(`/v1/comments/${id}/report/`, {
+      report_reason: reason,
+      report_content: content,
     });
 
     return true;

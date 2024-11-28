@@ -59,6 +59,8 @@ class CommentReport(Report):
         related_name='comment_reports'
     )
 
+    objects = models.Manager()
+
     class Meta:
         db_table = 'comment_report'
 
@@ -69,6 +71,8 @@ class ReCommentReport(Report):
         null=True,
         related_name='recomment_reports'
     )
+
+    objects = models.Manager()
 
     class Meta:
         db_table = 'recomment_report'

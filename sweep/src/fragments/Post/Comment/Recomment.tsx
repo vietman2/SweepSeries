@@ -12,7 +12,12 @@ import { useTheme } from "@contexts/theme";
 import { AuthorProfile } from "@fragments/Author";
 import { ReCommentType } from "@models/community";
 import { alert } from "@services/alert";
-import { deleteRecomment, likeRecomment } from "@services/community";
+import {
+  deleteRecomment,
+  editRecomment,
+  likeRecomment,
+  reportRecomment,
+} from "@services/community";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
@@ -42,7 +47,16 @@ export function Recomment({
     alert("로그인이 필요합니다.", "로그인 후 이용해주세요.", () => {}, "확인");
   };
 
-  const patchRecomment = async () => {}; // TODO: integrate with the backend
+  const patchRecomment = async () => {
+    const response = await editRecomment(recomment.id, editedContent);
+
+    if (response) {
+      refresh();
+      setEditMode(false);
+    } else {
+      alert("댓글 수정 실패", "다시 시도해주세요.");
+    }
+  };
 
   const removeRecomment = async () => {
     const response = await deleteRecomment(recomment.id);
@@ -54,9 +68,19 @@ export function Recomment({
     }
   };
 
-  const handleReportSubmit = async () => {
-    // TODO: integrate with the backend
-    refresh();
+  const handleReportSubmit = async (selectedReason: string, detail: string) => {
+    const response = await reportRecomment(
+      recomment.id,
+      selectedReason,
+      detail
+    );
+
+    if (response) {
+      setModalVisible(false);
+      alert("신고 완료", "신고가 정상적으로 접수되었습니다.");
+    } else {
+      alert("신고 실패", "다시 시도해주세요.");
+    }
   };
 
   const handleLike = async () => {

@@ -29,6 +29,12 @@ export const sampleTags: TagType[] = [
   },
 ];
 
+export const sampleTagResponse: Record<string, TagType[]> = {
+  덕아웃: [sampleTags[0]],
+  드래프트: [sampleTags[0]],
+  마켓: [sampleTags[1]],
+};
+
 export const samplePosts: PostSimpleType[] = [
   {
     id: "1",

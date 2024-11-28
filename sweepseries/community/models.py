@@ -4,7 +4,7 @@ from django.utils.timezone import now
 from auth.user.models import User
 from auth.userprofile.models import UserProfile
 from core.models import TimeStampedModel
-from .enums import ReportReason, ReviewStatus, ReportStatus
+from .enums import ReportReason, ReportStatus
 
 class Like(models.Model):
     user        = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
@@ -22,15 +22,11 @@ class Report(TimeStampedModel):
         choices=ReportReason.choices,
         default=ReportReason.OTHER
     )
-
-    review_status       = models.IntegerField(
-        choices=ReviewStatus.choices,
-        default=ReviewStatus.SUBMITTED
-    )
     report_status       = models.IntegerField(
         choices=ReportStatus.choices,
-        default=ReportStatus.PENDING
+        default=ReportStatus.SUBMITTED
     )
+
     feedback            = models.TextField(blank=True)
 
     class Meta:

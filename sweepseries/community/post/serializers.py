@@ -1,10 +1,11 @@
 from django.utils import timezone
 from rest_framework import serializers
 
+from auth.userprofile.models import UserProfile
 from auth.userprofile.serializers import UserProfileSerializer
 from community.comment.serializers import CommentSerializer
 from community.tag.serializers import TagSerializer
-from community.utils import get_time_since_created
+from community.utils import get_time_since_created, get_forum
 from core.utils import get_presigned_url
 from .models import Post, PostContentView, Image
 
@@ -133,3 +134,33 @@ class PostDetailSerializer(serializers.ModelSerializer):
 
         ## TODO: Think about pagination
         return serializer.data
+
+class PostWriteSerializer(serializers.ModelSerializer):
+    author          = serializers.IntegerField(write_only=True)
+    forum           = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = Post
+        fields = ['id', 'forum', 'tag', 'title', 'content', 'author']
+        read_only_fields = ['id']
+        write_only_fields = ['tag', 'title', 'content', 'author']
+
+    def validate_forum(self, value):
+        return get_forum(value)
+
+    def validate_author(self, value):
+        if not UserProfile.objects.filter(id=value).exists():
+            raise serializers.ValidationError("오류가 발생했습니다.")
+
+        user_profile = UserProfile.objects.get(id=value)
+        if user_profile.user != self.context.get('user', None):
+            raise serializers.ValidationError("프로필을 다시 선택해주세요.")
+
+        return user_profile
+
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get('title', instance.title)
+        instance.content = validated_data.get('content', instance.content)
+        instance.save()
+
+        return instance

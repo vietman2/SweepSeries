@@ -1,3 +1,4 @@
+import { PostCreate } from "./PostCreate/PostCreate";
 import { PostDetail } from "./PostDetail/PostDetail";
 import { PostList } from "./PostList/PostList";
 
@@ -13,4 +14,4 @@ function Market() {
   return <PostList mode="마켓" />;
 }
 
-export { Dugout, Draft, Market, PostDetail };
+export { Dugout, Draft, Market, PostCreate, PostDetail };

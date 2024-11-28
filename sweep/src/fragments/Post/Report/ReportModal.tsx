@@ -50,6 +50,7 @@ export function ReportModal({ visible, setVisible, content, onSubmit }: Props) {
 
   const handleSubmitPress = async () => {
     onSubmit(selectedReason, detail);
+    hideModal();
   };
 
   return (

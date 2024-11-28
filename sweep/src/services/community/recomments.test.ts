@@ -1,6 +1,12 @@
 import axios from "axios";
 
-import { createRecomment, deleteRecomment, likeRecomment } from "./recomments";
+import {
+  createRecomment,
+  deleteRecomment,
+  editRecomment,
+  likeRecomment,
+  reportRecomment,
+} from "./recomments";
 
 describe("createRecomment", () => {
   it("should create recomment", async () => {
@@ -44,6 +50,24 @@ describe("deleteRecomment", () => {
   });
 });
 
+describe("editRecomment", () => {
+  it("should edit recomment", async () => {
+    jest.spyOn(axios, "patch").mockResolvedValue({});
+
+    const result = await editRecomment(1, "content");
+
+    expect(result).toEqual(true);
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "patch").mockRejectedValue(null);
+
+    const result = await editRecomment(1, "content");
+
+    expect(result).toBeNull();
+  });
+});
+
 describe("likeComment", () => {
   it("should like comment", async () => {
     jest.spyOn(axios, "post").mockResolvedValue({});
@@ -57,6 +81,24 @@ describe("likeComment", () => {
     jest.spyOn(axios, "post").mockRejectedValue(null);
 
     const result = await likeRecomment(1, null);
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("reportRecomment", () => {
+  it("should report recomment", async () => {
+    jest.spyOn(axios, "post").mockResolvedValue({});
+
+    const result = await reportRecomment(1, "reason", "content");
+
+    expect(result).toEqual(true);
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "post").mockRejectedValue(null);
+
+    const result = await reportRecomment(1, "reason", "content");
 
     expect(result).toBeNull();
   });
