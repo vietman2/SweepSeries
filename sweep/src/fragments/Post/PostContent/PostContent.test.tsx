@@ -104,7 +104,7 @@ describe("<PostContent />", () => {
       fireEvent.press(getByTestId("신고하기"));
       fireEvent.press(getByTestId("report"));
     });
-  }
+  };
 
   it("handles report correctly", async () => {
     jest.spyOn(PostsAPI, "reportPost").mockResolvedValueOnce(true);
@@ -124,7 +124,7 @@ describe("<PostContent />", () => {
     );
 
     fireEvent.press(getByTestId("like"));
-  }
+  };
 
   it("handles like correctly", async () => {
     jest.spyOn(PostsAPI, "likePost").mockResolvedValueOnce(true);
