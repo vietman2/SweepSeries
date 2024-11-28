@@ -4,6 +4,7 @@ import { configureReanimatedLogger } from "react-native-reanimated";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
+import * as ImagePicker from "expo-image-picker";
 import { Stack, SplashScreen } from "expo-router";
 import axios from "axios";
 
@@ -38,6 +39,13 @@ export default function RootLayout() {
     if (loaded) {
       SplashScreen.hideAsync();
     }
+
+    const getImagePickerPermissions = async () => {
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+      await ImagePicker.requestCameraPermissionsAsync();
+    }
+
+    getImagePickerPermissions();
   }, [loaded]);
 
   if (!loaded) {
