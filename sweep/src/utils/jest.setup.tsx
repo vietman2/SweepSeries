@@ -244,6 +244,7 @@ jest.mock("@contexts/auth", () => ({
     login: jest.fn(),
     logout: jest.fn(),
     mode: "guest",
+    selectedProfile: null,
   }),
 }));
 jest.mock("@contexts/theme", () => ({
