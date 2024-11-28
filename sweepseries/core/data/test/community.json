@@ -69,6 +69,17 @@
     }
   },
   {
+    "model": "tag.tag",
+    "pk": 3,
+    "fields": {
+      "forum": 2,
+      "name": "Tag 3",
+      "icon": "https://via.placeholder.com/150",
+      "color": "#123456",
+      "bgcolor": "#fedcba"
+    }
+  },
+  {
     "model": "comment.comment",
     "pk": 1,
     "fields": {
