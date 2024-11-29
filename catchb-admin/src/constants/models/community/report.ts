@@ -10,11 +10,30 @@ type PostType = {
   created_at: string;
 };
 
-export type PostReportType = {
+export type ReportType = {
   id: number;
   reason: string;
   details: string;
   report_user: UserRelatedType;
-  post: PostType;
   status: string;
+  feedback: string;
+}
+
+export type PostReportType = {
+  post: PostType;
+} & ReportType;
+
+type CommentType = {
+  id: number;
+  author: UserProfileType;
+  content: string;
+  created_at: string;
 };
+
+export type CommentReportType = {
+  comment: CommentType;
+} & ReportType;
+
+export type ReCommentReportType = {
+  recomment: CommentType;
+} & ReportType;
