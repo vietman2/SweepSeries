@@ -1,6 +1,14 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 
-import { ReportsLayout, PostReportsLayout, PostReportDetail } from "./Reports";
+import {
+  ReportsLayout,
+  CommentReportLayout,
+  ReCommentReportLayout,
+  PostReportsLayout,
+  PostReportDetail,
+  CommentReportDetail,
+  ReCommentReportDetail,
+} from "./Reports";
 import { TagDetail, TagsLayout, TagWrite } from "./Tags";
 import { Community } from "@navigation/tabs";
 import { ContentLayout } from "@pages/_layout";
@@ -15,8 +23,12 @@ export function CommunityContainer() {
           <Route path="posts" element={<PostReportsLayout />}>
             <Route path=":reportId" element={<PostReportDetail />} />
           </Route>
-          <Route path="comments" element={<div />} />
-          <Route path="recomments" element={<div />} />
+          <Route path="comments" element={<CommentReportLayout />}>
+            <Route path=":reportId" element={<CommentReportDetail />} />
+          </Route>
+          <Route path="recomments" element={<ReCommentReportLayout />}>
+            <Route path=":reportId" element={<ReCommentReportDetail />} />
+          </Route>
         </Route>
         <Route path="tags" element={<TagsLayout />}>
           <Route path="create" element={<TagWrite />} />
