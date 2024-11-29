@@ -3,8 +3,9 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from core.utils import is_admin_page
 from .models import Agreement
-from .serializers import AgreementSimpleSerializer
+from .serializers import AgreementSimpleSerializer, AgreementDetailSerializer
 
 class AgreementViewSet(ModelViewSet):
     serializer_class = AgreementSimpleSerializer
@@ -14,7 +15,12 @@ class AgreementViewSet(ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
+
+        user = request.user
+        if user.is_superuser and is_admin_page(request):
+            serializer = AgreementDetailSerializer(queryset, many=True)
+        else:
+            serializer = AgreementSimpleSerializer(queryset, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 

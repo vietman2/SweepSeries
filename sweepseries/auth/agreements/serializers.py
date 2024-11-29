@@ -13,6 +13,9 @@ class AgreementSimpleSerializer(serializers.ModelSerializer):
         return bool(obj.content)
 
 class AgreementDetailSerializer(serializers.ModelSerializer):
+    created_at = serializers.DateTimeField(format='%Y-%m-%d', read_only=True)
+    updated_at = serializers.DateTimeField(format='%Y-%m-%d', read_only=True)
+
     class Meta:
         model = Agreement
         fields = '__all__'
