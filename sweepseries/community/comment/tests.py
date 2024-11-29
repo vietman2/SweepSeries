@@ -307,16 +307,6 @@ class CommentReportAPITest(APITestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 403)
 
-    def test_list(self):
-        self.client.force_authenticate(user=self.admin)
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-
-    def test_retrieve(self):
-        self.client.force_authenticate(user=self.admin)
-        response = self.client.get(f'{self.url}1/')
-        self.assertEqual(response.status_code, 200)
-
     def test_update(self):
         self.client.force_authenticate(user=self.admin)
         response = self.client.patch(f'{self.url}1/', self.update_data)
@@ -337,13 +327,23 @@ class CommentReportAPITest(APITestCase):
         response = self.client.patch(f'{self.url}1/')
         self.assertEqual(response.status_code, 400)
 
-        ## 3. no accept
+        ## 3. no feedback
+        response = self.client.patch(f'{self.url}1/', {'accept': True})
+        self.assertEqual(response.status_code, 400)
+
+        ## 4. no accept
         response = self.client.patch(f'{self.url}1/', {'feedback': 'feedback'})
         self.assertEqual(response.status_code, 400)
 
-        ## 4. no feedback
-        response = self.client.patch(f'{self.url}1/', {'accept': True})
-        self.assertEqual(response.status_code, 400)
+    def test_list(self):
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_retrieve(self):
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.get(f'{self.url}1/')
+        self.assertEqual(response.status_code, 200)
 
 class ReCommentReportAPITest(APITestCase):
     fixtures = ['core/data/test/community.json', 'core/data/test/users.json']
