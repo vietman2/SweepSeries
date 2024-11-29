@@ -89,7 +89,7 @@ const Container = styled.div`
 const SidebarWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 260px;
+  width: 240px;
   transition: width 0.3s ease-in-out;
   overflow-x: hidden;
 `;
@@ -103,12 +103,13 @@ const Content = styled.div`
 const SidebarContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 260px;
+  width: 240px;
   background-color: #262626;
   color: white;
   padding: 24px;
   height: 100dvh;
   position: fixed;
+  z-index: 100;
   top: 0;
   left: 0;
   border-radius: 0 20px 20px 0;
