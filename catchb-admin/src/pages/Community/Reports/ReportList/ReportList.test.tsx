@@ -52,7 +52,9 @@ describe("<PostReportList />", () => {
     });
     renderWithProviders(<PostReportList />);
 
-    await waitFor(() => expect(screen.getByText("Loading")).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.getByText("Loading")).toBeInTheDocument()
+    );
   });
 });
 
