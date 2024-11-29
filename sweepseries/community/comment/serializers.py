@@ -1,11 +1,34 @@
 from rest_framework import serializers
 
+from auth.user.serializers import UserRelatedSerializer
 from auth.userprofile.models import UserProfile
 from auth.userprofile.serializers import UserProfileSerializer
-from community.enums import ReportReason
+from community.enums import ReportReason, ReportStatus
 from community.post.models import Post
 from community.utils import get_time_since_created
 from .models import Comment, CommentReport, ReComment, ReCommentReport
+
+class CommentRelatedSerializer(serializers.ModelSerializer):
+    author          = UserProfileSerializer()
+    created_at      = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'author', 'content', 'created_at']
+
+    def get_created_at(self, obj):
+        return get_time_since_created(obj.created_at)
+
+class ReCommentRelatedSerializer(serializers.ModelSerializer):
+    author          = UserProfileSerializer()
+    created_at      = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ReComment
+        fields = ['id', 'author', 'content', 'created_at']
+
+    def get_created_at(self, obj):
+        return get_time_since_created(obj.created_at)
 
 class RecommentSerializer(serializers.ModelSerializer):
     id              = serializers.IntegerField(read_only=True)
@@ -188,12 +211,26 @@ class CommentSerializer(serializers.ModelSerializer):
         return comment
 
 class CommentReportSerializer(serializers.ModelSerializer):
+    id              = serializers.IntegerField(read_only=True)
+    report_user     = UserRelatedSerializer(read_only=True)
+    comment         = CommentRelatedSerializer(read_only=True)
+    reason          = serializers.CharField(read_only=True, source='get_report_reason_display')
+    details         = serializers.SerializerMethodField(read_only=True)
+    status          = serializers.CharField(read_only=True, source='get_report_status_display')
     report_content  = serializers.CharField(write_only=True)
     report_reason   = serializers.CharField(write_only=True)
+    accept          = serializers.BooleanField(write_only=True, required=False)
+    feedback        = serializers.CharField(required=False)
 
     class Meta:
         model = CommentReport
-        fields = ["report_content", "report_reason"]
+        fields = [
+            "id", "report_user", "comment", "reason", "details", "status",
+            "report_content", "report_reason", "accept", "feedback"
+        ]
+
+    def get_details(self, obj):
+        return obj.report_content
 
     def validate_report_reason(self, value):
         for reason in ReportReason:
@@ -215,13 +252,46 @@ class CommentReportSerializer(serializers.ModelSerializer):
 
         return report
 
+    def update(self, instance, validated_data):
+        feedback = validated_data.get('feedback', None)
+        if feedback is None:
+            raise serializers.ValidationError('피드백을 입력해주세요.')
+
+        accept = validated_data.get('accept', None)
+        if accept is None:
+            raise serializers.ValidationError('오류가 발생했습니다.')
+
+        if accept:
+            instance.report_status = ReportStatus.ACCEPTED
+        else:
+            instance.report_status = ReportStatus.REJECTED
+
+        instance.feedback = feedback
+        instance.save()
+
+        return instance
+
 class RecommentReportSerializer(serializers.ModelSerializer):
+    id              = serializers.IntegerField(read_only=True)
+    report_user     = UserRelatedSerializer(read_only=True)
+    recomment       = ReCommentRelatedSerializer(read_only=True)
+    reason          = serializers.CharField(read_only=True, source='get_report_reason_display')
+    details         = serializers.SerializerMethodField(read_only=True)
+    status          = serializers.CharField(read_only=True, source='get_report_status_display')
     report_content  = serializers.CharField(write_only=True)
     report_reason   = serializers.CharField(write_only=True)
+    accept          = serializers.BooleanField(write_only=True, required=False)
+    feedback        = serializers.CharField(required=False)
 
     class Meta:
         model = ReCommentReport
-        fields = ["report_content", "report_reason"]
+        fields = [
+            "id", "report_user", "recomment", "reason", "details", "status",
+            "report_content", "report_reason", "accept", "feedback"
+        ]
+
+    def get_details(self, obj):
+        return obj.report_content
 
     def validate_report_reason(self, value):
         for reason in ReportReason:
@@ -242,3 +312,22 @@ class RecommentReportSerializer(serializers.ModelSerializer):
         )
 
         return report
+
+    def update(self, instance, validated_data):
+        feedback = validated_data.get('feedback', None)
+        if feedback is None:
+            raise serializers.ValidationError('피드백을 입력해주세요.')
+
+        accept = validated_data.get('accept', None)
+        if accept is None:
+            raise serializers.ValidationError('오류가 발생했습니다.')
+
+        if accept:
+            instance.report_status = ReportStatus.ACCEPTED
+        else:
+            instance.report_status = ReportStatus.REJECTED
+
+        instance.feedback = feedback
+        instance.save()
+
+        return instance
