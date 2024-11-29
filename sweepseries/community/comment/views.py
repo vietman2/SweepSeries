@@ -9,7 +9,8 @@ from drf_spectacular.utils import extend_schema
 
 from auth.userprofile.models import UserProfile
 from community.permissions import IsOwner
-from .models import Comment, CommentLike, ReComment, ReCommentLike
+from core.permissions import AdminOnly
+from .models import Comment, CommentLike, CommentReport, ReComment, ReCommentLike, ReCommentReport
 from .serializers import (
     CommentSerializer, CommentReportSerializer, RecommentSerializer, RecommentReportSerializer
 )
@@ -191,3 +192,69 @@ class ReCommentViewSet(ModelViewSet):
             return Response({"message": e.detail}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({"message": "대댓글이 신고되었습니다."}, status=status.HTTP_201_CREATED)
+
+class CommentReportViewSet(ModelViewSet):
+    queryset = CommentReport.objects.all()
+    serializer_class = CommentReportSerializer
+    permission_classes = [AdminOnly]
+    http_method_names = ['get', 'patch']
+
+    @extend_schema(summary='신고 목록 조회 처리', tags=['댓글'])
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(summary='신고 상세 조회', tags=['댓글'])
+    def retrieve(self, request, *args, **kwargs):
+        report = self.get_object()
+        serializer = self.get_serializer(report)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(summary='신고 처리', tags=['댓글'])
+    def partial_update(self, request, *args, **kwargs):
+        report = self.get_object()
+        serializer = CommentReportSerializer(report, data=request.data, partial=True)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        except ValidationError as e:
+            return Response({"message": e.detail}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message": "신고 처리가 완료되었습니다."}, status=status.HTTP_200_OK)
+
+class ReCommentReportViewSet(ModelViewSet):
+    queryset = ReCommentReport.objects.all()
+    serializer_class = RecommentReportSerializer
+    permission_classes = [AdminOnly]
+    http_method_names = ['get', 'patch']
+
+    @extend_schema(summary='대댓글 신고 목록 조회 처리', tags=['대댓글'])
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(summary='대댓글 신고 상세 조회', tags=['대댓글'])
+    def retrieve(self, request, *args, **kwargs):
+        report = self.get_object()
+        serializer = self.get_serializer(report)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(summary='대댓글 신고 처리', tags=['대댓글'])
+    def partial_update(self, request, *args, **kwargs):
+        report = self.get_object()
+        serializer = RecommentReportSerializer(report, data=request.data, partial=True)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        except ValidationError as e:
+            return Response({"message": e.detail}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message": "신고 처리가 완료되었습니다."}, status=status.HTTP_200_OK)

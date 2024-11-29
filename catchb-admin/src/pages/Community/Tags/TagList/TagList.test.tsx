@@ -23,7 +23,7 @@ describe("<TagList />", () => {
     jest.spyOn(TagsAPI, "getTags").mockResolvedValue({
       덕아웃: sampleTags,
       드래프트: [],
-      장터: [],
+      마켓: [],
       스틸: [],
     });
   });
@@ -63,7 +63,7 @@ describe("<TagList />", () => {
     jest.spyOn(TagsAPI, "getTags").mockResolvedValue({
       덕아웃: [sampleTags[0]],
       드래프트: [sampleTags[1]],
-      장터: [sampleTags[2]],
+      마켓: [sampleTags[2]],
       스틸: [sampleTags[3]],
     });
     renderWithProviders(<TagList />);

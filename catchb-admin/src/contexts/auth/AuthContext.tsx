@@ -39,8 +39,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
           try {
             const response = await refresh();
-            if (response && response.status === 200) {
-              const newAccessToken = response.data.access;
+            if (response) {
+              const newAccessToken = response.access;
               login(newAccessToken);
 
               originalRequest.headers[

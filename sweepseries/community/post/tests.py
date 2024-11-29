@@ -270,3 +270,50 @@ class PostAPITest(APITestCase):
         self.client.post(report_url, self.report_data)
         response = self.client.post(report_url, self.report_data)
         self.assertEqual(response.status_code, 400)
+
+class PostReportAPITest(APITestCase):
+    fixtures = ['core/data/test/community.json', 'core/data/test/users.json']
+
+    def setUp(self):
+        self.url = '/v1/reports/posts/'
+        self.normaluser = User.objects.get(username="normaluser")
+        self.admin = User.objects.get(username="admin")
+
+    def test_unauthorized(self):
+        ## 1. unauthenticated
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 403)
+
+        ## 2. normal user
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_list(self):
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_detail(self):
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.get(self.url + '1/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_update(self):
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.patch(self.url + '1/', {'accept': True, 'feedback': 'test'})
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.patch(self.url + '1/', {'accept': False, 'feedback': 'test'})
+        self.assertEqual(response.status_code, 200)
+
+    def test_update_fail(self):
+        ## 1. no feedback
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.patch(self.url + '1/', {'accept': True})
+        self.assertEqual(response.status_code, 400)
+
+        ## 2. no accept
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.patch(self.url + '1/', {'feedback': 'test'})
+        self.assertEqual(response.status_code, 400)

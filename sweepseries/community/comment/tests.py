@@ -284,3 +284,123 @@ class ReCommentAPITest(APITestCase):
         self.client.post(report_url, self.report_data)
         response = self.client.post(report_url, self.report_data)
         self.assertEqual(response.status_code, 400)
+
+class CommentReportAPITest(APITestCase):
+    fixtures = ['core/data/test/community.json', 'core/data/test/users.json']
+
+    def setUp(self):
+        self.url = '/v1/reports/comments/'
+        self.normaluser = User.objects.get(username="normaluser")
+        self.admin = User.objects.get(username="admin")
+        self.update_data = {
+            'accept': True,
+            'feedback': '승인',
+        }
+
+    def test_unauthenticated(self):
+        ## 1. not logged in
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 403)
+
+        ## 2. not admin
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_update(self):
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.patch(f'{self.url}1/', self.update_data)
+        self.assertEqual(response.status_code, 200)
+
+        data = self.update_data.copy()
+        data['accept'] = False
+        response = self.client.patch(f'{self.url}1/', data)
+        self.assertEqual(response.status_code, 200)
+
+    def test_update_fail(self):
+        ## 1. unauthenticated
+        response = self.client.patch(f'{self.url}1/', self.update_data)
+        self.assertEqual(response.status_code, 403)
+
+        ## 2. no data
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.patch(f'{self.url}1/')
+        self.assertEqual(response.status_code, 400)
+
+        ## 3. no feedback
+        response = self.client.patch(f'{self.url}1/', {'accept': True})
+        self.assertEqual(response.status_code, 400)
+
+        ## 4. no accept
+        response = self.client.patch(f'{self.url}1/', {'feedback': 'feedback'})
+        self.assertEqual(response.status_code, 400)
+
+    def test_list(self):
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_retrieve(self):
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.get(f'{self.url}1/')
+        self.assertEqual(response.status_code, 200)
+
+class ReCommentReportAPITest(APITestCase):
+    fixtures = ['core/data/test/community.json', 'core/data/test/users.json']
+
+    def setUp(self):
+        self.url = '/v1/reports/recomments/'
+        self.normaluser = User.objects.get(username="normaluser")
+        self.admin = User.objects.get(username="admin")
+        self.update_data = {
+            'accept': False,
+            'feedback': '거절',
+        }
+
+    def test_unauthenticated(self):
+        ## 1. not logged in
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 403)
+
+        ## 2. not admin
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_list(self):
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_retrieve(self):
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.get(f'{self.url}1/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_update(self):
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.patch(f'{self.url}1/', self.update_data)
+        self.assertEqual(response.status_code, 200)
+
+        data = self.update_data.copy()
+        data['accept'] = True
+        response = self.client.patch(f'{self.url}1/', data)
+        self.assertEqual(response.status_code, 200)
+
+    def test_update_fail(self):
+        ## 1. unauthenticated
+        response = self.client.patch(f'{self.url}1/', self.update_data)
+        self.assertEqual(response.status_code, 403)
+
+        ## 2. no data
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.patch(f'{self.url}1/')
+        self.assertEqual(response.status_code, 400)
+
+        ## 3. no accept
+        response = self.client.patch(f'{self.url}1/', {'feedback': 'feedback'})
+        self.assertEqual(response.status_code, 400)
+
+        ## 4. no feedback
+        response = self.client.patch(f'{self.url}1/', {'feedback': 'feedback'})
+        self.assertEqual(response.status_code, 400)

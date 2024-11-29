@@ -104,10 +104,9 @@ describe("Axios Interceptor", () => {
     // Mock a request that initially fails with 403 and "token_not_valid" error
     mock.onGet("/test-endpoint").replyOnce(403, { code: "token_not_valid" });
 
-    jest.spyOn(AuthAPI, "refresh").mockResolvedValue({
-      status: 200,
-      data: { access: "newAccessToken" },
-    });
+    jest
+      .spyOn(AuthAPI, "refresh")
+      .mockResolvedValue({ access: "newAccessToken" });
 
     // After refreshing the token, the request should succeed
     mock.onGet("/test-endpoint").reply(200, { data: "success" });
@@ -170,7 +169,7 @@ describe("Axios Interceptor", () => {
     // Mock a request that initially fails with 403 and "token_not_valid" error
     mock.onGet("/test-endpoint").replyOnce(403, { code: "token_not_valid" });
 
-    jest.spyOn(AuthAPI, "refresh").mockResolvedValue({ status: 400, data: {} });
+    jest.spyOn(AuthAPI, "refresh").mockResolvedValue(null);
 
     const { getByText } = render(
       <AuthProvider>

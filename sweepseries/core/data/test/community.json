@@ -47,6 +47,20 @@
     }
   },
   {
+    "model": "post.postreport",
+    "pk": 1,
+    "fields": {
+      "created_at": "2024-11-29T03:12:42.141",
+      "updated_at": "2024-11-29T18:54:35.589",
+      "report_user": "223e4567-e89b-12d3-a456-426614174000",
+      "report_content": "스팸이에요",
+      "report_reason": "도배/스팸/광고",
+      "report_status": 0,
+      "feedback": "",
+      "post": 2024072300000002
+    }
+  },
+  {
     "model": "tag.tag",
     "pk": 1,
     "fields": {
@@ -119,6 +133,20 @@
     }
   },
   {
+    "model": "comment.commentreport",
+    "pk": 1,
+    "fields": {
+      "created_at": "2024-11-28T01:33:51.628",
+      "updated_at": "2024-11-29T22:34:28.764",
+      "report_user": "223e4567-e89b-12d3-a456-426614174000",
+      "report_content": "ㅋㅋㅋㅋ",
+      "report_reason": "욕설/비방",
+      "report_status": 2,
+      "feedback": "욕설은 보이지 않습니다....",
+      "comment": 2
+    }
+  },
+  {
     "model": "comment.recomment",
     "pk": 1,
     "fields": {
@@ -142,6 +170,20 @@
       "content": "대댓글 내용 2",
       "is_deleted": false,
       "deleted_at": null
+    }
+  },
+  {
+    "model": "comment.recommentreport",
+    "pk": 1,
+    "fields": {
+      "created_at": "2024-11-28T01:44:54.042",
+      "updated_at": "2024-11-29T22:36:29.466",
+      "report_user": "223e4567-e89b-12d3-a456-426614174000",
+      "report_content": "ㅠㅠㅠㅠ",
+      "report_reason": "욕설/비방",
+      "report_status": 1,
+      "feedback": "게시판 1일 이용 정지 처리하였습니다.",
+      "recomment": 2
     }
   },
   {

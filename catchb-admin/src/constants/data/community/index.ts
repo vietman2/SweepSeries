@@ -1,3 +1,13 @@
+import {
+  samplePostReports,
+  sampleCommentReports,
+  sampleReCommentReports,
+} from "./report";
 import { sampleTags } from "./tags";
 
-export { sampleTags };
+export {
+  samplePostReports,
+  sampleCommentReports,
+  sampleReCommentReports,
+  sampleTags,
+};

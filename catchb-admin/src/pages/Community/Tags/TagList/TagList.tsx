@@ -99,9 +99,9 @@ export function TagList() {
         </Chips>
       </Wrapper>
       <Wrapper>
-        <div>장터</div>
+        <div>마켓</div>
         <Chips>
-          {tags["장터"].map((tag) => (
+          {tags["마켓"].map((tag) => (
             <button
               key={tag.id}
               onClick={() => handleTagDetail(tag.id)}
