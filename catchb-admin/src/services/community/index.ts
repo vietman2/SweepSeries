@@ -1,3 +1,13 @@
+import { getPostReports, getPostReportDetails, updatePostReport } from "./reports";
 import { getTag, getTags, createTag, deleteTag, updateTag } from "./tags";
 
-export { getTag, getTags, createTag, deleteTag, updateTag };
+export {
+  getPostReports,
+  getPostReportDetails,
+  updatePostReport,
+  getTag,
+  getTags,
+  createTag,
+  deleteTag,
+  updateTag,
+};
