@@ -235,7 +235,7 @@ class PostReportSerializer(serializers.ModelSerializer):
         accept = validated_data.get('accept', None)
         if accept is None:
             raise serializers.ValidationError('오류가 발생했습니다.')
-        
+
         if accept:
             instance.report_status = ReportStatus.ACCEPTED
         else:
