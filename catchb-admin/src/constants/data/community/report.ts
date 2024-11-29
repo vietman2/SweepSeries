@@ -16,6 +16,6 @@ export const samplePostReports: PostReportType[] = [
       content: "게시글 내용",
       created_at: "2021-08-01T00:00:00",
     },
-    status: "처리중",
+    status: "검토중",
   },
 ];
