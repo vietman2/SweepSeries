@@ -1,14 +1,27 @@
 from django.utils import timezone
 from rest_framework import serializers
 
+from auth.user.serializers import UserRelatedSerializer
 from auth.userprofile.models import UserProfile
 from auth.userprofile.serializers import UserProfileSerializer
 from community.comment.serializers import CommentSerializer
-from community.enums import ReportReason
+from community.enums import ReportReason, ReportStatus
 from community.tag.serializers import TagSerializer
 from community.utils import get_time_since_created, get_forum
 from core.utils import get_presigned_url
 from .models import Post, PostContentView, PostReport, Image
+
+class PostRelatedSerializer(serializers.ModelSerializer):
+    tag             = TagSerializer()
+    author          = UserProfileSerializer()
+    created_at      = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Post
+        fields = ['id', 'tag', 'author', 'title', 'content', 'created_at']
+
+    def get_created_at(self, obj):
+        return get_time_since_created(obj.created_at)
 
 class PostSimpleSerializer(serializers.ModelSerializer):
     tag             = TagSerializer()
@@ -167,12 +180,32 @@ class PostWriteSerializer(serializers.ModelSerializer):
         return instance
 
 class PostReportSerializer(serializers.ModelSerializer):
+    id              = serializers.IntegerField(read_only=True)
+    report_user     = UserRelatedSerializer(read_only=True)
+    post            = PostRelatedSerializer(read_only=True)
+    reason          = serializers.SerializerMethodField(read_only=True)
+    details         = serializers.SerializerMethodField(read_only=True)
+    status          = serializers.SerializerMethodField(read_only=True)
     report_content  = serializers.CharField(write_only=True)
     report_reason   = serializers.CharField(write_only=True)
+    accept          = serializers.BooleanField(write_only=True, required=False)
+    feedback        = serializers.CharField(write_only=True, required=False)
 
     class Meta:
         model = PostReport
-        fields = ["report_content", "report_reason"]
+        fields = [
+            "id", "report_user", "post", "reason", "details", "status",
+            "report_content", "report_reason", "accept", "feedback"
+        ]
+
+    def get_reason(self, obj):
+        return obj.get_report_reason_display()
+
+    def get_details(self, obj):
+        return obj.report_content
+
+    def get_status(self, obj):
+        return obj.get_report_status_display()
 
     def validate_report_reason(self, value):
         for reason in ReportReason:
@@ -193,3 +226,22 @@ class PostReportSerializer(serializers.ModelSerializer):
         )
 
         return report
+
+    def update(self, instance, validated_data):
+        feedback = validated_data.get('feedback', None)
+        if feedback is None:
+            raise serializers.ValidationError('피드백을 입력해주세요.')
+
+        accept = validated_data.get('accept', None)
+        if accept is None:
+            raise serializers.ValidationError('오류가 발생했습니다.')
+        
+        if accept:
+            instance.report_status = ReportStatus.ACCEPTED
+        else:
+            instance.report_status = ReportStatus.REJECTED
+
+        instance.feedback = feedback
+        instance.save()
+
+        return instance

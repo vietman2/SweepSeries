@@ -10,7 +10,7 @@ from auth.user.views import UserViewSet, UserLoginView
 
 ## Community
 from community.comment.views import CommentViewSet, ReCommentViewSet
-from community.post.views import PostViewSet
+from community.post.views import PostViewSet, PostReportViewSet
 from community.tag.views import TagViewSet
 
 router = DefaultRouter()
@@ -22,6 +22,7 @@ router.register(r'users', UserViewSet, basename='users')
 router.register(r'comments', CommentViewSet, basename='comments')
 router.register(r'recomments', ReCommentViewSet, basename='recomments')
 router.register(r'posts', PostViewSet, basename='posts')
+router.register(r'reports/posts', PostReportViewSet, basename='post-reports')
 router.register(r'tags', TagViewSet, basename='tags')
 
 urlpatterns = [

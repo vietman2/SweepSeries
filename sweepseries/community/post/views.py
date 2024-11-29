@@ -13,7 +13,8 @@ from community.permissions import IsOwner
 from community.tag.models import Tag
 from community.tag.serializers import TagSerializer
 from community.utils import get_forum
-from .models import Post, PostLike
+from core.permissions import AdminOnly
+from .models import Post, PostLike, PostReport
 from .serializers import (
     PostSimpleSerializer, PostDetailSerializer, PostWriteSerializer, PostReportSerializer
 )
@@ -156,3 +157,36 @@ class PostViewSet(ModelViewSet):
             return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({'message': "신고가 완료되었습니다."}, status=status.HTTP_200_OK)
+
+class PostReportViewSet(ModelViewSet):
+    queryset = PostReport.objects.all()
+    serializer_class = PostReportSerializer
+    permission_classes = [AdminOnly]
+    http_method_names = ['get', 'patch']
+
+    @extend_schema(summary='신고 목록 조회', tags=['게시글'])
+    def list(self, request, *args, **kwargs):
+        queryset = PostReport.objects.all()
+        serializer = PostReportSerializer(queryset, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(summary='신고 상세 조회', tags=['게시글'])
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = PostReportSerializer(instance)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(summary='신고 처리', tags=['게시글'])
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = PostReportSerializer(instance, data=request.data, partial=True)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        except ValidationError as e:
+            return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
