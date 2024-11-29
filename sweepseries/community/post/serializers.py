@@ -189,7 +189,7 @@ class PostReportSerializer(serializers.ModelSerializer):
     report_content  = serializers.CharField(write_only=True)
     report_reason   = serializers.CharField(write_only=True)
     accept          = serializers.BooleanField(write_only=True, required=False)
-    feedback        = serializers.CharField(write_only=True, required=False)
+    feedback        = serializers.CharField(required=False)
 
     class Meta:
         model = PostReport
