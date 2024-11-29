@@ -1,8 +1,16 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import { PostReportDetail } from "./PostReport/PostReportDetail/PostReportDetail";
-import { PostReportList } from "./PostReport/PostReportList/PostReportList";
+import {
+  PostReportDetail,
+  CommentReportDetail,
+  ReCommentReportDetail,
+} from "./ReportDetail/ReportDetail";
+import {
+  PostReportList,
+  CommentReportList,
+  ReCommentReportList,
+} from "./ReportList/ReportList";
 import { SimpleModal } from "@components/Modals";
 
 function ReportsLayout() {
@@ -34,7 +42,7 @@ function ReportsLayout() {
   };
 
   const isSelected = (tab: TabType) => {
-    const currentLocation = location.pathname.split("/").pop();
+    const currentLocation = location.pathname.split("/")[3];
     return currentLocation === tab.path;
   };
 
@@ -86,18 +94,46 @@ const Tab = styled.button<{ $selected: boolean }>`
 `;
 
 function PostReportsLayout() {
+  return (
+    <CommonLayout path="/community/reports/posts">
+      <PostReportList />
+    </CommonLayout>
+  );
+}
+
+function CommentReportLayout() {
+  return (
+    <CommonLayout path="/community/reports/comments">
+      <CommentReportList />
+    </CommonLayout>
+  );
+}
+
+function ReCommentReportLayout() {
+  return (
+    <CommonLayout path="/community/reports/recomments">
+      <ReCommentReportList />
+    </CommonLayout>
+  );
+}
+
+interface CommonProps {
+  path: string;
+  children: React.ReactNode;
+}
+
+function CommonLayout({ path, children }: Readonly<CommonProps>) {
   const navigate = useNavigate();
   const location = useLocation();
 
   const isModalOpen =
-    location.pathname.includes("/community/reports/posts/") &&
-    location.pathname !== "/community/reports/posts";
+    location.pathname.includes(path) && location.pathname !== path;
 
-  const closeModal = () => navigate("/community/reports/posts");
+  const closeModal = () => navigate(path);
 
   return (
     <>
-      <PostReportList />
+      {children}
       <SimpleModal isOpen={isModalOpen} onClose={closeModal}>
         <Outlet />
       </SimpleModal>
@@ -105,4 +141,12 @@ function PostReportsLayout() {
   );
 }
 
-export { PostReportDetail, PostReportsLayout, ReportsLayout };
+export {
+  CommentReportLayout,
+  CommentReportDetail,
+  ReCommentReportLayout,
+  ReCommentReportDetail,
+  PostReportDetail,
+  PostReportsLayout,
+  ReportsLayout,
+};
