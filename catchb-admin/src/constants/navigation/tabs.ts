@@ -58,4 +58,16 @@ export const Community: TabType = {
   ],
 };
 
-export const tabs: TabType[] = [Home, User, Community];
+export const Apps: TabType = {
+  title: "앱 관리",
+  path: "/apps",
+  pathName: "apps",
+  subtabs: [
+    {
+      title: "약관 관리",
+      path: "/apps/terms",
+    },
+  ],
+};
+
+export const tabs: TabType[] = [Home, User, Community, Apps];
