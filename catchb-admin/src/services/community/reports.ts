@@ -4,7 +4,7 @@ export async function getPostReports() {
   try {
     const response = await axios.get("/v1/reports/posts");
     return response.data;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -15,7 +15,7 @@ export async function getPostReportDetails(reportId: string  | undefined) {
   try {
     const response = await axios.get(`/v1/reports/posts/${reportId}`);
     return response.data;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -29,7 +29,7 @@ export async function updatePostReport(reportId: string | undefined, accept: boo
       feedback,
     });
     return true;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
