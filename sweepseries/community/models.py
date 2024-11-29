@@ -24,7 +24,7 @@ class Report(TimeStampedModel):
     )
     report_status       = models.IntegerField(
         choices=ReportStatus.choices,
-        default=ReportStatus.SUBMITTED
+        default=ReportStatus.UNDER_REVIEW
     )
 
     feedback            = models.TextField(blank=True)

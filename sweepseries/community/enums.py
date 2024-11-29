@@ -18,6 +18,6 @@ class ReportReason(models.TextChoices):
     OTHER           = 'OT', '기타'
 
 class ReportStatus(models.IntegerChoices):
-    SUBMITTED       = 0, '제출됨'
-    UNDER_REVIEW    = 1, '검토중'
-    REVIEWED        = 2, '검토 완료'
+    UNDER_REVIEW    = 0, '검토중'
+    ACCEPTED        = 1, '처리완료'
+    REJECTED        = 2, '처리완료 (반려)'
