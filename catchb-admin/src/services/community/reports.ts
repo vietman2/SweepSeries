@@ -9,7 +9,7 @@ export async function getPostReports() {
   }
 }
 
-export async function getPostReportDetails(reportId: string  | undefined) {
+export async function getPostReportDetails(reportId: string | undefined) {
   if (!reportId) return null;
 
   try {
@@ -20,7 +20,11 @@ export async function getPostReportDetails(reportId: string  | undefined) {
   }
 }
 
-export async function updatePostReport(reportId: string | undefined, accept: boolean, feedback: string) {
+export async function updatePostReport(
+  reportId: string | undefined,
+  accept: boolean,
+  feedback: string
+) {
   if (!reportId) return null;
 
   try {
