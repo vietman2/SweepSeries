@@ -19,6 +19,18 @@ class UserAuthSerializer(serializers.ModelSerializer):
 
         return UserProfileSerializer(first_profile).data
 
+class UserRelatedSerializer(serializers.ModelSerializer):
+    uuid        = serializers.UUIDField(read_only=True)
+    username    = serializers.CharField(read_only=True)
+    full_name   = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['uuid', 'username', 'full_name']
+
+    def get_full_name(self, obj):
+        return obj.person.full_name
+
 class UserSerializer(serializers.ModelSerializer):
     uuid        = serializers.UUIDField(read_only=True)
     username    = serializers.CharField(read_only=True)
