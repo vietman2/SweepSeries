@@ -10,7 +10,13 @@ export type UserProfileType = {
   color: string;
   nickname: string;
   introduction: string;
-}
+};
+
+export type UserRelatedType = {
+  uuid: string;
+  username: string;
+  full_name: string;
+};
 
 export type UserType = {
   uuid: string;

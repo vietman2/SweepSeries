@@ -1,3 +1,4 @@
 import { TagType } from "./post";
+import { PostReportType } from "./report";
 
-export { type TagType };
+export { type TagType, type PostReportType };

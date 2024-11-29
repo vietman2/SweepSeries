@@ -1,4 +1,9 @@
-import { PersonType, UserType } from "@models/members";
+import {
+  PersonType,
+  UserType,
+  UserRelatedType,
+  UserProfileType,
+} from "@models/members";
 
 export const samplePeople: PersonType[] = [
   {
@@ -46,3 +51,16 @@ export const sampleUsers: UserType[] = [
     profiles: [],
   },
 ];
+
+export const sampleUserRelated: UserRelatedType = {
+  uuid: "1",
+  username: "johndoe",
+  full_name: "John Doe",
+};
+
+export const sampleProfile: UserProfileType = {
+  profile_image: "https://via.placeholder.com/150",
+  color: "#ff0000",
+  nickname: "John",
+  introduction: "Hello, I'm John.",
+};
