@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { ErrorComponent, Loading } from "@components/Fallbacks";
@@ -14,10 +14,18 @@ export function TermsList() {
   const [refreshCount, setRefreshCount] = useState<number>(0);
 
   const location = useLocation();
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleRefresh = () => {
     setRefreshCount(refreshCount + 1);
+  };
+
+  const handleCreate = () => {
+    navigate("/apps/terms/create");
+  }
+
+  const handleDetail = (termId: number) => {
+    navigate(`/apps/terms/${termId}`);
   };
 
   useEffect(() => {
@@ -59,7 +67,7 @@ export function TermsList() {
   return (
     <Container>
       <div>
-        <Button onClick={() => {}}>약관 추가</Button>
+        <Button onClick={handleCreate}>약관 추가</Button>
       </div>
       <List>
         <Header>
@@ -70,7 +78,7 @@ export function TermsList() {
           <div>수정일</div>
         </Header>
         {terms.map((term) => (
-          <Row key={term.id}>
+          <Row key={term.id} onClick={() => handleDetail(term.id)} data-testid={`term-${term.id}`}>
             <div>{term.id}</div>
             <div>{term.title}</div>
             <div>{term.required ? "O" : "X"}</div>

@@ -47,6 +47,9 @@ describe("<TermsList />", () => {
       expect(screen.getByText("약관 추가")).toBeInTheDocument();
     });
 
-    waitFor(() => fireEvent.click(screen.getByText("약관 추가")));
+    waitFor(() => {
+      fireEvent.click(screen.getByText("약관 추가"));
+      fireEvent.click(screen.getByTestId("term-1"));
+    });
   });
 });
