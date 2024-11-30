@@ -7,9 +7,15 @@ import { renderWithProviders } from "@utils/test-utils";
 jest.mock("react-quill", () => {
   const { forwardRef } = jest.requireActual("react");
 
-  const Component = forwardRef(({}, ref: React.RefObject<HTMLDivElement>) => {
-    return <div ref={ref} data-testid="quill" />;
-  });
+  const Component = forwardRef(
+    ({ value }: { value: string }, ref: React.RefObject<HTMLDivElement>) => {
+      return (
+        <div ref={ref} data-testid="quill">
+          {value}
+        </div>
+      );
+    }
+  );
 
   return {
     __esModule: true,
