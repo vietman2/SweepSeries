@@ -1,6 +1,6 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 
-import { TermsLayout } from "./Terms";
+import { TermsCreate, TermsDetail, TermsLayout } from "./Terms";
 import { Apps } from "@navigation/tabs";
 import { ContentLayout } from "@pages/_layout";
 
@@ -9,7 +9,11 @@ export function AppsContainer() {
     <Routes>
       <Route path="/" element={<ContentLayout selectedTab={Apps} />}>
         <Route index element={<Navigate to="terms" />} />
-        <Route path="terms" element={<TermsLayout />} />
+        <Route path="terms" element={<TermsLayout />}>
+          <Route path="create" element={<TermsCreate />} />
+          <Route path=":termId" element={<TermsDetail />} />
+          <Route path=":termId/edit" element={<Navigate to="terms" />} />
+        </Route>
       </Route>
     </Routes>
   );

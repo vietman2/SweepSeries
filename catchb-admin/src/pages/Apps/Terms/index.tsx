@@ -1,5 +1,7 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
+import { TermsCreate } from "./TermsCreate/TermsCreate";
+import { TermsDetail } from "./TermsDetail/TermsDetail";
 import { TermsList } from "./TermsList/TermsList";
 import { SimpleModal } from "@components/Modals";
 
@@ -23,4 +25,4 @@ function TermsLayout() {
   );
 }
 
-export { TermsLayout };
+export { TermsCreate, TermsDetail, TermsLayout };
