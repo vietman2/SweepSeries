@@ -22,7 +22,7 @@ export function TermsList() {
 
   const handleCreate = () => {
     navigate("/apps/terms/create");
-  }
+  };
 
   const handleDetail = (termId: number) => {
     navigate(`/apps/terms/${termId}`);
@@ -73,15 +73,24 @@ export function TermsList() {
         <Header>
           <div>No.</div>
           <div>약관 제목</div>
-          <div>필수 여부</div>
           <div>생성일</div>
           <div>수정일</div>
         </Header>
         {terms.map((term) => (
-          <Row key={term.id} onClick={() => handleDetail(term.id)} data-testid={`term-${term.id}`}>
+          <Row
+            key={term.id}
+            onClick={() => handleDetail(term.id)}
+            data-testid={`term-${term.id}`}
+          >
             <div>{term.id}</div>
-            <div>{term.title}</div>
-            <div>{term.required ? "O" : "X"}</div>
+            {term.deleted ? (
+              <div>(삭제됨) {term.title}</div>
+            ) : (
+              <div>
+                {term.required ? "(필수) " : "(선택) "}
+                {term.title}
+              </div>
+            )}
             <div>{term.created_at}</div>
             <div>{term.updated_at}</div>
           </Row>
@@ -128,8 +137,10 @@ const Row = styled.div`
 
   > div {
     display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 8px 12px;
-    width: 180px;
+    width: 140px;
 
     border-right: 1px solid ${({ theme }) => theme.colors.borderLight};
 
@@ -138,19 +149,17 @@ const Row = styled.div`
   }
 
   > div:first-child {
-    align-items: center;
-    justify-content: center;
     width: 60px;
   }
 
-  > div:nth-child(3) {
-    align-items: center;
-    justify-content: center;
-    width: 80px;
+  > div:nth-child(2) {
+    flex: 1;
+    justify-content: flex-start;
+    max-width: 400px;
+    font-size: 18px;
   }
 
   > div:last-child {
-    flex: 1;
     border-right: none;
   }
 `;
@@ -160,4 +169,8 @@ const Header = styled(Row)`
   font-weight: bold;
 
   border-top: none;
+
+  > div:nth-child(2) {
+    justify-content: center;
+  }
 `;
