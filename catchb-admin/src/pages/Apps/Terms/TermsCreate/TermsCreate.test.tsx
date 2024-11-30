@@ -4,21 +4,6 @@ import { TermsCreate } from "./TermsCreate";
 import * as TermsAPI from "@services/apps/terms";
 import { renderWithProviders } from "@utils/test-utils";
 
-
-jest.mock("@components/Inputs", () => {
-  const { forwardRef } = jest.requireActual("react");
-
-  const mockRef = jest.fn().mockImplementation(() => {
-    return { current: { getEditor: jest.fn(() => ({ getText: jest.fn() })) } };
-  });
-
-  return {
-    ContentInput: forwardRef(({}, ref: React.RefObject<HTMLDivElement>) => (
-      <div ref={mockRef} data-testid="content" />
-    )),
-  };
-});
-
 describe("<TermsCreate />", () => {
   beforeEach(() => {
     jest.clearAllMocks();
