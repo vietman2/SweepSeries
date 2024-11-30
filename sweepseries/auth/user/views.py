@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.db.models import Q
 from django.utils import timezone
 from dj_rest_auth.views import LoginView
@@ -7,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from core.permissions import AdminOnly
+from core.utils import is_admin_page
 from .models import User
 from .serializers import UserSerializer
 
@@ -35,8 +35,7 @@ class UserViewSet(ModelViewSet):
 
 class UserLoginView(LoginView):
     def post(self, request, *args, **kwargs):
-        admin_page_url = settings.ADMIN_PAGE_URL
-        if request.META.get('HTTP_ORIGIN') == admin_page_url:
+        if is_admin_page(request):
             q = Q()
             q &= Q(username=request.data['username'], is_superuser=True)
             if not User.objects.filter(q).exists():

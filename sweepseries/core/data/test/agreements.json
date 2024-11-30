@@ -4,10 +4,10 @@
     "pk": 1,
     "fields": {
       "created_at": "2024-11-18T10:14:06.943",
-      "updated_at": "2024-11-18T10:14:06.943",
       "title": "Mandatory without content",
-      "content": "",
-      "required": true
+      "required": true,
+      "deleted": false,
+      "deleted_at": null
     }
   },
   {
@@ -15,10 +15,10 @@
     "pk": 2,
     "fields": {
       "created_at": "2024-11-18T10:14:31.290",
-      "updated_at": "2024-11-18T10:14:31.290",
       "title": "Mandatory with content",
-      "content": ".",
-      "required": true
+      "required": true,
+      "deleted": false,
+      "deleted_at": null
     }
   },
   {
@@ -26,10 +26,10 @@
     "pk": 3,
     "fields": {
       "created_at": "2024-11-18T10:14:45.520",
-      "updated_at": "2024-11-18T10:14:45.520",
       "title": "Optional without content",
-      "content": "",
-      "required": false
+      "required": false,
+      "deleted": false,
+      "deleted_at": null
     }
   },
   {
@@ -37,10 +37,61 @@
     "pk": 4,
     "fields": {
       "created_at": "2024-11-18T10:15:09.334",
-      "updated_at": "2024-11-18T10:15:09.334",
       "title": "Optional with content",
-      "content": ".",
-      "required": false
+      "required": false,
+      "deleted": false,
+      "deleted_at": null
+    }
+  },
+  {
+    "model": "agreements.agreement",
+    "pk": 5,
+    "fields": {
+      "created_at": "2024-11-18T10:15:09.334",
+      "title": "Deleted",
+      "required": false,
+      "deleted": true,
+      "deleted_at": "2024-11-20T10:15:09.334"
+    }
+  },
+  {
+    "model": "agreements.agreementversion",
+    "pk": 1,
+    "fields": {
+      "agreement": 1,
+      "content": "",
+      "summary": "신규 생성",
+      "created_at": "2024-11-30T00:28:29.954"
+    }
+  },
+  {
+    "model": "agreements.agreementversion",
+    "pk": 2,
+    "fields": {
+      "agreement": 2,
+      "content": "",
+      "summary": "신규 생성",
+      "created_at": "2024-11-30T00:28:29.954"
+    }
+  },
+  {
+    "model": "agreements.agreementversion",
+    "pk": 3,
+    "fields": {
+      "agreement": 3,
+      "content": "",
+      "summary": "신규 생성",
+      "created_at": "2024-11-30T00:28:29.954"
+    }
+  },
+  {
+    "model": "agreements.agreementversion",
+    "pk": 4,
+    "fields": {
+      "agreement": 4,
+      "content": "",
+      "summary": "신규 생성",
+      "created_at": "2024-11-30T00:28:29.954"
     }
   }
 ]

@@ -19,3 +19,7 @@ def get_presigned_url(filename):
         },
         ExpiresIn=300,
     )
+
+def is_admin_page(request):
+    admin_page_url = settings.ADMIN_PAGE_URL
+    return request.META.get('HTTP_ORIGIN') == admin_page_url

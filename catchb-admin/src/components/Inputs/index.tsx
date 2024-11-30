@@ -1,3 +1,4 @@
+import { ContentInput } from "./ContentInput";
 import { TextInput } from "./TextInput";
 
-export { TextInput };
+export { ContentInput, TextInput };
