@@ -56,7 +56,7 @@ export async function deleteTerm(id: string | undefined) {
 
 export async function updateTerm(
   id: string | undefined,
-  content: string,
+  content: string | undefined,
   summary: string,
 ) {
   if (content === undefined || !id) return null;
