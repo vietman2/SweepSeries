@@ -20,7 +20,7 @@ export const ContentInput = forwardRef<ReactQuill, Props>(
           ref={ref}
           value={content}
           onChange={setContent}
-          style={{ height: "200px" }}
+          style={{ height: "90%" }}
         />
       </Container>
     );
@@ -31,7 +31,6 @@ const Container = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  height: 200px;
   padding: 0 8px;
 
   color: ${({ theme }) => theme.colors.foreground700};
