@@ -42,6 +42,7 @@ jest.mock("@components/Icons", () => ({
   ProfileIcon: () => <div>ProfileIcon</div>,
 }));
 jest.mock("@components/Inputs", () => ({
+  ContentInput: () => <div>ContentInput</div>,
   TextInput: ({
     placeholder,
     value,
