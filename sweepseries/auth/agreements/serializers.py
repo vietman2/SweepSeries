@@ -44,7 +44,7 @@ class AgreementDetailSerializer(serializers.ModelSerializer):
 
     def get_history(self, obj):
         versions = AgreementVersion.objects.filter(agreement=obj).order_by('-created_at')
-        data = AgreementVersionSimpleSerializer(versions, many=True).data
+        data = list(AgreementVersionSimpleSerializer(versions, many=True).data)
 
         if obj.deleted:
             data.append({

@@ -44,7 +44,7 @@ class AgreementViewSet(ModelViewSet):
         serializer = AgreementDetailSerializer(data=request.data)
         content = request.data.get('content', None)
 
-        if content == None:
+        if content is None:
             return Response({'message': '약관 내용을 입력해주세요.'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
