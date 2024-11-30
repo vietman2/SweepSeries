@@ -10,6 +10,18 @@ export async function getTerms() {
   }
 }
 
+export async function getTerm(id: string | undefined) {
+  if (!id) return null;
+
+  try {
+    const response = await axios.get(`/v1/agreements/${id}`);
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
 export async function createTerms(
   title: string,
   content: string | undefined,
@@ -22,6 +34,37 @@ export async function createTerms(
       title,
       content,
       required: isRequired,
+    });
+
+    return true;
+  } catch {
+    return null;
+  }
+}
+
+export async function deleteTerm(id: string | undefined) {
+  if (!id) return null;
+
+  try {
+    await axios.delete(`/v1/agreements/${id}`);
+
+    return true;
+  } catch {
+    return null;
+  }
+}
+
+export async function updateTerm(
+  id: string | undefined,
+  content: string,
+  summary: string,
+) {
+  if (content === undefined || !id) return null;
+
+  try {
+    await axios.put(`/v1/agreements/${id}/`, {
+      content,
+      summary,
     });
 
     return true;
