@@ -1,3 +1,3 @@
-import { getTerms } from "./terms";
+import { createTerms, getTerms } from "./terms";
 
-export { getTerms };
+export { createTerms, getTerms };
