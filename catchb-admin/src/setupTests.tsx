@@ -49,7 +49,7 @@ jest.mock("@components/Inputs", () => {
   });
 
   return {
-    ContentInput: forwardRef(({}, ref: React.RefObject<HTMLDivElement>) => (
+    ContentInput: forwardRef(() => (
       <div ref={mockRef} data-testid="content" />
     )),
     TextInput: ({

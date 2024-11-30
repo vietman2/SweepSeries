@@ -25,7 +25,7 @@ export function TermsCreate() {
     } else {
       window.alert("약관 생성에 실패했습니다.");
     }
-  }
+  };
 
   return (
     <Container>
