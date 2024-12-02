@@ -7,19 +7,20 @@
 # More details at https://github.com/eslint/eslint
 # and https://eslint.org
 
-name: ESLint (Webpage Web)
+name: ESLint (Mobile App)
 
 on:
   push:
     branches:
-        - dev
+      - dev
     paths:
-      - 'catchbweb/**'
+      - 'sweep/**'
   pull_request:
+    # The branches below must be a subset of the branches above
     branches:
-        - dev
+      - dev
     paths:
-      - 'catchbweb/**'
+      - 'sweep/**'
 
 jobs:
   eslint:
@@ -27,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "catchbweb"
+        working-directory: "sweep"
     permissions:
       contents: read
       security-events: write
@@ -52,5 +53,5 @@ jobs:
       - name: Upload analysis results to GitHub
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: catchbweb/eslint-results.sarif
+          sarif_file: sweep/eslint-results.sarif
           wait-for-processing: true
