@@ -1,14 +1,20 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
-name: React Native Frontend Test
+name: React Frontend (Webpage) Test
 
 on:
   push:
-    branches: [ "dev" ]
+    branches:
+      - dev
+    paths:
+      - 'catchbweb/**'
   pull_request:
-    branches: [ "dev" ]
-    types: [opened, synchronize, reopened]
+    branches:
+      - dev
+    paths:
+      - 'catchbweb/**'    
+
 
 jobs:
   build:
@@ -27,10 +33,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        cache-dependency-path: ./sweep/yarn.lock
+        cache-dependency-path: ./catchbweb/yarn.lock
 
     - name: Run tests
-      working-directory: "sweep"
+      working-directory: "catchbweb"
       run: |
         yarn && CI=true
         yarn test --coverage --watchAll=false
