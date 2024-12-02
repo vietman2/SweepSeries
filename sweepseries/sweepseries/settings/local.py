@@ -17,6 +17,18 @@ DATABASES = {
     }
 }
 
+REST_AUTH = {
+    'USE_JWT': True,
+    'JWT_AUTH_COOKIE': 'access',
+    'JWT_AUTH_REFRESH_COOKIE': 'refresh',
+    'JWT_AUTH_SECURE': False,
+    'JWT_AUTH_HTTPONLY': True,
+    'JWT_AUTH_RETURN_EXPIRATION': True,
+    'JWT_AUTH_COOKIE_USE_CSRF' : True,
+    'SESSION_LOGIN': False,
+
+    'USER_DETAILS_SERIALIZER': 'auth.user.serializers.UserAuthSerializer',
+}
 
 # CORS
 CORS_ALLOWED_ALL_ORIGINS = True
