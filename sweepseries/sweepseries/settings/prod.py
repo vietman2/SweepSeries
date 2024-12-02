@@ -94,6 +94,13 @@ CORS_ALLOW_HEADERS = [
     "authorization",
     "x-csrftoken",
 ]
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "OPTIONS",
+    "PUT",
+    "DELETE",
+]
 CSRF_TRUSTED_ORIGINS = [
     "https://api.sweepseries.com",
     "https://admin.sweepseries.com",
