@@ -2,7 +2,7 @@
 FROM node:18.18.0 as build
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+RUN yarn install --frozen-lockfile --ignore-scripts
 COPY . ./
 RUN PROD=true yarn build
 
