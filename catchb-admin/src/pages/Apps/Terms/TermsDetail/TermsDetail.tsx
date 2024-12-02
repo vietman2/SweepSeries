@@ -101,6 +101,7 @@ export function TermsDetail() {
             <Subtitle>약관 내용 : {term.title}</Subtitle>
             <Button onClick={() => setContentMode(false)}>닫기</Button>
           </Header>
+          {!editContent && <NoContent>아직 내용이 없는 동의 항목입니다.</NoContent>}
           <ContentInput
             content={editContent}
             setContent={setEditContent}
@@ -278,4 +279,12 @@ const ContentMode = styled(Container)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+`;
+
+const NoContent = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 400;
 `;

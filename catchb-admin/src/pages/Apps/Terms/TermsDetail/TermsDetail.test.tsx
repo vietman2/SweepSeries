@@ -67,7 +67,10 @@ describe("<TermsDetail />", () => {
     });
   });
 
-  it("handles edit fail", async () => {
+  it("renders no content and handles edit fail", async () => {
+    jest
+      .spyOn(TermsAPI, "getTerm")
+      .mockResolvedValue({ ...sampleTerms[1], content: "" });
     jest.spyOn(TermsAPI, "updateTerm").mockResolvedValue(null);
     renderWithProviders(<TermsDetail />);
 
