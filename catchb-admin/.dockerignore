@@ -1,0 +1,14 @@
+node_modules
+build
+.dockerignore
+.git
+.gitignore
+.npm
+.cache
+.yarn
+.vscode
+.idea
+*.log
+.DS_Store
+*.swp
+coverage
