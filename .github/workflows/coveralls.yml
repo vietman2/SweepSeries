@@ -50,6 +50,9 @@ jobs:
           cd ../catchb-admin
           yarn install
           cd ..
+          cd ../catchbweb
+          yarn install
+          cd ..
 
       - name: Backend Coverage
         run: |
@@ -72,6 +75,15 @@ jobs:
       - name: Catch B Admin Web Coverage
         run: |
           cd catchb-admin
+          yarn global add lcov-result-merger
+          yarn test --coverage --watchAll=false
+          cp coverage/lcov.info coverage.lcov
+          cd ..
+          lcov-result-merger '*/coverage.lcov' coverage.lcov --prepend-source-files --prepend-path-fix "."
+
+      - name: Catch B Admin Web Coverage
+        run: |
+          cd catchbweb
           yarn global add lcov-result-merger
           yarn test --coverage --watchAll=false
           cp coverage/lcov.info coverage.lcov
