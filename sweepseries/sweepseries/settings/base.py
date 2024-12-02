@@ -63,6 +63,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -93,19 +94,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'sweepseries.wsgi.application'
-
-REST_AUTH = {
-    'USE_JWT': True,
-    'JWT_AUTH_COOKIE': 'access',
-    'JWT_AUTH_REFRESH_COOKIE': 'refresh',
-    'JWT_AUTH_SECURE': False,
-    'JWT_AUTH_HTTPONLY': True,
-    'JWT_AUTH_RETURN_EXPIRATION': True,
-    'JWT_AUTH_COOKIE_USE_CSRF' : True,
-    'SESSION_LOGIN': False,
-
-    'USER_DETAILS_SERIALIZER': 'auth.user.serializers.UserAuthSerializer',
-}
 
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -195,6 +183,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
