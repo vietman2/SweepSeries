@@ -4,7 +4,12 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile --ignore-scripts
 COPY . ./
-COPY .env .env
+
+ARG REACT_APP_API_URL
+ARG NODE_ENV=production
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
+ENV NODE_ENV=$NODE_ENV
+
 RUN PROD=true yarn build
 
 # 2: Serve the React App with Nginx
