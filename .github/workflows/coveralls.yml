@@ -49,7 +49,6 @@ jobs:
           yarn install
           cd ../catchb-admin
           yarn install
-          cd ..
           cd ../catchbweb
           yarn install
           cd ..
