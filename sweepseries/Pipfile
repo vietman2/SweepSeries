@@ -18,6 +18,8 @@ dj-rest-auth = "*"
 djangorestframework-simplejwt = "*"
 django-allauth = "*"
 django-cors-headers = "*"
+gunicorn = "*"
+whitenoise = "*"
 
 [dev-packages]
 coverage = "*"
