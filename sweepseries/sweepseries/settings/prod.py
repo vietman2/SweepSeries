@@ -84,8 +84,9 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 CORS_ALLOWED_ORIGINS = [
     "https://sweepseries.com",
-    "https://www.sweepseries.co.kr",
-    "https://api.sweepseries.co.kr",
+    "https://www.sweepseries.com",
+    "https://api.sweepseries.com",
+    "https://admin.sweepseries.com",
 ]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
@@ -93,8 +94,16 @@ CORS_ALLOW_HEADERS = [
     "authorization",
     "x-csrftoken",
 ]
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "OPTIONS",
+    "PUT",
+    "DELETE",
+]
 CSRF_TRUSTED_ORIGINS = [
-    "https://api.sweepseries.co.kr",
+    "https://api.sweepseries.com",
+    "https://admin.sweepseries.com",
 ]
 CORS_PREFLIGHT_MAX_AGE = 3600
 
