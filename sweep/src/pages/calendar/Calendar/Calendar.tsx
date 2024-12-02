@@ -141,6 +141,7 @@ export function Calendar() {
         <CalendarButtons open={buttonsOpen} setOpen={setButtonsOpen} />
         <Scroll>
           <CalendarComponent
+            initialDate={new Date().toISOString().split("T")[0]}
             customHeader={CustomHeader}
             dayComponent={dayComponent}
             hideExtraDays
