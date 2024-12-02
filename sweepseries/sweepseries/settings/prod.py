@@ -96,6 +96,7 @@ CORS_ALLOW_HEADERS = [
 ]
 CSRF_TRUSTED_ORIGINS = [
     "https://api.sweepseries.com",
+    "https://admin.sweepseries.com",
 ]
 CORS_PREFLIGHT_MAX_AGE = 3600
 
