@@ -1,0 +1,51 @@
+name: Deploy Webpage
+
+on:
+  pull_request:
+    branches:
+      - prod
+    paths:
+      - 'catchbweb/**'
+
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == false
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Docker Login
+      - name: Docker Login
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          ecr: false
+          logout: true
+
+      # 3. Build the Docker image
+      - name: Build Docker image
+        run: |
+          cd catchbweb
+          docker build -t ${{ secrets.DOCKER_REGISTRY }}/webpage:latest .
+
+      # 4. Push the Docker image
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKER_REGISTRY }}/webpage:latest
+
+      # 5. SSH and deploy the server
+      - name: SSH and deploy the server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            docker stop webpage
+            docker rm webpage
+            docker pull ${{ secrets.DOCKER_REGISTRY }}/webpage:latest
+            docker run -d -p 3000:80 --name webpage ${{ secrets.DOCKER_REGISTRY }}/webpage:latest
