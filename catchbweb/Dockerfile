@@ -1,5 +1,5 @@
 # 1: Build the React App
-FROM node:18.18.0 as build
+FROM node:18.18.0 AS build
 WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile --ignore-scripts
