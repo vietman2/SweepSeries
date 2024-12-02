@@ -53,6 +53,6 @@ describe("<Calendar />", () => {
   it("handles day navigate", () => {
     const { getByTestId } = renderWithProviders(<Calendar />);
 
-    fireEvent.press(getByTestId("day-2024-11-01"));
+    fireEvent.press(getByTestId("day-2024-01-01"));
   });
 });
