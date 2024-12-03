@@ -11,12 +11,12 @@ class NoticeSerializer(serializers.ModelSerializer):
         model = Notice
         fields = ['id', 'title', 'content', 'created_at', 'updated_at']
 
-    def validate(self, data):
-        if not data.get('content'):
+    def validate(self, attrs):
+        if not attrs.get('content'):
             raise serializers.ValidationError("Content is required.")
-        if not data.get('title'):
+        if not attrs.get('title'):
             raise serializers.ValidationError("Title is required.")
-        return data
+        return attrs
 
     def update(self, instance, validated_data):
         instance.title = validated_data.get('title', instance.title)
