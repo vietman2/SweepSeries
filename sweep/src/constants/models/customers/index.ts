@@ -1,5 +1,5 @@
 import {
-  AnnouncementSimpleType,
+  AnnouncementType,
   FAQType,
   InquirySimpleType,
   SettingType,
@@ -7,7 +7,7 @@ import {
 } from "./services";
 
 export {
-  AnnouncementSimpleType,
+  AnnouncementType,
   FAQType,
   InquirySimpleType,
   SettingType,
