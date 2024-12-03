@@ -1,5 +1,6 @@
 ## Custom
 core/data/dev/
+staticfiles/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
