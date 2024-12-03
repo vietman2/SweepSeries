@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 
 import { NoticeWrite } from "./NoticeWrite";
 import * as NoticesAPI from "@services/apps/notices";
