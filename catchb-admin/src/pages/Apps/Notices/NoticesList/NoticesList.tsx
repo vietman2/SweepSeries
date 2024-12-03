@@ -50,9 +50,10 @@ export function NoticesList() {
 
   if (loading) {
     return (
-    <Container>
-      <Loading />
-    </Container>);
+      <Container>
+        <Loading />
+      </Container>
+    );
   }
 
   if (error) {
@@ -108,25 +109,6 @@ const Container = styled.div`
   gap: 32px;
 `;
 
-const Button = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 16px;
-  border-radius: 8px;
-  background-color: ${({ theme }) => theme.colors.background100};
-  color: ${({ theme }) => theme.colors.foreground900};
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-`;
-
-const List = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 8px;
-`;
-
 const Row = styled.div`
   display: flex;
   align-items: center;
@@ -173,4 +155,23 @@ const Header = styled(Row)`
   > div:nth-child(2) {
     justify-content: center;
   }
+`;
+
+const List = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+`;
+
+const Button = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: ${({ theme }) => theme.colors.background100};
+  color: ${({ theme }) => theme.colors.foreground900};
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
 `;
