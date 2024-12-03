@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { Divider } from "@components/Dividers";
+import { LoadingComponent } from "@components/Fallbacks";
 import { AppIcon } from "@components/Icons";
 import { Scroll } from "@components/ScrollView";
 import { FAQTabs } from "@components/Tabs";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
 import { FAQType } from "@models/customers";
-import { sampleFAQs } from "@testdata/customers";
+import { getFAQs } from "@services/app";
 import { ThemeColorType } from "@themes/colors";
 
 const tabs = ["전체", "예약", "아카데미", "레슨", "이벤트", "프로모드"];
@@ -17,6 +18,8 @@ export function FAQ() {
   const [FAQs, setFAQs] = useState<FAQType[]>([]);
   const [openFAQnumber, setOpenFAQnumber] = useState<number>(-1);
   const [selectedTab, setSelectedTab] = useState<string>("전체");
+
+  const [loading, setLoading] = useState(true);
 
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -30,7 +33,20 @@ export function FAQ() {
   };
 
   useEffect(() => {
-    setFAQs(sampleFAQs);
+    const fetchData = async () => {
+      setLoading(true);
+      const response = await getFAQs(selectedTab);
+
+      if (response) {
+        setFAQs(response);
+      } else {
+        setFAQs([]);
+      }
+
+      setLoading(false);
+    };
+
+    fetchData();
   }, [selectedTab]);
 
   return (
@@ -41,33 +57,39 @@ export function FAQ() {
         setSelectedTab={setSelectedTab}
       />
       <Divider />
-      <Scroll>
-        {FAQs.map((FAQ) => (
-          <View key={FAQ.id} style={styles.listitem}>
-            <TouchableOpacity
-              onPress={() => toggleFAQ(FAQ.id)}
-              style={styles.horizontal}
-            >
-              <Text
-                style={[
-                  styles.title,
-                  openFAQnumber === FAQ.id ? { fontWeight: "bold" } : {},
-                ]}
+      {loading ? (
+        <LoadingComponent />
+      ) : (
+        <Scroll>
+          {FAQs.map((FAQ) => (
+            <View key={FAQ.id} style={styles.listitem}>
+              <TouchableOpacity
+                onPress={() => toggleFAQ(FAQ.id)}
+                style={styles.horizontal}
               >
-                {FAQ.question}
-              </Text>
-              <AppIcon
-                icon={openFAQnumber === FAQ.id ? "chevron-up" : "chevron-down"}
-                size={14}
-                color={theme.lowEmphasis}
-              />
-            </TouchableOpacity>
-            {openFAQnumber === FAQ.id ? (
-              <Text style={styles.content}>{FAQ.answer}</Text>
-            ) : null}
-          </View>
-        ))}
-      </Scroll>
+                <Text
+                  style={[
+                    styles.title,
+                    openFAQnumber === FAQ.id ? { fontWeight: "bold" } : {},
+                  ]}
+                >
+                  {FAQ.question}
+                </Text>
+                <AppIcon
+                  icon={
+                    openFAQnumber === FAQ.id ? "chevron-up" : "chevron-down"
+                  }
+                  size={14}
+                  color={theme.lowEmphasis}
+                />
+              </TouchableOpacity>
+              {openFAQnumber === FAQ.id ? (
+                <Text style={styles.content}>{FAQ.answer}</Text>
+              ) : null}
+            </View>
+          ))}
+        </Scroll>
+      )}
     </View>
   );
 }
