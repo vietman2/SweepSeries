@@ -5,11 +5,12 @@ export type InquirySimpleType = {
   category: string;
 };
 
-export type AnnouncementSimpleType = {
+export type AnnouncementType = {
   id: number;
   title: string;
   content: string;
   created_at: string;
+  updated_at: string;
 };
 
 export type FAQType = {

@@ -1,7 +1,13 @@
 import { alert } from "./alert";
 
+jest.unmock("@services/alert/alert");
+
 describe("alert", () => {
   const onPress = jest.fn();
+
+  beforeEach(() => {
+  jest.restoreAllMocks();
+  });
 
   it("should return Alert", () => {
     alert("title", "message");

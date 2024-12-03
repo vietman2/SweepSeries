@@ -29,7 +29,7 @@ jest.mock("@components/Fallbacks", () => ({
   ComingSoon: () => <div>ComingSoon</div>,
   ErrorComponent: ({
     onRefresh,
-    label,
+    label = "Error",
   }: {
     onRefresh: () => void;
     label: string;
@@ -41,34 +41,23 @@ jest.mock("@components/Icons", () => ({
   MainLogo: () => <div>MainLogo</div>,
   ProfileIcon: () => <div>ProfileIcon</div>,
 }));
-jest.mock("@components/Inputs", () => {
-  const { forwardRef } = jest.requireActual("react");
-
-  const mockRef = jest.fn().mockImplementation(() => {
-    return { current: { getEditor: jest.fn(() => ({ getText: jest.fn() })) } };
-  });
-
-  return {
-    ContentInput: forwardRef(() => (
-      <div ref={mockRef} data-testid="content" />
-    )),
-    TextInput: ({
-      placeholder,
-      value,
-      onChange,
-    }: {
-      placeholder: string;
-      value: string;
-      onChange: (value: string) => void;
-    }) => (
-      <input
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        data-testid={`textinput-${placeholder}`}
-      />
-    ),
-  };
-});
+jest.mock("@components/Inputs", () => ({
+  TextInput: ({
+    placeholder,
+    value,
+    onChange,
+  }: {
+    placeholder: string;
+    value: string;
+    onChange: (value: string) => void;
+  }) => (
+    <input
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      data-testid={`textinput-${placeholder}`}
+    />
+  ),
+}));
 jest.mock("@components/Menus", () => ({
   Menu: ({
     options,

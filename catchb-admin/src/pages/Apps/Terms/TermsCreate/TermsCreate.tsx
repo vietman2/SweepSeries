@@ -1,9 +1,7 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ReactQuill from "react-quill";
 import styled from "styled-components";
 
-import { ContentInput } from "@components/Inputs";
 import { createTerms } from "@services/apps";
 
 export function TermsCreate() {
@@ -11,14 +9,13 @@ export function TermsCreate() {
   const [isRequired, setIsRequired] = useState<boolean>(true);
   const [hasContent, setHasContent] = useState<boolean>(true);
   const [content, setContent] = useState<string>("");
-  const quillRef = useRef<ReactQuill>(null);
 
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    const content = hasContent ? quillRef.current?.getEditor().getText() : "";
+    const inputContent = hasContent ? content : "";
 
-    const response = await createTerms(title, content, isRequired);
+    const response = await createTerms(title, inputContent, isRequired);
 
     if (response) {
       navigate("/apps/terms");
@@ -68,9 +65,9 @@ export function TermsCreate() {
           <>
             <Subtitle>내용</Subtitle>
             <ContentInput
-              content={content}
-              setContent={setContent}
-              ref={quillRef}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              data-testid="content"
             />
           </>
         )}
@@ -88,6 +85,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding: 16px 32px;
+  gap: 16px;
 `;
 
 const Wrapper = styled.div`
@@ -135,6 +133,15 @@ const FieldContainer = styled.div`
     width: 16px;
     height: 16px;
   }
+`;
+
+const ContentInput = styled.textarea`
+  display: flex;
+  flex: 1;
+  padding: 8px;
+
+  border-radius: 4px;
+  border: ${({ theme }) => `1px solid ${theme.colors.borderLight}`};
 `;
 
 const Button = styled.div`

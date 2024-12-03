@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import ReactQuill from "react-quill";
 import styled from "styled-components";
 
 import { Divider } from "@components/Dividers";
 import { ErrorComponent, Loading } from "@components/Fallbacks";
-import { ContentInput } from "@components/Inputs";
 import { TermType } from "@models/apps";
 import { deleteTerm, updateTerm, getTerm } from "@services/apps";
 
@@ -13,7 +11,6 @@ export function TermsDetail() {
   const [term, setTerm] = useState<TermType>();
   const [editContent, setEditContent] = useState<string>("");
   const [editSummary, setEditSummary] = useState<string>("");
-  const quillRef = useRef<ReactQuill>(null);
 
   const [contentMode, setContentMode] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -34,9 +31,7 @@ export function TermsDetail() {
   };
 
   const handleUpdate = async () => {
-    const content = quillRef.current?.getEditor().getText();
-
-    const response = await updateTerm(termId, content, editSummary);
+    const response = await updateTerm(termId, editContent, editSummary);
 
     if (response) {
       window.alert("수정이 완료되었습니다.");
@@ -101,11 +96,14 @@ export function TermsDetail() {
             <Subtitle>약관 내용 : {term.title}</Subtitle>
             <Button onClick={() => setContentMode(false)}>닫기</Button>
           </Header>
-          {!editContent && <NoContent>아직 내용이 없는 동의 항목입니다.</NoContent>}
+          {!editContent && (
+            <NoContent>아직 내용이 없는 동의 항목입니다.</NoContent>
+          )}
           <ContentInput
-            content={editContent}
-            setContent={setEditContent}
-            ref={quillRef}
+            value={editContent}
+            onChange={(e) => setEditContent(e.target.value)}
+            placeholder="내용을 입력해주세요."
+            data-testid="content"
           />
           <Divider />
           <div>개정 내용 요약</div>
@@ -197,6 +195,15 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
+`;
+
+const ContentInput = styled.textarea`
+  display: flex;
+  flex: 1;
+  padding: 8px;
+
+  border-radius: 4px;
+  border: ${({ theme }) => `1px solid ${theme.colors.borderLight}`};
 `;
 
 const Wrapper = styled(Content)`

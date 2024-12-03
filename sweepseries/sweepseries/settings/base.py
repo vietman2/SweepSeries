@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     'core',
 
     ## Custom Apps
+    'app.notices.apps.NoticesConfig',
+
     'auth.agreements.apps.AgreementsConfig',
     'auth.person.apps.PersonConfig',
     'auth.user.apps.UserConfig',

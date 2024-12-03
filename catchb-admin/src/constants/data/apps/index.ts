@@ -1,3 +1,4 @@
+import { sampleNotices } from "./notices";
 import { sampleTerms } from "./terms";
 
-export { sampleTerms };
+export { sampleNotices, sampleTerms };

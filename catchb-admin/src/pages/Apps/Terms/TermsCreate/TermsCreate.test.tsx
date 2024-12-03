@@ -18,6 +18,9 @@ describe("<TermsCreate />", () => {
       fireEvent.change(screen.getByTestId("label"), {
         target: { value: "title" },
       });
+      fireEvent.change(screen.getByTestId("content"), {
+        target: { value: "content" },
+      });
       fireEvent.click(screen.getByTestId("create"));
     });
   });
