@@ -1,3 +1,4 @@
+import { NoticeType } from "./notices";
 import { TermType } from "./terms";
 
-export { type TermType };
+export { type NoticeType, type TermType };
