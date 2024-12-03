@@ -4,20 +4,28 @@ import { StyleSheet, View } from "react-native";
 import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
-import { AnnouncementSimpleType } from "@models/customers";
-import { sampleAnnouncements } from "@testdata/customers";
+import { AnnouncementType } from "@models/customers";
+import { getAnnouncements } from "@services/app";
 import { ThemeColorType } from "@themes/colors";
 
 export function Bulletin() {
-  const [announcements, setAnnouncements] = useState<AnnouncementSimpleType[]>(
-    []
-  );
+  const [announcements, setAnnouncements] = useState<AnnouncementType[]>([]);
 
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   useEffect(() => {
-    setAnnouncements(sampleAnnouncements);
+    const fetchData = async () => {
+      const response = await getAnnouncements();
+
+      if (response) {
+        setAnnouncements(response);
+      } else {
+        setAnnouncements([]);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
