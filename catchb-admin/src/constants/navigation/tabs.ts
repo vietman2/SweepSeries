@@ -64,6 +64,10 @@ export const Apps: TabType = {
   pathName: "apps",
   subtabs: [
     {
+      title: "공지 관리",
+      path: "/apps/notices",
+    },
+    {
       title: "약관 관리",
       path: "/apps/terms",
     },

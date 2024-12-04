@@ -1,3 +1,27 @@
-import { createTerms, deleteTerm, updateTerm, getTerms, getTerm } from "./terms";
+import {
+  getNotice,
+  getNotices,
+  createNotice,
+  deleteNotice,
+  updateNotice,
+} from "./notices";
+import {
+  createTerms,
+  deleteTerm,
+  updateTerm,
+  getTerms,
+  getTerm,
+} from "./terms";
 
-export { createTerms, deleteTerm, updateTerm, getTerms, getTerm };
+export {
+  getNotice,
+  getNotices,
+  createNotice,
+  deleteNotice,
+  updateNotice,
+  createTerms,
+  deleteTerm,
+  updateTerm,
+  getTerms,
+  getTerm,
+};

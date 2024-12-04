@@ -63,6 +63,9 @@ describe("<TermsDetail />", () => {
       fireEvent.change(screen.getByPlaceholderText("요약"), {
         target: { value: "요약" },
       });
+      fireEvent.change(screen.getByTestId("content"), {
+        target: { value: "요약" },
+      });
       fireEvent.click(screen.getByText("수정하기"));
     });
   });

@@ -3,6 +3,10 @@ from dj_rest_auth.views import LogoutView
 from dj_rest_auth.jwt_auth import get_refresh_view
 from rest_framework.routers import DefaultRouter
 
+## Apps
+from app.faq.views import FaqViewSet
+from app.notices.views import NoticeViewSet
+
 ## Auth
 from auth.agreements.views import AgreementViewSet
 from auth.person.views import PersonViewSet
@@ -16,6 +20,9 @@ from community.post.views import PostViewSet, PostReportViewSet
 from community.tag.views import TagViewSet
 
 router = DefaultRouter()
+
+router.register(r'faqs', FaqViewSet, basename='faqs')
+router.register(r'notices', NoticeViewSet, basename='notices')
 
 router.register(r'agreements', AgreementViewSet, basename='agreements')
 router.register(r'people', PersonViewSet, basename='people')
