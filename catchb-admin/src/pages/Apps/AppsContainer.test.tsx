@@ -1,6 +1,11 @@
 import { AppsContainer } from "./AppsContainer";
 import { renderWithProviders } from "@utils/test-utils";
 
+jest.mock("./FAQs", () => ({
+  FAQCreate: () => <div>FAQCreate</div>,
+  FAQDetail: () => <div>FAQDetail</div>,
+  FAQsLayout: () => <div>FAQsLayout</div>,
+}));
 jest.mock("./Notices", () => ({
   NoticeDetail: () => <div>NoticeDetail</div>,
   NoticesLayout: () => <div>NoticesLayout</div>,
