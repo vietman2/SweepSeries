@@ -1,4 +1,5 @@
+import { sampleFAQs } from "./faqs";
 import { sampleNotices } from "./notices";
 import { sampleTerms } from "./terms";
 
-export { sampleNotices, sampleTerms };
+export { sampleFAQs, sampleNotices, sampleTerms };
