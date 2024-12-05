@@ -91,6 +91,8 @@ export function FAQDetail() {
       } else {
         setError(true);
       }
+
+      setLoading(false);
     };
 
     fetchData();
@@ -110,7 +112,7 @@ export function FAQDetail() {
               value={questionInput}
               onChange={(e) => setQuestionInput(e.target.value)}
               placeholder="질문을 입력하세요"
-              data-testid="title-input"
+              data-testid="question-input"
             />
           </InputArea>
         ) : (
@@ -132,8 +134,8 @@ export function FAQDetail() {
             <textarea
               value={answerInput}
               onChange={(e) => setAnswerInput(e.target.value)}
-              placeholder="내용을 입력하세요"
-              data-testid="content-input"
+              placeholder="답변을 입력하세요"
+              data-testid="answer-input"
             />
           </InputArea>
         ) : (
@@ -145,7 +147,7 @@ export function FAQDetail() {
           <Button onClick={toggleEditMode} $negative>
             취소
           </Button>
-          <Button onClick={handleUpdate}>수정하기</Button>
+          <Button onClick={handleUpdate}>저장</Button>
         </Buttons>
       )}
     </Container>
