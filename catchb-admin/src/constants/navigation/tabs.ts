@@ -68,6 +68,10 @@ export const Apps: TabType = {
       path: "/apps/notices",
     },
     {
+      title: "FAQ 관리",
+      path: "/apps/faqs",
+    },
+    {
       title: "약관 관리",
       path: "/apps/terms",
     },

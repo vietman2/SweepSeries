@@ -1,3 +1,4 @@
+import { getFAQ, getFAQs, createFAQ, deleteFAQ, updateFAQ } from "./faqs";
 import {
   getNotice,
   getNotices,
@@ -14,6 +15,11 @@ import {
 } from "./terms";
 
 export {
+  getFAQ,
+  getFAQs,
+  createFAQ,
+  deleteFAQ,
+  updateFAQ,
   getNotice,
   getNotices,
   createNotice,
