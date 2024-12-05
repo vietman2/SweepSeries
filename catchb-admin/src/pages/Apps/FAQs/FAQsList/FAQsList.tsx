@@ -90,11 +90,21 @@ export function FAQsList() {
               onClick={() => handleDetail(faq.id)}
               data-testid={`faq-${faq.id}`}
             >
-              <Item>
-                <div>{faq.id}</div>
-                <div>{faq.question}</div>
-                <div>{faq.answer}</div>
-              </Item>
+              {faq.is_active ? (
+                <Item>
+                  <div>{faq.id}</div>
+                  <div>{faq.question}</div>
+                  <div>{faq.answer}</div>
+                </Item>
+              ) : (
+                <s>
+                  <Item>
+                    <div>{faq.id}</div>
+                    <div>{faq.question}</div>
+                    <div>{faq.answer}</div>
+                  </Item>
+                </s>
+              )}
             </button>
           ))}
         </List>
