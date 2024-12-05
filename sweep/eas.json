@@ -14,6 +14,13 @@
         "buildConfiguration": "Debug"
       }
     },
+    "ios-simulator": {
+      "extends": "development",
+      "ios": {
+        "simulator": true,
+        "buildConfiguration": "Debug"
+      }
+    },
     "preview": {
       "distribution": "internal"
     },
