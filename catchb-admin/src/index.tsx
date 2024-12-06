@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import ReactDOM from "react-dom/client";
 import axios from "axios";
 
