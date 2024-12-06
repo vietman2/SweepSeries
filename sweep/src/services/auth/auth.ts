@@ -1,4 +1,5 @@
 import axios from "axios";
+import { GetProfileResponse } from "@react-native-seoul/naver-login";
 
 import { getSecure, removeSecure, saveSecure } from "@services/storage";
 
@@ -8,8 +9,50 @@ export const login = async (username: string, password: string) => {
       username,
       password,
     });
-    
-    axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.access}`;
+
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${response.data.access}`;
+    await saveSecure("refreshToken", response.data.refresh);
+
+    return response.data;
+  } catch {
+    return null;
+  }
+};
+
+export const kakaoLogin = async () => {
+  try {
+    const response = await axios.post("/v1/login/kakao/", {});
+
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${response.data.access}`;
+    await saveSecure("refreshToken", response.data.refresh);
+
+    return response.data;
+  } catch {
+    return null;
+  }
+};
+
+export const naverLogin = async (data: GetProfileResponse) => {
+  try {
+    const response = await axios.post("/v1/login/naver/", {
+      username: data.response.id,
+      email: data.response.email,
+      name: data.response.name,
+      phone_number: data.response.mobile,
+      birthday: data.response.birthday || "",
+      birthyear: data.response.birthyear || "",
+      gender: data.response.gender || "",
+      nickname: data.response.nickname || "",
+      profile_image: data.response.profile_image || "",
+    });
+
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${response.data.access}`;
     await saveSecure("refreshToken", response.data.refresh);
 
     return response.data;
