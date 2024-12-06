@@ -64,13 +64,13 @@ class NaverRegisterSerializer(serializers.ModelSerializer):
             'birthday', 'birthyear', 'gender', 'nickname', 'profile_image'
         ]
 
-    def validate(self, data):
-        email = data['email']
+    def validate(self, attrs):
+        email = attrs['email']
 
         if User.objects.filter(email=email).exists():
             raise serializers.ValidationError('Email already exists')
 
-        return data
+        return attrs
 
     def update_person(self, person, validated_data):
         month = validated_data['birthday'][:2]
@@ -101,7 +101,9 @@ class NaverRegisterSerializer(serializers.ModelSerializer):
             nickname = random_nickname_generator()
         else:
             nickname = validated_data['nickname']
-        UserProfile.objects.create(user=user, nickname=nickname, profile_image=validated_data['profile_image'])
+        UserProfile.objects.create(
+            ser=user, nickname=nickname, profile_image=validated_data['profile_image']
+        )
 
         return user
 

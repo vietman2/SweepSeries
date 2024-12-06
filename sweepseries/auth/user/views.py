@@ -55,14 +55,14 @@ class UserLoginView(LoginView):
         return process_response(request, response)
 
 class KakaoLoginView(APIView):
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs): ## pylint: disable=unused-argument
         ## 이미 계정이 있으면 로그인
         ## 없으면 계정 생성 후 로그인
 
         return Response({'error': 'Not implemented'}, status=status.HTTP_501_NOT_IMPLEMENTED)
 
 class NaverLoginView(APIView):
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs): ## pylint: disable=unused-argument
         number = PhoneNumber.from_string(request.data['phone_number'])
         person = Person.objects.filter(phone_number=number).first()
 
