@@ -61,7 +61,7 @@ REST_AUTH = {
     'JWT_AUTH_REFRESH_COOKIE': 'refresh',
     'JWT_AUTH_SECURE': True,
     'JWT_AUTH_SAMESITE': 'None',
-    'JWT_AUTH_HTTPONLY': True,
+    'JWT_AUTH_HTTPONLY': False,
     'JWT_AUTH_RETURN_EXPIRATION': True,
     'JWT_AUTH_COOKIE_USE_CSRF' : True,
     'SESSION_LOGIN': False,
