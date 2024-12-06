@@ -5,7 +5,7 @@ from .models import UserProfile
 
 class UserProfileSerializer(ModelSerializer):
     id              = serializers.IntegerField(read_only=True)
-    profile_image   = serializers.ImageField(use_url=True, read_only=True)
+    profile_image   = serializers.URLField(read_only=True)
     color           = serializers.CharField(source='default_color', read_only=True)
     nickname        = serializers.CharField(read_only=True)
     introduction    = serializers.CharField(read_only=True)
