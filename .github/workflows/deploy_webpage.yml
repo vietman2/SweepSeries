@@ -31,7 +31,10 @@ jobs:
       - name: Build Docker image
         run: |
           cd catchbweb
-          docker build -t ${{ secrets.DOCKER_REGISTRY }}/webpage:latest .
+          docker build \
+            --build-arg REACT_APP_API_URL=${{ secrets.API_URL }} \
+            --build-arg NODE_ENV=production \
+            -t ${{ secrets.DOCKER_REGISTRY }}/webpage:latest .
 
       # 4. Push the Docker image
       - name: Push Docker image
