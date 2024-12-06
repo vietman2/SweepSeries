@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import "expo-dev-client";
 import "react-native-reanimated";
 import { configureReanimatedLogger } from "react-native-reanimated";
@@ -36,14 +37,14 @@ export default function RootLayout() {
   }, [error]);
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-
     const getImagePickerPermissions = async () => {
       await ImagePicker.requestMediaLibraryPermissionsAsync();
       await ImagePicker.requestCameraPermissionsAsync();
     };
+
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
 
     getImagePickerPermissions();
   }, [loaded]);

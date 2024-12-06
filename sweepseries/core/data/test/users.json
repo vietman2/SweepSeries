@@ -3,8 +3,7 @@
     "model": "person.person",
     "pk": 1,
     "fields": {
-      "first_name": "리자",
-      "last_name": "관",
+      "name": "관리자",
       "phone_number": "+821000000000",
       "birth_date": "1990-01-01",
       "gender": "M"
@@ -14,8 +13,7 @@
     "model": "person.person",
     "pk": 2,
     "fields": {
-      "first_name": "길동",
-      "last_name": "홍",
+      "name": "홍길동",
       "phone_number": "+821011111111",
       "birth_date": "2000-01-01",
       "gender": "M"
@@ -25,8 +23,7 @@
     "model": "person.person",
     "pk": 3,
     "fields": {
-      "first_name": "영희",
-      "last_name": "",
+      "name": "영희",
       "phone_number": "+821022222222",
       "birth_date": "2001-01-01",
       "gender": "F"

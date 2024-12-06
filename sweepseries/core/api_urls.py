@@ -10,7 +10,7 @@ from app.notices.views import NoticeViewSet
 ## Auth
 from auth.agreements.views import AgreementViewSet
 from auth.person.views import PersonViewSet
-from auth.user.views import UserViewSet, UserLoginView
+from auth.user.views import UserViewSet, UserLoginView, KakaoLoginView, NaverLoginView
 
 ## Community
 from community.comment.views import (
@@ -37,6 +37,8 @@ router.register(r'reports/posts', PostReportViewSet, basename='post-reports')
 router.register(r'tags', TagViewSet, basename='tags')
 
 urlpatterns = [
+    path('login/kakao/', KakaoLoginView.as_view(), name='kakao-login'),
+    path('login/naver/', NaverLoginView.as_view(), name='naver-login'),
     path('login/', UserLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
 
