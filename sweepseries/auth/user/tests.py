@@ -40,8 +40,7 @@ class LoginAPITestCase(APITestCase):
     def setUp(self):
         self.url = "/v1/login/"
         user_person = Person.objects.create(
-            first_name='Test',
-            last_name='User',
+            name='Test User',
             phone_number='010-1234-1234'
         )
         self.user = User.objects.create_user(
@@ -52,8 +51,7 @@ class LoginAPITestCase(APITestCase):
             person=user_person
         )
         admin_person = Person.objects.create(
-            first_name='Admin',
-            last_name='User',
+            name='Admin',
             phone_number='010-4321-4321'
         )
         self.admin = User.objects.create_user(
@@ -69,14 +67,14 @@ class LoginAPITestCase(APITestCase):
         response = self.client.post(self.url, {
             "username": "user",
             "password": "user123!"
-        })
+        }, HTTP_USER_AGENT="sweep")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         ## 2. admin in admin page
         response = self.client.post(self.url, {
             "username": "admin",
             "password": "admin123!"
-        }, HTTP_ORIGIN=settings.ADMIN_PAGE_URL)
+        }, HTTP_ORIGIN=settings.ADMIN_PAGE_URL, HTTP_USER_AGENT="normal")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_login_fail(self):
@@ -112,8 +110,7 @@ class UserModelTest(TestCase):
 
     def test_create_user(self):
         person = Person.objects.create(
-            first_name='Test',
-            last_name='User',
+            name='Test User',
             phone_number='010-1234-1234'
         )
         user = User.objects.create_user(
@@ -126,8 +123,7 @@ class UserModelTest(TestCase):
 
     def test_create_superuser(self):
         person = Person.objects.create(
-            first_name='Test',
-            last_name='User',
+            name='Test User',
             phone_number='010-9999-9999'
         )
         user = User.objects.create_superuser(
@@ -141,8 +137,7 @@ class UserModelTest(TestCase):
 class UserFormTest(TestCase):
     def test_user_creation_form(self):
         person = Person.objects.create(
-            first_name='Test',
-            last_name='User',
+            name='Test User',
             phone_number='010-1234-1234'
         )
         form_data = {
@@ -161,8 +156,7 @@ class UserFormTest(TestCase):
 
     def test_user_creation_form_invalid(self):
         person = Person.objects.create(
-            first_name='Test',
-            last_name='User',
+            name='Test User',
             phone_number='010-1234-1234'
         )
         form_data = {
@@ -179,8 +173,7 @@ class UserFormTest(TestCase):
 
     def test_user_creation_form_no_commit(self):
         person = Person.objects.create(
-            first_name='Test',
-            last_name='User',
+            name='Test User',
             phone_number='010-1234-1234'
         )
         form_data = {
@@ -213,3 +206,91 @@ class UserAdminTest(TestCase):
         user = User.objects.get(username="admin")
         request = self.factory.get(f'/admin/user/user/{user.uuid}/change/')
         self.user_admin.get_form(request, obj=user)
+
+class NaverLoginTest(APITestCase):
+    def setUp(self):
+        self.url = "/v1/login/naver/"
+        self.data = {
+            "username": "naveruser",
+            "email": "email@email.com",
+            "name": "Test User",
+            "phone_number": "010-1234-1234",
+            "birthday": "01-01",
+            "birthyear": "1990",
+            "gender": "M",
+            "nickname": "testuser",
+            "profile_image": "https://test.com/test.jpg"
+        }
+
+    def test_naver_login_1(self):
+        ## 1. new person
+        response = self.client.post(self.url, self.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_naver_login_1_fail(self):
+        ## no username
+        data = self.data.copy()
+        data.pop('username')
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_naver_login_2(self):
+        ## 2. existing person
+        Person.objects.create(
+            name='Test User',
+            phone_number='010-1234-1234'
+        )
+        data = self.data.copy()
+        data['gender'] = 'F'
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_naver_login_2_fail(self):
+        ## email already exists
+        person = Person.objects.create(
+            name='Test User 1',
+            phone_number='010-5678-5678'
+        )
+        User.objects.create_user(
+            username="naveruser1",
+            email="email@email.com",
+            password="testpassword",
+            person=person
+        )
+        Person.objects.create(
+            name='Test User 1',
+            phone_number='010-1234-1234'
+        )
+        response = self.client.post(self.url, self.data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_naver_login_3(self):
+        ## 3. existing user
+        person = Person.objects.create(
+            name='Test User',
+            phone_number='010-1234-1234'
+        )
+        User.objects.create_user(
+            username="naveruser",
+            email="email@email.com",
+            password="testpassword",
+            person=person
+        )
+        response = self.client.post(self.url, self.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_naver_login_4(self):
+        ## 4. undefined gender and nickname
+        data = self.data.copy()
+        data['gender'] = 'X'
+        data['nickname'] = ''
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class KakaoLoginTest(APITestCase):
+    def setUp(self):
+        self.url = "/v1/login/kakao/"
+
+    def test_kakao_login(self):
+        response = self.client.post(self.url, {})
+        self.assertEqual(response.status_code, status.HTTP_501_NOT_IMPLEMENTED)

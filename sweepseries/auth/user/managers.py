@@ -15,8 +15,7 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, password=None, **extra_fields):
         person = Person.objects.create(
-            first_name='Admin',
-            last_name='Admin',
+            name='Admin',
             phone_number='010-1234-1234'
         )
         extra_fields['person'] = person

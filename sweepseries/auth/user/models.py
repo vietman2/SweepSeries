@@ -18,6 +18,8 @@ class User(AbstractBaseUser):
     is_staff        = models.BooleanField(default=False)
     is_blocked      = models.BooleanField(default=False)
     is_active       = models.BooleanField(default=True)
+    naver_linked    = models.BooleanField(default=False)
+    kakao_linked    = models.BooleanField(default=False)
 
     USERNAME_FIELD  = 'username'
 
@@ -30,7 +32,7 @@ class User(AbstractBaseUser):
     objects         = UserManager()
 
     def __str__(self):
-        return f"{self.username} ({self.person.full_name})" # pylint: disable=no-member
+        return f"{self.username} ({self.person.name})" # pylint: disable=no-member
 
     class Meta:
         db_table    = 'user'
