@@ -1,9 +1,14 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import naverLogo from "@assets/naver.svg";
 import instagramLogo from "@assets/instragram.svg";
+import { NoticeType } from "@constants/notice";
+import { getNotices } from "@services/notices";
 
 export function Footer() {
+  const [notices, setNotices] = useState<NoticeType[]>([]);
+
   const handleInstagramLink = () => {
     window.open(
       "https://www.instagram.com/catch.b__official/",
@@ -27,6 +32,18 @@ export function Footer() {
   const handlePrivacyLink = () => {
     // TODO: 개인정보 처리방침 페이지로 이동
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getNotices();
+
+      if (response) {
+        setNotices(response);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <Container>
@@ -52,7 +69,11 @@ export function Footer() {
       <Notices>
         <p>공지사항</p>
         <hr />
-        <p>최근 등록된 공지사항이 없습니다.</p>
+        {notices.map((notice) => (
+          <button key={notice.id}>
+            <p>{notice.title}</p>
+          </button>
+        ))}
       </Notices>
       <Copyright>© 2024 SWEEP series. All rights reserved.</Copyright>
     </Container>

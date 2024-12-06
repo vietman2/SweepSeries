@@ -1,5 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import axios from "axios";
+
 import "./index.css";
 import App from "@pages/App";
 import reportWebVitals from "./reportWebVitals";
@@ -7,6 +9,13 @@ import reportWebVitals from "./reportWebVitals";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
+if (process.env.NODE_ENV === "production") {
+  axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+} else {
+  axios.defaults.baseURL = "http://localhost:8000";
+}
+
 root.render(
   <React.StrictMode>
     <App />
