@@ -102,7 +102,7 @@ class NaverRegisterSerializer(serializers.ModelSerializer):
         else:
             nickname = validated_data['nickname']
         UserProfile.objects.create(
-            ser=user, nickname=nickname, profile_image=validated_data['profile_image']
+            user=user, nickname=nickname, profile_image=validated_data['profile_image']
         )
 
         return user
