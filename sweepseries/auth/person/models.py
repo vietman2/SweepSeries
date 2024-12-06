@@ -4,8 +4,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from .enums import GenderChoices
 
 class Person(models.Model):
-    first_name          = models.CharField(max_length=150, blank=True)
-    last_name           = models.CharField(max_length=150, blank=True)
+    name                = models.CharField(max_length=150, blank=True)
     phone_number        = PhoneNumberField(unique=True)
 
     birth_date          = models.DateField(null=True)
@@ -17,12 +16,8 @@ class Person(models.Model):
 
     objects = models.Manager()
 
-    @property
-    def full_name(self):
-        return f"{self.last_name}{self.first_name}"
-
     def __str__(self):
-        return f"{self.last_name}{self.first_name}"
+        return f"{self.name}"
 
     class Meta:
         db_table = 'person'
