@@ -15,7 +15,7 @@ export type UserProfileType = {
 export type UserRelatedType = {
   uuid: string;
   username: string;
-  full_name: string;
+  name: string;
 };
 
 export type UserType = {

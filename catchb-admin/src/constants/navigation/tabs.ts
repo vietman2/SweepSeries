@@ -78,4 +78,16 @@ export const Apps: TabType = {
   ],
 };
 
-export const tabs: TabType[] = [Home, User, Community, Apps];
+export const Academies: TabType = {
+  title: "아카데미 관리",
+  path: "/academies",
+  pathName: "academies",
+  subtabs: [
+    {
+      title: "아카데미 목록",
+      path: "/academies/academies",
+    },
+  ],
+};
+
+export const tabs: TabType[] = [Home, User, Community, Apps, Academies];

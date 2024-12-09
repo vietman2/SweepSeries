@@ -55,7 +55,7 @@ export const sampleUsers: UserType[] = [
 export const sampleUserRelated: UserRelatedType = {
   uuid: "1",
   username: "johndoe",
-  full_name: "John Doe",
+  name: "John Doe",
 };
 
 export const sampleProfile: UserProfileType = {
