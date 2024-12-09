@@ -123,6 +123,15 @@ jest.mock("@components/Icons", () => ({
   MainLogo: () => null,
   HorizontalLogo: () => null,
 }));
+jest.mock("@components/Images", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+
+  return {
+    ImagePreview: ({ removeImage }: { removeImage: () => void }) => (
+      <TouchableOpacity onPress={removeImage} testID="removeImage" />
+    ),
+  };
+});
 jest.mock("@components/Inputs", () => {
   const { TouchableOpacity } = jest.requireActual("react-native");
 
@@ -190,6 +199,9 @@ jest.mock("@components/Modals", () => {
     ),
   };
 });
+jest.mock("@components/Pickers", () => ({
+  ImagePicker: () => null,
+}));
 jest.mock("@components/Progressbars", () => ({
   Progressbar: () => null,
 }));
@@ -214,6 +226,7 @@ jest.mock("@components/ScrollView", () => {
   };
 });
 jest.mock("@components/Search", () => ({
+  SearchAddress: () => null,
   Searchbar: ({ onSubmit }: { onSubmit: () => void }) => {
     const { TouchableOpacity } = jest.requireActual("react-native");
 
