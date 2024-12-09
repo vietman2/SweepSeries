@@ -1,10 +1,11 @@
 export type AcademySimpleType = {
   uuid: string;
-  cover_image: string;
+  logo: string;
   name: string;
   location: string;
   rating: number;
   num_reviews: number;
+  top_review: string;
 };
 
 export type WorkingHoursType = {

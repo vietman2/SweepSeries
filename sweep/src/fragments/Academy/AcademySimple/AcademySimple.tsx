@@ -18,13 +18,13 @@ export function AcademySimple({ academy, quote = false }: Readonly<Props>) {
   return (
     <View style={styles.container}>
       <View style={styles.horizontal}>
-        <Image style={styles.image} src={academy.cover_image} />
+        <Image style={styles.image} src={academy.logo} />
         <View style={styles.content}>
           <View style={styles.header}>
             <Text style={styles.name} numberOfLines={2}>
               {academy.name}
             </Text>
-            <AppIcon icon="heart" size={20} color={theme.primary} />
+            <AppIcon icon={"heart-outline"} size={20} color={theme.primary} />
           </View>
           <View style={styles.rating}>
             <AppIcon icon="star" size={16} color="#F2B517" />
@@ -37,7 +37,7 @@ export function AcademySimple({ academy, quote = false }: Readonly<Props>) {
         </View>
       </View>
       {quote && (
-        <CalloutLarge text="쾌적하고 넓은 환경에서 친구들과 편하게 야구했어요 ~~!! :)" />
+        <CalloutLarge text={academy.top_review} />
       )}
     </View>
   );

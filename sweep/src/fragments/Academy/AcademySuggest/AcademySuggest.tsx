@@ -16,7 +16,7 @@ export function AcademySuggest({ academy }: Readonly<Props>) {
 
   return (
     <View style={styles.container}>
-      <Image style={styles.image} src={academy.cover_image} />
+      <Image style={styles.image} src={academy.logo} />
       <Text style={styles.name}>{academy.name}</Text>
       <Text>{academy.location}</Text>
       <View style={styles.rating}>
