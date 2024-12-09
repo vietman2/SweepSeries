@@ -42,7 +42,7 @@ export const formatPhoneNumberText = (number: string, text: string) => {
   if (
     text.length > 1 &&
     number.length < text.length &&
-    text[text.length - 1] === "-"
+    text.endsWith("-")
   ) {
     // Remove the last hyphen and reformat
     const newText = number.substring(0, number.length - 1);

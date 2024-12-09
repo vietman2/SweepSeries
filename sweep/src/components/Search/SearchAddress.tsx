@@ -15,7 +15,7 @@ export function SearchAddress({
   address2,
   onChangeText,
   onButtonPress,
-}: Props) {
+}: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
