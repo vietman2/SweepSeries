@@ -1,3 +1,3 @@
-import { createAcademy } from "./academy";
+import { createAcademy, getAcademies } from "./academy";
 
-export { createAcademy };
+export { createAcademy, getAcademies };

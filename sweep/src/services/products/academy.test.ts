@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { createAcademy } from "./academy";
+import { createAcademy, getAcademies } from "./academy";
 
 jest.mock("form-data", () => {
   return jest.fn().mockImplementation(() => {
@@ -42,6 +42,24 @@ describe("createAcademy", () => {
       zip_code: "zip_code",
       bcode: "bcode",
     });
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("getAcademies", () => {
+  it("should get academies", async () => {
+    jest.spyOn(axios, "get").mockResolvedValue({ data: {} });
+
+    const result = await getAcademies("query");
+
+    expect(result).toEqual({});
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "get").mockRejectedValue(null);
+
+    const result = await getAcademies("query");
 
     expect(result).toBeNull();
   });
