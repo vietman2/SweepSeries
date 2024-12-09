@@ -5,17 +5,68 @@ from django.db import transaction
 from rest_framework import serializers
 from phonenumber_field.validators import validate_international_phonenumber
 
+from auth.user.serializers import UserRelatedSerializer
+from core.utils import get_presigned_url
 from product.address.models import Address, Sigungu
 from product.address.utils import get_coordinates, fetch_map_image
 from .models import Academy
 
 class AcademySimpleSerializer(serializers.ModelSerializer):
+    rating      = serializers.SerializerMethodField()
+    num_reviews = serializers.SerializerMethodField()
+    num_likes   = serializers.SerializerMethodField()
+    is_liked    = serializers.SerializerMethodField()
+    top_review  = serializers.SerializerMethodField()
+    location    = serializers.SerializerMethodField()
+    logo        = serializers.SerializerMethodField()
+
     class Meta:
         model = Academy
         fields = [
             "uuid", "name", "rating", "num_reviews", "location",
-            "num_likes", "is_liked", "top_review"
+            "num_likes", "is_liked", "top_review", "logo"
         ]
+
+    def get_rating(self, obj):
+        ## TODO: rating 계산
+        return 0.0
+    
+    def get_num_reviews(self, obj):
+        ## TODO: 리뷰 개수 계산
+        return 0
+    
+    def get_num_likes(self, obj):
+        ## TODO: 좋아요 개수 계산
+        return 0
+    
+    def get_is_liked(self, obj):
+        ## TODO: 좋아요 여부 계산
+        return False
+    
+    def get_top_review(self, obj):
+        ## TODO: 최상위 리뷰 계산
+        return "좋은 시설과 친절한 코치들이 많아요!"
+    
+    def get_location(self, obj):
+        return obj.address.region.get_display_name()
+
+    def get_logo(self, obj):
+        return get_presigned_url(obj.logo)
+
+class AcademyStatusSerializer(serializers.ModelSerializer):
+    owner           = UserRelatedSerializer(read_only=True)
+    certification   = serializers.SerializerMethodField()
+    verified_at     = serializers.DateTimeField(format="%Y-%m-%d", read_only=True)
+
+    class Meta:
+        model = Academy
+        fields = [
+            "uuid", "name", "owner", "is_verified", "is_rejected", "certification", "verified_at",
+            "reject_reason"
+        ]
+
+    def get_certification(self, obj):
+        return get_presigned_url(obj.certificate)
 
 class AcademyRegisterSerializer(serializers.ModelSerializer):
     registration_number = serializers.CharField()

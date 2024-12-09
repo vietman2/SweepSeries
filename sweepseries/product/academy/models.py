@@ -48,6 +48,9 @@ class Academy(models.Model):
     )
 
     is_verified             = models.BooleanField(default=False)
+    verified_at             = models.DateTimeField(null=True)
+    is_rejected             = models.BooleanField(default=False)
+    reject_reason           = models.TextField(blank=True)
 
     objects                 = models.Manager()
 
