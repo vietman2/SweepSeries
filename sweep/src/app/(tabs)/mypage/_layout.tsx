@@ -76,6 +76,12 @@ export default function MyPageLayout() {
         }}
       />
       <Stack.Screen
+        name="register"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="settings"
         options={{
           headerTitle: "알림 맞춤 설정",
