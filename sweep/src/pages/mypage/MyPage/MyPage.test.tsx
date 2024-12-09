@@ -5,6 +5,7 @@ import { MyPage } from "./MyPage";
 import * as AuthContext from "@contexts/auth";
 import * as AuthAPI from "@services/auth/auth";
 import { renderWithProviders } from "@utils/test-utils";
+import { sampleAuthor } from "@testdata/auth";
 
 jest.mock("expo-router", () => ({
   router: {
@@ -32,7 +33,7 @@ describe("<MyPage />", () => {
       logout: jest.fn(),
       mode: "normal",
       isAuthenticated: true,
-      selectedProfileId: 1,
+      selectedProfile: sampleAuthor,
     });
     jest.spyOn(AuthAPI, "logout").mockResolvedValue(true);
   });
@@ -78,19 +79,21 @@ describe("<MyPage />", () => {
       logout: jest.fn(),
       mode: "guest",
       isAuthenticated: false,
-      selectedProfileId: null,
+      selectedProfile: null,
     });
     renderWithProviders(<MyPage />);
   });
 
-  it("renders correctly when logged in as pro", () => {
+  it("renders correctly when logged in as pro and handles navigate", () => {
     jest.spyOn(AuthContext, "useAuth").mockReturnValue({
       login: jest.fn(),
       logout: jest.fn(),
       mode: "pro",
       isAuthenticated: true,
-      selectedProfileId: 1,
+      selectedProfile: sampleAuthor,
     });
-    renderWithProviders(<MyPage />);
+    const { getByTestId } = renderWithProviders(<MyPage />);
+
+    fireEvent.press(getByTestId("아카데미/코치로 등록하기"));
   });
 });
