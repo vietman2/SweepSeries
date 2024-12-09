@@ -17,9 +17,13 @@ class AcademyFacility(models.Model):
         db_table = 'academy_facility'
 
 class Academy(models.Model):
-    uuid                    = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    uuid                    = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False
+    )
     name                    = models.CharField(max_length=50)
-    owner                   = models.ForeignKey(User, on_delete=models.CASCADE, related_name='academies')
+    owner                   = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='academies'
+    )
     academy_phone_number    = PhoneNumberField()
     registration_number     = models.CharField(max_length=12, unique=True)
     certificate             = models.FileField()
@@ -29,15 +33,21 @@ class Academy(models.Model):
     address                 = models.OneToOneField(
         'address.Address', on_delete=models.CASCADE, related_name='academy',
     )
-    convenience             = models.ManyToManyField(AcademyFacility, related_name='academies', blank=True)
+    convenience             = models.ManyToManyField(
+        AcademyFacility, related_name='academies', blank=True
+    )
     homepage                = models.URLField(blank=True)
     instagram               = models.URLField(blank=True)
     blog                    = models.URLField(blank=True)
 
-    num_mounds              = models.PositiveSmallIntegerField(validators=[Min(0), Max(5)], default=0)
-    num_plates              = models.PositiveSmallIntegerField(validators=[Min(0), Max(5)], default=0)
+    num_mounds              = models.PositiveSmallIntegerField(
+        validators=[Min(0), Max(5)], default=0
+    )
+    num_plates              = models.PositiveSmallIntegerField(
+        validators=[Min(0), Max(5)], default=0
+    )
 
-    is_verified = models.BooleanField(default=False)
+    is_verified             = models.BooleanField(default=False)
 
     objects                 = models.Manager()
 
