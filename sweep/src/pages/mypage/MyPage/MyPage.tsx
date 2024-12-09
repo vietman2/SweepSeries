@@ -16,6 +16,10 @@ export function MyPage() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  const handleRegisterPress = () => {
+    router.push("/mypage/register");
+  };
+
   const handleLessonsPress = () => {
     router.push("/mypage/lessons");
   };
@@ -64,16 +68,14 @@ export function MyPage() {
       <Scroll style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.profile}>
           <MainProfile />
-          <TextButton
-            text={
-              mode === "pro"
-                ? "캐치비 베이스볼 아카데미"
-                : "아카데미/코치로 등록하기"
-            }
-            onPress={() => {}}
-            color={theme.primary}
-            backgroundColor={theme.background}
-          />
+          {mode === "pro" && (
+            <TextButton
+              text="아카데미/코치로 등록하기"
+              onPress={handleRegisterPress}
+              color={theme.primary}
+              backgroundColor={theme.background}
+            />
+          )}
         </View>
         <Subtitle text="내 활동" />
         <SvgIconButton

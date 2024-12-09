@@ -17,6 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      NAVER_API_KEY_ID: "NAVER_API_KEY_ID"
+      NAVER_API_KEY: "NAVER_API_KEY"
       AWS_ACCESS_KEY: "AWS_ACCESS_KEY"
       AWS_SECRET_KEY: "AWS_SECRET_KEY"
     strategy:

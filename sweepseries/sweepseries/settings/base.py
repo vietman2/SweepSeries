@@ -62,6 +62,9 @@ INSTALLED_APPS = [
     'community.comment.apps.CommentConfig',
     'community.post.apps.PostConfig',
     'community.tag.apps.TagConfig',
+
+    'product.academy.apps.AcademyConfig',
+    'product.address.apps.AddressConfig',
 ]
 
 MIDDLEWARE = [
