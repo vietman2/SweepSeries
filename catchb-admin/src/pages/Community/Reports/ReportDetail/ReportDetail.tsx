@@ -253,7 +253,7 @@ function ReportDetail({
           </Information>
           <Information>
             <div>이름</div>
-            <div>{report.report_user.full_name}</div>
+            <div>{report.report_user.name}</div>
           </Information>
           <Information>
             <div>아이디</div>

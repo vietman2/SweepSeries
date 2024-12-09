@@ -18,6 +18,9 @@ jest.mock("@contexts/theme", () => ({
   ),
   useTheme: jest.fn(),
 }));
+jest.mock("@pages/Academies", () => ({
+  AcademyContainer: () => <div>AcademyContainer</div>,
+}));
 jest.mock("@pages/Apps", () => ({
   AppsContainer: () => <div>AppsContainer</div>,
 }));
