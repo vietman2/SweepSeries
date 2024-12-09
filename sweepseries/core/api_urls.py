@@ -19,6 +19,9 @@ from community.comment.views import (
 from community.post.views import PostViewSet, PostReportViewSet
 from community.tag.views import TagViewSet
 
+## Product
+from product.academy.views import AcademyViewSet
+
 router = DefaultRouter()
 
 router.register(r'faqs', FaqViewSet, basename='faqs')
@@ -35,6 +38,8 @@ router.register(r'reports/comments', CommentReportViewSet, basename='comment-rep
 router.register(r'reports/recomments', ReCommentReportViewSet, basename='recomment-reports')
 router.register(r'reports/posts', PostReportViewSet, basename='post-reports')
 router.register(r'tags', TagViewSet, basename='tags')
+
+router.register(r'academies', AcademyViewSet, basename='academies')
 
 urlpatterns = [
     path('login/kakao/', KakaoLoginView.as_view(), name='kakao-login'),
