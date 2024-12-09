@@ -199,9 +199,34 @@ jest.mock("@components/Modals", () => {
     ),
   };
 });
-jest.mock("@components/Pickers", () => ({
-  ImagePicker: () => null,
-}));
+jest.mock("@components/Pickers", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+
+  const mockImage = {
+    uri: "uri",
+    width: 1,
+    height: 1,
+  };
+
+  return {
+    ImagePicker: ({
+      setUploadedImages,
+    }: {
+      setUploadedImages: (
+        images: {
+          uri: string;
+          width: number;
+          height: number;
+        }[]
+      ) => void;
+    }) => (
+      <TouchableOpacity
+        onPress={() => setUploadedImages([mockImage])}
+        testID="image-picker"
+      />
+    ),
+  };
+});
 jest.mock("@components/Progressbars", () => ({
   Progressbar: () => null,
 }));
@@ -225,14 +250,18 @@ jest.mock("@components/ScrollView", () => {
     ),
   };
 });
-jest.mock("@components/Search", () => ({
-  SearchAddress: () => null,
-  Searchbar: ({ onSubmit }: { onSubmit: () => void }) => {
-    const { TouchableOpacity } = jest.requireActual("react-native");
+jest.mock("@components/Search", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
 
-    return <TouchableOpacity onPress={onSubmit} testID="search" />;
-  },
-}));
+  return {
+    SearchAddress: ({ onButtonPress }: { onButtonPress: () => void }) => (
+      <TouchableOpacity testID="search" onPress={onButtonPress} />
+    ),
+    Searchbar: ({ onSubmit }: { onSubmit: () => void }) => (
+      <TouchableOpacity onPress={onSubmit} testID="search" />
+    ),
+  };
+});
 jest.mock("@components/Tabs", () => ({
   CollapsibleTab: () => null,
   FAQTabs: () => null,
