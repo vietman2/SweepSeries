@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Keyboard, StyleSheet, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 import BottomSheet, {
   BottomSheetBackdrop,
@@ -16,7 +16,7 @@ import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
 import { AcademyCard, AcademySimple, AcademySuggest } from "@fragments/Academy";
 import { AcademySimpleType } from "@models/products";
-import { sampleAcademies } from "@testdata/products";
+import { getAcademies } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
 const sortOptions = ["인기순", "최신순", "평점순"];
@@ -68,9 +68,17 @@ export function Home() {
   );
 
   useEffect(() => {
-    setSuggestions(sampleAcademies);
-    setAcademies(sampleAcademies);
-  }, []);
+    const fetchData = async () => {
+      const response = await getAcademies(query);
+
+      if (response) {
+        setSuggestions(response.suggestions);
+        setAcademies(response.academies);
+      }
+    };
+
+    fetchData();
+  }, [query]);
 
   return (
     <>
@@ -121,7 +129,7 @@ export function Home() {
                 placeholder="제목, 내용으로 검색하세요"
                 value={query}
                 onChange={setQuery}
-                onSubmit={() => {}}
+                onSubmit={Keyboard.dismiss}
               />
             </View>
             <View style={styles.filters}>
