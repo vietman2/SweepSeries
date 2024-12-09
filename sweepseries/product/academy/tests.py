@@ -9,7 +9,6 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APITestCase
 
 from auth.user.models import User
-from .models import Academy
 
 def generate_photo_file():
     file = BytesIO()

@@ -30,19 +30,19 @@ class AcademySimpleSerializer(serializers.ModelSerializer):
     def get_rating(self, obj):
         ## TODO: rating 계산
         return 0.0
-    
+
     def get_num_reviews(self, obj):
         ## TODO: 리뷰 개수 계산
         return 0
-    
+
     def get_num_likes(self, obj):
         ## TODO: 좋아요 개수 계산
         return 0
-    
+
     def get_is_liked(self, obj):
         ## TODO: 좋아요 여부 계산
         return False
-    
+
     def get_top_review(self, obj):
         ## TODO: 최상위 리뷰 계산
         return "좋은 시설과 친절한 코치들이 많아요!"

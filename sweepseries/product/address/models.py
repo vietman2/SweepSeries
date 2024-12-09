@@ -27,7 +27,7 @@ class Sigungu(models.Model):
     objects = SigunguManager()
 
     def get_display_name(self):
-        return f"{self.sido.display} {self.sigungu_name}"
+        return f"{self.sido.display} {self.sigungu_name}" # pylint: disable=no-member
 
     class Meta:
         db_table = "sigungu"

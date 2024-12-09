@@ -92,7 +92,7 @@ class AcademyViewSet(ModelViewSet):
 
     @extend_schema(summary="아카데미 등록 승인", tags=["아카데미"])
     @action(detail=True, methods=['post'])
-    def approve(self, request, pk=None):
+    def approve(self, request, pk=None): # pylint: disable=unused-argument
         academy = self.get_object()
 
         academy.is_verified = True
@@ -106,7 +106,7 @@ class AcademyViewSet(ModelViewSet):
 
     @extend_schema(summary="아카데미 등록 거부", tags=["아카데미"])
     @action(detail=True, methods=['post'])
-    def reject(self, request, pk=None):
+    def reject(self, request, pk=None): # pylint: disable=unused-argument
         academy = self.get_object()
         reject_reason = request.data.get('reject_reason', None)
 
