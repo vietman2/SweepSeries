@@ -7,6 +7,8 @@ import { LikedAcademies } from "./LikedAcademies/LikedAcademies";
 import { LikedCoaches } from "./LikedCoaches/LikedCoaches";
 import { MyPage } from "./MyPage/MyPage";
 import { MyReviews } from "./MyReviews/MyReviews";
+import { Register } from "./Register/Register";
+import { RegisterAcademy } from "./RegisterAcademy/RegisterAcademy";
 import { Settings } from "./Settings/Settings";
 
 export {
@@ -19,5 +21,7 @@ export {
   LikedCoaches,
   MyPage,
   MyReviews,
+  Register,
+  RegisterAcademy,
   Settings,
 };
