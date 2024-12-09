@@ -20,6 +20,7 @@ django-allauth = "*"
 django-cors-headers = "*"
 gunicorn = "*"
 whitenoise = "*"
+requests = "*"
 
 [dev-packages]
 coverage = "*"
