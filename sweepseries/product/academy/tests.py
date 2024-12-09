@@ -51,8 +51,6 @@ class AcademyTestCase(APITestCase):
             "name": "테스트 아카데미",
             "phone": "+821012345678",
             "registration_number": "123-45-67890",
-            "certification": "test_certification.pdf",
-            "main_logo": "test_logo.png",
             "address": json.dumps(address_data),
             "certification": self.test_image1,
             "main_logo": self.test_image2,
