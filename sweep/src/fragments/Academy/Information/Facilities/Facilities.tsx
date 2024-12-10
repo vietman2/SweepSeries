@@ -7,6 +7,7 @@ import { AppIcon } from "@components/Icons";
 import { SimpleModal } from "@components/Modals";
 import { useTheme } from "@contexts/theme";
 import { FacilityType } from "@models/products";
+import { alert } from "@services/alert";
 import { updateFacilities } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
@@ -65,6 +66,8 @@ export function Facilities({
       if (onRefresh) {
         onRefresh();
       }
+    } else {
+      alert("저장 실패", "시설 정보를 수정하는데 실패했습니다.");
     }
   };
 
