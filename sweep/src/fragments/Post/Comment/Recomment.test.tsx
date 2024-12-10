@@ -21,7 +21,6 @@ describe("<Recomment />", () => {
       login: jest.fn(),
       logout: jest.fn(),
       mode: "normal",
-      isAuthenticated: true,
       selectedProfile: sampleAuthor,
     });
   });
@@ -91,7 +90,6 @@ describe("<Recomment />", () => {
       login: jest.fn(),
       logout: jest.fn(),
       mode: "guest",
-      isAuthenticated: false,
       selectedProfile: null,
     });
     const { getByTestId } = renderWithProviders(

@@ -42,3 +42,17 @@ export async function createAcademy(
     return null;
   }
 }
+
+export async function getAcademies(query?: string) {
+  try {
+    const response = await axios.get("/v1/academies/", {
+      params: query && {
+        query,
+      },
+    });
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}

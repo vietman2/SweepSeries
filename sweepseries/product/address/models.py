@@ -19,16 +19,15 @@ class SigunguManager(models.Manager):
 
         return sigungu
 
-    def get_display_name(self, obj):
-        sido = obj.sido.display
-        return f"{sido} {obj.sigungu_name}"
-
 class Sigungu(models.Model):
     sigungu_code    = models.PositiveBigIntegerField(primary_key=True)
     sigungu_name    = models.CharField(max_length=20)
     sido            = models.ForeignKey("Sido", on_delete=models.CASCADE)
 
     objects = SigunguManager()
+
+    def get_display_name(self):
+        return f"{self.sido.display} {self.sigungu_name}" # pylint: disable=no-member
 
     class Meta:
         db_table = "sigungu"

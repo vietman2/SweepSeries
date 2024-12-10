@@ -7,13 +7,13 @@ import {
 
 export const samplePeople: PersonType[] = [
   {
-    full_name: "John Doe",
+    name: "John Doe",
     phone_number: "123456",
     birth_date: "1990-01-01",
     gender: "M",
   },
   {
-    full_name: "Jane Doe",
+    name: "Jane Doe",
     phone_number: "654321",
     birth_date: "2000-01-01",
     gender: "F",
@@ -55,7 +55,7 @@ export const sampleUsers: UserType[] = [
 export const sampleUserRelated: UserRelatedType = {
   uuid: "1",
   username: "johndoe",
-  full_name: "John Doe",
+  name: "John Doe",
 };
 
 export const sampleProfile: UserProfileType = {

@@ -32,7 +32,6 @@ describe("<MyPage />", () => {
       login: jest.fn(),
       logout: jest.fn(),
       mode: "normal",
-      isAuthenticated: true,
       selectedProfile: sampleAuthor,
     });
     jest.spyOn(AuthAPI, "logout").mockResolvedValue(true);
@@ -78,7 +77,6 @@ describe("<MyPage />", () => {
       login: jest.fn(),
       logout: jest.fn(),
       mode: "guest",
-      isAuthenticated: false,
       selectedProfile: null,
     });
     renderWithProviders(<MyPage />);
@@ -89,7 +87,6 @@ describe("<MyPage />", () => {
       login: jest.fn(),
       logout: jest.fn(),
       mode: "pro",
-      isAuthenticated: true,
       selectedProfile: sampleAuthor,
     });
     const { getByTestId } = renderWithProviders(<MyPage />);

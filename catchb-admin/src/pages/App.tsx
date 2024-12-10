@@ -11,6 +11,7 @@ import {
   createGlobalStyle,
 } from "styled-components";
 
+import { AcademyContainer } from "@pages/Academies";
 import { AppsContainer } from "@pages/Apps";
 import { CommunityContainer } from "@pages/Community";
 import { Login } from "@pages/Login";
@@ -174,6 +175,7 @@ function AppRouter() {
           <Route path="/members/*" element={<MembersContainer />} />
           <Route path="/community/*" element={<CommunityContainer />} />
           <Route path="/apps/*" element={<AppsContainer />} />
+          <Route path="/academies/*" element={<AcademyContainer />} />
           <Route path="/*" element={<ErrorComponent />} />
         </Route>
       </>

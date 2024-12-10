@@ -4,19 +4,27 @@ import * as KakaoUser from "@react-native-kakao/user";
 import NaverLogin from "@react-native-seoul/naver-login";
 
 import { Login } from "./Login";
+import * as AuthContext from "@contexts/auth";
 import * as AuthAPI from "@services/auth/auth";
-import { renderWithProviders } from "@utils/test-utils";
 import { sampleAuthor } from "@testdata/auth";
+import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("expo-router", () => ({
   router: {
     replace: jest.fn(),
   },
+  Redirect: jest.fn(),
 }));
 jest.mock("@react-native-kakao/user", () => ({
   me: jest.fn(),
   login: jest.fn(),
   isLogined: jest.fn(),
+}));
+jest.mock("@contexts/auth", () => ({
+  AuthProvider: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  useAuth: jest.fn(),
 }));
 jest.mock("@services/alert/alert", () => ({
   alert: jest.fn(),
@@ -72,12 +80,28 @@ describe("<Login>", () => {
         profile_image: "profile_image",
       },
     });
+    jest.spyOn(AuthContext, "useAuth").mockReturnValue({
+      login: jest.fn(),
+      selectedProfile: null,
+      logout: jest.fn(),
+      mode: "guest",
+    });
   });
 
   it("handles guest mode", () => {
     const { getByTestId } = renderWithProviders(<Login />);
 
     fireEvent.press(getByTestId("비회원으로 둘러보기"));
+  });
+
+  it("handles auto login (redirect)", async () => {
+    jest.spyOn(AuthContext, "useAuth").mockReturnValue({
+      login: jest.fn(),
+      selectedProfile: sampleAuthor,
+      logout: jest.fn(),
+      mode: "normal",
+    });
+    await waitFor(() => renderWithProviders(<Login />));
   });
 
   it("handles Kakao login: first time", async () => {

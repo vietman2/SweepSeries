@@ -1,5 +1,5 @@
 export type PersonType = {
-  full_name: string;
+  name: string;
   phone_number: string;
   birth_date: string;
   gender: string;
@@ -15,7 +15,7 @@ export type UserProfileType = {
 export type UserRelatedType = {
   uuid: string;
   username: string;
-  full_name: string;
+  name: string;
 };
 
 export type UserType = {

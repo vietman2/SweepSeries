@@ -1,26 +1,84 @@
 import re
 import uuid
 from django.core.files.storage import default_storage
-from django.db import transaction
+from django.db import models, transaction
 from rest_framework import serializers
 from phonenumber_field.validators import validate_international_phonenumber
 
+from auth.user.serializers import UserRelatedSerializer
+from core.utils import get_presigned_url
 from product.address.models import Address, Sigungu
 from product.address.utils import get_coordinates, fetch_map_image
 from .models import Academy
 
 class AcademySimpleSerializer(serializers.ModelSerializer):
+    rating      = serializers.SerializerMethodField()
+    num_reviews = serializers.SerializerMethodField()
+    num_likes   = serializers.SerializerMethodField()
+    is_liked    = serializers.SerializerMethodField()
+    top_review  = serializers.SerializerMethodField()
+    location    = serializers.SerializerMethodField()
+    logo        = serializers.SerializerMethodField()
+
     class Meta:
         model = Academy
         fields = [
             "uuid", "name", "rating", "num_reviews", "location",
-            "num_likes", "is_liked", "top_review"
+            "num_likes", "is_liked", "top_review", "logo"
         ]
+
+    def get_rating(self, obj):
+        reviews = obj.reviews.all()
+        if reviews.exists():
+            return reviews.aggregate(models.Avg('rating'))['rating__avg']
+
+        return 0.0
+
+    def get_num_reviews(self, obj):
+        return obj.reviews.count()
+
+    def get_num_likes(self, obj):
+        return obj.likes.count()
+
+    def get_is_liked(self, obj):
+        user = self.context['request'].user
+        if user is None or not user.is_authenticated:
+            return False
+
+        return obj.likes.filter(user=user).exists()
+
+    def get_top_review(self, obj):
+        reviews = obj.reviews.all()
+        if reviews.exists():
+            return reviews.order_by('-rating').first().content
+
+        return ""
+
+    def get_location(self, obj):
+        return obj.address.region.get_display_name()
+
+    def get_logo(self, obj):
+        return get_presigned_url(obj.logo)
+
+class AcademyStatusSerializer(serializers.ModelSerializer):
+    owner           = UserRelatedSerializer(read_only=True)
+    certification   = serializers.SerializerMethodField()
+    verified_at     = serializers.DateTimeField(format="%Y-%m-%d", read_only=True)
+
+    class Meta:
+        model = Academy
+        fields = [
+            "uuid", "name", "owner", "is_verified", "is_rejected", "certification", "verified_at",
+            "reject_reason"
+        ]
+
+    def get_certification(self, obj):
+        return get_presigned_url(obj.certificate)
 
 class AcademyRegisterSerializer(serializers.ModelSerializer):
     registration_number = serializers.CharField()
     phone               = serializers.CharField()
-    address            = serializers.JSONField()
+    address             = serializers.JSONField()
     certification       = serializers.FileField()
     main_logo           = serializers.FileField()
 

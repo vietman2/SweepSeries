@@ -3,14 +3,15 @@ import "expo-dev-client";
 import "react-native-reanimated";
 import { configureReanimatedLogger } from "react-native-reanimated";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFonts } from "expo-font";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, SplashScreen } from "expo-router";
 import axios from "axios";
 
-import { AuthProvider } from "@contexts/auth";
+import { AuthProvider, useAuth } from "@contexts/auth";
 import { ThemeProvider } from "@contexts/theme";
+import { getProfile, refresh } from "@services/auth";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -61,13 +62,51 @@ function RootLayoutNav() {
     <AuthProvider>
       <ThemeProvider>
         <GestureHandlerRootView>
-          <Stack>
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen name="signup" options={{ headerShown: false }} />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          </Stack>
+          <AppRouter />
         </GestureHandlerRootView>
       </ThemeProvider>
     </AuthProvider>
+  );
+}
+
+function AppRouter() {
+  const [ready, setReady] = useState<boolean>(false);
+
+  const { login } = useAuth();
+
+  useEffect(() => {
+    const fetchProfile = async (token: string) => {
+      const response = await getProfile(token);
+
+      if (response) {
+        login(response.mode, response.profile);
+      }
+
+      setReady(true);
+    };
+
+    const refreshToken = async () => {
+      const response = await refresh();
+
+      if (response) {
+        fetchProfile(response.access);
+      } else {
+        setReady(true);
+      }
+    };
+
+    refreshToken();
+  }, []);
+
+  if (!ready) {
+    return null;
+  }
+
+  return (
+    <Stack>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="signup" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+    </Stack>
   );
 }

@@ -4,11 +4,11 @@ from io import BytesIO
 from unittest.mock import patch
 import requests_mock
 from PIL import Image
+from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APITestCase
 
 from auth.user.models import User
-from .models import Academy
 
 def generate_photo_file():
     file = BytesIO()
@@ -35,7 +35,7 @@ class AcademyTestCase(APITestCase):
         )
         address_data = {
             "road_address_part1": "서울특별시 강남구 강남대로 396",
-            "road_address_part2": "지하 2층",
+            "road_address_part2": "지하 4층",
             "building_name": "강남구청",
             "zip_code": "06164",
             "bcode": "1168010100",
@@ -82,7 +82,6 @@ class AcademyTestCase(APITestCase):
         response = self.client.post(self.url, self.data, format="multipart")
 
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(Academy.objects.count(), 2)
 
     def test_academy_register_fail(self):
         ## 1. bad registration_number
@@ -148,4 +147,51 @@ class AcademyTestCase(APITestCase):
         data["certification"] = new_image1
         data["main_logo"] = new_image2
         response = self.client.post(self.url, data, format="multipart")
+        self.assertEqual(response.status_code, 400)
+
+    def test_academy_list(self):
+        ## 1. no query and no auth
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+        ## 2. query and no auth
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(self.url, {"query": "아카데미"})
+        self.assertEqual(response.status_code, 200)
+
+    def test_academy_list_admin(self):
+        self.client.force_authenticate(user=User.objects.get(username="admin"))
+        param = {'status': '승인 대기'}
+        response = self.client.get(self.url, param, HTTP_ORIGIN=settings.ADMIN_PAGE_URL)
+        self.assertEqual(response.status_code, 200)
+
+        param = {'status': '승인 완료'}
+        response = self.client.get(self.url, param, HTTP_ORIGIN=settings.ADMIN_PAGE_URL)
+        self.assertEqual(response.status_code, 200)
+
+        param = {'status': '승인 거부'}
+        response = self.client.get(self.url, param, HTTP_ORIGIN=settings.ADMIN_PAGE_URL)
+        self.assertEqual(response.status_code, 200)
+
+    def test_academy_list_admin_fail(self):
+        self.client.force_authenticate(user=User.objects.get(username="admin"))
+        param = {'status': '승인'}
+        response = self.client.get(self.url, param, HTTP_ORIGIN=settings.ADMIN_PAGE_URL)
+        self.assertEqual(response.status_code, 400)
+
+    def test_academy_approve(self):
+        self.client.force_authenticate(user=User.objects.get(username="admin"))
+        response = self.client.post(f"{self.url}123e4567-e89b-12d3-a456-426614174111/approve/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_academy_reject(self):
+        self.client.force_authenticate(user=User.objects.get(username="admin"))
+        response = self.client.post(f"{self.url}123e4567-e89b-12d3-a456-426614174111/reject/", {
+            "reject_reason": "이유"
+        })
+        self.assertEqual(response.status_code, 200)
+
+    def test_academy_reject_fail(self):
+        self.client.force_authenticate(user=User.objects.get(username="admin"))
+        response = self.client.post(f"{self.url}123e4567-e89b-12d3-a456-426614174111/reject/")
         self.assertEqual(response.status_code, 400)

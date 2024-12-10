@@ -18,7 +18,7 @@ interface Props {
 export function PersonSimple({ person }: Readonly<Props>) {
   return (
     <Container>
-      <div>{person.full_name}</div>
+      <div>{person.name}</div>
       <div>{person.phone_number}</div>
     </Container>
   );

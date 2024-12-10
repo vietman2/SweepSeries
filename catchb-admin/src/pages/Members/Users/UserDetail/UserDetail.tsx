@@ -73,7 +73,7 @@ export function UserDetail() {
         </Row>
         <Row>
           <div>이름</div>
-          <div>{user.person.full_name}</div>
+          <div>{user.person.name}</div>
         </Row>
         <Row>
           <div>전화번호</div>

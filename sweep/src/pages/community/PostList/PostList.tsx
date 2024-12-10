@@ -27,7 +27,7 @@ export function PostList({ mode }: Readonly<Props>) {
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshCount, setRefreshCount] = useState<number>(0);
 
-  const { isAuthenticated } = useAuth();
+  const { selectedProfile } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -121,7 +121,7 @@ export function PostList({ mode }: Readonly<Props>) {
           ))}
         </View>
       </ScrollView>
-      {isAuthenticated && (
+      {selectedProfile && (
         <View style={styles.button}>
           <SvgIconButton
             icon="pencil"

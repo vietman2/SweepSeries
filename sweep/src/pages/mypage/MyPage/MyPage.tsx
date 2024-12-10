@@ -12,7 +12,7 @@ import { logout as logoutRequest } from "@services/auth";
 import { ThemeColorType } from "@themes/colors";
 
 export function MyPage() {
-  const { mode, isAuthenticated, logout } = useAuth();
+  const { mode, selectedProfile, logout } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -61,7 +61,7 @@ export function MyPage() {
   };
   const handleDeleteAccountPress = () => {};
 
-  if (!isAuthenticated) return <LoginNeeded />;
+  if (!selectedProfile) return <LoginNeeded />;
 
   return (
     <>

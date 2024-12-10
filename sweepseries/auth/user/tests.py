@@ -9,7 +9,10 @@ from .forms import UserAdmin, CustomUserCreationForm
 from .models import User
 
 class UserAPITestCase(APITestCase):
-    fixtures = ["core/data/test/users.json"]
+    fixtures = [
+        "core/data/test/users.json", "core/data/test/academies.json",
+        "core/data/initial/regions.json"
+    ]
 
     def setUp(self):
         self.url = "/v1/users/"
@@ -34,6 +37,17 @@ class UserAPITestCase(APITestCase):
     def test_users_retrieve(self):
         self.client.force_authenticate(user=self.admin)
         response = self.client.get(self.url + str(self.normaluser.uuid) + "/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_me(self):
+        ## 1. normal user
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.get(self.url + "me/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        ## 2. admin
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.get(self.url + "me/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class LoginAPITestCase(APITestCase):
