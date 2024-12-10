@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { router } from "expo-router";
+import { router, Redirect } from "expo-router";
 import { initializeKakaoSDK } from "@react-native-kakao/core";
 import {
   me as getProfile,
@@ -18,7 +18,7 @@ import { naverLogin as naverLoginRequest } from "@services/auth";
 import { ThemeColorType } from "@themes/colors";
 
 export function Login() {
-  const { login } = useAuth();
+  const { login, selectedProfile } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -123,6 +123,10 @@ export function Login() {
     initializeKakao();
     initializeNaver();
   }, []);
+
+  if (selectedProfile) {
+    return <Redirect href="/home" />;
+  }
 
   return (
     <View style={styles.container}>
