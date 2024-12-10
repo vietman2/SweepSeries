@@ -56,3 +56,60 @@ export async function getAcademies(query?: string) {
     return null;
   }
 }
+
+export async function getAcademyDetail(uuid: string) {
+  try {
+    const response = await axios.get(`/v1/academies/${uuid}/`);
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
+export async function getMyAcademies() {
+  try {
+    const response = await axios.get("/v1/academies/my/");
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
+export async function updateAcademyIntroduction(
+  uuid: string,
+  introduction: string
+) {
+  try {
+    const response = await axios.patch(`/v1/academies/${uuid}/introduction/`, {
+      introduction,
+    });
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
+export async function getFacilityOptions() {
+  try {
+    const response = await axios.get("/v1/facilities/");
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
+export async function updateFacilities(uuid: string, facilities: number[]) {
+  try {
+    const response = await axios.patch(`/v1/academies/${uuid}/facilities/`, {
+      facilities,
+    });
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
