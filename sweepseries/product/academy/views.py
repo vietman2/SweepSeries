@@ -10,24 +10,29 @@ from drf_spectacular.utils import extend_schema
 
 from core.permissions import AdminOnly
 from core.utils import is_admin_page
-from .models import Academy
+from .models import Academy, AcademyFacility
+from .permissions import IsAcademyOwner
 from .serializers import (
-    AcademySimpleSerializer, AcademyRegisterSerializer, AcademyStatusSerializer
+    AcademySimpleSerializer, AcademyRegisterSerializer, AcademyStatusSerializer,
+    AcademyDetailSerializer, ConvenienceSerializer
 )
 class AcademyViewSet(ModelViewSet):
     queryset = Academy.objects.all()
     serializer_class = AcademySimpleSerializer
-    http_method_names = ['get', 'post']
+    http_method_names = ['get', 'post', 'patch']
 
     def get_permissions(self):
-        login_needed = ['create']
+        login_needed = ['create', 'my']
         must_be_admin = ['approve', 'reject']
+        must_be_owner = ['introduction', 'facilities']
         permissions = []
 
         if self.action in login_needed:
             permissions.append(IsAuthenticated())
         if self.action in must_be_admin:
             permissions.append(AdminOnly())
+        if self.action in must_be_owner:
+            permissions.append(IsAcademyOwner())
 
         return permissions
 
@@ -90,6 +95,30 @@ class AcademyViewSet(ModelViewSet):
             status=status.HTTP_200_OK
         )
 
+    @extend_schema(summary="아카데미 상세 조회", tags=["아카데미"])
+    def retrieve(self, request, *args, **kwargs):
+        academy = self.get_object()
+        serializer = AcademyDetailSerializer(academy)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(summary="내 아카데미 조회", tags=["아카데미"])
+    @action(detail=False, methods=['get'])
+    def my(self, request):
+        user = request.user
+        academies = Academy.objects.filter(owner=user)
+
+        if not academies.exists():
+            return Response(
+                status=status.HTTP_404_NOT_FOUND,
+                data={"error": "아카데미 정보가 없습니다."}
+            )
+
+        uuids = academies.values_list('uuid', flat=True)
+        return Response(
+            status=status.HTTP_200_OK,
+            data={"academies": uuids}
+        )
+
     @extend_schema(summary="아카데미 등록 승인", tags=["아카데미"])
     @action(detail=True, methods=['post'])
     def approve(self, request, pk=None): # pylint: disable=unused-argument
@@ -124,3 +153,65 @@ class AcademyViewSet(ModelViewSet):
             status=status.HTTP_200_OK,
             data={"message": "아카데미 거부가 완료되었습니다."}
         )
+
+    @extend_schema(summary="아카데미 소개 수정", tags=["아카데미"])
+    @action(detail=True, methods=['patch'])
+    def introduction(self, request, pk=None): # pylint: disable=unused-argument
+        academy = self.get_object()
+        introduction = request.data.get('introduction', None)
+
+        if introduction is None or introduction == "":
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={"error": "소개 내용을 입력해주세요."}
+            )
+
+        academy.introduction = introduction
+        academy.save()
+
+        return Response(
+            status=status.HTTP_200_OK,
+            data={"message": "아카데미 소개가 수정되었습니다."}
+        )
+
+    @extend_schema(summary="아카데미 시설 업데이트", tags=["아카데미"])
+    @action(detail=True, methods=['patch'])
+    def facilities(self, request, pk=None): # pylint: disable=unused-argument
+        academy = self.get_object()
+        facilities = request.data.get('facilities', None)
+
+        if facilities is None:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={"error": "시설 정보를 입력해주세요."}
+            )
+
+        academy.convenience.clear()
+        for facility in facilities:
+            facility = AcademyFacility.objects.get(id=facility)
+            academy.convenience.add(facility)
+        academy.save()
+
+        return Response(
+            status=status.HTTP_200_OK,
+            data={"message": "아카데미 시설이 업데이트되었습니다."}
+        )
+
+class FacilityViewSet(ModelViewSet):
+    queryset = AcademyFacility.objects.all()
+    serializer_class = ConvenienceSerializer
+    http_method_names = ['get'] 
+
+    def get_permissions(self):
+        return [IsAcademyOwner()]
+
+    @extend_schema(summary="시설 목록 조회", tags=["아카데미"])
+    def list(self, request, *args, **kwargs):
+        queryset = self.queryset
+        serializer = ConvenienceSerializer(queryset, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(exclude=True)
+    def retrieve(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)

@@ -9,7 +9,21 @@ from auth.user.serializers import UserRelatedSerializer
 from core.utils import get_presigned_url
 from product.address.models import Address, Sigungu
 from product.address.utils import get_coordinates, fetch_map_image
-from .models import Academy
+from .models import Academy, AcademyFacility
+
+class ConvenienceSerializer(serializers.ModelSerializer):
+    id          = serializers.IntegerField()
+    name        = serializers.CharField(read_only=True)
+    kor_name    = serializers.CharField(read_only=True)
+    icon_url    = serializers.SerializerMethodField()
+    type        = serializers.CharField(source="get_type_display", read_only=True)
+
+    class Meta:
+        model = AcademyFacility
+        fields = ["id", "name", "kor_name", "icon_url", "type"]
+
+    def get_icon_url(self, obj):
+        return f"https://kr.object.ncloudstorage.com/sweepdev/facicons/{obj.name}.svg"
 
 class AcademySimpleSerializer(serializers.ModelSerializer):
     rating      = serializers.SerializerMethodField()
@@ -59,6 +73,44 @@ class AcademySimpleSerializer(serializers.ModelSerializer):
 
     def get_logo(self, obj):
         return get_presigned_url(obj.logo)
+
+class AcademyDetailSerializer(serializers.ModelSerializer):
+    address     = serializers.SerializerMethodField()
+    logo        = serializers.SerializerMethodField()
+    map         = serializers.SerializerMethodField()
+    images      = serializers.SerializerMethodField()
+    rating      = serializers.SerializerMethodField()
+    num_reviews = serializers.SerializerMethodField()
+    convenience = ConvenienceSerializer(many=True)
+
+    class Meta:
+        model = Academy
+        fields = [
+            "uuid", "name", "logo", "introduction", "address", "map", "images",
+            "rating", "num_reviews", "convenience"
+        ]
+
+    def get_address(self, obj):
+        return f"{obj.address.road_address_part1}, {obj.address.road_address_part2}"
+
+    def get_logo(self, obj):
+        return get_presigned_url(obj.logo)
+
+    def get_map(self, obj):
+        return get_presigned_url(obj.address.map_image)
+
+    def get_images(self, obj):
+        return []
+
+    def get_rating(self, obj):
+        reviews = obj.reviews.all()
+        if reviews.exists():
+            return reviews.aggregate(models.Avg('rating'))['rating__avg']
+
+        return 0.0
+
+    def get_num_reviews(self, obj):
+        return obj.reviews.count()
 
 class AcademyStatusSerializer(serializers.ModelSerializer):
     owner           = UserRelatedSerializer(read_only=True)

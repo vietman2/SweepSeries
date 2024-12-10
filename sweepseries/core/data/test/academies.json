@@ -4,7 +4,7 @@
     "pk": "123e4567-e89b-12d3-a456-426614174999",
     "fields": {
       "name": "아카데미 1",
-      "owner": "123e4567-e89b-12d3-a456-426614174000",
+      "owner": "223e4567-e89b-12d3-a456-426614174000",
       "academy_phone_number": "+821012341234",
       "registration_number": "012-34-56789",
       "certificate": "products/academies/123e4567-e89b-12d3-a456-426614174999/certification/IMG_0111.jpg",
@@ -28,7 +28,7 @@
     "pk": "123e4567-e89b-12d3-a456-426614174111",
     "fields": {
       "name": "아카데미 2",
-      "owner": "123e4567-e89b-12d3-a456-426614174000",
+      "owner": "223e4567-e89b-12d3-a456-426614174000",
       "academy_phone_number": "+821012341234",
       "registration_number": "012-34-56780",
       "certificate": "products/academies/123e4567-e89b-12d3-a456-426614174999/certification/IMG_0111.jpg",
@@ -52,7 +52,7 @@
     "pk": "123e4567-e89b-12d3-a456-426614174333",
     "fields": {
       "name": "아카데미 3",
-      "owner": "123e4567-e89b-12d3-a456-426614174000",
+      "owner": "223e4567-e89b-12d3-a456-426614174000",
       "academy_phone_number": "+821012341234",
       "registration_number": "012-34-56781",
       "certificate": "products/academies/123e4567-e89b-12d3-a456-426614174999/certification/IMG_0111.jpg",

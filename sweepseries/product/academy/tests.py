@@ -9,6 +9,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APITestCase
 
 from auth.user.models import User
+from .models import Academy
 
 def generate_photo_file():
     file = BytesIO()
@@ -21,12 +22,13 @@ def generate_photo_file():
 class AcademyTestCase(APITestCase):
     fixtures = [
         "core/data/test/users.json", "core/data/initial/regions.json",
-        "core/data/test/academies.json"
+        "core/data/test/academies.json", "core/data/initial/facilities.json"
     ]
 
     def setUp(self):
         self.url = "/v1/academies/"
         self.user = User.objects.get(username="normaluser")
+        self.academy = Academy.objects.get(name="아카데미 1")
         self.test_image1 = SimpleUploadedFile(
             "test1.png", b"file_content", content_type="image/png"
         )
@@ -179,6 +181,23 @@ class AcademyTestCase(APITestCase):
         response = self.client.get(self.url, param, HTTP_ORIGIN=settings.ADMIN_PAGE_URL)
         self.assertEqual(response.status_code, 400)
 
+    def test_academy_detail(self):
+        response = self.client.get(f"{self.url}{self.academy.uuid}/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_my_academy(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(f"{self.url}my/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_my_academy_fail(self):
+        response = self.client.get(f"{self.url}my/")
+        self.assertEqual(response.status_code, 403)
+
+        self.client.force_authenticate(user=User.objects.get(username="admin"))
+        response = self.client.get(f"{self.url}my/")
+        self.assertEqual(response.status_code, 404)
+
     def test_academy_approve(self):
         self.client.force_authenticate(user=User.objects.get(username="admin"))
         response = self.client.post(f"{self.url}123e4567-e89b-12d3-a456-426614174111/approve/")
@@ -195,3 +214,43 @@ class AcademyTestCase(APITestCase):
         self.client.force_authenticate(user=User.objects.get(username="admin"))
         response = self.client.post(f"{self.url}123e4567-e89b-12d3-a456-426614174111/reject/")
         self.assertEqual(response.status_code, 400)
+
+    def test_update_introduction(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.patch(f"{self.url}{self.academy.uuid}/introduction/", {
+            "introduction": "소개"
+        })
+        self.assertEqual(response.status_code, 200)
+
+    def test_update_introduction_fail(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.patch(f"{self.url}{self.academy.uuid}/introduction/", {
+            "introduction": ""
+        })
+        self.assertEqual(response.status_code, 400)
+
+    def test_update_facilities(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.patch(f"{self.url}{self.academy.uuid}/facilities/", {
+            "facilities": [1, 2]
+        })
+        self.assertEqual(response.status_code, 200)
+
+    def test_update_facilities_fail(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.patch(f"{self.url}{self.academy.uuid}/facilities/")
+        self.assertEqual(response.status_code, 400)
+
+class FacilityTestCase(APITestCase):
+    fixtures = ["core/data/initial/facilities.json"]
+
+    def setUp(self):
+        self.url = "/v1/facilities/"
+
+    def test_facility_list(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_facility_detail(self):
+        response = self.client.get(f"{self.url}1/")
+        self.assertEqual(response.status_code, 405)
