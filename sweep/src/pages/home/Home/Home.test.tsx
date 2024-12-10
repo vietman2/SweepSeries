@@ -49,6 +49,7 @@ describe("<Home />", () => {
     const { getByTestId } = renderWithProviders(<Home />);
 
     await waitFor(() => {
+      fireEvent.press(getByTestId("refresh"));
       fireEvent.press(getByTestId("filter"));
       fireEvent.press(getByTestId("filter"));
       fireEvent.press(getByTestId("sort-button"));
