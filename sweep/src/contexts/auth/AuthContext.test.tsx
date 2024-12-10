@@ -12,20 +12,25 @@ jest.unmock("@contexts/auth");
 const TestComponent = () => {
   const { login, logout } = useAuth();
 
-  const handleLogin = () => {
+  const handleLoginPro = () => {
     login("pro", sampleAuthor);
+  };
+
+  const handleLoginNormal = () => {
+    login("normal", sampleAuthor);
   };
 
   return (
     <>
-      <TouchableOpacity onPress={handleLogin} testID="login" />
+      <TouchableOpacity onPress={handleLoginPro} testID="login" />
+      <TouchableOpacity onPress={handleLoginNormal} testID="login-normal" />
       <TouchableOpacity onPress={logout} testID="logout" />
     </>
   );
 };
 
 describe("AuthProvider", () => {
-  it("provides auth context correctly and handles login, logout", () => {
+  it("provides auth context correctly and handles login (pro), logout", () => {
     const { getByTestId } = render(
       <AuthProvider>
         <TestComponent />
@@ -34,6 +39,16 @@ describe("AuthProvider", () => {
 
     fireEvent.press(getByTestId("login"));
     fireEvent.press(getByTestId("logout"));
+  });
+
+  it("handles login normal correctly", () => {
+    const { getByTestId } = render(
+      <AuthProvider>
+        <TestComponent />
+      </AuthProvider>
+    );
+
+    fireEvent.press(getByTestId("login-normal"));
   });
 
   it("handles error correctly", async () => {

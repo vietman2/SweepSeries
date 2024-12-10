@@ -76,7 +76,7 @@ export function Login() {
 
       const response = await naverLoginRequest(profile);
       if (response) {
-        login("normal", response.user.profile);
+        login(response.user.mode, response.user.profile);
         router.replace("/home");
       } else {
         alert(

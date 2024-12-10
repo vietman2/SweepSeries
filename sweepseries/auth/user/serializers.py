@@ -6,21 +6,31 @@ from auth.person.serializers import PersonSerializer
 from auth.userprofile.models import UserProfile
 from auth.userprofile.serializers import UserProfileSerializer
 from auth.userprofile.utils import random_nickname_generator
+from product.academy.models import Academy
 from .models import User
 
 class UserAuthSerializer(serializers.ModelSerializer):
     uuid        = serializers.UUIDField(read_only=True)
     username    = serializers.CharField(read_only=True)
     profile     = serializers.SerializerMethodField(read_only=True)
+    mode        = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
-        fields = ['uuid', 'username', 'profile']
+        fields = ['uuid', 'username', 'profile', 'mode']
 
     def get_profile(self, obj):
         first_profile = UserProfile.objects.filter(user=obj).first()
 
         return UserProfileSerializer(first_profile).data
+
+    def get_mode(self, obj):
+        ## 아카데미 대표이거나 TODO: 코치일 경우 "pro"
+        ## 그 외의 경우 "normal"
+        if Academy.objects.filter(owner=obj).exists():
+            return 'pro'
+
+        return 'normal'
 
 class UserRelatedSerializer(serializers.ModelSerializer):
     uuid        = serializers.UUIDField(read_only=True)
