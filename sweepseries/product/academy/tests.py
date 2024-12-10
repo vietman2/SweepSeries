@@ -150,11 +150,13 @@ class AcademyTestCase(APITestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_academy_list(self):
-        self.client.force_authenticate(user=self.user)
+        ## 1. no query and no auth
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.get(self.url, {"query": "테스트"})
+        ## 2. query and no auth
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(self.url, {"query": "아카데미"})
         self.assertEqual(response.status_code, 200)
 
     def test_academy_list_admin(self):

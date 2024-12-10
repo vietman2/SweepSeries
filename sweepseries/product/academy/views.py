@@ -21,7 +21,7 @@ class AcademyViewSet(ModelViewSet):
 
     def get_permissions(self):
         login_needed = ['create']
-        must_be_admin = ['verify']
+        must_be_admin = ['approve', 'reject']
         permissions = []
 
         if self.action in login_needed:
@@ -83,7 +83,7 @@ class AcademyViewSet(ModelViewSet):
         q &= Q(is_verified=True)
         self.queryset = self.queryset.filter(q)
         serializer = AcademySimpleSerializer(self.queryset, many=True)
-        serializer.context['user'] = user
+        serializer.context['request'] = request
 
         return Response(
             {"academies": serializer.data, "suggestions": serializer.data},

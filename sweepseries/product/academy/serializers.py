@@ -1,7 +1,7 @@
 import re
 import uuid
 from django.core.files.storage import default_storage
-from django.db import transaction
+from django.db import models, transaction
 from rest_framework import serializers
 from phonenumber_field.validators import validate_international_phonenumber
 
@@ -28,25 +28,32 @@ class AcademySimpleSerializer(serializers.ModelSerializer):
         ]
 
     def get_rating(self, obj):
-        ## TODO: rating 계산
+        reviews = obj.reviews.all()
+        if reviews.exists():
+            return reviews.aggregate(models.Avg('rating'))['rating__avg']
+
         return 0.0
 
     def get_num_reviews(self, obj):
-        ## TODO: 리뷰 개수 계산
-        return 0
+        return obj.reviews.count()
 
     def get_num_likes(self, obj):
-        ## TODO: 좋아요 개수 계산
-        return 0
+        return obj.likes.count()
 
     def get_is_liked(self, obj):
-        ## TODO: 좋아요 여부 계산
-        return False
+        user = self.context['request'].user
+        if user is None or not user.is_authenticated:
+            return False
+
+        return obj.likes.filter(user=user).exists()
 
     def get_top_review(self, obj):
-        ## TODO: 최상위 리뷰 계산
-        return "좋은 시설과 친절한 코치들이 많아요!"
-    
+        reviews = obj.reviews.all()
+        if reviews.exists():
+            return reviews.order_by('-rating').first().content
+
+        return ""
+
     def get_location(self, obj):
         return obj.address.region.get_display_name()
 
@@ -71,7 +78,7 @@ class AcademyStatusSerializer(serializers.ModelSerializer):
 class AcademyRegisterSerializer(serializers.ModelSerializer):
     registration_number = serializers.CharField()
     phone               = serializers.CharField()
-    address            = serializers.JSONField()
+    address             = serializers.JSONField()
     certification       = serializers.FileField()
     main_logo           = serializers.FileField()
 
