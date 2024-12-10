@@ -29,8 +29,8 @@ class UserAuthSerializer(serializers.ModelSerializer):
         ## 그 외의 경우 "normal"
         if Academy.objects.filter(owner=obj).exists():
             return 'pro'
-        else:
-            return 'normal'
+
+        return 'normal'
 
 class UserRelatedSerializer(serializers.ModelSerializer):
     uuid        = serializers.UUIDField(read_only=True)
