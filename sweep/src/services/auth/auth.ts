@@ -63,7 +63,10 @@ export const naverLogin = async (data: GetProfileResponse) => {
 
 export const logout = async () => {
   try {
-    await axios.post("/v1/logout/");
+    const refreshToken = await getSecure("refreshToken");
+    await axios.post("/v1/logout/", {
+      refresh: refreshToken,
+    });
 
     delete axios.defaults.headers.common["Authorization"];
     await removeSecure("refreshToken");
@@ -79,6 +82,24 @@ export const refresh = async () => {
     const refreshToken = await getSecure("refreshToken");
     const response = await axios.post("/v1/tokens/refresh/", {
       refresh: refreshToken,
+    });
+
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${response.data.access}`;
+    await saveSecure("refreshToken", response.data.refresh);
+    return response.data;
+  } catch {
+    return null;
+  }
+};
+
+export const getProfile = async (token: string) => {
+  try {
+    const response = await axios.get("/v1/users/me/", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data;
   } catch {
