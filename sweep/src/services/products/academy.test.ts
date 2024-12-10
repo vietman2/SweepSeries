@@ -1,6 +1,14 @@
 import axios from "axios";
 
-import { createAcademy, getAcademies, getAcademyDetail, getMyAcademies, getFacilityOptions, updateAcademyIntroduction, updateFacilities } from "./academy";
+import {
+  createAcademy,
+  getAcademies,
+  getAcademyDetail,
+  getMyAcademies,
+  getFacilityOptions,
+  updateAcademyIntroduction,
+  updateFacilities,
+} from "./academy";
 
 jest.mock("form-data", () => {
   return jest.fn().mockImplementation(() => {
