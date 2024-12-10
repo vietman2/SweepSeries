@@ -25,7 +25,6 @@ describe("<Comment />", () => {
       login: jest.fn(),
       logout: jest.fn(),
       mode: "normal",
-      isAuthenticated: true,
       selectedProfile: sampleAuthor,
     });
   });
@@ -137,7 +136,6 @@ describe("<Comment />", () => {
       login: jest.fn(),
       logout: jest.fn(),
       mode: "guest",
-      isAuthenticated: false,
       selectedProfile: null,
     });
     const { getByTestId } = renderWithProviders(

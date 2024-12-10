@@ -39,7 +39,7 @@ export function Recomment({
   const [editMode, setEditMode] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
-  const { isAuthenticated, selectedProfile } = useAuth();
+  const { selectedProfile } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -86,7 +86,7 @@ export function Recomment({
   };
 
   const handleLike = async () => {
-    if (!isAuthenticated || !selectedProfile) {
+    if (!selectedProfile) {
       loginAlert();
       return;
     }
@@ -135,7 +135,7 @@ export function Recomment({
           <View style={styles.horizontal}>
             <AuthorProfile author={recomment.author} />
           </View>
-          {isAuthenticated && actions.length > 0 && (
+          {selectedProfile && actions.length > 0 && (
             <PopupMenu items={actions}>
               <AppIcon icon="dots" color={theme.lowEmphasis} size={16} />
             </PopupMenu>

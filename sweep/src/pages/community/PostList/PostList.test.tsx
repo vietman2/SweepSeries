@@ -29,7 +29,6 @@ describe("<PostList />", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.spyOn(AuthContext, "useAuth").mockReturnValue({
-      isAuthenticated: true,
       login: jest.fn(),
       logout: jest.fn(),
       mode: "pro",
@@ -72,7 +71,6 @@ describe("<PostList />", () => {
 
   it("renders without being logged in", async () => {
     jest.spyOn(AuthContext, "useAuth").mockReturnValue({
-      isAuthenticated: false,
       login: jest.fn(),
       logout: jest.fn(),
       mode: "guest",

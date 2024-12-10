@@ -47,7 +47,7 @@ export function Comment({
   const [selected, setSelected] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
-  const { isAuthenticated, selectedProfile } = useAuth();
+  const { selectedProfile } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -64,7 +64,7 @@ export function Comment({
   };
 
   const handleCommentLike = async () => {
-    if (!isAuthenticated || !selectedProfile) {
+    if (!selectedProfile) {
       loginAlert();
       return;
     }
@@ -177,7 +177,7 @@ export function Comment({
             <View style={styles.horizontal}>
               <AuthorProfile author={comment.author} />
             </View>
-            {isAuthenticated && actions.length > 0 && (
+            {selectedProfile && actions.length > 0 && (
               <PopupMenu items={actions}>
                 <AppIcon icon="dots" color={theme.lowEmphasis} size={16} />
               </PopupMenu>
@@ -226,7 +226,7 @@ export function Comment({
               />
               <Text style={styles.likeText}>{comment.num_recomments}</Text>
             </View>
-            {isAuthenticated && (
+            {selectedProfile && (
               <TouchableOpacity
                 onPress={handleRecommentPress}
                 style={styles.recommentButton}

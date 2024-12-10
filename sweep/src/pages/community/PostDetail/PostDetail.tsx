@@ -32,7 +32,7 @@ export function PostDetail() {
   const [error, setError] = useState(false);
   const [refreshCount, setRefreshCount] = useState<number>(0);
 
-  const { isAuthenticated, selectedProfile } = useAuth();
+  const { selectedProfile } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -116,7 +116,7 @@ export function PostDetail() {
             ) : null}
           </Pressable>
         </ScrollView>
-        {commentMode && isAuthenticated ? (
+        {commentMode && selectedProfile ? (
           <View style={styles.newcomment}>
             <AuthorProfile author={selectedProfile} imageOnly />
             <View style={styles.textinput}>
