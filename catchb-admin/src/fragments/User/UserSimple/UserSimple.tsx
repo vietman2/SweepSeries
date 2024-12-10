@@ -22,7 +22,7 @@ export function UserSimple({ user }: Readonly<Props>) {
   return (
     <Container>
       <div>{user.uuid}</div>
-      <div>{user.person.full_name}</div>
+      <div>{user.person.name}</div>
       <div>{user.username}</div>
       <div>{user.email}</div>
       <div>{user.joined_at}</div>
@@ -50,6 +50,7 @@ const Container = styled.div`
     gap: 6px;
 
     white-space: nowrap;
+    overflow: hidden;
 
     border-right: 1px solid ${({ theme }) => theme.colors.borderLight};
   }

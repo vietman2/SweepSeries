@@ -3,7 +3,7 @@
     "model": "academy.academy",
     "pk": "123e4567-e89b-12d3-a456-426614174999",
     "fields": {
-      "name": "Catch B 아카데미",
+      "name": "아카데미 1",
       "owner": "123e4567-e89b-12d3-a456-426614174000",
       "academy_phone_number": "+821012341234",
       "registration_number": "012-34-56789",
@@ -17,6 +17,57 @@
       "num_mounds": 0,
       "num_plates": 0,
       "is_verified": true,
+      "verified_at": "2024-12-10T03:46:52.247",
+      "is_rejected": false,
+      "reject_reason": "",
+      "convenience": []
+    }
+  },
+  {
+    "model": "academy.academy",
+    "pk": "123e4567-e89b-12d3-a456-426614174111",
+    "fields": {
+      "name": "아카데미 2",
+      "owner": "123e4567-e89b-12d3-a456-426614174000",
+      "academy_phone_number": "+821012341234",
+      "registration_number": "012-34-56780",
+      "certificate": "products/academies/123e4567-e89b-12d3-a456-426614174999/certification/IMG_0111.jpg",
+      "logo": "products/academies/123e4567-e89b-12d3-a456-426614174999/main_logo/IMG_0005.jpg",
+      "introduction": "",
+      "address": 2,
+      "homepage": "",
+      "instagram": "",
+      "blog": "",
+      "num_mounds": 0,
+      "num_plates": 0,
+      "is_verified": false,
+      "verified_at": null,
+      "is_rejected": false,
+      "reject_reason": "",
+      "convenience": []
+    }
+  },
+  {
+    "model": "academy.academy",
+    "pk": "123e4567-e89b-12d3-a456-426614174333",
+    "fields": {
+      "name": "아카데미 3",
+      "owner": "123e4567-e89b-12d3-a456-426614174000",
+      "academy_phone_number": "+821012341234",
+      "registration_number": "012-34-56781",
+      "certificate": "products/academies/123e4567-e89b-12d3-a456-426614174999/certification/IMG_0111.jpg",
+      "logo": "products/academies/123e4567-e89b-12d3-a456-426614174999/main_logo/IMG_0005.jpg",
+      "introduction": "",
+      "address": 3,
+      "homepage": "",
+      "instagram": "",
+      "blog": "",
+      "num_mounds": 0,
+      "num_plates": 0,
+      "is_verified": false,
+      "verified_at": null,
+      "is_rejected": true,
+      "reject_reason": "거절되었습니다.",
       "convenience": []
     }
   },
@@ -27,6 +78,38 @@
       "region": 1168000000,
       "road_address_part1": "서울특별시 강남구 강남대로 396",
       "road_address_part2": "지하 1층",
+      "building_name": "강남구청",
+      "eng_address": "396, Gangnam-daero, Gangnam-gu, Seoul, Republic of Korea",
+      "jibun_address": "서울특별시 강남구 삼성동 159",
+      "zip_code": "06164",
+      "longitude": "127.0249730",
+      "latitude": "37.5172360",
+      "map_image": "products/academies/123e4567-e89b-12d3-a456-426614174999/map_image.png"
+    }
+  },
+  {
+    "model": "address.address",
+    "pk": 2,
+    "fields": {
+      "region": 1168000000,
+      "road_address_part1": "서울특별시 강남구 강남대로 396",
+      "road_address_part2": "지하 2층",
+      "building_name": "강남구청",
+      "eng_address": "396, Gangnam-daero, Gangnam-gu, Seoul, Republic of Korea",
+      "jibun_address": "서울특별시 강남구 삼성동 159",
+      "zip_code": "06164",
+      "longitude": "127.0249730",
+      "latitude": "37.5172360",
+      "map_image": "products/academies/123e4567-e89b-12d3-a456-426614174999/map_image.png"
+    }
+  },
+  {
+    "model": "address.address",
+    "pk": 3,
+    "fields": {
+      "region": 1168000000,
+      "road_address_part1": "서울특별시 강남구 강남대로 396",
+      "road_address_part2": "지하 3층",
       "building_name": "강남구청",
       "eng_address": "396, Gangnam-daero, Gangnam-gu, Seoul, Republic of Korea",
       "jibun_address": "서울특별시 강남구 삼성동 159",
