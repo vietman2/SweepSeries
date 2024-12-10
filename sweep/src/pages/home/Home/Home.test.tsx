@@ -38,7 +38,6 @@ describe("<Home />", () => {
       login: jest.fn(),
       logout: jest.fn(),
       mode: "normal",
-      isAuthenticated: true,
       selectedProfile: sampleAuthor,
     });
   });
@@ -66,7 +65,6 @@ describe("<Home />", () => {
       login: jest.fn(),
       logout: jest.fn(),
       mode: "pro",
-      isAuthenticated: true,
       selectedProfile: sampleAuthor,
     });
 

@@ -36,6 +36,11 @@ class UserAPITestCase(APITestCase):
         response = self.client.get(self.url + str(self.normaluser.uuid) + "/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_me(self):
+        self.client.force_authenticate(user=self.normaluser)
+        response = self.client.get(self.url + "me/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 class LoginAPITestCase(APITestCase):
     def setUp(self):
         self.url = "/v1/login/"

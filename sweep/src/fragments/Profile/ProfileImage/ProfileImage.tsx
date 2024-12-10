@@ -3,7 +3,6 @@ import { SvgCssUri } from "react-native-svg/css";
 
 import { AppIcon } from "@components/Icons";
 import { useTheme } from "@contexts/theme";
-import { ThemeColorType } from "@themes/colors";
 
 interface Props {
   uri?: string;
@@ -13,7 +12,6 @@ interface Props {
 
 export function ProfileImage({ uri, edit, color }: Readonly<Props>) {
   const { theme } = useTheme();
-  const styles = createStyles(theme);
 
   if (uri) {
     return (
@@ -48,29 +46,27 @@ export function ProfileImage({ uri, edit, color }: Readonly<Props>) {
     );
   }
 }
-
-const createStyles = (theme: ThemeColorType) =>
-  StyleSheet.create({
-    imageLarge: {
-      width: 70,
-      height: 70,
-      borderRadius: 35,
-    },
-    iconLarge: {
-      width: 70,
-      height: 70,
-      justifyContent: "center",
-      alignItems: "center",
-      borderRadius: 45,
-    },
-    edit: {
-      position: "absolute",
-      right: 0,
-      bottom: 0,
-      width: 25,
-      height: 25,
-      borderRadius: 12.5,
-      justifyContent: "center",
-      alignItems: "center",
-    },
-  });
+const styles = StyleSheet.create({
+  imageLarge: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+  },
+  iconLarge: {
+    width: 70,
+    height: 70,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 45,
+  },
+  edit: {
+    position: "absolute",
+    right: 0,
+    bottom: 0,
+    width: 25,
+    height: 25,
+    borderRadius: 12.5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});

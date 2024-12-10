@@ -9,7 +9,6 @@ interface AuthContextType {
   logout: () => void;
   mode: "pro" | "normal" | "guest";
   selectedProfile: UserProfileType | null;
-  isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -38,16 +37,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           try {
             const response = await refresh();
             if (response) {
-              const newAccessToken = response;
+              const newAccessToken = response.access;
 
               originalRequest.headers[
                 "Authorization"
               ] = `Bearer ${newAccessToken}`;
               return axios(originalRequest);
             }
-          } catch (refreshError: any) {
+          } catch {
             logout();
-            return Promise.reject(refreshError);
           }
         }
         return Promise.reject(error);
@@ -70,10 +68,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setSelectedProfile(null);
   };
 
-  const isAuthenticated = mode !== "guest";
-
   const value = useMemo(
-    () => ({ mode, login, logout, isAuthenticated, selectedProfile }),
+    () => ({ mode, login, logout, selectedProfile }),
     [mode]
   );
 

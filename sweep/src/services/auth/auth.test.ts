@@ -1,6 +1,13 @@
 import axios from "axios";
 
-import { login, logout, refresh, kakaoLogin, naverLogin } from "./auth";
+import {
+  login,
+  logout,
+  refresh,
+  kakaoLogin,
+  naverLogin,
+  getProfile,
+} from "./auth";
 import * as StorageAPI from "@services/storage/secure";
 
 describe("login", () => {
@@ -149,6 +156,28 @@ describe("naverLogin", () => {
       resultcode: "00",
       message: "message",
     });
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("getProfile", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should return response data on success", async () => {
+    jest.spyOn(axios, "get").mockResolvedValue({ data: {} });
+
+    const result = await getProfile("token");
+
+    expect(result).toEqual({});
+  });
+
+  it("should return null on failure", async () => {
+    jest.spyOn(axios, "get").mockRejectedValue(null);
+
+    const result = await getProfile("token");
 
     expect(result).toBeNull();
   });

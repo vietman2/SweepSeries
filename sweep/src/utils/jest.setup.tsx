@@ -282,7 +282,6 @@ jest.mock("@contexts/auth", () => ({
     <div>{children}</div>
   ),
   useAuth: () => ({
-    isAuthenticated: false,
     login: jest.fn(),
     logout: jest.fn(),
     mode: "guest",
