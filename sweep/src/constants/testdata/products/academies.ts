@@ -46,7 +46,7 @@ export const sampleAcademyDetail: AcademyDetailType = {
       hours: "없음",
     },
   ],
-  facilities: [
+  convenience: [
     {
       id: 1,
       name: "helmet",
@@ -151,6 +151,12 @@ export const sampleAcademyDetail: AcademyDetailType = {
         "https://kr.object.ncloudstorage.com/sweepdev/facicons/air_conditioner.svg",
       type: "편의시설",
     },
+  ],
+  logo: "https://yaguin.com/lf_img/lfi15856190990.jpeg",
+  images: [
+    "https://kr.object.ncloudstorage.com/sweepdev/test_images/academy1.jpg",
+    "https://kr.object.ncloudstorage.com/sweepdev/test_images/academy2.jpg",
+    "https://kr.object.ncloudstorage.com/sweepdev/test_images/academy3.jpg",
   ],
   map: "https://kr.object.ncloudstorage.com/sweepdev/test_images/map.png",
 };

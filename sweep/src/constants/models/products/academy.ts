@@ -23,11 +23,13 @@ export type FacilityType = {
 
 export type AcademyDetailType = {
   name: string;
+  logo: string;
+  images: string[];
   address: string;
   rating: number;
   num_reviews: number;
   introduction: string;
   working_hours: WorkingHoursType[];
-  facilities: FacilityType[];
+  convenience: FacilityType[];
   map: string;
 };
