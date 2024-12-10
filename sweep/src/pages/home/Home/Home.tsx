@@ -31,7 +31,7 @@ export function Home() {
   const [selectedSort, setSelectedSort] = useState<string>("인기순");
   const [selectedFilter, setSelectedFilter] = useState<string>("");
 
-  const { mode, isAuthenticated } = useAuth();
+  const { mode, selectedProfile } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -83,7 +83,7 @@ export function Home() {
   return (
     <>
       <Scroll style={styles.container} showsVerticalScrollIndicator={false}>
-        {isAuthenticated && (
+        {selectedProfile && (
           <AcademyCard
             mode={mode === "pro" ? "pro" : "normal"}
             num_students={34}
