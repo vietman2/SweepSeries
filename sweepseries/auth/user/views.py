@@ -48,7 +48,7 @@ class UserViewSet(ModelViewSet):
 
     @extend_schema(summary="유저 정보 조회", tags=["유저"])
     @action(detail=False, methods=['get'])
-    def me(self, request, *args, **kwargs):
+    def me(self, request, *args, **kwargs): ## pylint: disable=unused-argument
         user = request.user
         serializer = UserAuthSerializer(user)
 
