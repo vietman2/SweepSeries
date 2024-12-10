@@ -1,4 +1,3 @@
-import { Platform } from "react-native";
 import { Tabs } from "expo-router";
 
 import { AppIcon } from "@components/Icons";

@@ -23,6 +23,7 @@
     ],
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
+      "!src/app/**/*.{js,jsx,ts,tsx}",
       "!src/constants/**/*.{js,jsx,ts,tsx}",
       "!src/hooks/**/*.{js,jsx,ts,tsx}",
       "!src/**/*/index.tsx",
