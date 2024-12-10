@@ -79,7 +79,7 @@ function AppRouter() {
       const response = await getProfile(token);
 
       if (response) {
-        login("normal", response.profile);
+        login(response.mode, response.profile);
       }
 
       setReady(true);

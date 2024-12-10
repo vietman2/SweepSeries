@@ -58,8 +58,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     };
   }, []);
 
-  const login = (mode: "pro" | "normal", profile: UserProfileType) => {
-    setMode(mode);
+  const login = (mode: string, profile: UserProfileType) => {
+    if (mode === "pro") {
+      setMode("pro");
+    } else {
+      setMode("normal");
+    }
     setSelectedProfile(profile);
   };
 
