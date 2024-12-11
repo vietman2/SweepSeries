@@ -1,0 +1,50 @@
+[
+  {
+    "model": "coach.coachprofession",
+    "pk": 1,
+    "fields": {
+      "profession": "pitching",
+      "kor_name": "투수 전문"
+    }
+  },
+  {
+    "model": "coach.coachprofession",
+    "pk": 2,
+    "fields": {
+      "profession": "batting",
+      "kor_name": "타격 전문"
+    }
+  },
+  {
+    "model": "coach.coachprofession",
+    "pk": 3,
+    "fields": {
+      "profession": "catcher",
+      "kor_name": "포수 전문"
+    }
+  },
+  {
+    "model": "coach.coachprofession",
+    "pk": 4,
+    "fields": {
+      "profession": "defense",
+      "kor_name": "수비 전문"
+    }
+  },
+  {
+    "model": "coach.coachprofession",
+    "pk": 5,
+    "fields": {
+      "profession": "training",
+      "kor_name": "트레이닝 전문"
+    }
+  },
+  {
+    "model": "coach.coachprofession",
+    "pk": 6,
+    "fields": {
+      "profession": "rehabilitation",
+      "kor_name": "재활 전문"
+    }
+  }
+]

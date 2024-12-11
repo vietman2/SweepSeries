@@ -21,6 +21,7 @@ from community.tag.views import TagViewSet
 
 ## Product
 from product.academy.views import AcademyViewSet, FacilityViewSet
+from product.coach.views import CoachViewSet
 
 router = DefaultRouter()
 
@@ -41,6 +42,7 @@ router.register(r'tags', TagViewSet, basename='tags')
 
 router.register(r'academies', AcademyViewSet, basename='academies')
 router.register(r'facilities', FacilityViewSet, basename='facilities')
+router.register(r'coaches', CoachViewSet, basename='coaches')
 
 urlpatterns = [
     path('login/kakao/', KakaoLoginView.as_view(), name='kakao-login'),
