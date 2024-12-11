@@ -77,7 +77,7 @@ export function CoachSimple({ coach, type }: Readonly<ObjectProps>) {
         {type === "승인 완료" && <div>{coach.verified_at}</div>}
         {type === "승인 거부" && (
           <>
-            <a href={coach.certification} target="_blank" rel="noreferrer">
+            <a href={coach.certificate} target="_blank" rel="noreferrer">
               사업자 등록증
             </a>
             <div>{coach.reject_reason}</div>
@@ -85,7 +85,7 @@ export function CoachSimple({ coach, type }: Readonly<ObjectProps>) {
         )}
         {type === "승인 대기" && (
           <>
-            <a rel="" href={coach.certification} target="_blank">
+            <a rel="" href={coach.certificate} target="_blank">
               사업자 등록증
             </a>
             <Buttons>
