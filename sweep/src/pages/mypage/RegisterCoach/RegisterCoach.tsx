@@ -40,6 +40,9 @@ export function RegisterCoach() {
   const [uploadedProfile, setUploadedProfile] = useState<ImagePickerAsset[]>(
     []
   );
+  const [uploadedCertificate, setUploadedCertificate] = useState<ImagePickerAsset[]>(
+    []
+  );
   const [options, setOptions] = useState<AcademySimpleType[]>([]);
   const [selectedCareer, setSelectedCareer] = useState<string>("프로선수 출신");
   const [selectedProfessions, setSelectedProfessions] = useState<string[]>([
@@ -76,6 +79,7 @@ export function RegisterCoach() {
     const response = await createCoach(
       selectedCareer,
       selectedAcademy.uuid,
+      uploadedCertificate[0],
       uploadedProfile[0],
       selectedProfessions
     );
@@ -195,6 +199,16 @@ export function RegisterCoach() {
             setUploadedImages={setUploadedProfile}
             maxImages={1}
             description="*정면 얼굴 사진 혹은 증명사진으로 등록해주세요"
+          />
+        </View>
+        <View style={styles.inputWrapper}>
+          <Text style={styles.subtitle}>
+            경력 인증 <Text style={styles.required}>*</Text>
+          </Text>
+          <ImagePicker
+            uploadedImages={uploadedCertificate}
+            setUploadedImages={setUploadedCertificate}
+            maxImages={1}
           />
         </View>
         <View style={styles.inputWrapper}>
