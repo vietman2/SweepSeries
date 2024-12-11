@@ -84,10 +84,22 @@ export const Academies: TabType = {
   pathName: "academies",
   subtabs: [
     {
-      title: "아카데미 목록",
+      title: "아카데미 등록",
       path: "/academies/academies",
     },
   ],
 };
 
-export const tabs: TabType[] = [Home, User, Community, Apps, Academies];
+export const Coaches: TabType = {
+  title: "코치 관리",
+  path: "/coaches",
+  pathName: "coaches",
+  subtabs: [
+    {
+      title: "코치 등록",
+      path: "/coaches/coaches",
+    },
+  ],
+};
+
+export const tabs: TabType[] = [Home, User, Community, Apps, Academies, Coaches];
