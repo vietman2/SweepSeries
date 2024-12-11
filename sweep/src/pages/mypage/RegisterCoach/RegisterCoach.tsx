@@ -127,9 +127,9 @@ export function RegisterCoach() {
             경력 <Text style={styles.required}>*</Text>
           </Text>
           <View style={styles.optionContainer}>
-            {careerOptions.map((career, index) => (
+            {careerOptions.map((career) => (
               <TouchableOpacity
-                key={index}
+                key={career}
                 style={styles.option}
                 onPress={() => handleCareerPress(career)}
                 testID={`career-${career}`}
@@ -202,9 +202,9 @@ export function RegisterCoach() {
             전문 분야 (복수 가능) <Text style={styles.required}>*</Text>
           </Text>
           <View style={styles.optionContainer}>
-            {professionOptions.map((profession, index) => (
+            {professionOptions.map((profession) => (
               <TouchableOpacity
-                key={index}
+                key={profession}
                 style={styles.option}
                 onPress={() => handleProfessionPress(profession)}
                 testID={`profession-${profession}`}
@@ -231,7 +231,7 @@ export function RegisterCoach() {
   );
 }
 
-function AcademyMini({ academy }: { academy: AcademySimpleType }) {
+function AcademyMini({ academy }: Readonly<{ academy: AcademySimpleType }>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
