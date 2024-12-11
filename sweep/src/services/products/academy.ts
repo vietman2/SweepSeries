@@ -135,38 +135,14 @@ export async function updateBusinessHours(
       sunday: schedules[0],
     };
     form.append("data", JSON.stringify(data));
-  } else {
-    if (isAllWeekdays) {
-      if (isAllWeekend) {
-        const data = {
-          monday: schedules[0],
-          tuesday: schedules[0],
-          wednesday: schedules[0],
-          thursday: schedules[0],
-          friday: schedules[0],
-          saturday: schedules[5],
-          sunday: schedules[5],
-        };
-        form.append("data", JSON.stringify(data));
-      } else {
-        const data = {
-          monday: schedules[0],
-          tuesday: schedules[0],
-          wednesday: schedules[0],
-          thursday: schedules[0],
-          friday: schedules[0],
-          saturday: schedules[5],
-          sunday: schedules[6],
-        };
-        form.append("data", JSON.stringify(data));
-      }
-    } else if (isAllWeekend) {
+  } else if (isAllWeekdays) {
+    if (isAllWeekend) {
       const data = {
         monday: schedules[0],
-        tuesday: schedules[1],
-        wednesday: schedules[2],
-        thursday: schedules[3],
-        friday: schedules[4],
+        tuesday: schedules[0],
+        wednesday: schedules[0],
+        thursday: schedules[0],
+        friday: schedules[0],
         saturday: schedules[5],
         sunday: schedules[5],
       };
@@ -174,15 +150,37 @@ export async function updateBusinessHours(
     } else {
       const data = {
         monday: schedules[0],
-        tuesday: schedules[1],
-        wednesday: schedules[2],
-        thursday: schedules[3],
-        friday: schedules[4],
+        tuesday: schedules[0],
+        wednesday: schedules[0],
+        thursday: schedules[0],
+        friday: schedules[0],
         saturday: schedules[5],
         sunday: schedules[6],
       };
       form.append("data", JSON.stringify(data));
     }
+  } else if (isAllWeekend) {
+    const data = {
+      monday: schedules[0],
+      tuesday: schedules[1],
+      wednesday: schedules[2],
+      thursday: schedules[3],
+      friday: schedules[4],
+      saturday: schedules[5],
+      sunday: schedules[5],
+    };
+    form.append("data", JSON.stringify(data));
+  } else {
+    const data = {
+      monday: schedules[0],
+      tuesday: schedules[1],
+      wednesday: schedules[2],
+      thursday: schedules[3],
+      friday: schedules[4],
+      saturday: schedules[5],
+      sunday: schedules[6],
+    };
+    form.append("data", JSON.stringify(data));
   }
 
   try {
