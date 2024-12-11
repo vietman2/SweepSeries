@@ -21,6 +21,7 @@ class Coach(models.Model):
     academy         = models.ForeignKey(Academy, on_delete=models.CASCADE, related_name='coaches')
 
     introduction    = models.TextField()
+    certificate     = models.FileField()
     profile_image   = models.ImageField()
     career          = models.IntegerField(
         choices=CareerChoices.choices, default=CareerChoices.UNDEFINED

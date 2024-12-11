@@ -4,6 +4,7 @@ from django.core.files.storage import default_storage
 from rest_framework import serializers
 
 from auth.person.models import Person
+from core.utils import get_presigned_url
 from product.academy.models import Academy
 from .enums import CareerChoices
 from .models import Coach
@@ -13,15 +14,38 @@ class CoachSimpleSerializer(serializers.ModelSerializer):
         model = Coach
         fields = ["uuid"]
 
+class CoachStatusSerializer(serializers.ModelSerializer):
+    name            = serializers.SerializerMethodField(read_only=True)
+    academy         = serializers.SerializerMethodField(read_only=True)
+    certificate     = serializers.SerializerMethodField()
+    verified_at     = serializers.DateTimeField(format="%Y-%m-%d", read_only=True)
+
+    class Meta:
+        model = Coach
+        fields = [
+            "uuid", "name", "is_verified", "academy", "certificate", 
+            "is_rejected", "verified_at", "reject_reason"
+        ]
+
+    def get_name(self, obj):
+        return obj.person.name
+
+    def get_academy(self, obj):
+        return obj.academy.name
+
+    def get_certificate(self, obj):
+        return get_presigned_url(obj.certificate)
+
 class CoachRegisterSerializer(serializers.ModelSerializer):
     profile_image   = serializers.FileField(write_only=True)
     academy         = serializers.UUIDField(write_only=True)
     career          = serializers.CharField(write_only=True)
     professions     = serializers.JSONField(write_only=True)
+    certificate     = serializers.FileField(write_only=True)
 
     class Meta:
         model = Coach
-        fields = ["career", "academy", "profile_image", "professions"]
+        fields = ["career", "academy", "profile_image", "professions", "certificate"]
 
     def validate_career(self, value):
         for choice in CareerChoices.choices:
@@ -56,6 +80,14 @@ class CoachRegisterSerializer(serializers.ModelSerializer):
 
         return set(professions)
 
+    def upload_certificate(self, **kwargs):
+        new_id = kwargs['uuid']
+        file = self.validated_data['certificate']
+        filename = file.name.split('/')[-1]
+        path = f"products/coaches/{new_id}/certificate/{filename}"
+        default_storage.save(path, file)
+        return path
+
     def upload_profile_image(self, **kwargs):
         new_id = kwargs['uuid']
         file = self.validated_data['profile_image']
@@ -66,6 +98,7 @@ class CoachRegisterSerializer(serializers.ModelSerializer):
 
     def save(self, **kwargs):
         new_id = uuid.uuid4()
+        certificate = self.upload_certificate(uuid=new_id)
         profile_image = self.upload_profile_image(uuid=new_id)
         user = self.context['request'].user
         person = Person.objects.get(user=user)
@@ -74,6 +107,7 @@ class CoachRegisterSerializer(serializers.ModelSerializer):
             uuid=new_id,
             person=person,
             academy=self.validated_data['academy'],
+            certificate=certificate,
             profile_image=profile_image,
             career=self.validated_data['career'],
         )
