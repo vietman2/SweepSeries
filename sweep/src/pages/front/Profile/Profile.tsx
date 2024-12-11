@@ -10,7 +10,7 @@ import {
   AcademyProfile,
   Facilities,
   Introduction,
-  //WorkingHours,
+  WorkingHours,
 } from "@fragments/Academy";
 import { AcademyDetailType, FacilityType } from "@models/products";
 import { getFacilityOptions } from "@services/products";
@@ -50,9 +50,13 @@ export function ProfileManagement({ academy, onRefresh }: Readonly<Props>) {
           onRefresh={onRefresh}
         />
         <Divider />
-        {/*
-        <WorkingHours workingHours={academy.working_hours} edit />
-        <Divider />*/}
+        <WorkingHours
+          workingHours={academy.schedules}
+          scheduleDetails={academy.schedule_details}
+          edit
+          onRefresh={onRefresh}
+        />
+        <Divider />
         <Facilities
           facilities={academy.convenience}
           options={facilityOptions}
@@ -70,7 +74,7 @@ export function ProfileManagement({ academy, onRefresh }: Readonly<Props>) {
         />
         <Divider />
         <Text style={styles.subtitle}>지도</Text>
-        <View>
+        <View style={styles.mapWrapper}>
           <Image source={{ uri: academy.map }} style={styles.image} />
           <View style={styles.horizontal}>
             <AppIcon icon="location" size={20} color={theme.primary} />
@@ -111,5 +115,8 @@ const createStyles = (theme: ThemeColorType) =>
     address: {
       color: theme.highEmphasis,
       marginLeft: 4,
+    },
+    mapWrapper: {
+      marginBottom: 16,
     },
   });
