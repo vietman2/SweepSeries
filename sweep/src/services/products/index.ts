@@ -8,6 +8,7 @@ import {
   updateFacilities,
   updateBusinessHours,
 } from "./academy";
+import { createCoach } from "./coach";
 
 export {
   createAcademy,
@@ -18,4 +19,5 @@ export {
   updateAcademyIntroduction,
   updateFacilities,
   updateBusinessHours,
+  createCoach,
 };
