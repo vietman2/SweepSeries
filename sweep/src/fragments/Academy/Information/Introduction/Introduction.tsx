@@ -1,18 +1,28 @@
 import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useLocalSearchParams } from "expo-router";
 
 import { AppIcon } from "@components/Icons";
 import { TextInput } from "@components/Inputs";
 import { SimpleModal } from "@components/Modals";
 import { CalloutSmall } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
+import { alert } from "@services/alert";
+import { updateAcademyIntroduction } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
   introduction: string;
+  edit?: boolean;
+  onRefresh?: () => void;
 }
 
-export function Introduction({ introduction }: Readonly<Props>) {
+export function Introduction({
+  introduction,
+  edit = false,
+  onRefresh,
+}: Readonly<Props>) {
+  const { id } = useLocalSearchParams<{ id: string }>();
   const [introInput, setIntroInput] = useState<string>(introduction);
   const [expanded, setExpanded] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -29,7 +39,16 @@ export function Introduction({ introduction }: Readonly<Props>) {
   };
 
   const editIntro = async () => {
-    hideModal();
+    const response = await updateAcademyIntroduction(id, introInput);
+
+    if (response) {
+      hideModal();
+      if (onRefresh) {
+        onRefresh();
+      }
+    } else {
+      alert("수정 실패", "오류가 발생했습니다.");
+    }
   };
 
   return (
@@ -37,10 +56,16 @@ export function Introduction({ introduction }: Readonly<Props>) {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.subtitle}>아카데미 소개</Text>
-          <TouchableOpacity style={styles.editButton} onPress={openModal} testID="open">
-            <AppIcon icon="pencil" size={12} color={theme.primary} />
-            <Text style={styles.editText}>수정</Text>
-          </TouchableOpacity>
+          {edit && (
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={openModal}
+              testID="open"
+            >
+              <AppIcon icon="pencil" size={12} color={theme.primary} />
+              <Text style={styles.editText}>수정</Text>
+            </TouchableOpacity>
+          )}
         </View>
         <Text
           numberOfLines={expanded ? 0 : 5}

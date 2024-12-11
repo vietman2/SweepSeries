@@ -1,6 +1,15 @@
 import axios from "axios";
 
-import { createAcademy, getAcademies } from "./academy";
+import {
+  createAcademy,
+  getAcademies,
+  getAcademyDetail,
+  getMyAcademies,
+  getFacilityOptions,
+  updateAcademyIntroduction,
+  updateFacilities,
+  updateBusinessHours,
+} from "./academy";
 
 jest.mock("form-data", () => {
   return jest.fn().mockImplementation(() => {
@@ -62,5 +71,133 @@ describe("getAcademies", () => {
     const result = await getAcademies("query");
 
     expect(result).toBeNull();
+  });
+});
+
+describe("getAcademyDetail", () => {
+  it("should get academy detail", async () => {
+    jest.spyOn(axios, "get").mockResolvedValue({ data: {} });
+
+    const result = await getAcademyDetail("uuid");
+
+    expect(result).toEqual({});
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "get").mockRejectedValue(null);
+
+    const result = await getAcademyDetail("uuid");
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("getMyAcademies", () => {
+  it("should get my academies", async () => {
+    jest.spyOn(axios, "get").mockResolvedValue({ data: {} });
+
+    const result = await getMyAcademies();
+
+    expect(result).toEqual({});
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "get").mockRejectedValue(null);
+
+    const result = await getMyAcademies();
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("updateAcademyIntroduction", () => {
+  it("should update academy introduction", async () => {
+    jest.spyOn(axios, "patch").mockResolvedValue({ data: {} });
+
+    const result = await updateAcademyIntroduction("uuid", "introduction");
+
+    expect(result).toEqual({});
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "patch").mockRejectedValue(null);
+
+    const result = await updateAcademyIntroduction("uuid", "introduction");
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("getFacilityOptions", () => {
+  it("should get facility options", async () => {
+    jest.spyOn(axios, "get").mockResolvedValue({ data: {} });
+
+    const result = await getFacilityOptions();
+
+    expect(result).toEqual({});
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "get").mockRejectedValue(null);
+
+    const result = await getFacilityOptions();
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("updateFacilities", () => {
+  it("should update facilities", async () => {
+    jest.spyOn(axios, "patch").mockResolvedValue({ data: {} });
+
+    const result = await updateFacilities("uuid", []);
+
+    expect(result).toEqual({});
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "patch").mockRejectedValue(null);
+
+    const result = await updateFacilities("uuid", []);
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("updateBusinessHours", () => {
+    const dailyScheduleData = {
+      open_time: "09:00",
+      close_time: "18:00",
+      is_closed: false,
+      is_allday: false,
+    };
+    const data = [
+      dailyScheduleData,
+      dailyScheduleData,
+      dailyScheduleData,
+      dailyScheduleData,
+      dailyScheduleData,
+      dailyScheduleData,
+      dailyScheduleData,
+    ];
+  it("should update business hours (all types)", async () => {
+    jest.spyOn(axios, "patch").mockResolvedValue({ data: {} });
+
+    const result = await updateBusinessHours("uuid", data, true, true, true);
+
+    expect(result).toEqual({});
+
+    await updateBusinessHours("uuid", data, false, true, true);
+    await updateBusinessHours("uuid", data, false, true, false);
+    await updateBusinessHours("uuid", data, false, false, true);
+    await updateBusinessHours("uuid", data, false, false, false);
+  });
+
+  it("handles fail", async () => {
+    jest.spyOn(axios, "patch").mockRejectedValue(null);
+
+    const result = await updateBusinessHours("uuid", data, true, true, true);
+
+    expect(result).toEqual(null);
   });
 });

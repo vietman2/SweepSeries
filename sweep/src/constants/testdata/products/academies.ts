@@ -21,6 +21,13 @@ export const sampleAcademies: AcademySimpleType[] = [
   },
 ];
 
+const daily = {
+  open_time: "09:00",
+  close_time: "22:00",
+  is_allday: false,
+  is_closed: false,
+};
+
 export const sampleAcademyDetail: AcademyDetailType = {
   name: "Catch B 아카데미",
   address: "인천시 서구 청라한내로 72번길 17, 416호",
@@ -28,25 +35,14 @@ export const sampleAcademyDetail: AcademyDetailType = {
   num_reviews: 42,
   introduction:
     "인천광역시 서구 청라동에 위치한 캐치비 아카데미입니다.\n\n200평 규모의 시설에 야구를 위한 최첨단 장비까지 갖추고 있습니다. 세련된 야구 레슨을 위한 서비스를 제공하는 캐치비 아카데미는 인천 지역 최고의 코치진을 자랑하고 있기도 합니다.\n\n저희 아카데미는 공휴일을 제외한 어떠한 날에도 휴무하지 않고 있으니 참고바랍니다.",
-  working_hours: [
+  schedules: [
     {
-      label: "평일",
-      hours: "09:00 ~ 22:00",
-    },
-    {
-      label: "토요일",
-      hours: "09:00 ~ 18:00",
-    },
-    {
-      label: "일요일",
-      hours: "09:00 ~ 18:00",
-    },
-    {
-      label: "휴무일",
-      hours: "없음",
+      day: "매일",
+      schedule: "09:00 ~ 22:00",
     },
   ],
-  facilities: [
+  schedule_details: [daily, daily, daily, daily, daily, daily, daily],
+  convenience: [
     {
       id: 1,
       name: "helmet",
@@ -151,6 +147,12 @@ export const sampleAcademyDetail: AcademyDetailType = {
         "https://kr.object.ncloudstorage.com/sweepdev/facicons/air_conditioner.svg",
       type: "편의시설",
     },
+  ],
+  logo: "https://yaguin.com/lf_img/lfi15856190990.jpeg",
+  images: [
+    "https://kr.object.ncloudstorage.com/sweepdev/test_images/academy1.jpg",
+    "https://kr.object.ncloudstorage.com/sweepdev/test_images/academy2.jpg",
+    "https://kr.object.ncloudstorage.com/sweepdev/test_images/academy3.jpg",
   ],
   map: "https://kr.object.ncloudstorage.com/sweepdev/test_images/map.png",
 };

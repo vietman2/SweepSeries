@@ -4,7 +4,7 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 from auth.user.models import User
-from .enums import FacilityTypeChoices
+from .enums import FacilityTypeChoices, DayChoices
 
 class AcademyFacility(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -83,3 +83,33 @@ class AcademyReview(models.Model):
 
     class Meta:
         db_table = 'academy_review'
+
+class BusinessHoursManager(models.Manager):
+    def create_business_hours(self, academy):
+        self.create(academy=academy, day_of_week=DayChoices.MONDAY)
+        self.create(academy=academy, day_of_week=DayChoices.TUESDAY)
+        self.create(academy=academy, day_of_week=DayChoices.WEDNESDAY)
+        self.create(academy=academy, day_of_week=DayChoices.THURSDAY)
+        self.create(academy=academy, day_of_week=DayChoices.FRIDAY)
+        self.create(academy=academy, day_of_week=DayChoices.SATURDAY)
+        self.create(academy=academy, day_of_week=DayChoices.SUNDAY)
+
+        return True
+
+class BusinessHours(models.Model):
+    academy     = models.ForeignKey(
+        Academy, on_delete=models.CASCADE, related_name='business_hours'
+    )
+    open_time   = models.TimeField(default="09:00:00")
+    close_time  = models.TimeField(default="21:00:00")
+    day_of_week = models.PositiveSmallIntegerField(
+        choices=DayChoices.choices
+    )
+    is_closed   = models.BooleanField(default=False)
+    is_allday   = models.BooleanField(default=False)
+
+    objects     = BusinessHoursManager()
+
+    class Meta:
+        db_table = 'business_hours'
+        unique_together = ('academy', 'day_of_week')

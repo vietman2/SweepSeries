@@ -1,4 +1,8 @@
+import { waitFor } from "@testing-library/react-native";
+
 import { AcademyDetail } from "./AcademyDetail";
+import * as AcademiesAPI from "@services/products/academy";
+import { sampleAcademyDetail } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("./CoachList/CoachList", () => ({
@@ -22,6 +26,16 @@ jest.mock("@fragments/Academy", () => ({
 
 describe("<AcademyDetail />", () => {
   it("renders correctly", () => {
-    renderWithProviders(<AcademyDetail />);
+    jest
+      .spyOn(AcademiesAPI, "getAcademyDetail")
+      .mockResolvedValue(sampleAcademyDetail);
+    waitFor(() => renderWithProviders(<AcademyDetail />));
+  });
+
+  it("handles error correctly", async () => {
+    jest.spyOn(AcademiesAPI, "getAcademyDetail").mockResolvedValue(null);
+    const { getByTestId } = renderWithProviders(<AcademyDetail />);
+
+    await waitFor(() => expect(getByTestId("error")).toBeTruthy());
   });
 });

@@ -1,17 +1,25 @@
 import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+import { UpdateModal } from "./UpdateModal";
 import { AppIcon } from "@components/Icons";
-import { SimpleModal } from "@components/Modals";
 import { useTheme } from "@contexts/theme";
-import { WorkingHoursType } from "@models/products";
+import { ScheduleDetailType, WorkingHoursType } from "@models/products";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
   workingHours: WorkingHoursType[];
+  scheduleDetails: ScheduleDetailType[];
+  edit?: boolean;
+  onRefresh?: () => void;
 }
 
-export function WorkingHours({ workingHours }: Readonly<Props>) {
+export function WorkingHours({
+  workingHours,
+  scheduleDetails,
+  edit = false,
+  onRefresh,
+}: Readonly<Props>) {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const { theme } = useTheme();
@@ -25,38 +33,38 @@ export function WorkingHours({ workingHours }: Readonly<Props>) {
     setModalVisible(true);
   };
 
-  const editWorkingHours = async () => {
-    hideModal();
-  };
-
   return (
     <>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.subtitle}>운영시간</Text>
-          <TouchableOpacity style={styles.editButton} onPress={openModal} testID="open">
-            <AppIcon icon="pencil" size={12} color={theme.primary} />
-            <Text style={styles.editText}>수정</Text>
-          </TouchableOpacity>
+          {edit && (
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={openModal}
+              testID="open"
+            >
+              <AppIcon icon="pencil" size={12} color={theme.primary} />
+              <Text style={styles.editText}>수정</Text>
+            </TouchableOpacity>
+          )}
         </View>
         <View style={styles.hours}>
           {workingHours.map((workingHour) => (
-            <View key={workingHour.label} style={styles.row}>
-              <Text style={styles.workingHoursTitle}>{workingHour.label}</Text>
-              <Text style={styles.workingHours}>{workingHour.hours}</Text>
+            <View key={workingHour.day} style={styles.row}>
+              <Text style={styles.workingHoursTitle}>{workingHour.day}</Text>
+              <Text style={styles.workingHours}>{workingHour.schedule}</Text>
             </View>
           ))}
         </View>
       </View>
-      <SimpleModal
-        title="운영시간"
-        buttonText="저장"
-        visible={modalVisible}
+      <UpdateModal
+        schedule={workingHours}
+        initialSchedule={scheduleDetails}
+        modalVisible={modalVisible}
         hideModal={hideModal}
-        onButtonPress={editWorkingHours}
-      >
-        <View style={styles.body}></View>
-      </SimpleModal>
+        onRefresh={onRefresh}
+      />
     </>
   );
 }
@@ -102,5 +110,4 @@ const createStyles = (theme: ThemeColorType) =>
       color: theme.primary,
       textAlignVertical: "center",
     },
-    body: {},
   });

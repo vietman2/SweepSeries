@@ -1,0 +1,299 @@
+[
+  {
+    "model": "academy.academyfacility",
+    "pk": 1,
+    "fields": {
+      "name": "wifi",
+      "kor_name": "와이파이",
+      "type": 1
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 2,
+    "fields": {
+      "name": "water",
+      "kor_name": "정수기",
+      "type": 1
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 3,
+    "fields": {
+      "name": "free_parking",
+      "kor_name": "무료주차",
+      "type": 1
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 4,
+    "fields": {
+      "name": "paid_parking",
+      "kor_name": "유료주차",
+      "type": 1
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 5,
+    "fields": {
+      "name": "resting_area",
+      "kor_name": "휴게공간",
+      "type": 1
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 6,
+    "fields": {
+      "name": "toilet",
+      "kor_name": "화장실",
+      "type": 1
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 7,
+    "fields": {
+      "name": "air_conditioner",
+      "kor_name": "에어컨",
+      "type": 1
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 8,
+    "fields": {
+      "name": "heating",
+      "kor_name": "난방",
+      "type": 1
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 9,
+    "fields": {
+      "name": "locker",
+      "kor_name": "락커",
+      "type": 1
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 10,
+    "fields": {
+      "name": "changing_room",
+      "kor_name": "탈의실",
+      "type": 1
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 11,
+    "fields": {
+      "name": "shower",
+      "kor_name": "샤워실",
+      "type": 1
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 12,
+    "fields": {
+      "name": "sauna",
+      "kor_name": "사우나",
+      "type": 1
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 13,
+    "fields": {
+      "name": "no_smoking",
+      "kor_name": "금연시설",
+      "type": 1
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 14,
+    "fields": {
+      "name": "smoking_room",
+      "kor_name": "흡연실",
+      "type": 1
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 15,
+    "fields": {
+      "name": "kids_room",
+      "kor_name": "키즈룸",
+      "type": 1
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 16,
+    "fields": {
+      "name": "no_kids",
+      "kor_name": "노키즈존",
+      "type": 1
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 17,
+    "fields": {
+      "name": "bats",
+      "kor_name": "배트",
+      "type": 2
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 18,
+    "fields": {
+      "name": "gloves",
+      "kor_name": "글러브",
+      "type": 2
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 19,
+    "fields": {
+      "name": "catcher_gear",
+      "kor_name": "포수장비",
+      "type": 2
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 20,
+    "fields": {
+      "name": "pitching_machine",
+      "kor_name": "피칭머신",
+      "type": 2
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 21,
+    "fields": {
+      "name": "batting_tee",
+      "kor_name": "배팅티",
+      "type": 2
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 22,
+    "fields": {
+      "name": "helmets",
+      "kor_name": "헬멧",
+      "type": 2
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 23,
+    "fields": {
+      "name": "speed_gun",
+      "kor_name": "스피드건",
+      "type": 2
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 24,
+    "fields": {
+      "name": "video_analysis",
+      "kor_name": "영상분석",
+      "type": 2
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 25,
+    "fields": {
+      "name": "monitor",
+      "kor_name": "모니터",
+      "type": 2
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 26,
+    "fields": {
+      "name": "speaker",
+      "kor_name": "스피커",
+      "type": 2
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 27,
+    "fields": {
+      "name": "fitness",
+      "kor_name": "헬스시설",
+      "type": 2
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 28,
+    "fields": {
+      "name": "group_lesson",
+      "kor_name": "그룹레슨",
+      "type": 3
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 29,
+    "fields": {
+      "name": "private_lesson",
+      "kor_name": "개인레슨",
+      "type": 3
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 30,
+    "fields": {
+      "name": "cleats_allowed",
+      "kor_name": "스파이크 가능",
+      "type": 3
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 31,
+    "fields": {
+      "name": "outdoor",
+      "kor_name": "야외시설",
+      "type": 3
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 32,
+    "fields": {
+      "name": "pets_allowed",
+      "kor_name": "애완동물 동반가능",
+      "type": 3
+    }
+  },
+  {
+    "model": "academy.academyfacility",
+    "pk": 33,
+    "fields": {
+      "name": "wheelchair",
+      "kor_name": "휠체어 이용가능",
+      "type": 3
+    }
+  }
+]

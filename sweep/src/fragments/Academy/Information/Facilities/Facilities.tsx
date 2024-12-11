@@ -1,25 +1,40 @@
 import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SvgCssUri } from "react-native-svg/css";
+import { useLocalSearchParams } from "expo-router";
 
 import { AppIcon } from "@components/Icons";
 import { SimpleModal } from "@components/Modals";
 import { useTheme } from "@contexts/theme";
 import { FacilityType } from "@models/products";
+import { alert } from "@services/alert";
+import { updateFacilities } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
   facilities: FacilityType[];
+  options: FacilityType[];
   type: "구비장비" | "편의시설";
+  edit?: boolean;
+  onRefresh?: () => void;
 }
 
-export function Facilities({ facilities, type }: Readonly<Props>) {
-  //const [options, setOptions] = useState<FacilityType[]>([]);
+export function Facilities({
+  facilities,
+  options,
+  type,
+  edit = false,
+  onRefresh,
+}: Readonly<Props>) {
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const [selectedFacilities, setSelectedFacilities] =
+    useState<FacilityType[]>(facilities);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const facilitiesToDisplay = facilities.filter(
     (facility) => facility.type === type
   );
+  const optionsToDisplay = options.filter((facility) => facility.type === type);
 
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -32,8 +47,28 @@ export function Facilities({ facilities, type }: Readonly<Props>) {
     setModalVisible(true);
   };
 
+  const handleFacilityPress = async (facility: FacilityType) => {
+    if (selectedFacilities.some((f) => f.id === facility.id)) {
+      setSelectedFacilities((prev) => prev.filter((f) => f.id !== facility.id));
+    } else {
+      setSelectedFacilities((prev) => [...prev, facility]);
+    }
+  };
+
   const editFacility = async () => {
-    hideModal();
+    const response = await updateFacilities(
+      id,
+      selectedFacilities.map((f) => f.id)
+    );
+
+    if (response) {
+      hideModal();
+      if (onRefresh) {
+        onRefresh();
+      }
+    } else {
+      alert("저장 실패", "시설 정보를 수정하는데 실패했습니다.");
+    }
   };
 
   return (
@@ -43,10 +78,16 @@ export function Facilities({ facilities, type }: Readonly<Props>) {
           <Text style={styles.subtitle}>
             {type === "구비장비" ? "구비시설" : "편의시설 및 서비스"}
           </Text>
-          <TouchableOpacity style={styles.editButton} onPress={openModal} testID="open">
-            <AppIcon icon="pencil" size={12} color={theme.primary} />
-            <Text style={styles.editText}>수정</Text>
-          </TouchableOpacity>
+          {edit && (
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={openModal}
+              testID="open"
+            >
+              <AppIcon icon="pencil" size={12} color={theme.primary} />
+              <Text style={styles.editText}>수정</Text>
+            </TouchableOpacity>
+          )}
         </View>
         <View style={styles.facilities}>
           {facilitiesToDisplay.map((facility) => (
@@ -70,7 +111,37 @@ export function Facilities({ facilities, type }: Readonly<Props>) {
         onButtonPress={editFacility}
         large={type === "편의시설"}
       >
-        <View style={styles.modal}></View>
+        <View style={styles.modal}>
+          {optionsToDisplay.map((facility) => (
+            <TouchableOpacity
+              key={facility.id}
+              style={[
+                styles.facilityChoice,
+                selectedFacilities.some((f) => f.id === facility.id) && {
+                  backgroundColor: theme.primary,
+                  borderColor: theme.primary,
+                },
+              ]}
+              onPress={() => handleFacilityPress(facility)}
+              testID={`${facility.kor_name}-choice`}
+            >
+              <Text
+                style={[
+                  styles.choiceText,
+                  selectedFacilities.some((f) => f.id === facility.id) && {
+                    color: theme.background,
+                    fontWeight: "bold",
+                  },
+                ]}
+              >
+                {facility.kor_name}
+              </Text>
+              {selectedFacilities.some((f) => f.id === facility.id) && (
+                <AppIcon icon="check" size={14} color={theme.background} />
+              )}
+            </TouchableOpacity>
+          ))}
+        </View>
       </SimpleModal>
     </>
   );
@@ -118,5 +189,25 @@ const createStyles = (theme: ThemeColorType) =>
       color: theme.primary,
       textAlignVertical: "center",
     },
-    modal: {},
+    modal: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: 16,
+      gap: 12,
+    },
+    facilityChoice: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      width: "47.5%",
+      paddingHorizontal: 8,
+      paddingVertical: 5,
+      borderWidth: 1,
+      borderRadius: 4,
+      borderColor: theme.border,
+    },
+    choiceText: {
+      fontSize: 14,
+    },
   });

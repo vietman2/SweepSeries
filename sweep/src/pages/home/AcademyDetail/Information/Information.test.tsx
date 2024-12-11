@@ -1,4 +1,5 @@
 import { Information } from "./Information";
+import { sampleAcademyDetail } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("@fragments/Academy", () => ({
@@ -9,6 +10,6 @@ jest.mock("@fragments/Academy", () => ({
 
 describe("<Information />", () => {
   it("renders all sections", () => {
-    renderWithProviders(<Information />);
+    renderWithProviders(<Information academy={sampleAcademyDetail} />);
   });
 });

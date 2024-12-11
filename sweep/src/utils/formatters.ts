@@ -66,3 +66,10 @@ export const formatRegistrationNumber = (number: string) => {
 
   return digits;
 };
+
+export const formatTime = (time: string) => {
+  if (time.length === 4) {
+    return time.replace(/(\d{2})(\d{2})/, "$1:$2");
+  }
+  return time;
+};
