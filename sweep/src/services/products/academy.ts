@@ -160,30 +160,28 @@ export async function updateBusinessHours(
         };
         form.append("data", JSON.stringify(data));
       }
+    } else if (isAllWeekend) {
+      const data = {
+        monday: schedules[0],
+        tuesday: schedules[1],
+        wednesday: schedules[2],
+        thursday: schedules[3],
+        friday: schedules[4],
+        saturday: schedules[5],
+        sunday: schedules[5],
+      };
+      form.append("data", JSON.stringify(data));
     } else {
-      if (isAllWeekend) {
-        const data = {
-          monday: schedules[0],
-          tuesday: schedules[1],
-          wednesday: schedules[2],
-          thursday: schedules[3],
-          friday: schedules[4],
-          saturday: schedules[5],
-          sunday: schedules[5],
-        };
-        form.append("data", JSON.stringify(data));
-      } else {
-        const data = {
-          monday: schedules[0],
-          tuesday: schedules[1],
-          wednesday: schedules[2],
-          thursday: schedules[3],
-          friday: schedules[4],
-          saturday: schedules[5],
-          sunday: schedules[6],
-        };
-        form.append("data", JSON.stringify(data));
-      }
+      const data = {
+        monday: schedules[0],
+        tuesday: schedules[1],
+        wednesday: schedules[2],
+        thursday: schedules[3],
+        friday: schedules[4],
+        saturday: schedules[5],
+        sunday: schedules[6],
+      };
+      form.append("data", JSON.stringify(data));
     }
   }
 
