@@ -204,7 +204,7 @@ class AcademyViewSet(ModelViewSet):
 
     @extend_schema(summary="아카데미 운영시간 업데이트", tags=["아카데미"])
     @action(detail=True, methods=['patch'])
-    def hours(self, request, pk=None):
+    def hours(self, request, pk=None):  # pylint: disable=unused-argument
         academy = self.get_object()
         hours = request.data.get('data', None)
 

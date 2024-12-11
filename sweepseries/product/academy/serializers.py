@@ -9,7 +9,6 @@ from auth.user.serializers import UserRelatedSerializer
 from core.utils import get_presigned_url
 from product.address.models import Address, Sigungu
 from product.address.utils import get_coordinates, fetch_map_image
-from .enums import DayChoices
 from .models import Academy, AcademyFacility, BusinessHours
 from .utils import get_weekly_schedule, get_schedule_details
 
@@ -104,6 +103,7 @@ class AcademyDetailSerializer(serializers.ModelSerializer):
         return get_presigned_url(obj.address.map_image)
 
     def get_images(self, obj):
+        print(obj)
         return []
 
     def get_rating(self, obj):
