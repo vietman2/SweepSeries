@@ -13,6 +13,7 @@ import {
 
 import { AcademyContainer } from "@pages/Academies";
 import { AppsContainer } from "@pages/Apps";
+import { CoachContainer } from "@pages/Coaches";
 import { CommunityContainer } from "@pages/Community";
 import { Login } from "@pages/Login";
 import { MembersContainer } from "@pages/Members";
@@ -176,6 +177,7 @@ function AppRouter() {
           <Route path="/community/*" element={<CommunityContainer />} />
           <Route path="/apps/*" element={<AppsContainer />} />
           <Route path="/academies/*" element={<AcademyContainer />} />
+          <Route path="/coaches/*" element={<CoachContainer />} />
           <Route path="/*" element={<ErrorComponent />} />
         </Route>
       </>
