@@ -3,6 +3,7 @@ import {
   AcademyDetailType,
   FacilityType,
   WorkingHoursType,
+  ScheduleDetailType,
 } from "./academy";
 import { CoachDetailType, CoachProfessionType, CoachRequestType, CoachSimpleType } from "./coach";
 import { NoticeSimpleType } from "./notice";
@@ -18,6 +19,7 @@ export {
   CoachSimpleType,
   FacilityType,
   WorkingHoursType,
+  ScheduleDetailType,
   NoticeSimpleType,
   ProgramSimpleType,
   LessonPositionType,

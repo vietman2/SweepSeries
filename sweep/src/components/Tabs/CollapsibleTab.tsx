@@ -60,7 +60,7 @@ const createStyles = (theme: ThemeColorType) =>
     },
     tabText: {
       color: theme.lowEmphasis,
-      fontSize: 20,
+      fontSize: 18,
       fontWeight: "bold",
     },
     selectedTabText: {

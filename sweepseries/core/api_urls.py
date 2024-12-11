@@ -20,7 +20,7 @@ from community.post.views import PostViewSet, PostReportViewSet
 from community.tag.views import TagViewSet
 
 ## Product
-from product.academy.views import AcademyViewSet
+from product.academy.views import AcademyViewSet, FacilityViewSet
 
 router = DefaultRouter()
 
@@ -40,6 +40,7 @@ router.register(r'reports/posts', PostReportViewSet, basename='post-reports')
 router.register(r'tags', TagViewSet, basename='tags')
 
 router.register(r'academies', AcademyViewSet, basename='academies')
+router.register(r'facilities', FacilityViewSet, basename='facilities')
 
 urlpatterns = [
     path('login/kakao/', KakaoLoginView.as_view(), name='kakao-login'),

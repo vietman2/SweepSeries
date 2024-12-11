@@ -12,37 +12,69 @@ import {
   Introduction,
   WorkingHours,
 } from "@fragments/Academy";
-import { AcademyDetailType } from "@models/products";
-import { sampleAcademyDetail } from "@testdata/products";
+import { AcademyDetailType, FacilityType } from "@models/products";
+import { getFacilityOptions } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
-export function ProfileManagement() {
-  const [academy, setAcademy] = useState<AcademyDetailType>();
+interface Props {
+  academy: AcademyDetailType;
+  onRefresh?: () => void;
+}
+
+export function ProfileManagement({ academy, onRefresh }: Readonly<Props>) {
+  const [facilityOptions, setFacilityOptions] = useState<FacilityType[]>([]);
 
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   useEffect(() => {
-    setAcademy(sampleAcademyDetail);
-  }, []);
+    const fetchOptions = async () => {
+      const options = await getFacilityOptions();
 
-  if (!academy) return null;
+      if (options) {
+        setFacilityOptions(options);
+      }
+    };
+
+    fetchOptions();
+  }, []);
 
   return (
     <Scroll style={styles.container}>
-      <AcademyProfile pro />
+      <AcademyProfile pro academy={academy} />
       <View style={styles.content}>
         <Divider />
-        <Introduction introduction={academy.introduction} />
+        <Introduction
+          introduction={academy.introduction}
+          edit
+          onRefresh={onRefresh}
+        />
         <Divider />
-        <WorkingHours workingHours={academy.working_hours} />
+        <WorkingHours
+          workingHours={academy.schedules}
+          scheduleDetails={academy.schedule_details}
+          edit
+          onRefresh={onRefresh}
+        />
         <Divider />
-        <Facilities facilities={academy.facilities} type="구비장비" />
+        <Facilities
+          facilities={academy.convenience}
+          options={facilityOptions}
+          type="구비장비"
+          edit
+          onRefresh={onRefresh}
+        />
         <Divider />
-        <Facilities facilities={academy.facilities} type="편의시설" />
+        <Facilities
+          facilities={academy.convenience}
+          options={facilityOptions}
+          type="편의시설"
+          edit
+          onRefresh={onRefresh}
+        />
         <Divider />
         <Text style={styles.subtitle}>지도</Text>
-        <View>
+        <View style={styles.mapWrapper}>
           <Image source={{ uri: academy.map }} style={styles.image} />
           <View style={styles.horizontal}>
             <AppIcon icon="location" size={20} color={theme.primary} />
@@ -83,5 +115,8 @@ const createStyles = (theme: ThemeColorType) =>
     address: {
       color: theme.highEmphasis,
       marginLeft: 4,
+    },
+    mapWrapper: {
+      marginBottom: 16,
     },
   });

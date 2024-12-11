@@ -11,15 +11,17 @@ import { AppIcon } from "@components/Icons";
 import { SimpleModal } from "@components/Modals";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
+import { AcademyDetailType } from "@models/products";
 import { ThemeColorType } from "@themes/colors";
 
 const { width } = Dimensions.get("window");
 
 interface Props {
+  academy: AcademyDetailType;
   pro?: boolean;
 }
 
-export function AcademyProfile({ pro }: Readonly<Props>) {
+export function AcademyProfile({ academy, pro }: Readonly<Props>) {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const { theme } = useTheme();
@@ -51,27 +53,29 @@ export function AcademyProfile({ pro }: Readonly<Props>) {
               <Text style={styles.buttonText}>대표 사진 변경</Text>
             </TouchableOpacity>
           )}
-          <Image
-            src={
-              "https://mblogthumb-phinf.pstatic.net/MjAyNDA4MTJfMTk1/MDAxNzIzNDcwMDkyNjI1.CIzE8pfUnv-yPLFphjW8gHScETczni_iOFx9lYYCxrwg.401U8w3xp21TmyobrG2pC1AbGA4kNXahLRe99Jog5Ysg.JPEG/IMG_8197.jpeg?type=w800"
-            }
-            style={styles.image}
-          />
+          {academy.images.length > 0 ? (
+            <Image
+              source={{ uri: academy.images[0] }}
+              style={styles.image}
+            />
+          ) : (
+            <View style={styles.placeholderImage} />
+          )}
         </View>
         <View style={styles.header}>
           <View style={styles.titleWrapper}>
-            <Image src="https://picsum.photos/200" style={styles.logo} />
-            <Text style={styles.title}>Catch B 아카데미</Text>
+            <Image src={academy.logo} style={styles.logo} />
+            <Text style={styles.title}>{academy.name}</Text>
           </View>
           <View style={styles.horizontal}>
             <AppIcon icon="location" size={20} color={theme.lowEmphasis} />
             <Text style={styles.infoText}>
-              인천시 서구 청라한내로 72번길 17, 416호
+              {academy.address}
             </Text>
           </View>
           <View style={styles.horizontal}>
             <AppIcon icon="star" size={20} color="#F2B517" />
-            <Text style={styles.infoText}>{(4.2).toFixed(2)} (42)</Text>
+            <Text style={styles.infoText}>{academy.rating} ({academy.num_reviews})</Text>
           </View>
         </View>
       </View>
@@ -147,5 +151,10 @@ const createStyles = (theme: ThemeColorType) =>
       width: 30,
       height: 30,
       borderRadius: 4,
-    }
+    },
+    placeholderImage: {
+      width,
+      height: (width * 9) / 16,
+      backgroundColor: theme.lowEmphasis,
+    },
   });

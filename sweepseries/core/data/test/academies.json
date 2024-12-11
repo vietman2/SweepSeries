@@ -4,7 +4,7 @@
     "pk": "123e4567-e89b-12d3-a456-426614174999",
     "fields": {
       "name": "아카데미 1",
-      "owner": "123e4567-e89b-12d3-a456-426614174000",
+      "owner": "223e4567-e89b-12d3-a456-426614174000",
       "academy_phone_number": "+821012341234",
       "registration_number": "012-34-56789",
       "certificate": "products/academies/123e4567-e89b-12d3-a456-426614174999/certification/IMG_0111.jpg",
@@ -28,7 +28,7 @@
     "pk": "123e4567-e89b-12d3-a456-426614174111",
     "fields": {
       "name": "아카데미 2",
-      "owner": "123e4567-e89b-12d3-a456-426614174000",
+      "owner": "223e4567-e89b-12d3-a456-426614174000",
       "academy_phone_number": "+821012341234",
       "registration_number": "012-34-56780",
       "certificate": "products/academies/123e4567-e89b-12d3-a456-426614174999/certification/IMG_0111.jpg",
@@ -52,7 +52,7 @@
     "pk": "123e4567-e89b-12d3-a456-426614174333",
     "fields": {
       "name": "아카데미 3",
-      "owner": "123e4567-e89b-12d3-a456-426614174000",
+      "owner": "223e4567-e89b-12d3-a456-426614174000",
       "academy_phone_number": "+821012341234",
       "registration_number": "012-34-56781",
       "certificate": "products/academies/123e4567-e89b-12d3-a456-426614174999/certification/IMG_0111.jpg",
@@ -117,6 +117,258 @@
       "longitude": "127.0249730",
       "latitude": "37.5172360",
       "map_image": "products/academies/123e4567-e89b-12d3-a456-426614174999/map_image.png"
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 1,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174999",
+      "open_time": "09:30:00",
+      "close_time": "22:00:00",
+      "day_of_week": 0,
+      "is_closed": false,
+      "is_allday": false
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 2,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174999",
+      "open_time": "09:30:00",
+      "close_time": "22:00:00",
+      "day_of_week": 1,
+      "is_closed": false,
+      "is_allday": false
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 3,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174999",
+      "open_time": "09:30:00",
+      "close_time": "22:00:00",
+      "day_of_week": 2,
+      "is_closed": false,
+      "is_allday": false
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 4,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174999",
+      "open_time": "09:30:00",
+      "close_time": "22:00:00",
+      "day_of_week": 3,
+      "is_closed": false,
+      "is_allday": false
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 5,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174999",
+      "open_time": "09:30:00",
+      "close_time": "22:00:00",
+      "day_of_week": 4,
+      "is_closed": false,
+      "is_allday": false
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 6,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174999",
+      "open_time": "09:30:00",
+      "close_time": "22:30:00",
+      "day_of_week": 5,
+      "is_closed": false,
+      "is_allday": false
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 7,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174999",
+      "open_time": "09:30:00",
+      "close_time": "22:00:00",
+      "day_of_week": 6,
+      "is_closed": true,
+      "is_allday": true
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 8,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174111",
+      "open_time": "09:00:00",
+      "close_time": "21:00:00",
+      "day_of_week": 0,
+      "is_closed": false,
+      "is_allday": false
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 9,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174111",
+      "open_time": "09:00:00",
+      "close_time": "21:00:00",
+      "day_of_week": 1,
+      "is_closed": false,
+      "is_allday": false
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 10,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174111",
+      "open_time": "09:00:00",
+      "close_time": "21:00:00",
+      "day_of_week": 2,
+      "is_closed": false,
+      "is_allday": false
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 11,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174111",
+      "open_time": "09:00:00",
+      "close_time": "21:00:00",
+      "day_of_week": 3,
+      "is_closed": false,
+      "is_allday": false
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 12,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174111",
+      "open_time": "09:00:00",
+      "close_time": "21:00:00",
+      "day_of_week": 4,
+      "is_closed": false,
+      "is_allday": false
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 13,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174111",
+      "open_time": "09:00:00",
+      "close_time": "21:00:00",
+      "day_of_week": 5,
+      "is_closed": false,
+      "is_allday": false
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 14,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174111",
+      "open_time": "09:00:00",
+      "close_time": "21:00:00",
+      "day_of_week": 6,
+      "is_closed": false,
+      "is_allday": false
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 15,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174333",
+      "open_time": "09:00:00",
+      "close_time": "21:00:00",
+      "day_of_week": 0,
+      "is_closed": true,
+      "is_allday": false
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 16,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174333",
+      "open_time": "09:00:00",
+      "close_time": "21:00:00",
+      "day_of_week": 1,
+      "is_closed": true,
+      "is_allday": false
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 17,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174333",
+      "open_time": "09:00:00",
+      "close_time": "21:00:00",
+      "day_of_week": 2,
+      "is_closed": true,
+      "is_allday": false
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 18,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174333",
+      "open_time": "09:00:00",
+      "close_time": "21:00:00",
+      "day_of_week": 3,
+      "is_closed": true,
+      "is_allday": false
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 19,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174333",
+      "open_time": "09:00:00",
+      "close_time": "21:00:00",
+      "day_of_week": 4,
+      "is_closed": false,
+      "is_allday": true
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 20,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174333",
+      "open_time": "09:00:00",
+      "close_time": "21:00:00",
+      "day_of_week": 5,
+      "is_closed": false,
+      "is_allday": true
+    }
+  },
+  {
+    "model": "academy.businesshours",
+    "pk": 21,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174333",
+      "open_time": "09:00:00",
+      "close_time": "21:00:00",
+      "day_of_week": 6,
+      "is_closed": false,
+      "is_allday": true
     }
   }
 ]

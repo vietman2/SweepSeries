@@ -2,6 +2,7 @@ import {
   formatBirthDate,
   formatPhoneNumberText,
   formatRegistrationNumber,
+  formatTime,
 } from "./formatters";
 
 it("formats birth date", () => {
@@ -32,4 +33,9 @@ it("formats phone number text", () => {
 it("formats registration number", () => {
   expect(formatRegistrationNumber("1234567890")).toBe("123-45-67890");
   expect(formatRegistrationNumber("123456789")).toBe("123456789");
+});
+
+it("formats time", () => {
+  expect(formatTime("1234")).toBe("12:34");
+  expect(formatTime("123")).toBe("123");
 });

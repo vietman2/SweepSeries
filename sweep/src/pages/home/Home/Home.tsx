@@ -9,7 +9,7 @@ import BottomSheet, {
 
 import { Filters } from "@components/Filters";
 import { AppIcon } from "@components/Icons";
-import { Scroll } from "@components/ScrollView";
+import { Scroll, ScrollView } from "@components/ScrollView";
 import { Searchbar } from "@components/Search";
 import { Text } from "@components/Texts";
 import { useAuth } from "@contexts/auth";
@@ -30,10 +30,16 @@ export function Home() {
   const [query, setQuery] = useState<string>("");
   const [selectedSort, setSelectedSort] = useState<string>("인기순");
   const [selectedFilter, setSelectedFilter] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [refreshCount, setRefreshCount] = useState<number>(0);
 
   const { mode, selectedProfile } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  const handleRefresh = () => {
+    setRefreshCount(refreshCount + 1);
+  };
 
   const handleFilterSelect = (filter: string) => {
     if (filter === selectedFilter) {
@@ -69,20 +75,24 @@ export function Home() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const response = await getAcademies(query);
 
       if (response) {
         setSuggestions(response.suggestions);
         setAcademies(response.academies);
       }
+
+      setLoading(false);
     };
 
     fetchData();
-  }, [query]);
+  }, [query, refreshCount]);
 
   return (
     <>
-      <Scroll style={styles.container} showsVerticalScrollIndicator={false}>
+      <ScrollView refreshing={loading} onRefresh={handleRefresh}>
+        <View style={styles.container}>
         {selectedProfile && (
           <AcademyCard
             mode={mode === "pro" ? "pro" : "normal"}
@@ -160,8 +170,8 @@ export function Home() {
             ))}
           </View>
         </View>
-        <View style={styles.void} />
-      </Scroll>
+        <View style={styles.void} /></View>
+      </ScrollView>
       <BottomSheet
         ref={ref}
         index={-1}

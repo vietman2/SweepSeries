@@ -4,8 +4,8 @@ import { Home } from "./Home";
 import * as AuthContext from "@contexts/auth";
 import * as AcademyAPI from "@services/products/academy";
 import { sampleAuthor } from "@testdata/auth";
-import { renderWithProviders } from "@utils/test-utils";
 import { sampleAcademies } from "@testdata/products";
+import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("expo-router", () => ({
   router: {
@@ -49,6 +49,7 @@ describe("<Home />", () => {
     const { getByTestId } = renderWithProviders(<Home />);
 
     await waitFor(() => {
+      fireEvent.press(getByTestId("refresh"));
       fireEvent.press(getByTestId("filter"));
       fireEvent.press(getByTestId("filter"));
       fireEvent.press(getByTestId("sort-button"));
