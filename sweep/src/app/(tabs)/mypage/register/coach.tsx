@@ -1,3 +1,3 @@
-export default function CoachRegister() {
-  return <></>;
-}
+import { RegisterCoach } from "@pages/mypage";
+
+export default RegisterCoach;

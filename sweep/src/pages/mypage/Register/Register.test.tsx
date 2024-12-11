@@ -14,5 +14,6 @@ describe("<Register />", () => {
     const { getByTestId } = renderWithProviders(<Register />);
 
     fireEvent.press(getByTestId("academy"));
+    fireEvent.press(getByTestId("coach"));
   });
 });

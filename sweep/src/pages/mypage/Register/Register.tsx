@@ -13,14 +13,26 @@ export function Register() {
     router.push("/mypage/register/academy");
   };
 
+  const handleCoachRegister = () => {
+    router.push("/mypage/register/coach");
+  };
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={handleAcademyRegister} testID="academy">
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleAcademyRegister}
+        testID="academy"
+      >
         <Text>아카데미 등록</Text>
       </TouchableOpacity>
-      <View style={styles.button}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleCoachRegister}
+        testID="coach"
+      >
         <Text>코치 등록</Text>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 }

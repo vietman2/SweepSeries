@@ -8,7 +8,7 @@ interface Props {
   placeholder: string;
   value: string;
   onChange: (text: string) => void;
-  onSubmit: () => void;
+  onSubmit?: () => void;
 }
 
 export function Searchbar({ placeholder, value, onChange, onSubmit }: Props) {
@@ -27,9 +27,11 @@ export function Searchbar({ placeholder, value, onChange, onSubmit }: Props) {
           onSubmitEditing={onSubmit}
         />
       </View>
-      <TouchableOpacity onPress={onSubmit}>
-        <AppIcon icon="search" size={16} color={theme.primary} />
-      </TouchableOpacity>
+      {onSubmit && (
+        <TouchableOpacity onPress={onSubmit}>
+          <AppIcon icon="search" size={16} color={theme.primary} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
