@@ -7,7 +7,7 @@ export const sampleCoaches: CoachType[] = [
     is_verified: true,
     is_rejected: false,
     academy: "My Academy",
-    certification: "Certified",
+    certificate: "Certified",
     verified_at: "2021-01-01",
     rejected_at: "",
     reject_reason: "",
