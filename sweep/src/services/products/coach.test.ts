@@ -21,7 +21,9 @@ describe("createCoach", () => {
   it("should create a coach", async () => {
     jest.spyOn(axios, "post").mockResolvedValue({ data: {} });
 
-    const result = await createCoach("career", "academy", file, ["profession"]);
+    const result = await createCoach("career", "academy", file, file, [
+      "profession",
+    ]);
 
     expect(result).toEqual({});
   });
@@ -29,7 +31,9 @@ describe("createCoach", () => {
   it("should return null on error", async () => {
     jest.spyOn(axios, "post").mockRejectedValue(null);
 
-    const result = await createCoach("career", "academy", file, ["profession"]);
+    const result = await createCoach("career", "academy", file, file, [
+      "profession",
+    ]);
 
     expect(result).toBeNull();
   });
