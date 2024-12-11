@@ -9,8 +9,15 @@ export type AcademySimpleType = {
 };
 
 export type WorkingHoursType = {
-  label: string;
-  hours: string;
+  day: string;
+  schedule: string;
+};
+
+export type ScheduleDetailType = {
+  open_time: string;
+  close_time: string;
+  is_closed: boolean;
+  is_allday: boolean;
 };
 
 export type FacilityType = {
@@ -29,7 +36,8 @@ export type AcademyDetailType = {
   rating: number;
   num_reviews: number;
   introduction: string;
-  working_hours: WorkingHoursType[];
+  schedules: WorkingHoursType[];
+  schedule_details: ScheduleDetailType[];
   convenience: FacilityType[];
   map: string;
 };
