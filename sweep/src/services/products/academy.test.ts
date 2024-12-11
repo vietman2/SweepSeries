@@ -8,6 +8,7 @@ import {
   getFacilityOptions,
   updateAcademyIntroduction,
   updateFacilities,
+  updateBusinessHours,
 } from "./academy";
 
 jest.mock("form-data", () => {
@@ -160,5 +161,43 @@ describe("updateFacilities", () => {
     const result = await updateFacilities("uuid", []);
 
     expect(result).toBeNull();
+  });
+});
+
+describe("updateBusinessHours", () => {
+    const dailyScheduleData = {
+      open_time: "09:00",
+      close_time: "18:00",
+      is_closed: false,
+      is_allday: false,
+    };
+    const data = [
+      dailyScheduleData,
+      dailyScheduleData,
+      dailyScheduleData,
+      dailyScheduleData,
+      dailyScheduleData,
+      dailyScheduleData,
+      dailyScheduleData,
+    ];
+  it("should update business hours (all types)", async () => {
+    jest.spyOn(axios, "patch").mockResolvedValue({ data: {} });
+
+    const result = await updateBusinessHours("uuid", data, true, true, true);
+
+    expect(result).toEqual({});
+
+    await updateBusinessHours("uuid", data, false, true, true);
+    await updateBusinessHours("uuid", data, false, true, false);
+    await updateBusinessHours("uuid", data, false, false, true);
+    await updateBusinessHours("uuid", data, false, false, false);
+  });
+
+  it("handles fail", async () => {
+    jest.spyOn(axios, "patch").mockRejectedValue(null);
+
+    const result = await updateBusinessHours("uuid", data, true, true, true);
+
+    expect(result).toEqual(null);
   });
 });

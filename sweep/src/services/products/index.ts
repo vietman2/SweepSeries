@@ -6,6 +6,7 @@ import {
   getFacilityOptions,
   updateAcademyIntroduction,
   updateFacilities,
+  updateBusinessHours,
 } from "./academy";
 
 export {
@@ -16,4 +17,5 @@ export {
   getFacilityOptions,
   updateAcademyIntroduction,
   updateFacilities,
+  updateBusinessHours,
 };
