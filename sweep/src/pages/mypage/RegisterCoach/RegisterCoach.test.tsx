@@ -34,6 +34,7 @@ describe("<RegisterCoach />", () => {
 
   it("handles bad responses", async () => {
     jest.spyOn(AcademyAPI, "getAcademies").mockResolvedValueOnce(null);
+    jest.spyOn(CoachAPI, "createCoach").mockResolvedValueOnce(null);
 
     const { getByTestId } = renderWithProviders(<RegisterCoach />);
 
@@ -44,10 +45,16 @@ describe("<RegisterCoach />", () => {
     jest
       .spyOn(AcademyAPI, "getAcademies")
       .mockResolvedValue({ academies: sampleAcademies });
-    jest.spyOn(CoachAPI, "createCoach").mockResolvedValueOnce(null);
 
     await waitFor(() => {
       fireEvent.press(getByTestId("search2"));
+      fireEvent.press(getByTestId("academy-1"));
+      fireEvent.press(getByTestId("reset"));
+      fireEvent.press(getByTestId("등록하기"));
+    });
+
+    await waitFor(() => {
+      fireEvent.press(getByTestId("search"));
       fireEvent.press(getByTestId("academy-1"));
       fireEvent.press(getByTestId("image-picker"));
       fireEvent.press(getByTestId("등록하기"));
@@ -66,17 +73,6 @@ describe("<RegisterCoach />", () => {
       fireEvent.press(getByTestId("search"));
       fireEvent.press(getByTestId("academy-1"));
       fireEvent.press(getByTestId("image-picker"));
-      fireEvent.press(getByTestId("등록하기"));
-    });
-  });
-
-  it("handles register failure (no academy)", async () => {
-    const { getByTestId } = renderWithProviders(<RegisterCoach />);
-
-    await waitFor(() => {
-      fireEvent.press(getByTestId("search"));
-      fireEvent.press(getByTestId("academy-1"));
-      fireEvent.press(getByTestId("reset"));
       fireEvent.press(getByTestId("등록하기"));
     });
   });
