@@ -171,16 +171,14 @@ export function UpdateModal({
             />
           </TouchableOpacity>
           {isEveryday ? (
-            <>
-              <InputRow
-                index={0}
-                schedule={scheduleInputs[0]}
-                setOpentime={editOpenTime}
-                setCloseTime={editCloseTime}
-                toggleClosed={toggleClosed}
-                toggleAllday={toggleAllday}
-              />
-            </>
+            <InputRow
+              index={0}
+              schedule={scheduleInputs[0]}
+              setOpentime={editOpenTime}
+              setCloseTime={editCloseTime}
+              toggleClosed={toggleClosed}
+              toggleAllday={toggleAllday}
+            />
           ) : (
             <View style={styles.empty} />
           )}
@@ -201,16 +199,14 @@ export function UpdateModal({
                 />
               </TouchableOpacity>
               {isAllWeekdays ? (
-                <>
-                  <InputRow
-                    index={0}
-                    schedule={scheduleInputs[0]}
-                    setOpentime={editOpenTime}
-                    setCloseTime={editCloseTime}
-                    toggleClosed={toggleClosed}
-                    toggleAllday={toggleAllday}
-                  />
-                </>
+                <InputRow
+                  index={0}
+                  schedule={scheduleInputs[0]}
+                  setOpentime={editOpenTime}
+                  setCloseTime={editCloseTime}
+                  toggleClosed={toggleClosed}
+                  toggleAllday={toggleAllday}
+                />
               ) : (
                 <View style={styles.empty} />
               )}
@@ -298,16 +294,14 @@ export function UpdateModal({
                 />
               </TouchableOpacity>
               {isAllWeekends ? (
-                <>
-                  <InputRow
-                    index={5}
-                    schedule={scheduleInputs[5]}
-                    setOpentime={editOpenTime}
-                    setCloseTime={editCloseTime}
-                    toggleClosed={toggleClosed}
-                    toggleAllday={toggleAllday}
-                  />
-                </>
+                <InputRow
+                  index={5}
+                  schedule={scheduleInputs[5]}
+                  setOpentime={editOpenTime}
+                  setCloseTime={editCloseTime}
+                  toggleClosed={toggleClosed}
+                  toggleAllday={toggleAllday}
+                />
               ) : (
                 <View style={styles.empty} />
               )}
