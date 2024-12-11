@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
+import { View } from "react-native";
 import { Redirect } from "expo-router";
 
-import { ErrorPage } from "@components/Fallbacks";
 import { getMyAcademies } from "@services/products";
 
 export default function Front() {
@@ -23,5 +23,5 @@ export default function Front() {
     return <Redirect href={`/front/academy/${academyId}`} />;
   }
 
-  return <ErrorPage />;
+  return <View />;
 }
