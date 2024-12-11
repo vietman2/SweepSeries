@@ -20,9 +20,8 @@ export function Information({ academy }: Readonly<Props>) {
     <View style={styles.container}>
       <Introduction introduction={academy.introduction} />
       <Divider />
-      {/*
-      <WorkingHours workingHours={academy.working_hours} />
-      <Divider />*/}
+      <WorkingHours workingHours={academy.schedules} scheduleDetails={academy.schedule_details} />
+      <Divider />
       <Facilities
         facilities={academy.convenience}
         type="구비장비"
