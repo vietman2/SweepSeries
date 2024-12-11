@@ -1,4 +1,3 @@
-
 import json
 from io import BytesIO
 from unittest.mock import patch
@@ -185,6 +184,14 @@ class AcademyTestCase(APITestCase):
         response = self.client.get(f"{self.url}{self.academy.uuid}/")
         self.assertEqual(response.status_code, 200)
 
+        academy2 = Academy.objects.get(name="아카데미 2")
+        response = self.client.get(f"{self.url}{academy2.uuid}/")
+        self.assertEqual(response.status_code, 200)
+
+        academy3 = Academy.objects.get(name="아카데미 3")
+        response = self.client.get(f"{self.url}{academy3.uuid}/")
+        self.assertEqual(response.status_code, 200)
+
     def test_my_academy(self):
         self.client.force_authenticate(user=self.user)
         response = self.client.get(f"{self.url}my/")
@@ -239,6 +246,55 @@ class AcademyTestCase(APITestCase):
     def test_update_facilities_fail(self):
         self.client.force_authenticate(user=self.user)
         response = self.client.patch(f"{self.url}{self.academy.uuid}/facilities/")
+        self.assertEqual(response.status_code, 400)
+
+    def test_update_business_hours(self):
+        daily = {
+            "open_time": "09:00",
+            "close_time": "18:00",
+            "is_closed": False,
+            "is_allday": False,
+        }
+        data = {
+            "monday": daily,
+            "tuesday": daily,
+            "wednesday": daily,
+            "thursday": daily,
+            "friday": daily,
+            "saturday": daily,
+            "sunday": daily,
+        }
+        self.client.force_authenticate(user=self.user)
+        response = self.client.patch(
+            f"{self.url}{self.academy.uuid}/hours/", {"data": json.dumps(data)}
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_update_business_hours_fail(self):
+        bad_data = {
+            "open_time": "30:00",
+            "close_time": "30:00",
+            "is_closed": False,
+            "is_allday": False,
+        }
+        data = {
+            "monday": bad_data,
+            "tuesday": bad_data,
+            "wednesday": bad_data,
+            "thursday": bad_data,
+            "friday": bad_data,
+            "saturday": bad_data,
+            "sunday": bad_data,
+        }
+        self.client.force_authenticate(user=self.user)
+        ## 1. no data
+        response = self.client.patch(f"{self.url}{self.academy.uuid}/hours/")
+        self.assertEqual(response.status_code, 400)
+
+        ## 2. bad data
+        response = self.client.patch(
+            f"{self.url}{self.academy.uuid}/hours/", {"data": json.dumps(data)}
+        )
         self.assertEqual(response.status_code, 400)
 
 class FacilityTestCase(APITestCase):

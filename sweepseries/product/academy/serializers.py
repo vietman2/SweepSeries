@@ -9,7 +9,9 @@ from auth.user.serializers import UserRelatedSerializer
 from core.utils import get_presigned_url
 from product.address.models import Address, Sigungu
 from product.address.utils import get_coordinates, fetch_map_image
-from .models import Academy, AcademyFacility
+from .enums import DayChoices
+from .models import Academy, AcademyFacility, BusinessHours
+from .utils import get_weekly_schedule, get_schedule_details
 
 class ConvenienceSerializer(serializers.ModelSerializer):
     id          = serializers.IntegerField()
@@ -75,19 +77,21 @@ class AcademySimpleSerializer(serializers.ModelSerializer):
         return get_presigned_url(obj.logo)
 
 class AcademyDetailSerializer(serializers.ModelSerializer):
-    address     = serializers.SerializerMethodField()
-    logo        = serializers.SerializerMethodField()
-    map         = serializers.SerializerMethodField()
-    images      = serializers.SerializerMethodField()
-    rating      = serializers.SerializerMethodField()
-    num_reviews = serializers.SerializerMethodField()
-    convenience = ConvenienceSerializer(many=True)
+    address             = serializers.SerializerMethodField()
+    logo                = serializers.SerializerMethodField()
+    map                 = serializers.SerializerMethodField()
+    images              = serializers.SerializerMethodField()
+    rating              = serializers.SerializerMethodField()
+    num_reviews         = serializers.SerializerMethodField()
+    convenience         = ConvenienceSerializer(many=True)
+    schedules           = serializers.SerializerMethodField()
+    schedule_details    = serializers.SerializerMethodField()
 
     class Meta:
         model = Academy
         fields = [
             "uuid", "name", "logo", "introduction", "address", "map", "images",
-            "rating", "num_reviews", "convenience"
+            "rating", "num_reviews", "convenience", "schedules", "schedule_details"
         ]
 
     def get_address(self, obj):
@@ -111,6 +115,12 @@ class AcademyDetailSerializer(serializers.ModelSerializer):
 
     def get_num_reviews(self, obj):
         return obj.reviews.count()
+
+    def get_schedules(self, obj):
+        return get_weekly_schedule(obj)
+
+    def get_schedule_details(self, obj):
+        return get_schedule_details(obj)
 
 class AcademyStatusSerializer(serializers.ModelSerializer):
     owner           = UserRelatedSerializer(read_only=True)
@@ -232,5 +242,6 @@ class AcademyRegisterSerializer(serializers.ModelSerializer):
                 logo=uploaded_logo,
                 address=address,
             )
+            BusinessHours.objects.create_business_hours(academy)
 
             return academy

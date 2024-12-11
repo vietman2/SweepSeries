@@ -1,3 +1,5 @@
+import json
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db.models import Q
 from django.utils import timezone
 from rest_framework import status
@@ -10,12 +12,15 @@ from drf_spectacular.utils import extend_schema
 
 from core.permissions import AdminOnly
 from core.utils import is_admin_page
-from .models import Academy, AcademyFacility
+from .enums import DayChoices
+from .models import Academy, AcademyFacility, BusinessHours
 from .permissions import IsAcademyOwner
 from .serializers import (
     AcademySimpleSerializer, AcademyRegisterSerializer, AcademyStatusSerializer,
     AcademyDetailSerializer, ConvenienceSerializer
 )
+from .utils import update_daily_schedule
+
 class AcademyViewSet(ModelViewSet):
     queryset = Academy.objects.all()
     serializer_class = AcademySimpleSerializer
@@ -197,10 +202,52 @@ class AcademyViewSet(ModelViewSet):
             data={"message": "아카데미 시설이 업데이트되었습니다."}
         )
 
+    @extend_schema(summary="아카데미 운영시간 업데이트", tags=["아카데미"])
+    @action(detail=True, methods=['patch'])
+    def hours(self, request, pk=None):
+        academy = self.get_object()
+        hours = request.data.get('data', None)
+
+        if hours is None:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={"error": "운영시간 정보를 입력해주세요."}
+            )
+
+        ## decode json
+        hours = json.loads(hours)
+
+        monday = BusinessHours.objects.get(academy=academy, day_of_week=DayChoices.MONDAY)
+        tuesday = BusinessHours.objects.get(academy=academy, day_of_week=DayChoices.TUESDAY)
+        wednesday = BusinessHours.objects.get(academy=academy, day_of_week=DayChoices.WEDNESDAY)
+        thursday = BusinessHours.objects.get(academy=academy, day_of_week=DayChoices.THURSDAY)
+        friday = BusinessHours.objects.get(academy=academy, day_of_week=DayChoices.FRIDAY)
+        saturday = BusinessHours.objects.get(academy=academy, day_of_week=DayChoices.SATURDAY)
+        sunday = BusinessHours.objects.get(academy=academy, day_of_week=DayChoices.SUNDAY)
+
+        try:
+            update_daily_schedule(monday, hours["monday"])
+            update_daily_schedule(tuesday, hours["tuesday"])
+            update_daily_schedule(wednesday, hours["wednesday"])
+            update_daily_schedule(thursday, hours["thursday"])
+            update_daily_schedule(friday, hours["friday"])
+            update_daily_schedule(saturday, hours["saturday"])
+            update_daily_schedule(sunday, hours["sunday"])
+        except DjangoValidationError as e:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={"error": e}
+            )
+
+        return Response(
+            status=status.HTTP_200_OK,
+            data={"message": "아카데미 운영시간이 업데이트되었습니다."}
+        )
+
 class FacilityViewSet(ModelViewSet):
     queryset = AcademyFacility.objects.all()
     serializer_class = ConvenienceSerializer
-    http_method_names = ['get'] 
+    http_method_names = ['get']
 
     def get_permissions(self):
         return [IsAcademyOwner()]
