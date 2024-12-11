@@ -9,6 +9,7 @@ import { MyPage } from "./MyPage/MyPage";
 import { MyReviews } from "./MyReviews/MyReviews";
 import { Register } from "./Register/Register";
 import { RegisterAcademy } from "./RegisterAcademy/RegisterAcademy";
+import { RegisterCoach } from "./RegisterCoach/RegisterCoach";
 import { Settings } from "./Settings/Settings";
 
 export {
@@ -23,5 +24,6 @@ export {
   MyReviews,
   Register,
   RegisterAcademy,
+  RegisterCoach,
   Settings,
 };
