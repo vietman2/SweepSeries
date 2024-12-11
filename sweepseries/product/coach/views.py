@@ -66,10 +66,10 @@ class CoachViewSet(ModelViewSet):
 
         if user.is_superuser and is_admin_page(request):
             status_query = request.query_params.get('status', None)
-            if status_query == "승인 완료":
-                q &= Q(is_verified=True)
-            elif status_query == "승인 거부":
+            if status_query == "승인 거부":
                 q &= Q(is_rejected=True)
+            elif status_query == "승인 완료":
+                q &= Q(is_verified=True)
             elif status_query == "승인 대기":
                 q &= Q(is_verified=False) & Q(is_rejected=False)
             else:

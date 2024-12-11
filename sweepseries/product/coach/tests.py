@@ -60,15 +60,15 @@ class CoachTestCase(APITestCase):
 
     def test_coach_list_admin(self):
         self.client.force_authenticate(user=User.objects.get(username="admin"))
+        param = {'status': '승인 거부'}
+        response = self.client.get(self.url, param, HTTP_ORIGIN=settings.ADMIN_PAGE_URL)
+        self.assertEqual(response.status_code, 200)
+
         param = {'status': '승인 대기'}
         response = self.client.get(self.url, param, HTTP_ORIGIN=settings.ADMIN_PAGE_URL)
         self.assertEqual(response.status_code, 200)
 
         param = {'status': '승인 완료'}
-        response = self.client.get(self.url, param, HTTP_ORIGIN=settings.ADMIN_PAGE_URL)
-        self.assertEqual(response.status_code, 200)
-
-        param = {'status': '승인 거부'}
         response = self.client.get(self.url, param, HTTP_ORIGIN=settings.ADMIN_PAGE_URL)
         self.assertEqual(response.status_code, 200)
 
