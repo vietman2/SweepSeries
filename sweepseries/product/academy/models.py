@@ -72,7 +72,6 @@ class AcademyReview(models.Model):
     academy     = models.ForeignKey(Academy, on_delete=models.CASCADE, related_name='reviews')
     user        = models.ForeignKey(User, on_delete=models.CASCADE, related_name='academy_reviews')
 
-    title       = models.CharField(max_length=50)
     content     = models.TextField()
     rating      = models.PositiveSmallIntegerField(validators=[Min(1), Max(5)])
 

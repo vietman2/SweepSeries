@@ -29,7 +29,7 @@ class AcademyViewSet(ModelViewSet):
     def get_permissions(self):
         login_needed = ['create', 'my']
         must_be_admin = ['approve', 'reject']
-        must_be_owner = ['introduction', 'facilities']
+        must_be_owner = ['introduction', 'facilities', 'hours']
         permissions = []
 
         if self.action in login_needed:
