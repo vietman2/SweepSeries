@@ -22,7 +22,9 @@ class Coach(models.Model):
 
     introduction    = models.TextField()
     profile_image   = models.ImageField()
-    career          = models.IntegerField(choices=CareerChoices.choices, default=CareerChoices.UNDEFINED)
+    career          = models.IntegerField(
+        choices=CareerChoices.choices, default=CareerChoices.UNDEFINED
+    )
     professions     = models.ManyToManyField(CoachProfession, related_name='coaches')
 
     is_verified     = models.BooleanField(default=False)
