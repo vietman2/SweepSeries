@@ -88,16 +88,16 @@ export function CoachSimple({ coach, type }: Readonly<ObjectProps>) {
             <a rel="" href={coach.certificate} target="_blank">
               사업자 등록증
             </a>
-            <Buttons>
-              <Button onClick={handleApprove}>승인</Button>
-              <Button $negative onClick={openModal}>
+            <Footer>
+              <Pressable onClick={handleApprove}>승인</Pressable>
+              <Pressable $negative onClick={openModal}>
                 거절
-              </Button>
-            </Buttons>
+              </Pressable>
+            </Footer>
           </>
         )}
       </Container>
-      <Overlay $open={isModalOpen}>
+      <Background $open={isModalOpen}>
         <Modal $open={isModalOpen}>
           <div>거절 사유</div>
           <input
@@ -107,14 +107,14 @@ export function CoachSimple({ coach, type }: Readonly<ObjectProps>) {
             onChange={(e) => setRejectReason(e.target.value)}
             data-testid="reject-reason"
           />
-          <Buttons>
-            <Button $negative onClick={handleReject}>
+          <Footer>
+            <Pressable $negative onClick={handleReject}>
               확인
-            </Button>
-            <Button onClick={() => setIsModalOpen(false)}>취소</Button>
-          </Buttons>
+            </Pressable>
+            <Pressable onClick={() => setIsModalOpen(false)}>취소</Pressable>
+          </Footer>
         </Modal>
-      </Overlay>
+      </Background>
     </>
   );
 }
@@ -144,7 +144,7 @@ const Container = styled.div`
   }
 `;
 
-const Button = styled.button<{ $negative?: boolean }>`
+const Pressable = styled.button<{ $negative?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -185,7 +185,7 @@ const Modal = styled.div<{ $open: boolean }>`
   transition: background-color 0.3s;
 `;
 
-const Overlay = styled.div<{ $open: boolean }>`
+const Background = styled.div<{ $open: boolean }>`
   display: ${({ $open }) => ($open ? "flex" : "none")};
   position: fixed;
   top: 0;
@@ -196,7 +196,7 @@ const Overlay = styled.div<{ $open: boolean }>`
   background-color: rgba(0, 0, 0, 0.5);
 `;
 
-const Buttons = styled.div`
+const Footer = styled.div`
   display: flex;
   gap: 8px;
 `;
