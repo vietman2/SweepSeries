@@ -4,8 +4,8 @@ import { router } from "expo-router";
 import { MyPage } from "./MyPage";
 import * as AuthContext from "@contexts/auth";
 import * as AuthAPI from "@services/auth/auth";
-import { renderWithProviders } from "@utils/test-utils";
 import { sampleAuthor } from "@testdata/auth";
+import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("expo-router", () => ({
   router: {
@@ -49,6 +49,7 @@ describe("<MyPage />", () => {
     fireEvent.press(getByTestId("questionmark-circle"));
     fireEvent.press(getByTestId("bell"));
     fireEvent.press(getByTestId("person-minus"));
+    fireEvent.press(getByTestId("아카데미/코치로 등록하기"));
   });
 
   it("renders correctly and handles logout with no dismiss", () => {
@@ -89,8 +90,6 @@ describe("<MyPage />", () => {
       mode: "pro",
       selectedProfile: sampleAuthor,
     });
-    const { getByTestId } = renderWithProviders(<MyPage />);
-
-    fireEvent.press(getByTestId("아카데미/코치로 등록하기"));
+    renderWithProviders(<MyPage />);
   });
 });

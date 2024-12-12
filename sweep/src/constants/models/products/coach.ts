@@ -25,11 +25,3 @@ export type CoachDetailType = {
   num_reviews: number;
   introduction: string;
 };
-
-export type CoachRequestType = {
-  uuid: string;
-  name: string;
-  profile_image: string;
-  career: string;
-  professions: CoachProfessionType[];
-};

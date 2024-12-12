@@ -1,5 +1,6 @@
 import json
 from unittest.mock import patch
+from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APITestCase
 
@@ -19,10 +20,14 @@ class CoachTestCase(APITestCase):
         test_image1 = SimpleUploadedFile(
             "test1.png", b"file_content", content_type="image/png"
         )
+        test_image2 = SimpleUploadedFile(
+            "test2.jpg", b"file_content", content_type="image/jpeg"
+        )
         professions = ["투수 전문", "타격 전문", "수비 전문", "포수 전문", "트레이닝 전문", "재활 전문", "기타"]
         self.create_data = {
             "career": "프로선수 출신",
             "academy": "123e4567-e89b-12d3-a456-426614174999",
+            "certificate": test_image2,
             "profile_image": test_image1,
             "professions": json.dumps(professions)
         }
@@ -52,3 +57,70 @@ class CoachTestCase(APITestCase):
         data['academy'] = "523e4567-e89b-12d3-a456-426614174998"
         response = self.client.post(self.url, data, format='multipart')
         self.assertEqual(response.status_code, 400)
+
+    def test_coach_list_admin(self):
+        self.client.force_authenticate(user=User.objects.get(username="admin"))
+        param = {'status': '승인 거부'}
+        response = self.client.get(self.url, param, HTTP_ORIGIN=settings.ADMIN_PAGE_URL)
+        self.assertEqual(response.status_code, 200)
+
+        param = {'status': '승인 대기'}
+        response = self.client.get(self.url, param, HTTP_ORIGIN=settings.ADMIN_PAGE_URL)
+        self.assertEqual(response.status_code, 200)
+
+        param = {'status': '승인 완료'}
+        response = self.client.get(self.url, param, HTTP_ORIGIN=settings.ADMIN_PAGE_URL)
+        self.assertEqual(response.status_code, 200)
+
+    def test_coach_list_normal(self):
+        self.client.force_authenticate(user=User.objects.get(username="normaluser"))
+        param = {'academy': '123e4567-e89b-12d3-a456-426614174999', }
+        response = self.client.get(self.url, param)
+        self.assertEqual(response.status_code, 200)
+
+    def test_coach_list_fail(self):
+        self.client.force_authenticate(user=User.objects.get(username="admin"))
+        param = {'status': 'invalid'}
+        response = self.client.get(self.url, param, HTTP_ORIGIN=settings.ADMIN_PAGE_URL)
+        self.assertEqual(response.status_code, 400)
+
+        self.client.force_authenticate(user=User.objects.get(username="normaluser"))
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 400)
+
+    def test_coach_approve(self):
+        self.client.force_authenticate(user=User.objects.get(username="admin"))
+        response = self.client.post(f"{self.url}923e4567-e89b-12d3-a456-426614174999/approve/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_coach_reject(self):
+        self.client.force_authenticate(user=User.objects.get(username="admin"))
+        response = self.client.post(f"{self.url}923e4567-e89b-12d3-a456-426614174999/reject/", {
+            "reject_reason": "이유"
+        })
+        self.assertEqual(response.status_code, 200)
+
+    def test_coach_reject_fail(self):
+        self.client.force_authenticate(user=User.objects.get(username="admin"))
+        response = self.client.post(f"{self.url}923e4567-e89b-12d3-a456-426614174999/reject/")
+        self.assertEqual(response.status_code, 400)
+
+    def test_accept_coach(self):
+        self.client.force_authenticate(self.user)
+        response = self.client.post(f"{self.url}923e4567-e89b-12d3-a456-426614174999/accept/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_accept_coach_fail(self):
+        self.client.force_authenticate(self.user2)
+        response = self.client.post(f"{self.url}923e4567-e89b-12d3-a456-426614174999/accept/")
+        self.assertEqual(response.status_code, 403)
+
+    def test_deny_coach(self):
+        self.client.force_authenticate(self.user)
+        response = self.client.post(f"{self.url}923e4567-e89b-12d3-a456-426614174999/deny/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_deny_coach_fail(self):
+        self.client.force_authenticate(self.user2)
+        response = self.client.post(f"{self.url}923e4567-e89b-12d3-a456-426614174999/deny/")
+        self.assertEqual(response.status_code, 403)

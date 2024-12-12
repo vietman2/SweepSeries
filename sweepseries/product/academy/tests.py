@@ -21,7 +21,8 @@ def generate_photo_file():
 class AcademyTestCase(APITestCase):
     fixtures = [
         "core/data/test/users.json", "core/data/initial/regions.json",
-        "core/data/test/academies.json", "core/data/initial/facilities.json"
+        "core/data/test/academies.json", "core/data/initial/facilities.json",
+        "core/data/test/coaches.json", "core/data/initial/professions.json",
     ]
 
     def setUp(self):
@@ -296,6 +297,11 @@ class AcademyTestCase(APITestCase):
             f"{self.url}{self.academy.uuid}/hours/", {"data": json.dumps(data)}
         )
         self.assertEqual(response.status_code, 400)
+
+    def test_academy_employees(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(f"{self.url}{self.academy.uuid}/employees/")
+        self.assertEqual(response.status_code, 200)
 
 class FacilityTestCase(APITestCase):
     fixtures = ["core/data/initial/facilities.json"]

@@ -2,16 +2,59 @@ import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
-import { CoachRequestType } from "@models/products";
+import { CoachSimpleType } from "@models/products";
+import { alert } from "@services/alert";
+import { acceptCoach, rejectCoach } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
-  coach: CoachRequestType;
+  coach: CoachSimpleType;
+  onRefresh: () => void;
 }
 
-export function CoachRequest({ coach }: Readonly<Props>) {
+export function CoachRequest({ coach, onRefresh }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  const handleAccept = async () => {
+    const response = await acceptCoach(coach.uuid);
+
+    if (response) {
+      onRefresh();
+    } else {
+      alert("코치 승인 실패", "오류가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
+
+  const acceptPress = () => {
+    alert(
+      "코치 승인",
+      `${coach.name} 코치를 승인하시겠습니까?`,
+      handleAccept,
+      "승인",
+      true
+    );
+  };
+
+  const handleReject = async () => {
+    const response = await rejectCoach(coach.uuid);
+
+    if (response) {
+      onRefresh();
+    } else {
+      alert("코치 거절 실패", "오류가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
+
+  const rejectPress = () => {
+    alert(
+      "코치 거절",
+      `${coach.name} 코치를 거절하시겠습니까?`,
+      handleReject,
+      "거절",
+      true
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -28,6 +71,8 @@ export function CoachRequest({ coach }: Readonly<Props>) {
       <View style={styles.buttons}>
         <TouchableOpacity
           style={[styles.button, { borderColor: theme.border }]}
+          onPress={rejectPress}
+          testID="reject"
         >
           <Text style={[styles.buttonText, { color: theme.lowEmphasis }]}>
             거절
@@ -38,6 +83,8 @@ export function CoachRequest({ coach }: Readonly<Props>) {
             styles.button,
             { backgroundColor: theme.primary, borderColor: theme.primary },
           ]}
+          onPress={acceptPress}
+          testID="accept"
         >
           <Text style={[styles.buttonText, { color: theme.background }]}>
             승인
@@ -52,6 +99,8 @@ const createStyles = (theme: ThemeColorType) =>
   StyleSheet.create({
     container: {
       alignItems: "center",
+      minWidth: 180,
+      maxWidth: "50%",
       marginRight: 16,
       padding: 16,
       paddingBottom: 8,
@@ -71,7 +120,11 @@ const createStyles = (theme: ThemeColorType) =>
       textAlign: "center",
     },
     professions: {
+      flex: 1,
       flexDirection: "row",
+      flexWrap: "wrap",
+      alignItems: "center",
+      justifyContent: "center",
       gap: 4,
     },
     profession: {
