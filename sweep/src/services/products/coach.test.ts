@@ -10,6 +10,24 @@ jest.mock("form-data", () => {
   });
 });
 
+describe("getCoaches", () => {
+  it("should get coaches", async () => {
+    jest.spyOn(axios, "get").mockResolvedValue({ data: "data" });
+
+    const result = await getCoaches("academyId");
+
+    expect(result).toEqual("data");
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "get").mockRejectedValue(null);
+
+    const result = await getCoaches("academyId");
+
+    expect(result).toBeNull();
+  });
+});
+
 describe("createCoach", () => {
   const file = {
     uri: "uri",
@@ -34,24 +52,6 @@ describe("createCoach", () => {
     const result = await createCoach("career", "academy", file, file, [
       "profession",
     ]);
-
-    expect(result).toBeNull();
-  });
-});
-
-describe("getCoaches", () => {
-  it("should get coaches", async () => {
-    jest.spyOn(axios, "get").mockResolvedValue({ data: {} });
-
-    const result = await getCoaches("academyId");
-
-    expect(result).toEqual({});
-  });
-
-  it("should return null on error", async () => {
-    jest.spyOn(axios, "get").mockRejectedValue(null);
-
-    const result = await getCoaches("academyId");
 
     expect(result).toBeNull();
   });
