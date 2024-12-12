@@ -72,10 +72,20 @@ class CoachTestCase(APITestCase):
         response = self.client.get(self.url, param, HTTP_ORIGIN=settings.ADMIN_PAGE_URL)
         self.assertEqual(response.status_code, 200)
 
+    def test_coach_list_normal(self):
+        self.client.force_authenticate(user=User.objects.get(username="normaluser"))
+        param = {'academy': '123e4567-e89b-12d3-a456-426614174999', }
+        response = self.client.get(self.url, param)
+        self.assertEqual(response.status_code, 200)
+
     def test_coach_list_fail(self):
         self.client.force_authenticate(user=User.objects.get(username="admin"))
         param = {'status': 'invalid'}
         response = self.client.get(self.url, param, HTTP_ORIGIN=settings.ADMIN_PAGE_URL)
+        self.assertEqual(response.status_code, 400)
+
+        self.client.force_authenticate(user=User.objects.get(username="normaluser"))
+        response = self.client.get(self.url)
         self.assertEqual(response.status_code, 400)
 
     def test_coach_approve(self):
@@ -94,3 +104,23 @@ class CoachTestCase(APITestCase):
         self.client.force_authenticate(user=User.objects.get(username="admin"))
         response = self.client.post(f"{self.url}923e4567-e89b-12d3-a456-426614174999/reject/")
         self.assertEqual(response.status_code, 400)
+
+    def test_accept_coach(self):
+        self.client.force_authenticate(self.user)
+        response = self.client.post(f"{self.url}923e4567-e89b-12d3-a456-426614174999/accept/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_accept_coach_fail(self):
+        self.client.force_authenticate(self.user2)
+        response = self.client.post(f"{self.url}923e4567-e89b-12d3-a456-426614174999/accept/")
+        self.assertEqual(response.status_code, 403)
+
+    def test_deny_coach(self):
+        self.client.force_authenticate(self.user)
+        response = self.client.post(f"{self.url}923e4567-e89b-12d3-a456-426614174999/deny/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_deny_coach_fail(self):
+        self.client.force_authenticate(self.user2)
+        response = self.client.post(f"{self.url}923e4567-e89b-12d3-a456-426614174999/deny/")
+        self.assertEqual(response.status_code, 403)

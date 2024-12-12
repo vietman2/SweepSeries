@@ -1,18 +1,60 @@
 import uuid
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.storage import default_storage
+from django.db import models
 from rest_framework import serializers
 
 from auth.person.models import Person
 from core.utils import get_presigned_url
 from product.academy.models import Academy
 from .enums import CareerChoices
-from .models import Coach
+from .models import Coach, CoachProfession
+
+class CoachProfessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CoachProfession
+        fields = ["id", "kor_name"]
 
 class CoachSimpleSerializer(serializers.ModelSerializer):
+    name            = serializers.SerializerMethodField(read_only=True)
+    career          = serializers.CharField(read_only=True, source="get_career_display")
+    profile_image   = serializers.SerializerMethodField(read_only=True)
+    professions     = CoachProfessionSerializer(many=True, read_only=True)
+    rating          = serializers.SerializerMethodField(read_only=True)
+    num_reviews     = serializers.SerializerMethodField(read_only=True)
+    is_liked        = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Coach
-        fields = ["uuid"]
+        fields = [
+            "uuid", "name", "career", "profile_image", "introduction",
+            "professions", "rating", "num_reviews", "is_liked"
+        ]
+
+    def get_name(self, obj):
+        return obj.person.name
+
+    def get_profile_image(self, obj):
+        return get_presigned_url(obj.profile_image)
+
+    def get_rating(self, obj):
+        reviews = obj.reviews.all()
+        if reviews.exists():
+            return reviews.aggregate(models.Avg('rating'))['rating__avg']
+
+        return 0.0
+
+    def get_num_reviews(self, obj):
+        return obj.reviews.count()
+
+    def get_is_liked(self, obj):
+        ## context request might not be available in some cases
+        request = self.context.get('request')
+        user = request.user if request else None
+        if user is None or not user.is_authenticated:
+            return False
+
+        return obj.likes.filter(user=user).exists()
 
 class CoachStatusSerializer(serializers.ModelSerializer):
     name            = serializers.SerializerMethodField(read_only=True)

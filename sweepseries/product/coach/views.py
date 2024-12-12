@@ -10,6 +10,7 @@ from drf_spectacular.utils import extend_schema
 
 from core.permissions import AdminOnly
 from core.utils import is_admin_page
+from .enums import CoachApplicationStatus
 from .models import Coach
 from .serializers import CoachSimpleSerializer, CoachRegisterSerializer, CoachStatusSerializer
 
@@ -19,7 +20,7 @@ class CoachViewSet(ModelViewSet):
     http_method_names = ['get', 'post']
 
     def get_permissions(self):
-        login_needed = ['create']
+        login_needed = ['create', 'accept', 'deny']
         must_be_admin = ['approve', 'reject']
         #must_be_owner = ['introduction', 'facilities', 'hours']
         permissions = []
@@ -57,12 +58,9 @@ class CoachViewSet(ModelViewSet):
 
     @extend_schema(summary="코치 리스트 조회", tags=["코치"])
     def list(self, request, *args, **kwargs):
-        query = request.query_params.get('query', None)
         user = request.user
 
         q = Q()
-        if query:
-            q &= Q(name__icontains=query)
 
         if user.is_superuser and is_admin_page(request):
             status_query = request.query_params.get('status', None)
@@ -82,9 +80,24 @@ class CoachViewSet(ModelViewSet):
             serializer = CoachStatusSerializer(self.queryset, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
+        academy_uuid = request.query_params.get('academy', None)
+        if academy_uuid is None:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={"error": "아카데미 uuid를 입력해주세요."}
+            )
+        q &= Q(academy__uuid=academy_uuid)
+
+        q &= Q(is_verified=True, status=CoachApplicationStatus.APPROVED)
+        self.queryset = self.queryset.filter(q)
+        serializer = CoachSimpleSerializer(self.queryset, many=True)
+        serializer.context['request'] = request
+
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
     @extend_schema(summary="코치 승인", tags=["코치"])
     @action(detail=True, methods=['post'])
-    def approve(self, request, *args, **kwargs):
+    def approve(self, request, *args, **kwargs):    # pylint: disable=unused-argument
         coach = self.get_object()
         coach.is_verified = True
         coach.verified_at = timezone.now()
@@ -97,7 +110,7 @@ class CoachViewSet(ModelViewSet):
 
     @extend_schema(summary="코치 거부", tags=["코치"])
     @action(detail=True, methods=['post'])
-    def reject(self, request, *args, **kwargs):
+    def reject(self, request, *args, **kwargs):     # pylint: disable=unused-argument
         coach = self.get_object()
         reject_reason = request.data.get('reject_reason', None)
 
@@ -109,6 +122,48 @@ class CoachViewSet(ModelViewSet):
 
         coach.is_rejected = True
         coach.reject_reason = reject_reason
+        coach.save()
+
+        return Response(
+            status=status.HTTP_200_OK,
+            data={"message": "코치 거부에 성공했습니다."}
+        )
+
+    @extend_schema(summary="코치 승인 (아카데미)", tags=["코치"])
+    @action(detail=True, methods=['post'])
+    def accept(self, request, *args, **kwargs):
+        coach = self.get_object()
+        user = request.user
+        academy = coach.academy
+
+        if academy.owner != user:
+            return Response(
+                status=status.HTTP_403_FORBIDDEN,
+                data={"error": "권한이 없습니다."}
+            )
+        
+        coach.status = CoachApplicationStatus.APPROVED
+        coach.save()
+
+        return Response(
+            status=status.HTTP_200_OK,
+            data={"message": "코치 승인에 성공했습니다."}
+        )
+
+    @extend_schema(summary="코치 거부 (아카데미)", tags=["코치"])
+    @action(detail=True, methods=['post'])
+    def deny(self, request, *args, **kwargs):
+        coach = self.get_object()
+        user = request.user
+        academy = coach.academy
+
+        if academy.owner != user:
+            return Response(
+                status=status.HTTP_403_FORBIDDEN,
+                data={"error": "권한이 없습니다."}
+            )
+
+        coach.status = CoachApplicationStatus.REJECTED
         coach.save()
 
         return Response(

@@ -4,7 +4,7 @@ from django.db import models
 from auth.person.models import Person
 from auth.user.models import User
 from product.academy.models import Academy
-from .enums import CareerChoices
+from .enums import CareerChoices, CoachApplicationStatus
 
 class CoachProfession(models.Model):
     profession      = models.CharField(max_length=20, unique=True)
@@ -32,6 +32,9 @@ class Coach(models.Model):
     verified_at     = models.DateTimeField(null=True)
     is_rejected     = models.BooleanField(default=False)
     reject_reason   = models.TextField(blank=True)
+    status          = models.SmallIntegerField(
+        choices=CoachApplicationStatus.choices, default=CoachApplicationStatus.PENDING
+    )
 
     objects         = models.Manager()
 

@@ -103,7 +103,6 @@ class AcademyDetailSerializer(serializers.ModelSerializer):
         return get_presigned_url(obj.address.map_image)
 
     def get_images(self, obj):
-        print(obj)
         return []
 
     def get_rating(self, obj):
