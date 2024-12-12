@@ -131,7 +131,7 @@ class CoachViewSet(ModelViewSet):
 
     @extend_schema(summary="코치 승인 (아카데미)", tags=["코치"])
     @action(detail=True, methods=['post'])
-    def accept(self, request, *args, **kwargs):
+    def accept(self, request, *args, **kwargs):    # pylint: disable=unused-argument
         coach = self.get_object()
         user = request.user
         academy = coach.academy
@@ -141,7 +141,7 @@ class CoachViewSet(ModelViewSet):
                 status=status.HTTP_403_FORBIDDEN,
                 data={"error": "권한이 없습니다."}
             )
-        
+
         coach.status = CoachApplicationStatus.APPROVED
         coach.save()
 
@@ -152,7 +152,7 @@ class CoachViewSet(ModelViewSet):
 
     @extend_schema(summary="코치 거부 (아카데미)", tags=["코치"])
     @action(detail=True, methods=['post'])
-    def deny(self, request, *args, **kwargs):
+    def deny(self, request, *args, **kwargs):    # pylint: disable=unused-argument
         coach = self.get_object()
         user = request.user
         academy = coach.academy
