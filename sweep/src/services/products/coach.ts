@@ -34,3 +34,45 @@ export async function createCoach(
     return null;
   }
 }
+
+export async function getCoaches(academyId: string) {
+  try {
+    const response = await axios.get("/v1/coaches/", {
+      params: { academy: academyId },
+    });
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
+export async function getEmployedCoaches(academyId: string) {
+  try {
+    const repsonse = await axios.get(`/v1/academies/${academyId}/employees/`);
+
+    return repsonse.data;
+  } catch {
+    return null;
+  }
+}
+
+export async function acceptCoach(coachId: string) {
+  try {
+    const response = await axios.post(`/v1/coaches/${coachId}/accept/`);
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
+export async function rejectCoach(coachId: string) {
+  try {
+    const response = await axios.post(`/v1/coaches/${coachId}/deny/`);
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
