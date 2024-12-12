@@ -36,7 +36,9 @@ describe("<RegisterCoach />", () => {
     jest.spyOn(AcademyAPI, "getAcademies").mockResolvedValueOnce(null);
     jest.spyOn(CoachAPI, "createCoach").mockResolvedValueOnce(null);
 
-    const { getByTestId } = renderWithProviders(<RegisterCoach />);
+    const { getByTestId, getAllByTestId } = renderWithProviders(
+      <RegisterCoach />
+    );
 
     await waitFor(() => {
       fireEvent.press(getByTestId("search"));
@@ -56,7 +58,8 @@ describe("<RegisterCoach />", () => {
     await waitFor(() => {
       fireEvent.press(getByTestId("search"));
       fireEvent.press(getByTestId("academy-1"));
-      fireEvent.press(getByTestId("image-picker"));
+      fireEvent.press(getAllByTestId("image-picker")[0]);
+      fireEvent.press(getAllByTestId("image-picker")[1]);
       fireEvent.press(getByTestId("등록하기"));
     });
   });
@@ -64,7 +67,9 @@ describe("<RegisterCoach />", () => {
   it("should handle register correctly", async () => {
     jest.spyOn(CoachAPI, "createCoach").mockResolvedValueOnce({});
 
-    const { getByTestId } = renderWithProviders(<RegisterCoach />);
+    const { getByTestId, getAllByTestId } = renderWithProviders(
+      <RegisterCoach />
+    );
 
     await waitFor(() => {
       fireEvent.press(getByTestId("career-프로선수 출신"));
@@ -72,7 +77,8 @@ describe("<RegisterCoach />", () => {
       fireEvent.press(getByTestId("profession-타격 전문"));
       fireEvent.press(getByTestId("search"));
       fireEvent.press(getByTestId("academy-1"));
-      fireEvent.press(getByTestId("image-picker"));
+      fireEvent.press(getAllByTestId("image-picker")[0]);
+      fireEvent.press(getAllByTestId("image-picker")[1]);
       fireEvent.press(getByTestId("등록하기"));
     });
   });

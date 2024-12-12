@@ -12,6 +12,8 @@ from drf_spectacular.utils import extend_schema
 
 from core.permissions import AdminOnly
 from core.utils import is_admin_page
+from product.coach.enums import CoachApplicationStatus
+from product.coach.serializers import CoachSimpleSerializer
 from .enums import DayChoices
 from .models import Academy, AcademyFacility, BusinessHours
 from .permissions import IsAcademyOwner
@@ -29,7 +31,7 @@ class AcademyViewSet(ModelViewSet):
     def get_permissions(self):
         login_needed = ['create', 'my']
         must_be_admin = ['approve', 'reject']
-        must_be_owner = ['introduction', 'facilities', 'hours']
+        must_be_owner = ['introduction', 'facilities', 'hours', 'employees']
         permissions = []
 
         if self.action in login_needed:
@@ -242,6 +244,25 @@ class AcademyViewSet(ModelViewSet):
         return Response(
             status=status.HTTP_200_OK,
             data={"message": "아카데미 운영시간이 업데이트되었습니다."}
+        )
+
+    @extend_schema(summary="아카데미 코치 목록 조회 (직원관리)", tags=["아카데미"])
+    @action(detail=True, methods=['get'])
+    def employees(self, request, pk=None): # pylint: disable=unused-argument
+        academy = self.get_object()
+        print(academy.uuid)
+        accepted_coaches = academy.coaches.filter(status=CoachApplicationStatus.APPROVED)
+        pending_coaches = academy.coaches.filter(status=CoachApplicationStatus.PENDING)
+
+        accepted_serializer = CoachSimpleSerializer(accepted_coaches, many=True)
+        pending_serializer = CoachSimpleSerializer(pending_coaches, many=True)
+
+        return Response(
+            status=status.HTTP_200_OK,
+            data={
+                "accepted": accepted_serializer.data,
+                "pending": pending_serializer.data
+            }
         )
 
 class FacilityViewSet(ModelViewSet):

@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
+import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
 import { CoachSimple } from "@fragments/Coach";
 import { CoachSimpleType } from "@models/products";
-import { sampleCoaches } from "@testdata/products";
+import { getCoaches } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
 export function CoachList() {
+  const { id } = useLocalSearchParams<{ id: string }>();
   const [coaches, setCoaches] = useState<CoachSimpleType[]>([]);
 
   const { theme } = useTheme();
@@ -22,20 +24,36 @@ export function CoachList() {
   };
 
   useEffect(() => {
-    setCoaches(sampleCoaches);
+    const fetchData = async () => {
+      const response = await getCoaches(id);
+
+      if (response) {
+        setCoaches(response);
+      } else {
+        setCoaches([]);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
     <View style={styles.container}>
-      {coaches.map((coach) => (
-        <TouchableOpacity
-          key={coach.uuid}
-          onPress={() => handleCoachPress(coach)}
-          testID={`coach-${coach.uuid}`}
-        >
-          <CoachSimple coach={coach} />
-        </TouchableOpacity>
-      ))}
+      {coaches.length === 0 ? (
+        <Text>등록된 코치가 아직 없습니다.</Text>
+      ) : (
+        <>
+          {coaches.map((coach) => (
+            <TouchableOpacity
+              key={coach.uuid}
+              onPress={() => handleCoachPress(coach)}
+              testID={`coach-${coach.uuid}`}
+            >
+              <CoachSimple coach={coach} />
+            </TouchableOpacity>
+          ))}
+        </>
+      )}
     </View>
   );
 }

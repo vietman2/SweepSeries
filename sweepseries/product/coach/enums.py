@@ -8,3 +8,8 @@ class CareerChoices(models.IntegerChoices):
     INDEPENDENT     = 4, '독립리그 출신'
     OVERSEAS        = 5, '해외대학 출신'
     TRAINING        = 6, '트레이닝 코치'
+
+class CoachApplicationStatus(models.IntegerChoices):
+    PENDING     = 0, '대기중'
+    APPROVED    = 1, '승인됨'
+    REJECTED    = 2, '거절됨'

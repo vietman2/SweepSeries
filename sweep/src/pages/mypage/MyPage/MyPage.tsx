@@ -68,7 +68,7 @@ export function MyPage() {
       <Scroll style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.profile}>
           <MainProfile />
-          {mode === "pro" && (
+          {mode === "normal" && (
             <TextButton
               text="아카데미/코치로 등록하기"
               onPress={handleRegisterPress}

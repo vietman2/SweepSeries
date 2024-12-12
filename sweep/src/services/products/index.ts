@@ -8,7 +8,13 @@ import {
   updateFacilities,
   updateBusinessHours,
 } from "./academy";
-import { createCoach } from "./coach";
+import {
+  createCoach,
+  getCoaches,
+  getEmployedCoaches,
+  acceptCoach,
+  rejectCoach,
+} from "./coach";
 
 export {
   createAcademy,
@@ -20,4 +26,8 @@ export {
   updateFacilities,
   updateBusinessHours,
   createCoach,
+  getCoaches,
+  getEmployedCoaches,
+  acceptCoach,
+  rejectCoach,
 };

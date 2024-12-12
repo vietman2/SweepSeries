@@ -24,6 +24,9 @@ jest.mock("@pages/Academies", () => ({
 jest.mock("@pages/Apps", () => ({
   AppsContainer: () => <div>AppsContainer</div>,
 }));
+jest.mock("@pages/Coaches", () => ({
+  CoachContainer: () => <div>CoachContainer</div>,
+}));
 jest.mock("@pages/Community", () => ({
   CommunityContainer: () => <div>CommunityContainer</div>,
 }));
