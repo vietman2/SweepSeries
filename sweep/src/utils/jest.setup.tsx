@@ -15,7 +15,7 @@ jest.mock("react-native-svg/css", () => ({
   SvgCssUri: "SvgCssUri",
 }));
 jest.mock("@react-native-community/datetimepicker", () => {
-  const { TouchableOpacity } = jest.requireActual("react-native");
+  const { TouchableOpacity, View } = jest.requireActual("react-native");
 
   return {
     __esModule: true,
@@ -25,13 +25,13 @@ jest.mock("@react-native-community/datetimepicker", () => {
       onChange: (event: any, selectedDate?: Date) => void;
     }) => {
       return (
-        <>
+        <View>
           <TouchableOpacity
             onPress={() => onChange({}, new Date())}
             testID="change-datetime"
           />
           <TouchableOpacity onPress={() => onChange({})} testID="cancel" />
-        </>
+        </View>
       );
     },
     DateTimePickerEvent: jest.fn(),
@@ -80,13 +80,13 @@ jest.mock("@components/Checkbox", () => ({
     onChange: () => void;
     rightPress: () => void;
   }) => {
-    const { TouchableOpacity } = jest.requireActual("react-native");
+    const { TouchableOpacity, View } = jest.requireActual("react-native");
 
     return (
-      <>
+      <View>
         <TouchableOpacity onPress={onChange} testID={text} />
         <TouchableOpacity onPress={rightPress} testID={`${text}-right`} />
-      </>
+      </View>
     );
   },
 }));
@@ -151,7 +151,7 @@ jest.mock("@components/Inputs", () => {
   };
 });
 jest.mock("@components/Menus", () => {
-  const { TouchableOpacity } = jest.requireActual("react-native");
+  const { TouchableOpacity, View } = jest.requireActual("react-native");
 
   return {
     PopupMenu: ({
@@ -164,7 +164,7 @@ jest.mock("@components/Menus", () => {
       }[];
       children: React.ReactNode;
     }) => (
-      <>
+      <View>
         {children}
         {items.map((item) => (
           <TouchableOpacity
@@ -173,12 +173,12 @@ jest.mock("@components/Menus", () => {
             key={item.label}
           />
         ))}
-      </>
+      </View>
     ),
   };
 });
 jest.mock("@components/Modals", () => {
-  const { TouchableOpacity } = jest.requireActual("react-native");
+  const { TouchableOpacity, View } = jest.requireActual("react-native");
   return {
     SimpleModal: ({
       children,
@@ -191,11 +191,11 @@ jest.mock("@components/Modals", () => {
       hideModal: () => void;
       onButtonPress: () => void;
     }) => (
-      <>
+      <View>
         <TouchableOpacity testID="hide" onPress={hideModal} />
         <TouchableOpacity testID={buttonText} onPress={onButtonPress} />
         {children}
-      </>
+      </View>
     ),
   };
 });
@@ -231,11 +231,11 @@ jest.mock("@components/Progressbars", () => ({
   Progressbar: () => null,
 }));
 jest.mock("@components/ScrollView", () => {
-  const { TouchableOpacity } = jest.requireActual("react-native");
+  const { TouchableOpacity, View } = jest.requireActual("react-native");
 
   return {
-    GSScroll: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-    Scroll: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+    GSScroll: ({ children }: { children: React.ReactNode }) => children,
+    Scroll: ({ children }: { children: React.ReactNode }) => children,
     ScrollView: ({
       children,
       onRefresh,
@@ -243,10 +243,10 @@ jest.mock("@components/ScrollView", () => {
       children: React.ReactNode;
       onRefresh: () => void;
     }) => (
-      <>
+      <View>
         {children}
         <TouchableOpacity onPress={onRefresh} testID="refresh" />
-      </>
+      </View>
     ),
   };
 });
@@ -265,7 +265,7 @@ jest.mock("@components/Search", () => {
 jest.mock("@components/Tabs", () => ({
   CollapsibleTab: () => null,
   FAQTabs: () => null,
-  Tabbar: () => null,
+  TabBar: jest.fn(() => null),
 }));
 jest.mock("@components/Texts", () => {
   const { Text } = jest.requireActual("react-native");
@@ -316,7 +316,7 @@ jest.mock("@fragments/Post/Report/ReportModal", () => {
   };
 });
 jest.mock("@fragments/SignUp", () => {
-  const { TouchableOpacity } = jest.requireActual("react-native");
+  const { TouchableOpacity, View } = jest.requireActual("react-native");
 
   return {
     SignUpForm: ({
@@ -326,10 +326,10 @@ jest.mock("@fragments/SignUp", () => {
       children: React.ReactNode;
       buttonOnPress: () => void;
     }) => (
-      <>
+      <View>
         {children}
         <TouchableOpacity onPress={buttonOnPress} testID="button" />
-      </>
+      </View>
     ),
   };
 });
