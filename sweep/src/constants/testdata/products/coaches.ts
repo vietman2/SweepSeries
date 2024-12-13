@@ -77,4 +77,6 @@ export const sampleCoachDetail: CoachDetailType = {
   is_liked: true,
   rating: 4.5,
   num_reviews: 10,
+  instagram: "https://www.instagram.com/abc",
+  blog: "https://www.naver.com/abc",
 };
