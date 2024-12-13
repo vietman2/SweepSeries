@@ -97,7 +97,12 @@ export async function getMyCoachProfile() {
   }
 }
 
-export async function updateCoachIntro(uuid: string, introduction: string) {
+export async function updateCoachIntro(
+  uuid: string | undefined,
+  introduction: string
+) {
+  if (!uuid) return null;
+
   try {
     const response = await axios.patch(`/v1/coaches/${uuid}/introduction/`, {
       introduction,
@@ -109,7 +114,9 @@ export async function updateCoachIntro(uuid: string, introduction: string) {
   }
 }
 
-export async function updateCoachSNS(uuid: string, instagram: string, blog: string) {
+export async function updateCoachSNS(uuid: string | undefined, instagram: string, blog: string) {
+  if (!uuid) return null;
+
   try {
     const response = await axios.patch(`/v1/coaches/${uuid}/sns/`, {
       instagram,

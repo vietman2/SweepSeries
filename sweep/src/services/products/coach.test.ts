@@ -166,6 +166,12 @@ describe("updateCoachIntro", () => {
     expect(result).toEqual({});
   });
 
+  it("should return null if uuid is not provided", async () => {
+    const result = await updateCoachIntro(undefined, "intro");
+
+    expect(result).toBeNull();
+  });
+
   it("should return null on error", async () => {
     jest.spyOn(axios, "patch").mockRejectedValue(null);
 
@@ -182,6 +188,12 @@ describe("updateCoachSNS", () => {
     const result = await updateCoachSNS("coachId", "insta", "blog");
 
     expect(result).toEqual({});
+  });
+
+  it("should return null if uuid is not provided", async () => {
+    const result = await updateCoachSNS(undefined, "insta", "blog");
+
+    expect(result).toBeNull();
   });
 
   it("should return null on error", async () => {
