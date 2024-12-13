@@ -11,9 +11,13 @@ import {
 import {
   createCoach,
   getCoaches,
+  getCoachDetails,
   getEmployedCoaches,
   acceptCoach,
   rejectCoach,
+  getMyCoachProfile,
+  updateCoachIntro,
+  updateCoachSNS,
 } from "./coach";
 
 export {
@@ -27,7 +31,11 @@ export {
   updateBusinessHours,
   createCoach,
   getCoaches,
+  getCoachDetails,
   getEmployedCoaches,
   acceptCoach,
   rejectCoach,
+  getMyCoachProfile,
+  updateCoachIntro,
+  updateCoachSNS,
 };
