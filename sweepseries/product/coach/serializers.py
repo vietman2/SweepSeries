@@ -23,12 +23,14 @@ class CoachSimpleSerializer(serializers.ModelSerializer):
     rating          = serializers.SerializerMethodField(read_only=True)
     num_reviews     = serializers.SerializerMethodField(read_only=True)
     is_liked        = serializers.SerializerMethodField(read_only=True)
+    instagram       = serializers.CharField(read_only=True)
+    blog            = serializers.CharField(read_only=True)
 
     class Meta:
         model = Coach
         fields = [
-            "uuid", "name", "career", "profile_image", "introduction",
-            "professions", "rating", "num_reviews", "is_liked"
+            "uuid", "name", "career", "profile_image", "introduction", "professions",
+            "rating", "num_reviews", "is_liked", "instagram", "blog"
         ]
 
     def get_name(self, obj):

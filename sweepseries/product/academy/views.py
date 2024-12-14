@@ -120,10 +120,10 @@ class AcademyViewSet(ModelViewSet):
                 data={"error": "아카데미 정보가 없습니다."}
             )
 
-        uuids = academies.values_list('uuid', flat=True)
+        academies = AcademySimpleSerializer(academies, many=True)
         return Response(
             status=status.HTTP_200_OK,
-            data={"academies": uuids}
+            data=academies.data
         )
 
     @extend_schema(summary="아카데미 등록 승인", tags=["아카데미"])
