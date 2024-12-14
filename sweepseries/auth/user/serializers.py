@@ -7,6 +7,7 @@ from auth.userprofile.models import UserProfile
 from auth.userprofile.serializers import UserProfileSerializer
 from auth.userprofile.utils import random_nickname_generator
 from product.academy.models import Academy
+from product.coach.models import Coach
 from .models import User
 
 class UserAuthSerializer(serializers.ModelSerializer):
@@ -25,9 +26,12 @@ class UserAuthSerializer(serializers.ModelSerializer):
         return UserProfileSerializer(first_profile).data
 
     def get_mode(self, obj):
-        ## 아카데미 대표이거나 TODO: 코치일 경우 "pro"
+        ## 아카데미 대표이거나
         ## 그 외의 경우 "normal"
         if Academy.objects.filter(owner=obj).exists():
+            return 'pro'
+
+        if Coach.objects.filter(person__user=obj).exists():
             return 'pro'
 
         return 'normal'
