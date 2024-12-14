@@ -189,7 +189,7 @@ class CoachViewSet(ModelViewSet):
 
     @extend_schema(summary="내 코치 정보 조회", tags=["코치"])
     @action(detail=False, methods=['get'])
-    def me(self, request, *args, **kwargs):
+    def me(self, request, *args, **kwargs):     # pylint: disable=unused-argument
         user = request.user
         coach = Coach.objects.filter(person__user=user)
 
@@ -198,7 +198,7 @@ class CoachViewSet(ModelViewSet):
                 status=status.HTTP_404_NOT_FOUND,
                 data={"error": "코치 정보가 없습니다."}
             )
-        
+
         coach = coach.first()
         serializer = CoachSimpleSerializer(coach)
 
@@ -226,7 +226,7 @@ class CoachViewSet(ModelViewSet):
 
     @extend_schema(summary="SNS 정보 수정", tags=["코치"])
     @action(detail=True, methods=['patch'])
-    def sns(self, request, pk=None):
+    def sns(self, request, pk=None):    # pylint: disable=unused-argument
         coach = self.get_object()
 
         instagram = request.data.get('instagram', None)
