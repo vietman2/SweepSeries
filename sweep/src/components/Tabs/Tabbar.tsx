@@ -8,9 +8,9 @@ import {
 } from "react-native";
 import { MaterialTopTabBarProps } from "@react-navigation/material-top-tabs";
 
+import { Scroll } from "@components/ScrollView";
 import { useTheme } from "@contexts/theme";
 import { ThemeColorType } from "@themes/colors";
-import { Scroll } from "@components/ScrollView";
 
 const { width: screenWidth } = Dimensions.get("window");
 

@@ -37,6 +37,31 @@ jest.mock("@react-native-community/datetimepicker", () => {
     DateTimePickerEvent: jest.fn(),
   };
 });
+jest.mock("@react-navigation/material-top-tabs", () => {
+  const { View } = jest.requireActual("react-native");
+  const actual = jest.requireActual("@react-navigation/material-top-tabs");
+  return {
+    ...actual,
+    createMaterialTopTabNavigator: jest.fn(() => ({
+      Navigator: jest.fn(
+        ({
+          tabBar,
+          children,
+        }: {
+          tabBar: () => React.ReactNode;
+          children: React.ReactNode;
+        }) => (
+          <View>
+            {tabBar()}
+            {children}
+          </View>
+        )
+      ),
+      Screen: ({ component }: { component: () => React.ReactNode }) =>
+        component(),
+    })),
+  };
+});
 jest.mock("@components/Buttons", () => ({
   SvgIconButton: ({ icon, onPress }: { icon: string; onPress: () => void }) => {
     const { TouchableOpacity } = jest.requireActual("react-native");
@@ -65,30 +90,6 @@ jest.mock("@components/Buttons", () => ({
     return <TouchableOpacity onPress={onToggle} testID="toggle" />;
   },
 }));
-jest.mock("@react-navigation/material-top-tabs", () => {
-  const { View } = jest.requireActual("react-native");
-  const actual = jest.requireActual("@react-navigation/material-top-tabs");
-  return {
-    ...actual,
-    createMaterialTopTabNavigator: jest.fn(() => ({
-      Navigator: jest.fn(
-        ({
-          tabBar,
-          children,
-        }: {
-          tabBar: () => React.ReactNode;
-          children: React.ReactNode;
-        }) => (
-          <View>
-            {tabBar()}
-            {children}
-          </View>
-        )
-      ),
-      Screen: jest.fn(() => null),
-    })),
-  };
-});
 jest.mock("@components/Calendars", () => ({
   CalendarHeader: () => null,
   CustomHeader: () => null,

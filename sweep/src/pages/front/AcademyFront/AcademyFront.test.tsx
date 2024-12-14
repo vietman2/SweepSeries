@@ -1,9 +1,8 @@
-//import { NavigationContainer } from "@react-navigation/native";
+import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { AcademyFront } from "./AcademyFront";
 import * as AcademiesAPI from "@services/products/academy";
 import { sampleAcademyDetail } from "@testdata/products";
-import { fireEvent, waitFor } from "@testing-library/react-native";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("./Profile/Profile", () => {
