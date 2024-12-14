@@ -108,6 +108,18 @@ class CoachTestCase(APITestCase):
         response = self.client.get(f"{self.url}me/")
         self.assertEqual(response.status_code, 404)
 
+class CoachUpdateTestCase(APITestCase):
+    fixtures = [
+        "core/data/initial/professions.json", "core/data/test/coaches.json",
+        "core/data/test/users.json", "core/data/initial/regions.json",
+        "core/data/test/academies.json", "core/data/initial/facilities.json"
+    ]
+
+    def setUp(self):
+        self.url = "/v1/coaches/"
+        self.user = User.objects.get(username="normaluser")
+        self.user2 = User.objects.get(username="admin")
+
     def test_coach_approve(self):
         self.client.force_authenticate(user=User.objects.get(username="admin"))
         response = self.client.post(f"{self.url}923e4567-e89b-12d3-a456-426614174999/approve/")
@@ -205,3 +217,4 @@ class CoachTestCase(APITestCase):
             "instagram": "https://www.instagram.com/!@#$%^&*", 
             "blog": "https://www.blog.com/test"
         })
+        self.assertEqual(response.status_code, 400)
