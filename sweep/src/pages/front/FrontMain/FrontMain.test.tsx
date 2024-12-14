@@ -1,8 +1,9 @@
+import { fireEvent, waitFor } from "@testing-library/react-native";
+
 import { Front } from "./FrontMain";
 import * as AcademiesAPI from "@services/products/academy";
 import * as CoachesAPI from "@services/products/coach";
 import { sampleAcademies, sampleCoaches } from "@testdata/products";
-import { fireEvent, waitFor } from "@testing-library/react-native";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("../AcademyFront/AcademyFront", () => ({
