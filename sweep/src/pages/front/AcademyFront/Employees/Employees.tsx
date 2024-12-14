@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { useLocalSearchParams } from "expo-router";
 
 import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
@@ -10,8 +9,11 @@ import { CoachSimpleType } from "@models/products";
 import { getEmployedCoaches } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
-export function EmployeeManagement() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+interface Props {
+  uuid: string;
+}
+
+export function EmployeeManagement({ uuid }: Readonly<Props>) {
   const [coaches, setCoaches] = useState<CoachSimpleType[]>([]);
   const [requests, setRequests] = useState<CoachSimpleType[]>([]);
 
@@ -26,7 +28,7 @@ export function EmployeeManagement() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getEmployedCoaches(id);
+      const response = await getEmployedCoaches(uuid);
 
       if (response) {
         setCoaches(response.accepted);
@@ -38,7 +40,7 @@ export function EmployeeManagement() {
     };
 
     fetchData();
-  }, [refreshCount]);
+  }, [refreshCount, uuid]);
 
   return (
     <Scroll style={styles.container}>

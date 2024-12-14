@@ -9,9 +9,11 @@ import { FAQTabs } from "./FAQTabs";
 import { TabBar } from "./Tabbar";
 import { renderWithProviders } from "@utils/test-utils";
 
+jest.unmock("@react-navigation/material-top-tabs");
+
 const Tab = createMaterialTopTabNavigator();
 
-const MockComponent = () => <></>;
+const MockComponent = () => <div />;
 
 configureReanimatedLogger({
   strict: false,

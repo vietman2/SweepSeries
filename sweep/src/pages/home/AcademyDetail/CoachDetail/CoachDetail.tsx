@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
-//import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 
 import { Divider } from "@components/Dividers";
 import { AppIcon } from "@components/Icons";
@@ -8,18 +8,26 @@ import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
 import { CoachDetailType } from "@models/products";
-import { sampleCoachDetail } from "@testdata/products";
+import { getCoachDetails } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
 export function CoachDetail() {
   const [coach, setCoach] = useState<CoachDetailType>();
-  //const { id } = useLocalSearchParams();
+  const { id } = useLocalSearchParams<{ id: string }>();
 
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   useEffect(() => {
-    setCoach(sampleCoachDetail);
+    const fetchData = async () => {
+      const response = await getCoachDetails(id);
+
+      if (response) {
+        setCoach(response);
+      }
+    };
+
+    fetchData();
   }, []);
 
   if (!coach) {
@@ -27,7 +35,7 @@ export function CoachDetail() {
   }
 
   return (
-    <Scroll>
+    <Scroll style={styles.wrapper}>
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.profile}>
@@ -74,12 +82,14 @@ export function CoachDetail() {
 
 const createStyles = (theme: ThemeColorType) =>
   StyleSheet.create({
-    container: {
+    wrapper: {
       flex: 1,
+      backgroundColor: theme.background,
+    },
+    container: {
       paddingTop: 24,
       paddingHorizontal: 16,
       gap: 16,
-      backgroundColor: theme.background,
     },
     header: {
       paddingHorizontal: 8,
@@ -113,7 +123,7 @@ const createStyles = (theme: ThemeColorType) =>
     horizontal: {
       flexDirection: "row",
       alignItems: "center",
-      gap: 4,
+      gap: 8,
     },
     professions: {
       fontSize: 14,

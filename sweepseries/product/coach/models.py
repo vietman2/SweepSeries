@@ -28,6 +28,9 @@ class Coach(models.Model):
     )
     professions     = models.ManyToManyField(CoachProfession, related_name='coaches')
 
+    instagram       = models.URLField(max_length=200, blank=True)
+    blog            = models.URLField(max_length=200, blank=True)
+
     is_verified     = models.BooleanField(default=False)
     verified_at     = models.DateTimeField(null=True)
     is_rejected     = models.BooleanField(default=False)

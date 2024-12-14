@@ -10,27 +10,29 @@ from drf_spectacular.utils import extend_schema
 
 from core.permissions import AdminOnly
 from core.utils import is_admin_page
+from product.validators import validate_instagram_url, normalize_instagram_url
 from .enums import CoachApplicationStatus
 from .models import Coach
+from .permissions import IsSelf
 from .serializers import CoachSimpleSerializer, CoachRegisterSerializer, CoachStatusSerializer
 
 class CoachViewSet(ModelViewSet):
     queryset = Coach.objects.all()
     serializer_class = CoachSimpleSerializer
-    http_method_names = ['get', 'post']
+    http_method_names = ['get', 'post', 'patch']
 
     def get_permissions(self):
-        login_needed = ['create', 'accept', 'deny']
+        login_needed = ['create', 'accept', 'deny', 'me']
         must_be_admin = ['approve', 'reject']
-        #must_be_owner = ['introduction', 'facilities', 'hours']
+        must_be_self = ['introduction', 'sns']
         permissions = []
 
         if self.action in login_needed:
             permissions.append(IsAuthenticated())
         if self.action in must_be_admin:
             permissions.append(AdminOnly())
-        #if self.action in must_be_owner:
-        #    permissions.append(IsAcademyOwner())
+        if self.action in must_be_self:
+            permissions.append(IsSelf())
 
         return permissions
 
@@ -94,6 +96,20 @@ class CoachViewSet(ModelViewSet):
         serializer.context['request'] = request
 
         return Response(serializer.data,status=status.HTTP_200_OK)
+
+    @extend_schema(summary="코치 상세 조회", tags=["코치"])
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = CoachSimpleSerializer(instance)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(exclude=True)
+    def partial_update(self, request, *args, **kwargs):
+        return Response(
+            status=status.HTTP_405_METHOD_NOT_ALLOWED,
+            data={"error": "PATCH 메소드는 지원하지 않습니다."}
+        )
 
     @extend_schema(summary="코치 승인", tags=["코치"])
     @action(detail=True, methods=['post'])
@@ -169,4 +185,71 @@ class CoachViewSet(ModelViewSet):
         return Response(
             status=status.HTTP_200_OK,
             data={"message": "코치 거부에 성공했습니다."}
+        )
+
+    @extend_schema(summary="내 코치 정보 조회", tags=["코치"])
+    @action(detail=False, methods=['get'])
+    def me(self, request, *args, **kwargs):     # pylint: disable=unused-argument
+        user = request.user
+        coach = Coach.objects.filter(person__user=user)
+
+        if not coach.exists():
+            return Response(
+                status=status.HTTP_404_NOT_FOUND,
+                data={"error": "코치 정보가 없습니다."}
+            )
+
+        coach = coach.first()
+        serializer = CoachSimpleSerializer(coach)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(summary="코치 소개글 수정", tags=["코치"])
+    @action(detail=True, methods=['patch'])
+    def introduction(self, request, pk=None):   # pylint: disable=unused-argument
+        coach = self.get_object()
+
+        introduction = request.data.get('introduction', None)
+        if introduction is None:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={"error": "소개글을 입력해주세요."}
+            )
+
+        coach.introduction = introduction
+        coach.save()
+
+        return Response(
+            status=status.HTTP_200_OK,
+            data={"message": "소개글 수정에 성공했습니다."}
+        )
+
+    @extend_schema(summary="SNS 정보 수정", tags=["코치"])
+    @action(detail=True, methods=['patch'])
+    def sns(self, request, pk=None):    # pylint: disable=unused-argument
+        coach = self.get_object()
+
+        instagram = request.data.get('instagram', None)
+        blog = request.data.get('blog', None)
+        if instagram is None or blog is None:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={"error": "SNS 정보를 입력해주세요."}
+            )
+
+        try:
+            validate_instagram_url(instagram)
+        except ValidationError as e:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={"error": e.detail}
+            )
+
+        coach.instagram = normalize_instagram_url(instagram)
+        coach.blog = blog
+        coach.save()
+
+        return Response(
+            status=status.HTTP_200_OK,
+            data={"message": "SNS 정보 수정에 성공했습니다."}
         )

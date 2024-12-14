@@ -24,4 +24,6 @@ export type CoachDetailType = {
   rating: number;
   num_reviews: number;
   introduction: string;
+  instagram: string;
+  blog: string;
 };

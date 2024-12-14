@@ -56,7 +56,8 @@ class AcademySimpleSerializer(serializers.ModelSerializer):
         return obj.likes.count()
 
     def get_is_liked(self, obj):
-        user = self.context['request'].user
+        request = self.context.get('request')
+        user = request.user if request else None
         if user is None or not user.is_authenticated:
             return False
 
