@@ -20,7 +20,7 @@ from community.post.views import PostViewSet, PostReportViewSet
 from community.tag.views import TagViewSet
 
 ## Product
-from product.academy.views import AcademyViewSet, FacilityViewSet
+from product.academy.views import AcademyViewSet, FacilityViewSet, AcademyNoticeViewSet
 from product.coach.views import CoachViewSet
 
 router = DefaultRouter()
@@ -40,6 +40,9 @@ router.register(r'reports/recomments', ReCommentReportViewSet, basename='recomme
 router.register(r'reports/posts', PostReportViewSet, basename='post-reports')
 router.register(r'tags', TagViewSet, basename='tags')
 
+router.register(
+    r'academies/(?P<academy_id>[^/.]+)/notices', AcademyNoticeViewSet, basename='academy-notices'
+)
 router.register(r'academies', AcademyViewSet, basename='academies')
 router.register(r'facilities', FacilityViewSet, basename='facilities')
 router.register(r'coaches', CoachViewSet, basename='coaches')

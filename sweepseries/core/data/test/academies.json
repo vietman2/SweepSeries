@@ -370,5 +370,27 @@
       "is_closed": false,
       "is_allday": true
     }
+  },
+  {
+    "model": "academy.academynotice",
+    "pk": 1,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174999",
+      "title": "[일반] 공지 제목 1",
+      "content": "공지 내용 1",
+      "created_at": "2024-12-15T00:42:46.373",
+      "updated_at": "2024-12-15T00:42:46.373"
+    }
+  },
+  {
+    "model": "academy.academynotice",
+    "pk": 2,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174999",
+      "title": "[일반] 공지 제목 2",
+      "content": "공지 내용 2",
+      "created_at": "2024-12-15T00:47:21.662",
+      "updated_at": "2024-12-15T00:47:21.662"
+    }
   }
 ]

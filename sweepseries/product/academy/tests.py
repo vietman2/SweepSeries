@@ -316,3 +316,48 @@ class FacilityTestCase(APITestCase):
     def test_facility_detail(self):
         response = self.client.get(f"{self.url}1/")
         self.assertEqual(response.status_code, 405)
+
+class AcademyNoticeTestCase(APITestCase):
+    fixtures = [
+        "core/data/test/users.json", "core/data/initial/regions.json",
+        "core/data/test/academies.json", "core/data/initial/facilities.json",
+        "core/data/test/coaches.json", "core/data/initial/professions.json",
+    ]
+
+    def setUp(self):
+        self.url = "/v1/academies/123e4567-e89b-12d3-a456-426614174999/notices/"
+        self.user = User.objects.get(username="normaluser")
+
+    def test_academy_notice_list(self):
+        response = self.client.get(f"{self.url}")
+        self.assertEqual(response.status_code, 200)
+
+    def test_academy_notice_detail(self):
+        response = self.client.get(f"{self.url}1/")
+        self.assertEqual(response.status_code, 405)
+
+    def test_academy_notice_create(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post(f"{self.url}", {
+            "title": "제목",
+            "content": "내용",
+        })
+        self.assertEqual(response.status_code, 201)
+
+    def test_academy_notice_create_fail(self):
+        ## 1. empty data
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post(f"{self.url}", {
+            "title": "",
+            "content": "",
+        })
+        self.assertEqual(response.status_code, 400)
+
+        ## 2. no auth
+        user = User.objects.get(username="admin")
+        self.client.force_authenticate(user=user)
+        response = self.client.post(f"{self.url}", {
+            "title": "제목",
+            "content": "내용",
+        })
+        self.assertEqual(response.status_code, 403)
