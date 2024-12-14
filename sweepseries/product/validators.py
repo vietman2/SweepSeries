@@ -1,6 +1,6 @@
 import re
-from rest_framework.exceptions import ValidationError
 from urllib.parse import urlparse, urlunparse
+from rest_framework.exceptions import ValidationError
 
 def validate_instagram_url(value):
     parsed = urlparse(value)
@@ -26,6 +26,6 @@ def normalize_instagram_url(value):
 
     path = parsed.path.rstrip('/')
 
-    normalize_instagram_url = urlunparse((scheme, netloc, path, '', '', ''))
+    normalized_url = urlunparse((scheme, netloc, path, '', '', ''))
 
-    return normalize_instagram_url
+    return normalized_url
