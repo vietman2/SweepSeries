@@ -19,6 +19,7 @@ import {
   updateCoachIntro,
   updateCoachSNS,
 } from "./coach";
+import { createNotice, getNotices } from "./notices";
 
 export {
   createAcademy,
@@ -38,4 +39,6 @@ export {
   getMyCoachProfile,
   updateCoachIntro,
   updateCoachSNS,
+  createNotice,
+  getNotices,
 };

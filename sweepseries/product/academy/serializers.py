@@ -9,7 +9,7 @@ from auth.user.serializers import UserRelatedSerializer
 from core.utils import get_presigned_url
 from product.address.models import Address, Sigungu
 from product.address.utils import get_coordinates, fetch_map_image
-from .models import Academy, AcademyFacility, BusinessHours
+from .models import Academy, AcademyFacility, AcademyNotice, BusinessHours
 from .utils import get_weekly_schedule, get_schedule_details
 
 class ConvenienceSerializer(serializers.ModelSerializer):
@@ -246,3 +246,17 @@ class AcademyRegisterSerializer(serializers.ModelSerializer):
             BusinessHours.objects.create_business_hours(academy)
 
             return academy
+
+class AcademyNoticeSerializer(serializers.ModelSerializer):
+    id          = serializers.IntegerField(read_only=True)
+    title       = serializers.CharField()
+    content     = serializers.CharField()
+    updated_at  = serializers.DateTimeField(format="%Y.%m.%d", read_only=True)
+
+    class Meta:
+        model = AcademyNotice
+        fields = ["id", "title", "content", "updated_at"]
+
+    def create(self, validated_data):
+        academy = self.context['academy']
+        return AcademyNotice.objects.create(academy=academy, **validated_data)

@@ -112,3 +112,16 @@ class BusinessHours(models.Model):
     class Meta:
         db_table = 'business_hours'
         unique_together = ('academy', 'day_of_week')
+
+class AcademyNotice(models.Model):
+    academy     = models.ForeignKey(Academy, on_delete=models.CASCADE, related_name='notices')
+    title       = models.CharField(max_length=100)
+    content     = models.TextField()
+    created_at  = models.DateTimeField(auto_now_add=True)
+    updated_at  = models.DateTimeField(auto_now=True)
+
+    objects     = models.Manager()
+
+    class Meta:
+        db_table = 'academy_notice'
+        ordering = ['-created_at']
