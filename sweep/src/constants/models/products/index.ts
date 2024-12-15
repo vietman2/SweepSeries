@@ -7,7 +7,7 @@ import {
 } from "./academy";
 import { CoachDetailType, CoachProfessionType, CoachSimpleType } from "./coach";
 import { NoticeSimpleType } from "./notice";
-import { ProgramSimpleType, LessonPositionType } from "./program";
+import { ProgramSimpleType, PositionTargetType } from "./program";
 import { ReviewType, ReplyType } from "./review";
 
 export {
@@ -21,7 +21,7 @@ export {
   ScheduleDetailType,
   NoticeSimpleType,
   ProgramSimpleType,
-  LessonPositionType,
+  PositionTargetType,
   ReviewType,
   ReplyType,
 };

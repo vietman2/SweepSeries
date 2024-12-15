@@ -1,0 +1,11 @@
+[
+  { "model": "program.target", "pk": 1, "fields": { "name": "선수반" } },
+  { "model": "program.target", "pk": 2, "fields": { "name": "취미반" } },
+  { "model": "program.target", "pk": 3, "fields": { "name": "사회인야구반" } },
+  { "model": "program.target", "pk": 4, "fields": { "name": "여자야구반" } },
+  { "model": "program.position", "pk": 1, "fields": { "name": "투수레슨" } },
+  { "model": "program.position", "pk": 2, "fields": { "name": "타격레슨" } },
+  { "model": "program.position", "pk": 3, "fields": { "name": "수비레슨" } },
+  { "model": "program.position", "pk": 4, "fields": { "name": "포수레슨" } },
+  { "model": "program.position", "pk": 4, "fields": { "name": "트레이닝" } }
+]

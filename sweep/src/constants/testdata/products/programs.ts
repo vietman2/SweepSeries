@@ -1,24 +1,30 @@
-import { ProgramSimpleType, LessonPositionType } from "@models/products";
+import { ProgramSimpleType, PositionTargetType } from "@models/products";
 
-const sampleProgramPositions: LessonPositionType[] = [
+export const sampleProgramPositions: PositionTargetType[] = [
   {
     id: 1,
-    name: "pitchers",
-    kor_name: "투수레슨",
+    name: "투수레슨",
   },
   {
     id: 2,
-    name: "batters",
-    kor_name: "타격레슨",
+    name: "타격레슨",
   },
 ];
+
+export const sampleProgramTargets: PositionTargetType[] = [{
+  id: 1,
+  name: "선수반",
+}, {
+  id: 2,
+  name: "사회인야구반",
+}];
 
 export const sampleAcademyPrograms: ProgramSimpleType[] = [
   {
     id: 1,
     name: "엘리트선수(중학생) 1:1 개인레슨 (60분)",
     rating: 4.89,
-    target: "선수반",
+    target: sampleProgramTargets[0],
     positions: sampleProgramPositions,
     lowest_price: 150000,
   },
@@ -26,7 +32,7 @@ export const sampleAcademyPrograms: ProgramSimpleType[] = [
     id: 2,
     name: "엘리트선수(초등학생) 1:1 개인레슨 (60분)",
     rating: 3.94,
-    target: "선수반",
+    target: sampleProgramTargets[0],
     positions: sampleProgramPositions,
     lowest_price: 120000,
   },
@@ -34,7 +40,7 @@ export const sampleAcademyPrograms: ProgramSimpleType[] = [
     id: 3,
     name: "사회인야구 1:1 개인레슨",
     rating: 4.23,
-    target: "사회인야구반",
+    target: sampleProgramTargets[1],
     positions: sampleProgramPositions,
     lowest_price: 80000,
   },
@@ -42,7 +48,7 @@ export const sampleAcademyPrograms: ProgramSimpleType[] = [
     id: 4,
     name: "사회인야구 1:4 그룹레슨",
     rating: 4.67,
-    target: "사회인야구반",
+    target: sampleProgramTargets[1],
     positions: sampleProgramPositions,
     lowest_price: 80000,
   },

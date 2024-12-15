@@ -2,13 +2,12 @@ export type ProgramSimpleType = {
   id: number;
   name: string;
   rating: number;
-  positions: LessonPositionType[];
-  target: string;
+  positions: PositionTargetType[];
+  target: PositionTargetType;
   lowest_price: number;
 };
 
-export type LessonPositionType = {
+export type PositionTargetType = {
   id: number;
   name: string;
-  kor_name: string;
 };
