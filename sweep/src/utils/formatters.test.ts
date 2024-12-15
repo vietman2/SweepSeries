@@ -3,6 +3,7 @@ import {
   formatPhoneNumberText,
   formatRegistrationNumber,
   formatTime,
+  formatPrice,
 } from "./formatters";
 
 it("formats birth date", () => {
@@ -38,4 +39,9 @@ it("formats registration number", () => {
 it("formats time", () => {
   expect(formatTime("1234")).toBe("12:34");
   expect(formatTime("123")).toBe("123");
+});
+
+it("formats price", () => {
+  expect(formatPrice(1234567890)).toBe("1,234,567,890");
+  expect(formatPrice(-32890)).toBe("-32,890");
 });
