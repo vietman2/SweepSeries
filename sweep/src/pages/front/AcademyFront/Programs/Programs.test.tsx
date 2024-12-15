@@ -1,7 +1,8 @@
+import { fireEvent, waitFor } from "@testing-library/react-native";
+
 import { ProgramManagement } from "./Programs";
 import * as ProgramsAPI from "@services/products/programs";
 import { sampleAcademyPrograms } from "@testdata/products";
-import { fireEvent, waitFor } from "@testing-library/react-native";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("expo-router", () => ({
