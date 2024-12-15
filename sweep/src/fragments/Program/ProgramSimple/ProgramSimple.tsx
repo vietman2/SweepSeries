@@ -21,17 +21,17 @@ export function ProgramSimple({ program }: Readonly<Props>) {
         <View style={styles.footer}>
           <View style={styles.rating}>
             <AppIcon icon="star" size={14} color="#F2B517" />
-            <Text style={styles.ratingText}>{program.rating.toFixed(2)}</Text>
+            <Text style={styles.ratingText}>4.89</Text>
           </View>
           <View style={styles.chips}>
-            <Chip text={program.target} />
+            <Chip text={program.target.name} />
             {program.positions.map((position) => (
-              <Chip key={position.id} text={position.kor_name} />
+              <Chip key={position.id} text={position.name} />
             ))}
           </View>
         </View>
       </View>
-      <Text style={styles.bold}>{program.lowest_price.toLocaleString()}~</Text>
+      <Text style={styles.bold}>100,000~</Text>
     </View>
   );
 }
