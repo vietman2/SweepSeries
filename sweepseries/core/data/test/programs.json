@@ -1,0 +1,74 @@
+[
+  { "model": "program.target", "pk": 1, "fields": { "name": "선수반" } },
+  { "model": "program.target", "pk": 2, "fields": { "name": "취미반" } },
+  { "model": "program.target", "pk": 3, "fields": { "name": "사회인야구반" } },
+  { "model": "program.target", "pk": 4, "fields": { "name": "여자야구반" } },
+  { "model": "program.position", "pk": 1, "fields": { "name": "투수레슨" } },
+  { "model": "program.position", "pk": 2, "fields": { "name": "타격레슨" } },
+  { "model": "program.position", "pk": 3, "fields": { "name": "수비레슨" } },
+  { "model": "program.position", "pk": 4, "fields": { "name": "트레이닝" } },
+  {
+    "model": "program.program",
+    "pk": 1,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174999",
+      "name": "레슨 1",
+      "duration": 90,
+      "target": 1,
+      "positions": [1]
+    }
+  },
+  {
+    "model": "program.program",
+    "pk": 2,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174999",
+      "name": "레슨 2",
+      "duration": 90,
+      "target": 1,
+      "positions": [1]
+    }
+  },
+  {
+    "model": "program.program",
+    "pk": 3,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174999",
+      "name": "레슨 3",
+      "duration": 60,
+      "target": 3,
+      "positions": [2]
+    }
+  },
+  {
+    "model": "program.program",
+    "pk": 4,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174999",
+      "name": "레슨 4",
+      "duration": 60,
+      "target": 3,
+      "positions": [1]
+    }
+  },
+  {
+    "model": "program.curriculum",
+    "pk": 1,
+    "fields": { "program": 1, "num_lessons": 1, "price": 1500000 }
+  },
+  {
+    "model": "program.curriculum",
+    "pk": 2,
+    "fields": { "program": 2, "num_lessons": 8, "price": 1500000 }
+  },
+  {
+    "model": "program.curriculum",
+    "pk": 3,
+    "fields": { "program": 3, "num_lessons": 8, "price": 800000 }
+  },
+  {
+    "model": "program.curriculum",
+    "pk": 4,
+    "fields": { "program": 4, "num_lessons": 8, "price": 800000 }
+  }
+]

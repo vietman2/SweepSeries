@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'product.academy.apps.AcademyConfig',
     'product.address.apps.AddressConfig',
     'product.coach.apps.CoachConfig',
+    'product.program.apps.ProgramConfig',
 ]
 
 MIDDLEWARE = [

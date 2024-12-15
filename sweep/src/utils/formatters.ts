@@ -73,3 +73,23 @@ export const formatTime = (time: string) => {
   }
   return time;
 };
+
+export const formatPrice = (price: number) => {
+  const totalString = price.toString();
+  const totalLength = totalString.length;
+  let formattedTotal = "";
+
+  for (let i = 0; i < totalLength; i++) {
+    // ignore if first character is a minus sign
+    if (totalString[i] === "-") {
+      formattedTotal += "-";
+      continue;
+    }
+    formattedTotal += totalString[i];
+    if ((totalLength - i - 1) % 3 === 0 && i !== totalLength - 1) {
+      formattedTotal += ",";
+    }
+  }
+
+  return formattedTotal;
+};

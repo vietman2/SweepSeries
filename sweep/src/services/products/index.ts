@@ -20,6 +20,7 @@ import {
   updateCoachSNS,
 } from "./coach";
 import { createNotice, getNotices } from "./notices";
+import { getTargets, getPositions, createProgram, getPrograms } from "./programs";
 
 export {
   createAcademy,
@@ -41,4 +42,8 @@ export {
   updateCoachSNS,
   createNotice,
   getNotices,
+  getTargets,
+  getPositions,
+  getPrograms,
+  createProgram,
 };
