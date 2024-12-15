@@ -8,6 +8,7 @@ interface Props {
   color?: string;
   backgroundColor?: string;
   align?: "flex-start" | "center";
+  small?: boolean;
 }
 
 export function SvgIconButton({
@@ -17,6 +18,7 @@ export function SvgIconButton({
   color = "black",
   backgroundColor = "transparent",
   align = "flex-start",
+  small = false
 }: Readonly<Props>) {
   const url = `https://kr.object.ncloudstorage.com/sweepdev/icons/${icon}.svg`;
   return (
@@ -25,7 +27,7 @@ export function SvgIconButton({
       onPress={onPress}
     >
       <SvgCssUri uri={url} width={"18"} height={"18"} color={color} />
-      <Text style={[styles.svgtexthorizontal, { color }]}>
+      <Text style={{ color, fontSize: small ? 16 : 20 }}>
         {text}
       </Text>
     </TouchableOpacity>
@@ -40,8 +42,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     borderRadius: 4,
     gap: 8,
-  },
-  svgtexthorizontal: {
-    fontSize: 20,
   },
 });

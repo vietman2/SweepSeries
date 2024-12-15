@@ -11,11 +11,15 @@ jest.unmock("@components/Buttons");
 describe("<SvgIconButton>", () => {
   it("renders correctly", () => {
     renderWithProviders(
-      <SvgIconButton
-        icon="heart-outline"
-        text="좋아요 목록"
-        onPress={() => {}}
-      />
+      <div>
+        <SvgIconButton
+          icon="heart-outline"
+          text="좋아요 목록"
+          onPress={() => {}}
+          small
+        />
+        <SvgIconButton icon="heart" text="좋아요" onPress={() => {}} />
+      </div>
     );
   });
 });
@@ -60,6 +64,8 @@ describe("<Toggle>", () => {
   });
 
   it("renders off correctly", () => {
-    waitFor(() => renderWithProviders(<Toggle isOn={false} onToggle={jest.fn()} />));
+    waitFor(() =>
+      renderWithProviders(<Toggle isOn={false} onToggle={jest.fn()} />)
+    );
   });
 });
