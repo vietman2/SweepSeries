@@ -51,6 +51,8 @@ export function AcademyFront({ uuid }: Readonly<Props>) {
 
   const Notices = () => <NoticeManagement uuid={uuid} />;
 
+  const Programs = () => <ProgramManagement uuid={uuid} />;
+
   return (
     <Tab.Navigator
       initialRouteName="profile"
@@ -69,7 +71,7 @@ export function AcademyFront({ uuid }: Readonly<Props>) {
       />
       <Tab.Screen
         name="programs"
-        component={ProgramManagement}
+        component={Programs}
         options={{ title: "프로그램" }}
       />
       <Tab.Screen
