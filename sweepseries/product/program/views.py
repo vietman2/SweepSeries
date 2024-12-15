@@ -16,7 +16,7 @@ class ProgramViewSet(ModelViewSet):
 
     @extend_schema(summary="프로그램 대상 목록 조회", tags=["프로그램"])
     @action(detail=False, methods=['get'])
-    def targets(self, request):
+    def targets(self, request):         ## pylint: disable=unused-argument
         targets = Target.objects.all()
         serializer = TargetSerializer(targets, many=True)
 
@@ -24,14 +24,14 @@ class ProgramViewSet(ModelViewSet):
 
     @extend_schema(summary="프로그램 포지션 목록 조회", tags=["프로그램"])
     @action(detail=False, methods=['get'])
-    def positions(self, request):
+    def positions(self, request):       ## pylint: disable=unused-argument
         positions = Position.objects.all()
         serializer = PositionSerializer(positions, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema(summary="프로그램 생성", tags=["프로그램"])
-    def create(self, request):
+    def create(self, request, *args, **kwargs):
         serializer = ProgramSerializer(data=request.data)
         academy_id = request.data.get("academy")
         target_id = request.data.get("target")
@@ -52,7 +52,7 @@ class ProgramViewSet(ModelViewSet):
         return Response({"message": "프로그램이 생성되었습니다."}, status=status.HTTP_201_CREATED)
 
     @extend_schema(summary="프로그램 목록 조회", tags=["프로그램"])
-    def list(self, request):
+    def list(self, request, *args, **kwargs):
         academy_id = request.query_params.get("academy")
 
         if academy_id is None:

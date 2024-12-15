@@ -1,4 +1,4 @@
-from django.db import models, transaction
+from django.db import transaction
 from rest_framework import serializers
 
 from .models import Program, Position, Target, Curriculum
