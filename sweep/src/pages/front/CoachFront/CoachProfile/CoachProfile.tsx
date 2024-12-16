@@ -8,6 +8,7 @@ import {
 } from "react-native";
 
 import { Divider } from "@components/Dividers";
+import { LoadingComponent } from "@components/Fallbacks";
 import { AppIcon } from "@components/Icons";
 import { TextInput } from "@components/Inputs";
 import { SimpleModal } from "@components/Modals";
@@ -22,7 +23,6 @@ import {
   updateCoachSNS,
 } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
-import { ErrorPage } from "@components/Fallbacks";
 
 interface Props {
   uuid: string;
@@ -112,7 +112,7 @@ export function CoachProfile({ uuid }: Readonly<Props>) {
   }, [refreshCount, uuid]);
 
   if (!coach) {
-    return <ErrorPage />;
+    return <LoadingComponent />;
   }
 
   return (

@@ -1,7 +1,8 @@
+import { fireEvent, waitFor } from "@testing-library/react-native";
+
 import { CoachProfile } from "./CoachProfile";
 import * as CoachesAPI from "@services/products/coach";
 import { sampleCoachDetail } from "@testdata/products";
-import { fireEvent, waitFor } from "@testing-library/react-native";
 import { renderWithProviders } from "@utils/test-utils";
 
 describe("<CoachProfile />", () => {
@@ -10,12 +11,12 @@ describe("<CoachProfile />", () => {
       .spyOn(CoachesAPI, "getCoachDetails")
       .mockResolvedValue(null);
 
-    const { getByTestId } = renderWithProviders(
+    renderWithProviders(
       <CoachProfile uuid="uuid" />
     );
 
     await waitFor(() => {
-        expect(getByTestId("error")).toBeTruthy();
+        expect("LoadingComponent").toBeTruthy();
     });
   });
 

@@ -15,7 +15,7 @@ import BottomSheet, {
 import { AcademyFront } from "../AcademyFront/AcademyFront";
 import { CoachFront } from "../CoachFront/CoachFront";
 import { Divider } from "@components/Dividers";
-import { ErrorPage } from "@components/Fallbacks";
+import { LoadingComponent } from "@components/Fallbacks";
 import { AppIcon, CustomLogo } from "@components/Icons";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
@@ -82,7 +82,7 @@ export function Front() {
     []
   );
 
-  if (mode === null) return <ErrorPage />;
+  if (mode === null) return <LoadingComponent />;
 
   return (
     <>
