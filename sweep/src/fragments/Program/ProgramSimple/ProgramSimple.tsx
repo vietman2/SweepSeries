@@ -31,7 +31,7 @@ export function ProgramSimple({ program }: Readonly<Props>) {
           </View>
         </View>
       </View>
-      <Text style={styles.bold}>100,000~</Text>
+      <Text style={styles.bold}>{program.lowest_price.toLocaleString()}~</Text>
     </View>
   );
 }
@@ -76,7 +76,7 @@ const createStyles = (theme: ThemeColorType) =>
     footer: {
       flexDirection: "row",
       alignItems: "center",
-      gap: 16,
+      gap: 12,
     },
     rating: {
       flexDirection: "row",
@@ -90,7 +90,7 @@ const createStyles = (theme: ThemeColorType) =>
     chips: {
       flexDirection: "row",
       alignItems: "center",
-      gap: 8,
+      gap: 4,
     },
     chip: {
       paddingHorizontal: 4,
