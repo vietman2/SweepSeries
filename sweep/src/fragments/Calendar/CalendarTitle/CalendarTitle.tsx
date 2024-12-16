@@ -12,9 +12,9 @@ export function CalendarTitle({ calendar }: Readonly<Props>) {
   return (
     <View style={styles.container}>
       <View style={[styles.fill, { backgroundColor: calendar.color }]}>
-        <Text style={styles.character}>{calendar.title[0]}</Text>
+        <Text style={styles.character}>{calendar.name[0]}</Text>
       </View>
-      <Text style={styles.title}>{calendar.title}</Text>
+      <Text style={styles.title}>{calendar.name}</Text>
       <AppIcon icon="chevron-down" size={16} color="gray" />
     </View>
   );

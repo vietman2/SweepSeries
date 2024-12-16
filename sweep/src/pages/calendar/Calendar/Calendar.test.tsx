@@ -1,7 +1,9 @@
-import { fireEvent } from "@testing-library/react-native";
+import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { Calendar } from "./Calendar";
+import * as CalendarsAPI from "@services/calendar/calendars";
 import { renderWithProviders } from "@utils/test-utils";
+import { sampleCalendars } from "@testdata/calendar";
 
 jest.mock("expo-router", () => ({
   router: {
@@ -26,33 +28,40 @@ describe("<Calendar />", () => {
     jest.clearAllMocks();
     jest.useFakeTimers();
     jest.setSystemTime(new Date("2024-01-01").getTime());
+    jest.spyOn(CalendarsAPI, "getCalendars").mockResolvedValue(sampleCalendars);
   });
 
-  it("renders correctly (month >= 10) and open settings", () => {
+  it("renders correctly (month >= 10) and open settings", async () => {
     jest.setSystemTime(new Date("2024-10-01").getTime());
 
     const { getByTestId } = renderWithProviders(<Calendar />);
 
-    fireEvent.press(getByTestId("open-settings"));
+    await waitFor(() => fireEvent.press(getByTestId("open-settings")));
   });
 
-  it("renders correctly (month < 10) and handles search", () => {
+  it("renders correctly (month < 10) and handles search", async () => {
     const { getByTestId } = renderWithProviders(<Calendar />);
 
-    fireEvent.press(getByTestId("open-list"));
-    fireEvent.press(getByTestId("search"));
+    await waitFor(() => {
+      fireEvent.press(getByTestId("open-list"));
+      fireEvent.press(getByTestId("search"));
+    });
   });
 
-  it("handles calendar select", () => {
+  it("handles calendar select", async () => {
     const { getByTestId } = renderWithProviders(<Calendar />);
 
-    fireEvent.press(getByTestId("calendar-1"));
-    fireEvent.press(getByTestId("close-buttons"));
+    await waitFor(() => {
+      fireEvent.press(getByTestId("calendar-1"));
+      fireEvent.press(getByTestId("close-buttons"));
+    });
   });
 
-  it("handles day navigate", () => {
+  it("handles day navigate", async () => {
     const { getByTestId } = renderWithProviders(<Calendar />);
 
-    fireEvent.press(getByTestId("day-2024-01-01"));
+    await waitFor(() => {
+      fireEvent.press(getByTestId("day-2024-01-01"));
+    });
   });
 });
