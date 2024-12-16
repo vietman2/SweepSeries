@@ -6,8 +6,10 @@ export type CalendarMemberType = {
 
 export type CalendarType = {
   id: number;
-  title: string;
+  name: string;
   color: string;
+  is_owner: boolean;
+  num_members: number;
   owner: CalendarMemberType;
   members: CalendarMemberType[];
 };

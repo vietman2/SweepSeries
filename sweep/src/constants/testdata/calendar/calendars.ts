@@ -22,16 +22,20 @@ const calendarMembers: CalendarMemberType[] = [
 export const sampleCalendars: CalendarType[] = [
   {
     id: 1,
-    title: "Catch B 캘린더",
+    name: "Catch B 캘린더",
     color: "#FFD700",
     owner: calendarOwner,
     members: [],
+    is_owner: true,
+    num_members: 1,
   },
   {
     id: 2,
-    title: "홍길동 코치 개인 캘린더",
+    name: "홍길동 코치 개인 캘린더",
     color: "#FF6B6B",
     owner: calendarOwner,
     members: calendarMembers,
+    is_owner: false,
+    num_members: 2,
   },
 ];
