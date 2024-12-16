@@ -46,7 +46,7 @@ export function CalendarOptions({ calendar }: Readonly<Props>) {
   };
 
   useEffect(() => {
-    setCalendarName(calendar.title);
+    setCalendarName(calendar.name);
     setCalendarColor(calendar.color);
   }, [calendar]);
 
@@ -58,7 +58,7 @@ export function CalendarOptions({ calendar }: Readonly<Props>) {
           onPress={() => setNameModalOpen(true)}
           testID="open-name-modal"
         >
-          <Text style={styles.text}>{calendar.title}</Text>
+          <Text style={styles.text}>{calendar.name}</Text>
           <AppIcon icon="chevron-right" size={14} color={theme.lowEmphasis} />
         </TouchableOpacity>
         <Divider />

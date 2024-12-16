@@ -16,7 +16,7 @@ export function CalendarSimple({ calendar }: Readonly<Props>) {
 
   if (!calendar) {
     return (
-      <View style={styles.container}>
+      <View style={styles.row}>
         <View style={styles.emptyFill}>
           <AppIcon icon="plus" size={24} color={theme.lowEmphasis} />
         </View>
@@ -29,16 +29,21 @@ export function CalendarSimple({ calendar }: Readonly<Props>) {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.fill, { backgroundColor: calendar.color }]}>
-        <Text style={styles.character}>{calendar.title[0]}</Text>
-      </View>
-      <View style={styles.content}>
-        <Text style={styles.title}>{calendar.title}</Text>
-        <View style={styles.footer}>
-          <AppIcon icon="people" size={16} color={theme.mediumEmphasis} />
-          <Text style={styles.text}>{calendar.members.length}명</Text>
+      <View style={styles.row}>
+        <View style={[styles.fill, { backgroundColor: calendar.color }]}>
+          <Text style={styles.character}>{calendar.name[0]}</Text>
+        </View>
+        <View style={styles.content}>
+          <Text style={styles.title}>{calendar.name}</Text>
+          <View style={styles.footer}>
+            <AppIcon icon="people" size={16} color={theme.mediumEmphasis} />
+            <Text style={styles.text}>{calendar.num_members}명</Text>
+          </View>
         </View>
       </View>
+      {calendar.is_owner && (
+        <AppIcon icon="crown" size={24} color={theme.primary} />
+      )}
     </View>
   );
 }
@@ -46,6 +51,11 @@ export function CalendarSimple({ calendar }: Readonly<Props>) {
 const createStyles = (theme: ThemeColorType) =>
   StyleSheet.create({
     container: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+    },
+    row: {
       flexDirection: "row",
       alignItems: "center",
       gap: 16,

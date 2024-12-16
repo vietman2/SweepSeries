@@ -1,0 +1,20 @@
+[
+  {
+    "model": "calendarapp.calendar",
+    "pk": 1,
+    "fields": { "name": "홍길동의 캘린더" }
+  },
+  {
+    "model": "calendarapp.calendaruser",
+    "pk": 1,
+    "fields": {
+      "user": "223e4567-e89b-12d3-a456-426614174000",
+      "color": "#FF6B6B",
+      "calendar": 1,
+      "auth": 1,
+      "display_name": "홍길동의 캘린더",
+      "notifications": true,
+      "notifications_today": true
+    }
+  }
+]
