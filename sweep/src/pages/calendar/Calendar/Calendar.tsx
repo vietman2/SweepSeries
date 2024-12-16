@@ -22,7 +22,8 @@ import {
   CalendarSimple,
 } from "@fragments/Calendar";
 import { CalendarType, ScheduleResponseType } from "@models/calendar";
-import { sampleCalendars, sampleScheduleResponse } from "@testdata/calendar";
+import { getCalendars } from "@services/calendar";
+import { sampleScheduleResponse } from "@testdata/calendar";
 import { ThemeColorType } from "@themes/colors";
 
 export function Calendar() {
@@ -59,8 +60,17 @@ export function Calendar() {
   useEffect(() => {
     // TODO: Fetch data from API
     setSchedules(sampleScheduleResponse);
-    setSelectedCalendar(sampleCalendars[0]);
-    setCalendars(sampleCalendars);
+
+    const fetchData = async () => {
+      const response = await getCalendars();
+
+      if (response) {
+        setCalendars(response);
+        setSelectedCalendar(response[0]);
+      }
+    };
+
+    fetchData();
   }, [selectedMonth]);
 
   useEffect(() => {
