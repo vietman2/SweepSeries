@@ -1,7 +1,7 @@
 from django.db import models
 
 from auth.user.models import User
-from .enums import ColorChoices, AuthChoices
+from .enums import AuthChoices
 
 class Calendar(models.Model):
     name    = models.CharField(max_length=200)
@@ -15,9 +15,7 @@ class CalendarUser(models.Model):
     user                = models.ForeignKey(
         User, related_name='calendar_users', on_delete=models.CASCADE
     )
-    color               = models.CharField(
-        max_length=7, choices=ColorChoices.choices, default=ColorChoices.RED
-    )
+    color               = models.CharField(max_length=7, default="#FF6B6B")
     calendar            = models.ForeignKey(
         Calendar, related_name='calendar_users', on_delete=models.CASCADE
     )
@@ -27,6 +25,7 @@ class CalendarUser(models.Model):
     display_name        = models.CharField(max_length=200)
     notifications       = models.BooleanField(default=True)
     notifications_today = models.BooleanField(default=True)
+    daily_time          = models.TimeField(null=True, blank=True, default="09:00:00")
 
     objects = models.Manager()
 
