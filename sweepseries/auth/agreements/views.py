@@ -28,9 +28,21 @@ class AgreementViewSet(ModelViewSet):
         if user.is_superuser and is_admin_page(request):
             queryset = self.get_queryset()
             serializer = AgreementDetailSerializer(queryset, many=True)
-        else:
-            queryset = Agreement.objects.filter(deleted=False)
-            serializer = AgreementSimpleSerializer(queryset, many=True)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        query = request.query_params.get('query', None)
+        version = request.query_params.get('version', None)
+        if query:
+            queryset = Agreement.objects.filter(deleted=False, title=query).first()
+
+            serializer = AgreementDetailSerializer(queryset)
+            serializer.context['version'] = version
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        queryset = Agreement.objects.filter(deleted=False)
+        serializer = AgreementSimpleSerializer(queryset, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 

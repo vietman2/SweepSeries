@@ -11,6 +11,7 @@ jest.mock("@components/NavBar", () => ({
 jest.mock("@components/Footer", () => ({
   Footer: () => <div>Footer</div>
 }));
+jest.mock("@pages/Terms", () => "Terms");
 
 describe('<App />', () => {
   it('renders without crashing', () => {

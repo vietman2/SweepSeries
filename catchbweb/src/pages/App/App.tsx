@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { Header } from "@components/Header";
 import { NavBar } from "@components/NavBar";
 import { Footer } from "@components/Footer";
+import TermsOfService from "@pages/Terms";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
       <Container>
         <Routes>
           <Route path="/" element={<Elements />} />
+          <Route path="/terms" element={<TermsOfService />} />
         </Routes>
       </Container>
     </Router>
