@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
@@ -10,35 +10,75 @@ import { SvgIconButton, TextButton, Toggle } from "@components/Buttons";
 import { useTheme } from "@contexts/theme";
 import { CalendarMembers, CalendarOptions } from "@fragments/Calendar";
 import { CalendarType } from "@models/calendar";
-import { sampleCalendars } from "@testdata/calendar";
+import { alert } from "@services/alert";
+import {
+  getCalendar,
+  toggleCalendarNotification,
+  toggleCalendarDaily,
+  deleteCalendar,
+} from "@services/calendar";
 import { ThemeColorType } from "@themes/colors";
 
 export function Settings() {
   const [calendar, setCalendar] = useState<CalendarType>();
   const [selectedTime, setSelectedTime] = useState<Date>(new Date());
+  const { calendarId } = useLocalSearchParams<{ calendarId: string }>();
   const [isNotificationOn, setIsNotificationOn] = useState<boolean>(false);
   const [isDailyOn, setIsDailyOn] = useState<boolean>(false);
+  const [refreshCount, setRefreshCount] = useState<number>(0);
 
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["40%"], []);
-  const { calendarId } = useLocalSearchParams<{ calendarId: string }>();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  const handleNotificationToggle = () => {
-    setIsNotificationOn((prev) => !prev);
+  const handleRefresh = () => {
+    setRefreshCount((prev) => prev + 1);
   };
 
-  const handleDailyToggle = () => {
-    setIsDailyOn((prev) => !prev);
+  const handleNotificationToggle = async () => {
+    const response = await toggleCalendarNotification(calendarId);
+
+    if (response) {
+      setIsNotificationOn((prev) => !prev);
+      handleRefresh();
+    } else {
+      alert("오류 발생", "알림 설정을 변경하는 중 오류가 발생했습니다.");
+    }
+  };
+
+  const handleDailyToggle = async () => {
+    if (isDailyOn) {
+      const response = await toggleCalendarDaily(calendarId, "");
+
+      if (response) {
+        setIsDailyOn(false);
+        handleRefresh();
+      } else {
+        alert("오류 발생", "알림 시간을 해제하는 중 오류가 발생했습니다.");
+      }
+    } else {
+      setIsDailyOn(true);
+    }
   };
 
   const handleCloseModal = () => {
     router.back();
   };
 
-  const handleConfirmTime = () => {
-    bottomSheetRef.current?.close();
+  const handleConfirmTime = async () => {
+    const response = await toggleCalendarDaily(
+      calendarId,
+      selectedTime.toTimeString()
+    );
+
+    if (response) {
+      setIsDailyOn(true);
+      handleRefresh();
+      bottomSheetRef.current?.close();
+    } else {
+      alert("오류 발생", "알림 시간을 변경하는 중 오류가 발생했습니다.");
+    }
   };
 
   const handleTimeChange = (
@@ -47,6 +87,16 @@ export function Settings() {
   ) => {
     const currentDate = selectedDate || selectedTime;
     setSelectedTime(currentDate);
+  };
+
+  const handleDeleteCalendar = async () => {
+    const response = await deleteCalendar(calendarId);
+
+    if (response) {
+      router.back();
+    } else {
+      alert("오류 발생", "캘린더 삭제 중 오류가 발생했습니다.");
+    }
   };
 
   useEffect(() => {
@@ -58,9 +108,24 @@ export function Settings() {
   }, [isDailyOn]);
 
   useEffect(() => {
-    const id = parseInt(calendarId, 10);
-    setCalendar(sampleCalendars[id - 1]);
-  }, [calendarId]);
+    const fetchData = async () => {
+      const response = await getCalendar(calendarId);
+
+      if (response) {
+        setCalendar(response);
+        setIsNotificationOn(response.notifications);
+        setIsDailyOn(response.notifications_today);
+      } else {
+        alert(
+          "오류 발생",
+          "캘린더 정보를 불러오는 중 오류가 발생했습니다.",
+          router.back
+        );
+      }
+    };
+
+    fetchData();
+  }, [calendarId, refreshCount]);
 
   if (!calendar) {
     return null;
@@ -90,7 +155,7 @@ export function Settings() {
             </View>
             <View style={styles.wrapper}>
               <Text style={styles.subtitle}>캘린더 정보</Text>
-              <CalendarOptions calendar={calendar} />
+              <CalendarOptions calendar={calendar} onRefresh={handleRefresh} />
             </View>
             <View style={styles.wrapper}>
               <Text style={styles.subtitle}>알림</Text>
@@ -101,16 +166,21 @@ export function Settings() {
                   onToggle={handleNotificationToggle}
                 />
               </View>
-              <View style={styles.horizontal}>
-                <Text>오늘 알림 받기</Text>
-                <Toggle isOn={isDailyOn} onToggle={handleDailyToggle} />
-              </View>
+              {isNotificationOn && (
+                <View style={styles.horizontal}>
+                  <Text>
+                    오늘 알림 받기{" "}
+                    {calendar.daily_time && `(${calendar.daily_time})`}
+                  </Text>
+                  <Toggle isOn={isDailyOn} onToggle={handleDailyToggle} />
+                </View>
+              )}
             </View>
           </View>
           <View>
             <TextButton
-              text="캘린더 삭제하기"
-              onPress={() => {}}
+              text={calendar.is_owner ? "캘린더 삭제하기" : "캘린더 연동해제"}
+              onPress={handleDeleteCalendar}
               color={theme.lowEmphasis}
               backgroundColor={theme.background}
             />
@@ -122,6 +192,7 @@ export function Settings() {
         index={-1}
         snapPoints={snapPoints}
         enableHandlePanningGesture={false}
+        enablePanDownToClose={false}
       >
         <BottomSheetView style={styles.sheetContainer}>
           <View style={styles.timepickerwrapper}>

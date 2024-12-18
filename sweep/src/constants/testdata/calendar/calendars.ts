@@ -28,6 +28,9 @@ export const sampleCalendars: CalendarType[] = [
     members: [],
     is_owner: true,
     num_members: 1,
+    notifications: true,
+    notifications_today: true,
+    daily_time: "09:00",
   },
   {
     id: 2,
@@ -37,5 +40,8 @@ export const sampleCalendars: CalendarType[] = [
     members: calendarMembers,
     is_owner: false,
     num_members: 2,
+    notifications: false,
+    notifications_today: false,
+    daily_time: "",
   },
 ];
