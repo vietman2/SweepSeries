@@ -12,29 +12,30 @@ type VersionType = {
 };
 
 export function PrivacyPolicy() {
-  const [versionChoices, setVersionChoices] = useState<VersionType[]>([]);
+  const [versions, setVersions] = useState<VersionType[]>([]);
   const [content, setContent] = useState<string>("");
-  const [selectedVersionId, setSelectedVersionId] = useState<number>(-1);
+  const [selectedId, setSelectedId] = useState<number>(-1);
+
+  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedId(Number(e.target.value));
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await getTerms(
-        "Catch B 개인정보 처리방침",
-        selectedVersionId
-      );
+    const fetchPrivacyPolicy = async () => {
+      const response = await getTerms("Catch B 개인정보 처리방침", selectedId);
 
       if (response) {
-        setVersionChoices(response.history);
+        setVersions(response.history);
         setContent(response.content);
 
-        if (selectedVersionId === -1) {
-          setSelectedVersionId(response.history[0].id);
+        if (selectedId === -1) {
+          setSelectedId(response.history[0].id);
         }
       }
     };
 
-    fetchData();
-  }, [selectedVersionId]);
+    fetchPrivacyPolicy();
+  }, [selectedId]);
 
   return (
     <Wrapper>
@@ -45,11 +46,11 @@ export function PrivacyPolicy() {
         <label htmlFor="version">개인정보 처리방침 버전: </label>
         <select
           id="version"
-          value={selectedVersionId}
-          onChange={(e) => setSelectedVersionId(Number(e.target.value))}
+          value={selectedId}
+          onChange={handleSelect}
           data-testid="version-select"
         >
-          {versionChoices.map((version) => (
+          {versions.map((version) => (
             <option key={version.id} value={version.id}>
               {version.created_at}
             </option>
