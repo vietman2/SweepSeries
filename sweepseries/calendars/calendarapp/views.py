@@ -93,7 +93,7 @@ class CalendarViewSet(ModelViewSet):
 
     @extend_schema(summary="캘린더 알림 설정", tags=["캘린더"])
     @action(detail=True, methods=['patch'])
-    def notification(self, request, pk=None):
+    def notification(self, request, pk=None):   # pylint: disable=unused-argument
         ## toggle notification setting
         instance = self.get_object()
         user = request.user
@@ -114,7 +114,7 @@ class CalendarViewSet(ModelViewSet):
 
     @extend_schema(summary="캘린더 오늘 알림 설정", tags=["캘린더"])
     @action(detail=True, methods=['patch'])
-    def daily(self, request, pk=None):
+    def daily(self, request, pk=None):  # pylint: disable=unused-argument
         ## toggle daily notification setting
         instance = self.get_object()
         user = request.user
@@ -133,7 +133,7 @@ class CalendarViewSet(ModelViewSet):
             ## convert to time format, and in the KR timezone
             hour_input = time_input.split(':')[0]
             minute_input = time_input.split(':')[1]
-            
+
             time = datetime.time(hour=int(hour_input), minute=int(minute_input))
 
             calendar_user.notifications_today = True
