@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import naverLogo from "@assets/naver.svg";
@@ -8,6 +9,8 @@ import { getNotices } from "@services/notices";
 
 export function Footer() {
   const [notices, setNotices] = useState<NoticeType[]>([]);
+
+  const navigate = useNavigate();
 
   const handleInstagramLink = () => {
     window.open(
@@ -26,7 +29,7 @@ export function Footer() {
   };
 
   const handleTermsLink = () => {
-    // TODO: 서비스 이용약관 페이지로 이동
+    navigate("/terms");
   };
 
   const handlePrivacyLink = () => {

@@ -31,8 +31,13 @@ class AgreementDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_content(self, obj):
-        version = AgreementVersion.objects.filter(agreement=obj).first()
-        return version.content if version else None
+        version = self.context.get('version', None)
+        if version:
+            sel_version = AgreementVersion.objects.get(agreement=obj, id=version)
+            return sel_version.content if sel_version else None
+
+        sel_version = AgreementVersion.objects.filter(agreement=obj).first()
+        return sel_version.content if sel_version else None
 
     def get_updated_at(self, obj):
         if obj.deleted:
