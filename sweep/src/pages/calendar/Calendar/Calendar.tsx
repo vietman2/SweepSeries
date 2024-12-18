@@ -22,7 +22,9 @@ import {
   CalendarSimple,
 } from "@fragments/Calendar";
 import { CalendarType, ScheduleResponseType } from "@models/calendar";
-import { getCalendars } from "@services/calendar";
+import { alert } from "@services/alert";
+import { createCalendar, getCalendars } from "@services/calendar";
+import { saveStorage, getStorage } from "@services/storage";
 import { sampleScheduleResponse } from "@testdata/calendar";
 import { ThemeColorType } from "@themes/colors";
 
@@ -48,7 +50,21 @@ export function Calendar() {
 
   const handleCalendarSelect = (calendar: CalendarType) => {
     setSelectedCalendar(calendar);
+    const storeSelectedCalendar = async () => {
+      await saveStorage("selectedCalendarId", calendar.id.toString());
+    };
+    storeSelectedCalendar();
     ref.current?.close();
+  };
+
+  const handleCreateNewCalendar = async () => {
+    const response = await createCalendar();
+
+    if (response) {
+      handleRefresh();
+    } else {
+      alert("생성 실패", "캘린더 생성에 실패했습니다.");
+    }
   };
 
   const handleSearchPress = () => {
@@ -83,10 +99,19 @@ export function Calendar() {
 
     const fetchData = async () => {
       const response = await getCalendars();
+      const selectedCalendarId = await getStorage("selectedCalendarId");
 
       if (response) {
         setCalendars(response);
-        setSelectedCalendar(response[0]);
+        if (selectedCalendarId) {
+          const selected = response.find(
+            (calendar: CalendarType) =>
+              calendar.id === Number(selectedCalendarId)
+          );
+          setSelectedCalendar(selected || response[0]);
+        } else {
+          setSelectedCalendar(response[0]);
+        }
       }
     };
 
@@ -193,7 +218,11 @@ export function Calendar() {
                 <CalendarSimple calendar={calendar} />
               </TouchableOpacity>
             ))}
-            <TouchableOpacity style={styles.calendar}>
+            <TouchableOpacity
+              style={styles.calendar}
+              onPress={handleCreateNewCalendar}
+              testID="create-calendar"
+            >
               <CalendarSimple />
             </TouchableOpacity>
           </View>

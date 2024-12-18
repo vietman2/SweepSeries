@@ -3,6 +3,7 @@ import * as Router from "expo-router";
 
 import { Calendar } from "./Calendar";
 import * as CalendarsAPI from "@services/calendar/calendars";
+import * as StorageAPI from "@services/storage/asyncstorage";
 import { sampleCalendars } from "@testdata/calendar";
 import { renderWithProviders } from "@utils/test-utils";
 
@@ -31,10 +32,12 @@ describe("<Calendar />", () => {
     jest.useFakeTimers();
     jest.setSystemTime(new Date("2024-01-01").getTime());
     jest.spyOn(CalendarsAPI, "getCalendars").mockResolvedValue(sampleCalendars);
+    jest.spyOn(StorageAPI, "getStorage").mockResolvedValue("1");
   });
 
   it("renders correctly (month >= 10) and open settings", async () => {
       jest.spyOn(Router, "useFocusEffect").mockImplementationOnce((cb) => cb());
+    jest.spyOn(StorageAPI, "getStorage").mockResolvedValue(null);
     jest.setSystemTime(new Date("2024-10-01").getTime());
 
     const { getByTestId } = renderWithProviders(<Calendar />);
@@ -51,20 +54,25 @@ describe("<Calendar />", () => {
     });
   });
 
-  it("handles calendar select", async () => {
+  it("handles calendar select and create", async () => {
+    jest.spyOn(StorageAPI, "saveStorage").mockResolvedValue(undefined);
+    jest.spyOn(CalendarsAPI, "createCalendar").mockResolvedValue(true);
     const { getByTestId } = renderWithProviders(<Calendar />);
 
     await waitFor(() => {
       fireEvent.press(getByTestId("calendar-1"));
+      fireEvent.press(getByTestId("create-calendar"));
       fireEvent.press(getByTestId("close-buttons"));
     });
   });
 
-  it("handles day navigate", async () => {
+  it("handles day navigate and create fail", async () => {
+    jest.spyOn(CalendarsAPI, "createCalendar").mockResolvedValue(null);
     const { getByTestId } = renderWithProviders(<Calendar />);
 
     await waitFor(() => {
       fireEvent.press(getByTestId("day-2024-01-01"));
+      fireEvent.press(getByTestId("create-calendar"));
     });
   });
 });
