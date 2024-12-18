@@ -33,7 +33,7 @@ export function Footer() {
   };
 
   const handlePrivacyLink = () => {
-    // TODO: 개인정보 처리방침 페이지로 이동
+    navigate("/privacy");
   };
 
   useEffect(() => {

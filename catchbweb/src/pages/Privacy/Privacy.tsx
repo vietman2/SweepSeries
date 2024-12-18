@@ -11,7 +11,7 @@ type VersionType = {
   summary: string;
 };
 
-export function TermsOfService() {
+export function PrivacyPolicy() {
   const [versionChoices, setVersionChoices] = useState<VersionType[]>([]);
   const [content, setContent] = useState<string>("");
   const [selectedVersionId, setSelectedVersionId] = useState<number>(-1);
@@ -19,7 +19,7 @@ export function TermsOfService() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await getTerms(
-        "Catch B 서비스 이용약관",
+        "Catch B 개인정보 처리방침",
         selectedVersionId
       );
 
@@ -37,12 +37,12 @@ export function TermsOfService() {
   }, [selectedVersionId]);
 
   return (
-    <Container>
-      <StyledLink to="/">
+    <Wrapper>
+      <LinkWrapper to="/">
         <Logo src={CatchBLogo} />
-      </StyledLink>
+      </LinkWrapper>
       <Content>
-        <label htmlFor="version">서비스 이용약관 버전: </label>
+        <label htmlFor="version">개인정보 처리방침 버전: </label>
         <select
           id="version"
           value={selectedVersionId}
@@ -55,39 +55,41 @@ export function TermsOfService() {
             </option>
           ))}
         </select>
-        <h1>서비스 이용약관</h1>
+        <h1>개인정보 처리방침</h1>
         <div>{content}</div>
       </Content>
-    </Container>
+    </Wrapper>
   );
 }
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const StyledLink = styled(Link)`
-  display: inline-block;
-  width: fit-content;
-  margin: 35px 80px;
-`;
 
 const Logo = styled.img`
   width: 200px;
   cursor: pointer;
 `;
 
+const LinkWrapper = styled(Link)`
+  display: inline-block;
+  width: fit-content;
+  margin: 35px 80px;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
 const Content = styled.div`
   margin: 0;
   padding: 20px 80px;
-  background-color: #f9f9f9;
-  border-radius: 10px 10px 0 0;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
   color: #333;
   line-height: 1.6;
   font-family: "Noto Sans KR", sans-serif;
   text-align: left;
+
   white-space: pre-wrap;
+  background-color: #f9f9f9;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
