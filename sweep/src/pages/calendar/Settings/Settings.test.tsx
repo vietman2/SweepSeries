@@ -1,7 +1,9 @@
-import { fireEvent } from "@testing-library/react-native";
+import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { Settings } from "./Settings";
+import * as CalendarsAPI from "@services/calendar/calendars";
 import { renderWithProviders } from "@utils/test-utils";
+import { sampleCalendars } from "@testdata/calendar";
 
 jest.mock("expo-router", () => ({
   router: {
@@ -24,12 +26,61 @@ jest.mock("@fragments/Calendar", () => ({
 }));
 
 describe("<Settings />", () => {
-  it("should render and handles toggle", () => {
+  beforeEach(() => {
+    jest
+      .spyOn(CalendarsAPI, "getCalendar")
+      .mockResolvedValue(sampleCalendars[0]);
+  });
+
+  it("should render and handles toggle", async () => {
+    jest.spyOn(CalendarsAPI, "toggleCalendarNotification").mockResolvedValue(true);
+    jest.spyOn(CalendarsAPI, "toggleCalendarDaily").mockResolvedValue(true);
     const { getAllByTestId, getByTestId } = renderWithProviders(<Settings />);
 
-    fireEvent.press(getAllByTestId("toggle")[0]);
-    fireEvent.press(getAllByTestId("toggle")[1]);
-    fireEvent.press(getByTestId("close-modal"));
-    fireEvent.press(getByTestId("확인"));
+    await waitFor(() => {
+      fireEvent.press(getAllByTestId("toggle")[1]); // 오늘 알림 끄기
+      fireEvent.press(getAllByTestId("toggle")[1]); // 오늘 알림 켜기
+      fireEvent.press(getByTestId("change-datetime")); // 시간 변경
+      fireEvent.press(getByTestId("확인"));
+      fireEvent.press(getAllByTestId("toggle")[0]); // 알림 끄기
+      fireEvent.press(getAllByTestId("toggle")[0]); // 알림 켜기
+      fireEvent.press(getAllByTestId("toggle")[1]); // 오늘 알림 켜기
+      fireEvent.press(getByTestId("change-datetime"));
+      fireEvent.press(getByTestId("확인"));
+      fireEvent.press(getByTestId("close-modal"));
+    });
+  });
+
+  it("handles toggle fail", async () => {
+    jest
+      .spyOn(CalendarsAPI, "toggleCalendarNotification")
+      .mockResolvedValue(null);
+    jest.spyOn(CalendarsAPI, "toggleCalendarDaily").mockResolvedValue(null);
+    const { getAllByTestId, getByTestId } = renderWithProviders(<Settings />);
+
+    await waitFor(() => {
+      fireEvent.press(getAllByTestId("toggle")[1]);
+      fireEvent.press(getByTestId("change-datetime"));
+      fireEvent.press(getByTestId("확인"));
+      fireEvent.press(getAllByTestId("toggle")[0]);
+    });
+  });
+
+  it("handles daily toggle on", async () => {
+    jest
+      .spyOn(CalendarsAPI, "getCalendar")
+      .mockResolvedValue({...sampleCalendars[0], notifications_today: false});
+    const { getAllByTestId } = renderWithProviders(<Settings />);
+
+    await waitFor(() => {
+      fireEvent.press(getAllByTestId("toggle")[1]);
+    });
+  });
+
+  it("handles api error", async () => {
+    jest
+      .spyOn(CalendarsAPI, "getCalendar")
+      .mockResolvedValue(null);
+    renderWithProviders(<Settings />);
   });
 });
