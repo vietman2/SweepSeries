@@ -15,6 +15,7 @@ import {
   getCalendar,
   toggleCalendarNotification,
   toggleCalendarDaily,
+  deleteCalendar,
 } from "@services/calendar";
 import { ThemeColorType } from "@themes/colors";
 
@@ -88,6 +89,16 @@ export function Settings() {
     setSelectedTime(currentDate);
   };
 
+  const handleDeleteCalendar = async () => {
+    const response = await deleteCalendar(calendarId);
+
+    if (response) {
+      router.back();
+    } else {
+      alert("오류 발생", "캘린더 삭제 중 오류가 발생했습니다.");
+    }
+  };
+
   useEffect(() => {
     if (isDailyOn) {
       bottomSheetRef.current?.expand();
@@ -157,7 +168,10 @@ export function Settings() {
               </View>
               {isNotificationOn && (
                 <View style={styles.horizontal}>
-                  <Text>오늘 알림 받기 {calendar.daily_time && `(${calendar.daily_time})`}</Text>
+                  <Text>
+                    오늘 알림 받기{" "}
+                    {calendar.daily_time && `(${calendar.daily_time})`}
+                  </Text>
                   <Toggle isOn={isDailyOn} onToggle={handleDailyToggle} />
                 </View>
               )}
@@ -165,8 +179,8 @@ export function Settings() {
           </View>
           <View>
             <TextButton
-              text="캘린더 삭제하기"
-              onPress={() => {}}
+              text={calendar.is_owner ? "캘린더 삭제하기" : "캘린더 연동해제"}
+              onPress={handleDeleteCalendar}
               color={theme.lowEmphasis}
               backgroundColor={theme.background}
             />
