@@ -14,7 +14,7 @@ type VersionType = {
 export function TermsOfService() {
   const [versionChoices, setVersionChoices] = useState<VersionType[]>([]);
   const [content, setContent] = useState<string>("");
-  const [selectedVersionId, setSelectedVersionId] = useState<number>(1);
+  const [selectedVersionId, setSelectedVersionId] = useState<number>(-1);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,6 +26,10 @@ export function TermsOfService() {
       if (response) {
         setVersionChoices(response.history);
         setContent(response.content);
+
+        if (selectedVersionId === -1) {
+          setSelectedVersionId(response.history[0].id);
+        }
       }
     };
 
