@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import BottomSheet, {
   BottomSheetView,
   BottomSheetBackdrop,
@@ -22,7 +22,9 @@ import {
   CalendarSimple,
 } from "@fragments/Calendar";
 import { CalendarType, ScheduleResponseType } from "@models/calendar";
-import { getCalendars } from "@services/calendar";
+import { alert } from "@services/alert";
+import { createCalendar, getCalendars } from "@services/calendar";
+import { saveStorage, getStorage } from "@services/storage";
 import { sampleScheduleResponse } from "@testdata/calendar";
 import { ThemeColorType } from "@themes/colors";
 
@@ -33,9 +35,14 @@ export function Calendar() {
   const [selectedMonth, setSelectedMonth] = useState<string>("");
 
   const [buttonsOpen, setButtonsOpen] = useState<boolean>(false);
+  const [refreshCount, setRefreshCount] = useState<number>(0);
   const ref = useRef<BottomSheet>(null);
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  const handleRefresh = () => {
+    setRefreshCount((prev) => prev + 1);
+  };
 
   const handleCalendarListPress = () => {
     ref.current?.expand();
@@ -43,7 +50,21 @@ export function Calendar() {
 
   const handleCalendarSelect = (calendar: CalendarType) => {
     setSelectedCalendar(calendar);
+    const storeSelectedCalendar = async () => {
+      await saveStorage("selectedCalendarId", calendar.id.toString());
+    };
+    storeSelectedCalendar();
     ref.current?.close();
+  };
+
+  const handleCreateNewCalendar = async () => {
+    const response = await createCalendar();
+
+    if (response) {
+      handleRefresh();
+    } else {
+      alert("생성 실패", "캘린더 생성에 실패했습니다.");
+    }
   };
 
   const handleSearchPress = () => {
@@ -57,20 +78,15 @@ export function Calendar() {
     });
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      handleRefresh();
+    }, [])
+  );
+
   useEffect(() => {
     // TODO: Fetch data from API
     setSchedules(sampleScheduleResponse);
-
-    const fetchData = async () => {
-      const response = await getCalendars();
-
-      if (response) {
-        setCalendars(response);
-        setSelectedCalendar(response[0]);
-      }
-    };
-
-    fetchData();
   }, [selectedMonth]);
 
   useEffect(() => {
@@ -81,8 +97,27 @@ export function Calendar() {
       return `${year}-${month < 10 ? `0${month}` : month}`;
     };
 
+    const fetchData = async () => {
+      const response = await getCalendars();
+      const selectedCalendarId = await getStorage("selectedCalendarId");
+
+      if (response) {
+        setCalendars(response);
+        if (selectedCalendarId) {
+          const selected = response.find(
+            (calendar: CalendarType) =>
+              calendar.id === Number(selectedCalendarId)
+          );
+          setSelectedCalendar(selected || response[0]);
+        } else {
+          setSelectedCalendar(response[0]);
+        }
+      }
+    };
+
+    fetchData();
     setSelectedMonth(getCurrentMonth());
-  }, []);
+  }, [refreshCount]);
 
   const dayComponent = ({ date }: { date: DateData }) => {
     const schedule = schedules?.[date.dateString];
@@ -183,7 +218,11 @@ export function Calendar() {
                 <CalendarSimple calendar={calendar} />
               </TouchableOpacity>
             ))}
-            <TouchableOpacity style={styles.calendar}>
+            <TouchableOpacity
+              style={styles.calendar}
+              onPress={handleCreateNewCalendar}
+              testID="create-calendar"
+            >
               <CalendarSimple />
             </TouchableOpacity>
           </View>

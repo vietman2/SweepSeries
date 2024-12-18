@@ -1,3 +1,19 @@
-import { getCalendars } from "./calendars";
+import {
+  getCalendars,
+  getCalendar,
+  createCalendar,
+  deleteCalendar,
+  updateCalendarInfo,
+  toggleCalendarDaily,
+  toggleCalendarNotification,
+} from "./calendars";
 
-export { getCalendars };
+export {
+  getCalendars,
+  getCalendar,
+  createCalendar,
+  deleteCalendar,
+  updateCalendarInfo,
+  toggleCalendarDaily,
+  toggleCalendarNotification,
+};
