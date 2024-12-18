@@ -18,6 +18,10 @@ class CalendarAPITestCase(APITestCase):
         response = self.client.get(f'{self.url}1/')
         self.assertEqual(response.status_code, 200)
 
+    def test_create(self):
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 201)
+
     def test_partial_update(self):
         ## 1. name
         response = self.client.patch(f'{self.url}1/', {'name': 'new name'})
@@ -30,6 +34,11 @@ class CalendarAPITestCase(APITestCase):
     def test_partial_update_fail(self):
         response = self.client.patch(f'{self.url}1/', {})
         self.assertEqual(response.status_code, 400)
+
+    def test_delete(self):
+        ## 1. delete as owner
+        response = self.client.delete(f'{self.url}1/')
+        self.assertEqual(response.status_code, 204)
 
     def test_toggle_notification(self):
         ## 1. turn off

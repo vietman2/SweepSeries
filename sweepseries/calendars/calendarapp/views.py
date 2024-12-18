@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from drf_spectacular.utils import extend_schema
 
+from .enums import AuthChoices
 from .models import Calendar, CalendarUser
 from .serializers import CalendarSerializer
 
@@ -15,7 +16,20 @@ class CalendarViewSet(ModelViewSet):
     queryset = Calendar.objects.all()
     serializer_class = CalendarSerializer
     permission_classes = [IsAuthenticated]
-    http_method_names = ['get', 'patch']
+    http_method_names = ['get', 'patch', 'post', 'delete']
+
+    @extend_schema(summary="캘린더 생성", tags=["캘린더"])
+    def create(self, request, *args, **kwargs):
+        user = request.user
+
+        calendar = Calendar.objects.create(name="새 캘린더")
+        calendar_user = CalendarUser.objects.create(
+            user=user, calendar=calendar, auth=AuthChoices.OWNER, display_name="새 캘린더"
+        )
+
+        serializer = CalendarSerializer(calendar_user)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @extend_schema(summary="캘린더 목록 조회", tags=["캘린더"])
     def list(self, request, *args, **kwargs):
@@ -63,6 +77,19 @@ class CalendarViewSet(ModelViewSet):
         serializer = CalendarSerializer(calendar_user)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(summary="캘린더 삭제", tags=["캘린더"])
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        user = request.user
+
+        calendar_user = CalendarUser.objects.get(user=user, calendar=instance)
+        if calendar_user.auth == AuthChoices.OWNER:
+            instance.delete()
+        else:
+            calendar_user.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @extend_schema(summary="캘린더 알림 설정", tags=["캘린더"])
     @action(detail=True, methods=['patch'])
