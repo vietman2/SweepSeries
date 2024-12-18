@@ -12,4 +12,7 @@ export type CalendarType = {
   num_members: number;
   owner: CalendarMemberType;
   members: CalendarMemberType[];
+  notifications: boolean;
+  notifications_today: boolean;
+  daily_time: string;
 };
