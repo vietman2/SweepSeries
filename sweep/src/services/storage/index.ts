@@ -1,3 +1,4 @@
+import { saveStorage, getStorage } from "./asyncstorage";
 import { saveSecure, getSecure, removeSecure } from "./secure";
 
-export { saveSecure, getSecure, removeSecure };
+export { saveStorage, getStorage, saveSecure, getSecure, removeSecure };

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-require-imports */
 import * as AlertAPI from "@services/alert/alert";
 
 jest
@@ -36,7 +37,9 @@ jest.mock("@react-native-community/datetimepicker", () => {
     },
     DateTimePickerEvent: jest.fn(),
   };
-});
+});jest.mock("@react-native-async-storage/async-storage", () =>
+  require("@react-native-async-storage/async-storage/jest/async-storage-mock")
+);
 jest.mock("@react-navigation/material-top-tabs", () => {
   const { View } = jest.requireActual("react-native");
   const actual = jest.requireActual("@react-navigation/material-top-tabs");
