@@ -56,7 +56,7 @@ export function TermsOfService() {
           ))}
         </select>
         <h1>서비스 이용약관</h1>
-        <p>{content}</p>
+        <textarea>{content}</textarea>
       </Content>
     </Container>
   );
