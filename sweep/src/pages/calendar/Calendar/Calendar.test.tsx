@@ -1,14 +1,16 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
+import * as Router from "expo-router";
 
 import { Calendar } from "./Calendar";
 import * as CalendarsAPI from "@services/calendar/calendars";
-import { renderWithProviders } from "@utils/test-utils";
 import { sampleCalendars } from "@testdata/calendar";
+import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("expo-router", () => ({
   router: {
     push: jest.fn(),
   },
+  useFocusEffect: jest.fn(),
 }));
 jest.mock("@gorhom/bottom-sheet", () => ({
   __esModule: true,
@@ -32,6 +34,7 @@ describe("<Calendar />", () => {
   });
 
   it("renders correctly (month >= 10) and open settings", async () => {
+      jest.spyOn(Router, "useFocusEffect").mockImplementationOnce((cb) => cb());
     jest.setSystemTime(new Date("2024-10-01").getTime());
 
     const { getByTestId } = renderWithProviders(<Calendar />);

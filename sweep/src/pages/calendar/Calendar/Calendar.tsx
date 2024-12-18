@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import BottomSheet, {
   BottomSheetView,
   BottomSheetBackdrop,
@@ -33,9 +33,14 @@ export function Calendar() {
   const [selectedMonth, setSelectedMonth] = useState<string>("");
 
   const [buttonsOpen, setButtonsOpen] = useState<boolean>(false);
+  const [refreshCount, setRefreshCount] = useState<number>(0);
   const ref = useRef<BottomSheet>(null);
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  const handleRefresh = () => {
+    setRefreshCount((prev) => prev + 1);
+  };
 
   const handleCalendarListPress = () => {
     ref.current?.expand();
@@ -57,9 +62,24 @@ export function Calendar() {
     });
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      handleRefresh();
+    }, [])
+  );
+
   useEffect(() => {
     // TODO: Fetch data from API
     setSchedules(sampleScheduleResponse);
+  }, [selectedMonth]);
+
+  useEffect(() => {
+    const getCurrentMonth = () => {
+      const currentDate = new Date();
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth() + 1;
+      return `${year}-${month < 10 ? `0${month}` : month}`;
+    };
 
     const fetchData = async () => {
       const response = await getCalendars();
@@ -71,18 +91,8 @@ export function Calendar() {
     };
 
     fetchData();
-  }, [selectedMonth]);
-
-  useEffect(() => {
-    const getCurrentMonth = () => {
-      const currentDate = new Date();
-      const year = currentDate.getFullYear();
-      const month = currentDate.getMonth() + 1;
-      return `${year}-${month < 10 ? `0${month}` : month}`;
-    };
-
     setSelectedMonth(getCurrentMonth());
-  }, []);
+  }, [refreshCount]);
 
   const dayComponent = ({ date }: { date: DateData }) => {
     const schedule = schedules?.[date.dateString];
