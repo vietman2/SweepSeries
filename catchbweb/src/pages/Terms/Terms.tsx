@@ -56,7 +56,7 @@ export function TermsOfService() {
           ))}
         </select>
         <h1>서비스 이용약관</h1>
-        <p>{content}</p>
+        <div>{content}</div>
       </Content>
     </Container>
   );
@@ -89,4 +89,5 @@ const Content = styled.div`
   line-height: 1.6;
   font-family: "Noto Sans KR", sans-serif;
   text-align: left;
+  white-space: pre-wrap;
 `;

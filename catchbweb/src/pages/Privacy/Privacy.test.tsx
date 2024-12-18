@@ -1,13 +1,13 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
-import { TermsOfService } from "./Terms";
+import { PrivacyPolicy } from "./Privacy";
 import * as TermsAPI from "@services/terms/terms";
 
 jest.mock("react-router-dom", () => ({
   Link: ({ children }: { children: React.ReactNode }) => children,
 }));
 
-describe("<TermsOfService />", () => {
+describe("<PrivacyPolicy />", () => {
   it("renders correctly and handles select", async () => {
     jest.spyOn(TermsAPI, "getTerms").mockResolvedValue({
       history: [
@@ -19,7 +19,7 @@ describe("<TermsOfService />", () => {
       ],
       content: "Content",
     });
-    render(<TermsOfService />);
+    render(<PrivacyPolicy />);
 
     await waitFor(() => {
       expect(screen.getByText("2021-01-01")).toBeInTheDocument();
@@ -31,6 +31,6 @@ describe("<TermsOfService />", () => {
 
   it("handles api error", async () => {
     jest.spyOn(TermsAPI, "getTerms").mockResolvedValue(null);
-    render(<TermsOfService />);
+    render(<PrivacyPolicy />);
   });
 });
