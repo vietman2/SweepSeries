@@ -11,6 +11,14 @@ describe("getTerms", () => {
     expect(result).toEqual({});
   });
 
+  it("should fetch terms without version", async () => {
+    jest.spyOn(axios, "get").mockResolvedValue({ data: {} });
+
+    const result = await getTerms("query", -1);
+
+    expect(result).toEqual({});
+  });
+
   it("should return null on error", async () => {
     jest.spyOn(axios, "get").mockRejectedValue(null);
 
