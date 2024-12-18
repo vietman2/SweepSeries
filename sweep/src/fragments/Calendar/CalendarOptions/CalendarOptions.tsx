@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Pressable,
@@ -13,10 +13,12 @@ import { TextInput } from "@components/Inputs";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
 import { CalendarType } from "@models/calendar";
+import { updateCalendarInfo } from "@services/calendar";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
   calendar: CalendarType;
+  onRefresh: () => void;
 }
 
 const colorOptions = [
@@ -30,9 +32,8 @@ const colorOptions = [
   "#D8BFD8",
 ];
 
-export function CalendarOptions({ calendar }: Readonly<Props>) {
+export function CalendarOptions({ calendar, onRefresh }: Readonly<Props>) {
   const [calendarName, setCalendarName] = useState<string>("");
-  const [calendarColor, setCalendarColor] = useState<string>("");
 
   const [nameModalOpen, setNameModalOpen] = useState<boolean>(false);
   const [colorModalOpen, setColorModalOpen] = useState<boolean>(false);
@@ -40,14 +41,27 @@ export function CalendarOptions({ calendar }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  const handleColorSelect = (color: string) => {
-    setCalendarColor(color);
-    setColorModalOpen(false);
+  const handleUpdateName = async () => {
+    const response = await updateCalendarInfo(calendar.id, calendarName, calendar.color);
+
+    if (response) {
+      setCalendarName("");
+      setNameModalOpen(false);
+      onRefresh();
+    }
+  };
+
+  const handleUpdateColor = async (color: string) => {
+    const response = await updateCalendarInfo(calendar.id, calendar.name, color);
+
+    if (response) {
+      setColorModalOpen(false);
+      onRefresh();
+    }
   };
 
   useEffect(() => {
     setCalendarName(calendar.name);
-    setCalendarColor(calendar.color);
   }, [calendar]);
 
   return (
@@ -101,7 +115,7 @@ export function CalendarOptions({ calendar }: Readonly<Props>) {
               </TouchableOpacity>
               <VerticalDivider width={1} />
               <TouchableOpacity
-                onPress={() => setNameModalOpen(false)}
+                onPress={handleUpdateName}
                 style={styles.buttonWrapper}
                 testID="confirm-name-modal"
               >
@@ -126,11 +140,11 @@ export function CalendarOptions({ calendar }: Readonly<Props>) {
               {colorOptions.map((color) => (
                 <TouchableOpacity
                   key={color}
-                  onPress={() => handleColorSelect(color)}
+                  onPress={() => handleUpdateColor(color)}
                   testID={`select-color-${color}`}
                 >
                   <View style={[styles.color, { backgroundColor: color }]}>
-                    {calendarColor === color && (
+                    {calendar.color === color && (
                       <AppIcon
                         icon="check"
                         size={20}
