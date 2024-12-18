@@ -3,6 +3,8 @@ import axios from "axios";
 import {
   getCalendars,
   getCalendar,
+  createCalendar,
+  deleteCalendar,
   updateCalendarInfo,
   toggleCalendarDaily,
   toggleCalendarNotification,
@@ -41,6 +43,43 @@ describe("getCalendar", () => {
     axios.get = jest.fn().mockRejectedValue(null);
 
     const result = await getCalendar("1");
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("createCalendar", () => {
+  it("should return the created calendar", async () => {
+    const calendar = { id: "1", name: "Calendar 1" };
+    axios.post = jest.fn().mockResolvedValue({ data: calendar });
+
+    const result = await createCalendar();
+
+    expect(result).toEqual(calendar);
+  });
+
+  it("should return null if the request fails", async () => {
+    axios.post = jest.fn().mockRejectedValue(null);
+
+    const result = await createCalendar();
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("deleteCalendar", () => {
+  it("should return true if the calendar is deleted", async () => {
+    axios.delete = jest.fn().mockResolvedValue(null);
+
+    const result = await deleteCalendar("1");
+
+    expect(result).toBe(true);
+  });
+
+  it("should return null if the request fails", async () => {
+    axios.delete = jest.fn().mockRejectedValue(null);
+
+    const result = await deleteCalendar("1");
 
     expect(result).toBeNull();
   });

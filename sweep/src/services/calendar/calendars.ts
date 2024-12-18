@@ -18,6 +18,24 @@ export async function getCalendar(id: string) {
   }
 }
 
+export async function createCalendar() {
+  try {
+    const response = await axios.post("/v1/calendars/");
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
+export async function deleteCalendar(id: string) {
+  try {
+    await axios.delete(`/v1/calendars/${id}/`);
+    return true;
+  } catch {
+    return null;
+  }
+}
+
 export async function updateCalendarInfo(id: number, name: string, color: string) {
   try {
     const response = await axios.patch(`/v1/calendars/${id}/`, {

@@ -1,6 +1,8 @@
 import {
   getCalendars,
   getCalendar,
+  createCalendar,
+  deleteCalendar,
   updateCalendarInfo,
   toggleCalendarDaily,
   toggleCalendarNotification,
@@ -9,6 +11,8 @@ import {
 export {
   getCalendars,
   getCalendar,
+  createCalendar,
+  deleteCalendar,
   updateCalendarInfo,
   toggleCalendarDaily,
   toggleCalendarNotification,
