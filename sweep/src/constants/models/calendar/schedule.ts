@@ -1,4 +1,4 @@
-export type ScheduleSimpleType = {
+export type ScheduleType = {
   id: number;
   short_text: string;
   time: string;
@@ -8,6 +8,12 @@ export type ScheduleSimpleType = {
   color: string;
   note?: string;
 };
+
+export type ScheduleSimpleType = {
+  id: number;
+  title: string;
+  color: string;
+}
 
 export type ScheduleResponseType = {
   [date: string]: ScheduleSimpleType[];

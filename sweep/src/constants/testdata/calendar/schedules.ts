@@ -1,6 +1,6 @@
-import { ScheduleSimpleType, ScheduleResponseType } from "@models/calendar";
+import { ScheduleType, ScheduleResponseType } from "@models/calendar";
 
-export const sampleSchedules: ScheduleSimpleType[] = [
+export const sampleSchedules: ScheduleType[] = [
   {
     id: 1,
     time: "오전 9시 ~ 오전 11시 (2시간)",
