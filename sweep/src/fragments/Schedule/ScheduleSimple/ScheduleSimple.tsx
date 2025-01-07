@@ -4,11 +4,11 @@ import { router } from "expo-router";
 import { VerticalDivider } from "@components/Dividers";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
-import { ScheduleSimpleType } from "@models/calendar";
+import { ScheduleType } from "@models/calendar";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
-  schedule: ScheduleSimpleType;
+  schedule: ScheduleType;
 }
 
 export function ScheduleSimple({ schedule }: Readonly<Props>) {
