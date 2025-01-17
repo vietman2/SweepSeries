@@ -4,6 +4,7 @@ import {
   formatRegistrationNumber,
   formatTime,
   formatPrice,
+  formatDate,
 } from "./formatters";
 
 it("formats birth date", () => {
@@ -44,4 +45,8 @@ it("formats time", () => {
 it("formats price", () => {
   expect(formatPrice(1234567890)).toBe("1,234,567,890");
   expect(formatPrice(-32890)).toBe("-32,890");
+});
+
+it("formats date", () => {
+  expect(formatDate(new Date("2024-12-31"))).toBe("2024.12.31 (화)");
 });

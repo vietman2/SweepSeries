@@ -320,6 +320,16 @@ jest.mock("@contexts/auth", () => ({
     selectedProfile: null,
   }),
 }));
+jest.mock("@contexts/calendar", () => ({
+  CalendarProvider: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  useCalendar: () => ({
+    calendars: [],
+    selectedCalendar: null,
+    setSelectedCalendar: jest.fn(),
+  }),
+}));
 jest.mock("@contexts/theme", () => ({
   ThemeProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
