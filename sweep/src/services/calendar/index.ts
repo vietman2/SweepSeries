@@ -7,6 +7,7 @@ import {
   toggleCalendarDaily,
   toggleCalendarNotification,
 } from "./calendars";
+import { createTodo } from "./todos";
 
 export {
   getCalendars,
@@ -16,4 +17,5 @@ export {
   updateCalendarInfo,
   toggleCalendarDaily,
   toggleCalendarNotification,
+  createTodo,
 };
