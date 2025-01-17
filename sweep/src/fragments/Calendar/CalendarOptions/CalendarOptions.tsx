@@ -7,6 +7,7 @@ import {
   View,
 } from "react-native";
 
+import { ColorModal } from "../ColorModal/ColorModal";
 import { Divider, VerticalDivider } from "@components/Dividers";
 import { AppIcon } from "@components/Icons";
 import { TextInput } from "@components/Inputs";
@@ -21,17 +22,6 @@ interface Props {
   onRefresh: () => void;
 }
 
-const colorOptions = [
-  "#FF6B6B",
-  "#FFA07A",
-  "#98FB98",
-  "#B0E0E6",
-  "#FFD700",
-  "#E6E6FA",
-  "#87CEEB",
-  "#D8BFD8",
-];
-
 export function CalendarOptions({ calendar, onRefresh }: Readonly<Props>) {
   const [calendarName, setCalendarName] = useState<string>("");
 
@@ -42,7 +32,11 @@ export function CalendarOptions({ calendar, onRefresh }: Readonly<Props>) {
   const styles = createStyles(theme);
 
   const handleUpdateName = async () => {
-    const response = await updateCalendarInfo(calendar.id, calendarName, calendar.color);
+    const response = await updateCalendarInfo(
+      calendar.id,
+      calendarName,
+      calendar.color
+    );
 
     if (response) {
       setCalendarName("");
@@ -52,7 +46,11 @@ export function CalendarOptions({ calendar, onRefresh }: Readonly<Props>) {
   };
 
   const handleUpdateColor = async (color: string) => {
-    const response = await updateCalendarInfo(calendar.id, calendar.name, color);
+    const response = await updateCalendarInfo(
+      calendar.id,
+      calendar.name,
+      color
+    );
 
     if (response) {
       setColorModalOpen(false);
@@ -127,37 +125,12 @@ export function CalendarOptions({ calendar, onRefresh }: Readonly<Props>) {
           </View>
         </View>
       </Modal>
-      <Modal visible={colorModalOpen} animationType="slide" transparent>
-        <View style={styles.backdrop}>
-          <Pressable
-            onPress={() => setColorModalOpen(false)}
-            style={StyleSheet.absoluteFill}
-            testID="close-color-modal"
-          />
-          <View style={styles.modal2}>
-            <Text style={styles.modalTitle}>캘린더 색상을 선택해주세요.</Text>
-            <View style={styles.colors}>
-              {colorOptions.map((color) => (
-                <TouchableOpacity
-                  key={color}
-                  onPress={() => handleUpdateColor(color)}
-                  testID={`select-color-${color}`}
-                >
-                  <View style={[styles.color, { backgroundColor: color }]}>
-                    {calendar.color === color && (
-                      <AppIcon
-                        icon="check"
-                        size={20}
-                        color={theme.mediumEmphasis}
-                      />
-                    )}
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-        </View>
-      </Modal>
+      <ColorModal
+        colorModalOpen={colorModalOpen}
+        setColorModalOpen={setColorModalOpen}
+        selectedColor={calendar.color}
+        handleUpdateColor={handleUpdateColor}
+      />
     </>
   );
 }
@@ -235,28 +208,5 @@ const createStyles = (theme: ThemeColorType) =>
       fontSize: 16,
       fontWeight: "bold",
       color: theme.lowEmphasis,
-    },
-    modal2: {
-      alignItems: "center",
-      maxWidth: 280,
-      paddingHorizontal: 32,
-      paddingTop: 16,
-      paddingBottom: 24,
-      gap: 16,
-      backgroundColor: theme.background,
-      borderRadius: 16,
-    },
-    colors: {
-      flexDirection: "row",
-      flexWrap: "wrap",
-      justifyContent: "center",
-      gap: 16,
-    },
-    color: {
-      justifyContent: "center",
-      alignItems: "center",
-      width: 40,
-      height: 40,
-      borderRadius: 5,
     },
   });
