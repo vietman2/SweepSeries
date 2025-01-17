@@ -7,4 +7,10 @@ describe("<ScheduleInput />", () => {
       <ScheduleInput icon="icon" text="text" onPress={jest.fn()} />
     );
   });
+
+  it("renders disabled", () => {
+    renderWithProviders(
+      <ScheduleInput icon="icon" text="text" onPress={jest.fn()} disabled />
+    );
+  });
 });
