@@ -11,7 +11,7 @@ jest.mock("expo-router", () => ({
 }));
 jest.mock("@contexts/auth", () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => (
-    <>{children}</>
+    <div>{children}</div>
   ),
   useAuth: jest.fn(),
 }));
@@ -23,7 +23,7 @@ describe("<CalendarButtons />", () => {
       login: jest.fn(),
       logout: jest.fn(),
       mode: "normal",
-      isAuthenticated: true,
+      selectedProfile: null,
     });
   });
 
@@ -41,7 +41,7 @@ describe("<CalendarButtons />", () => {
       login: jest.fn(),
       logout: jest.fn(),
       mode: "pro",
-      isAuthenticated: true,
+      selectedProfile: null,
     });
 
     const { getByTestId } = renderWithProviders(
