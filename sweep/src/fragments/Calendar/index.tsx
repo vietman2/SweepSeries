@@ -3,6 +3,7 @@ import { CalendarMembers } from "./CalendarMembers/CalendarMembers";
 import { CalendarOptions } from "./CalendarOptions/CalendarOptions";
 import { CalendarSimple } from "./CalendarSimple/CalendarSimple";
 import { CalendarTitle } from "./CalendarTitle/CalendarTitle";
+import { ColorModal } from "./ColorModal/ColorModal";
 
 export {
   CalendarButtons,
@@ -10,4 +11,5 @@ export {
   CalendarOptions,
   CalendarSimple,
   CalendarTitle,
+  ColorModal,
 };
