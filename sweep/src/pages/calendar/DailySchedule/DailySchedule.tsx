@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -10,7 +10,7 @@ import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
 import { ScheduleSimple } from "@fragments/Schedule";
 import { TodoSimple } from "@fragments/Todo";
-import { DiaryType, ScheduleSimpleType, TodoType } from "@models/calendar";
+import { DiaryType, ScheduleType, TodoType } from "@models/calendar";
 import {
   sampleDiary,
   sampleScheduleResponse,
@@ -19,7 +19,7 @@ import {
 import { ThemeColorType } from "@themes/colors";
 
 export function DailySchedule() {
-  const [schedules, setSchedules] = useState<ScheduleSimpleType[]>([]);
+  const [schedules, setSchedules] = useState<ScheduleType[]>([]);
   const [todos, setTodos] = useState<TodoType[]>([]);
   const [diary, setDiary] = useState<DiaryType>();
   const [dateObj, setDateObj] = useState<Date>();
@@ -36,7 +36,17 @@ export function DailySchedule() {
   };
 
   const handleSchedulePress = () => {
-    router.replace("/calendar/addschedule");
+    router.push({
+      pathname: "/calendar/addschedule/[date]",
+      params: { date },
+    });
+  };
+
+  const handleTodoPress = () => {
+    router.push({
+      pathname: "/calendar/addtodo/[date]",
+      params: { date },
+    });
   };
 
   useEffect(() => {
@@ -90,7 +100,7 @@ export function DailySchedule() {
         <View style={styles.content}>
           <View style={styles.header}>
             <Text style={styles.subtitle}>할 일</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleTodoPress} testID="todo">
               <AppIcon icon="plus-circle" size={20} color={theme.primary} />
             </TouchableOpacity>
           </View>
