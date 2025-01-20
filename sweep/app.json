@@ -94,7 +94,8 @@
           "cameraPermission": "The app accesses your camera to let you share them with your friends."
         }
       ],
-      "expo-router"
+      "expo-router",
+      "expo-font"
     ]
   }
 }
