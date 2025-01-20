@@ -7,6 +7,7 @@ import DateTimePicker, {
 } from "@react-native-community/datetimepicker";
 
 import { SvgIconButton, TextButton, Toggle } from "@components/Buttons";
+import { useCalendar } from "@contexts/calendar";
 import { useTheme } from "@contexts/theme";
 import { CalendarMembers, CalendarOptions } from "@fragments/Calendar";
 import { CalendarType } from "@models/calendar";
@@ -29,6 +30,7 @@ export function Settings() {
 
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["40%"], []);
+  const { setSelectedCalendar } = useCalendar();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -41,6 +43,7 @@ export function Settings() {
 
     if (response) {
       setIsNotificationOn((prev) => !prev);
+      setSelectedCalendar(response);
       handleRefresh();
     } else {
       alert("오류 발생", "알림 설정을 변경하는 중 오류가 발생했습니다.");
@@ -53,6 +56,7 @@ export function Settings() {
 
       if (response) {
         setIsDailyOn(false);
+        setSelectedCalendar(response);
         handleRefresh();
       } else {
         alert("오류 발생", "알림 시간을 해제하는 중 오류가 발생했습니다.");

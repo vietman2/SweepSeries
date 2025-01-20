@@ -63,6 +63,7 @@ describe("<Settings />", () => {
 
     await waitFor(() => {
       fireEvent.press(getAllByTestId("toggle")[1]);
+      fireEvent.press(getByTestId("cancel"));
       fireEvent.press(getByTestId("change-datetime"));
       fireEvent.press(getByTestId("확인"));
       fireEvent.press(getAllByTestId("toggle")[0]);
