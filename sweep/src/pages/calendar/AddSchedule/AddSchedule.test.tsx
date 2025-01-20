@@ -2,6 +2,8 @@ import { Platform } from "react-native";
 import { fireEvent } from "@testing-library/react-native";
 
 import { AddSchedule } from "./AddSchedule";
+import * as CalendarContext from "@contexts/calendar";
+import { sampleCalendars } from "@testdata/calendar";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("react-native", () => {
@@ -11,6 +13,17 @@ jest.mock("react-native", () => {
 
   return RN;
 });
+jest.mock("@contexts/calendar", () => ({
+  CalendarProvider: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  useCalendar: jest.fn(),
+}));
+jest.mock("@fragments/Calendar", () => ({
+  AlarmModal: () => null,
+  ColorModal: () => null,
+  RepeatModal: () => null,
+}));
 jest.mock("@fragments/Schedule", () => {
   const { TouchableOpacity } = jest.requireActual("react-native");
 
@@ -22,16 +35,24 @@ jest.mock("@fragments/Schedule", () => {
       handleEndMode: () => void;
       handleStartMode: () => void;
     }) => (
-      <>
+      <div>
         <TouchableOpacity onPress={handleStartMode} testID="start" />
         <TouchableOpacity onPress={handleEndMode} testID="end" />
-      </>
+      </div>
     ),
     ScheduleInput: () => null,
   };
 });
 
 describe("<AddSchedule />", () => {
+  beforeEach(() => {
+    jest.spyOn(CalendarContext, "useCalendar").mockReturnValue({
+      calendars: sampleCalendars,
+      selectedCalendar: sampleCalendars[0],
+      setSelectedCalendar: jest.fn(),
+    });
+  });
+
   it("renders correctly (ios)", () => {
     Platform.OS = "ios";
 
