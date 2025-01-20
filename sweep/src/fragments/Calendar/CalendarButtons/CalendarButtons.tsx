@@ -26,7 +26,10 @@ export function CalendarButtons({ open, setOpen }: Readonly<Props>) {
   };
 
   const handleSchedulePress = () => {
-    router.push("/calendar/addschedule");
+    router.push({
+      pathname: "/calendar/addschedule/[date]",
+      params: { date: new Date().toISOString() },
+    });
     setOpen(false);
   };
 
