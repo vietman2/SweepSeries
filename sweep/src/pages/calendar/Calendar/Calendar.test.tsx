@@ -2,6 +2,7 @@ import { fireEvent, waitFor } from "@testing-library/react-native";
 import * as Router from "expo-router";
 
 import { Calendar } from "./Calendar";
+import * as CalendarContext from "@contexts/calendar";
 import * as CalendarsAPI from "@services/calendar/calendars";
 import * as StorageAPI from "@services/storage/asyncstorage";
 import { sampleCalendars } from "@testdata/calendar";
@@ -20,6 +21,12 @@ jest.mock("@gorhom/bottom-sheet", () => ({
   BottomSheetBackdropProps: null,
   BottomSheetView: ({ children }: { children: React.ReactNode }) => children,
 }));
+jest.mock("@contexts/calendar", () => ({
+  CalendarProvider: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  useCalendar: jest.fn(),
+}));
 jest.mock("@fragments/Calendar", () => ({
   CalendarButtons: () => <div>CalendarButtons</div>,
   CalendarTitle: () => <div>CalendarTitle</div>,
@@ -31,8 +38,22 @@ describe("<Calendar />", () => {
     jest.clearAllMocks();
     jest.useFakeTimers();
     jest.setSystemTime(new Date("2024-01-01").getTime());
+    jest.spyOn(CalendarContext, "useCalendar").mockReturnValue({
+      calendars: sampleCalendars,
+      selectedCalendar: sampleCalendars[0],
+      setSelectedCalendar: jest.fn(),
+    });
     jest.spyOn(CalendarsAPI, "getCalendars").mockResolvedValue(sampleCalendars);
     jest.spyOn(StorageAPI, "getStorage").mockResolvedValue("1");
+  });
+
+  it("handles no calendar error", async () => {
+    jest.spyOn(CalendarContext, "useCalendar").mockReturnValue({
+      calendars: [],
+      selectedCalendar: null,
+      setSelectedCalendar: jest.fn(),
+    });
+    renderWithProviders(<Calendar />);
   });
 
   it("renders correctly (month >= 10) and open settings", async () => {
