@@ -1,6 +1,7 @@
 import {
   getCalendars,
   getCalendar,
+  getCalendarData,
   createCalendar,
   deleteCalendar,
   updateCalendarInfo,
@@ -13,6 +14,7 @@ import { createTodo } from "./todos";
 export {
   getCalendars,
   getCalendar,
+  getCalendarData,
   createCalendar,
   deleteCalendar,
   updateCalendarInfo,
