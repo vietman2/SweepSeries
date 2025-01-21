@@ -8,6 +8,7 @@ interface CalendarContextType {
   calendars: CalendarType[];
   selectedCalendar: CalendarType | null;
   setSelectedCalendar: (calendar: CalendarType) => void;
+  reloadData: () => void;
 }
 
 const CalendarContext = createContext<CalendarContextType | undefined>(
@@ -21,6 +22,11 @@ export const CalendarProvider: React.FC<{ children: React.ReactNode }> = ({
   const [selectedCalendar, setSelectedCalendar] = useState<CalendarType | null>(
     null
   );
+  const [refreshCount, setRefreshCount] = useState<number>(0);
+
+  const reloadData = () => {
+    setRefreshCount((prev) => prev + 1);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,11 +49,11 @@ export const CalendarProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     fetchData();
-  }, []);
+  }, [refreshCount]);
 
   const value = useMemo(
-    () => ({ calendars, selectedCalendar, setSelectedCalendar }),
-    [calendars, selectedCalendar, setSelectedCalendar]
+    () => ({ calendars, selectedCalendar, setSelectedCalendar, reloadData }),
+    [calendars, selectedCalendar, setSelectedCalendar, reloadData]
   );
 
   return (
