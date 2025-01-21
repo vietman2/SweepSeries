@@ -5,7 +5,7 @@ import { Calendar } from "./Calendar";
 import * as CalendarContext from "@contexts/calendar";
 import * as CalendarsAPI from "@services/calendar/calendars";
 import * as StorageAPI from "@services/storage/asyncstorage";
-import { sampleCalendars } from "@testdata/calendar";
+import { sampleCalendars, sampleScheduleResponse } from "@testdata/calendar";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("expo-router", () => ({
@@ -43,7 +43,7 @@ describe("<Calendar />", () => {
       selectedCalendar: sampleCalendars[0],
       setSelectedCalendar: jest.fn(),
     });
-    jest.spyOn(CalendarsAPI, "getCalendars").mockResolvedValue(sampleCalendars);
+    jest.spyOn(CalendarsAPI, "getCalendarData").mockResolvedValue(sampleScheduleResponse);
     jest.spyOn(StorageAPI, "getStorage").mockResolvedValue("1");
   });
 
@@ -66,7 +66,8 @@ describe("<Calendar />", () => {
     await waitFor(() => fireEvent.press(getByTestId("open-settings")));
   });
 
-  it("renders correctly (month < 10) and handles search", async () => {
+  it("renders correctly (month < 10), bad response and handles search", async () => {
+    jest.spyOn(CalendarsAPI, "getCalendarData").mockResolvedValue(null);
     const { getByTestId } = renderWithProviders(<Calendar />);
 
     await waitFor(() => {

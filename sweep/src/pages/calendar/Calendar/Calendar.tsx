@@ -25,9 +25,8 @@ import {
 } from "@fragments/Calendar";
 import { CalendarType, ScheduleResponseType } from "@models/calendar";
 import { alert } from "@services/alert";
-import { createCalendar } from "@services/calendar";
+import { createCalendar, getCalendarData } from "@services/calendar";
 import { saveStorage } from "@services/storage";
-import { sampleScheduleResponse } from "@testdata/calendar";
 import { ThemeColorType } from "@themes/colors";
 
 export function Calendar() {
@@ -79,6 +78,12 @@ export function Calendar() {
     });
   };
 
+  const handleMonthChange = (date: DateData) => {
+    const { year, month } = date;
+
+    setSelectedMonth(`${year}-${month < 10 ? `0${month}` : month}`);
+  };
+
   useFocusEffect(
     useCallback(() => {
       handleRefresh();
@@ -86,9 +91,20 @@ export function Calendar() {
   );
 
   useEffect(() => {
-    // TODO: Fetch data from API
-    setSchedules(sampleScheduleResponse);
-  }, [selectedMonth]);
+    const fetchData = async () => {
+      if (!selectedCalendar) return;
+
+      const response = await getCalendarData(selectedCalendar.id, selectedMonth);
+
+      if (response) {
+        setSchedules(response);
+      } else {
+        alert("데이터 불러오기 실패", "데이터를 불러오는데 실패했습니다.");
+      }
+    };
+
+    fetchData();
+  }, [selectedMonth, selectedCalendar, refreshCount]);
 
   useEffect(() => {
     const getCurrentMonth = () => {
@@ -99,7 +115,7 @@ export function Calendar() {
     };
 
     setSelectedMonth(getCurrentMonth());
-  }, [refreshCount]);
+  }, []);
 
   const dayComponent = ({ date }: { date: DateData }) => {
     const schedule = schedules?.[date.dateString];
@@ -173,6 +189,7 @@ export function Calendar() {
             initialDate={new Date().toISOString().split("T")[0]}
             customHeader={CustomHeader}
             dayComponent={dayComponent}
+            onMonthChange={handleMonthChange}
             hideExtraDays
           />
         </Scroll>
@@ -259,4 +276,5 @@ const createStyles = (theme: ThemeColorType) =>
       padding: 8,
       borderRadius: 8,
     },
+
   });
