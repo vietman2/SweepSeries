@@ -21,6 +21,7 @@ django-cors-headers = "*"
 gunicorn = "*"
 whitenoise = "*"
 requests = "*"
+python-dateutil = "*"
 
 [dev-packages]
 coverage = "*"
