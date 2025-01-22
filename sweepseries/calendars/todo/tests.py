@@ -18,6 +18,11 @@ class TodosAPITestCase(APITestCase):
             "color": "#ffffff"
         }
 
+    def test_unallowed_methods(self):
+        self.client.force_authenticate(user=self.calendar_owner)
+        response = self.client.patch(self.url + "1/")
+        self.assertEqual(response.status_code, 405)
+
     def test_create_todo(self):
         self.client.force_authenticate(user=self.calendar_owner)
         response = self.client.post(self.url, self.create_data)
@@ -36,6 +41,19 @@ class TodosAPITestCase(APITestCase):
         self.client.force_authenticate(user=self.calendar_owner)
         response = self.client.post(self.url, {})
         self.assertEqual(response.status_code, 400)
+
+    def test_toggle_todo(self):
+        todo = Todo.objects.get(pk=1)
+        self.client.force_authenticate(user=self.calendar_owner)
+        response = self.client.patch(f"{self.url}{todo.id}/toggle/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_toggle_fail(self):
+        ## no auth
+        todo = Todo.objects.get(pk=1)
+        self.client.force_authenticate(user=self.calendar_viewer)
+        response = self.client.patch(f"{self.url}{todo.id}/toggle/")
+        self.assertEqual(response.status_code, 403)
 
 class TodoModelTestCase(TestCase):
     fixtures = ["core/data/test/users.json", "core/data/test/calendars.json"]
