@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { useState } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { AppIcon } from '@components/Icons';
-import { Text } from '@components/Texts';
-import { useTheme } from '@contexts/theme';
-import { TodoType } from '@models/calendar';
-import { ThemeColorType } from '@themes/colors';
+import { AppIcon } from "@components/Icons";
+import { Text } from "@components/Texts";
+import { useTheme } from "@contexts/theme";
+import { TodoType } from "@models/calendar";
+import { ThemeColorType } from "@themes/colors";
 
 interface Props {
   todo: TodoType;
@@ -35,7 +35,7 @@ export function TodoSimple({ todo, onPress }: Readonly<Props>) {
       <View
         style={[
           styles.iconWrapper,
-          { backgroundColor: isDone ? theme.primary : 'white' },
+          { backgroundColor: isDone ? theme.primary : "white" },
         ]}
       >
         <AppIcon icon="check" size={14} color="white" />
@@ -48,8 +48,8 @@ export function TodoSimple({ todo, onPress }: Readonly<Props>) {
 const createStyles = (theme: ThemeColorType) =>
   StyleSheet.create({
     container: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: "row",
+      alignItems: "center",
       gap: 8,
     },
     iconWrapper: {
