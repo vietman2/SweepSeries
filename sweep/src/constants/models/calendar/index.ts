@@ -1,5 +1,4 @@
 import { CalendarMemberType, CalendarType } from "./calendar";
-import { DiaryType } from "./diary";
 import {
   ScheduleType,
   ScheduleSimpleType,
@@ -11,7 +10,6 @@ import { TodoType } from "./todo";
 export {
   CalendarMemberType,
   CalendarType,
-  DiaryType,
   ScheduleType,
   ScheduleSimpleType,
   ScheduleResponseType,

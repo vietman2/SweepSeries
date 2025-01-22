@@ -1,12 +1,10 @@
 export type ScheduleType = {
   id: number;
-  short_text: string;
   time: string;
   type: string;
-  name: string;
-  detail: string;
+  title: string;
+  description: string;
   color: string;
-  note?: string;
 };
 
 export type ScheduleSimpleType = {
