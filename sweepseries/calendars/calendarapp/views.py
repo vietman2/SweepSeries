@@ -1,4 +1,6 @@
-import datetime
+from collections import defaultdict
+from datetime import date, time as time_module
+from dateutil.relativedelta import relativedelta
 from django.db.models import Q
 from rest_framework import status
 from rest_framework.decorators import action
@@ -8,15 +10,30 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from drf_spectacular.utils import extend_schema
 
+from calendars.diary.models import Diary
+from calendars.schedule.models import Event
+from calendars.schedule.serializers import EventSerializer
+from calendars.todo.models import Todo
+from calendars.todo.serializers import TodoSerializer
 from .enums import AuthChoices
 from .models import Calendar, CalendarUser
+from .permissions import IsMember, IsOwner
 from .serializers import CalendarSerializer
 
 class CalendarViewSet(ModelViewSet):
     queryset = Calendar.objects.all()
     serializer_class = CalendarSerializer
-    permission_classes = [IsAuthenticated]
     http_method_names = ['get', 'patch', 'post', 'delete']
+
+    def get_permissions(self):
+        permissions = [IsAuthenticated()]
+
+        if self.action in ['schedules']:
+            permissions.append(IsMember())
+        elif self.action in ['destroy']:
+            permissions.append(IsOwner())
+
+        return permissions
 
     @extend_schema(summary="캘린더 생성", tags=["캘린더"])
     def create(self, request, *args, **kwargs):
@@ -81,13 +98,7 @@ class CalendarViewSet(ModelViewSet):
     @extend_schema(summary="캘린더 삭제", tags=["캘린더"])
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
-        user = request.user
-
-        calendar_user = CalendarUser.objects.get(user=user, calendar=instance)
-        if calendar_user.auth == AuthChoices.OWNER:
-            instance.delete()
-        else:
-            calendar_user.delete()
+        instance.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -134,7 +145,7 @@ class CalendarViewSet(ModelViewSet):
             hour_input = time_input.split(':')[0]
             minute_input = time_input.split(':')[1]
 
-            time = datetime.time(hour=int(hour_input), minute=int(minute_input))
+            time = time_module(hour=int(hour_input), minute=int(minute_input))
 
             calendar_user.notifications_today = True
             calendar_user.daily_time = time
@@ -143,3 +154,97 @@ class CalendarViewSet(ModelViewSet):
         serializer = CalendarSerializer(calendar_user)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(summary="월간 캘린더 조회", tags=["캘린더"])
+    @action(detail=True, methods=['get'])
+    def schedules(self, request, pk=None):  # pylint: disable=unused-argument
+        ## return the events for the month
+        calendar = self.get_object()
+        month_query = request.query_params.get('month', None)
+        daily_query = request.query_params.get('day', None)
+
+        if month_query is None and daily_query is None:
+            return Response({"detail": "잘못된 요청입니다."}, status=status.HTTP_400_BAD_REQUEST)
+        if month_query and daily_query:
+            return Response({"detail": "잘못된 요청입니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if month_query:
+            data = get_monthly_data(month_query, calendar)
+
+        if daily_query:
+            data = get_daily_data(daily_query, calendar, request.user)
+
+        return Response(data, status=status.HTTP_200_OK)
+
+def get_monthly_data(month_query, calendar):
+    month = month_query.split('-')[1]
+    year = month_query.split('-')[0]
+
+    try:
+        month = int(month)
+        year = int(year)
+        start_date = date(year, month, 1)
+        end_date = start_date + relativedelta(months=1)
+    except ValueError:
+        raise ValidationError("올바른 형식이 아닙니다.")
+
+    q = Q()
+    q &= Q(schedule__calendar=calendar)
+    q &= Q(start_datetime__range=[start_date, end_date])
+
+    data = defaultdict(list)
+
+    events = Event.objects.filter(q)
+
+    for event in events:
+        date_str = event.start_datetime.date().strftime('%Y-%m-%d')
+        data[date_str].append({
+            'id': event.id,
+            'title': event.schedule.title,
+            'color': event.schedule.color,
+        })
+
+    return data
+
+def get_daily_data(daily_query, calendar, user):
+    date_str = daily_query
+
+    try:
+        date_obj = date.fromisoformat(date_str)
+    except ValueError:
+        raise ValidationError("올바른 형식이 아닙니다.")
+
+    q_event = Q()
+    q_event &= Q(schedule__calendar=calendar)
+    q_event &= Q(start_datetime__date=date_obj)
+
+    q_todo = Q()
+    q_todo &= Q(calendar=calendar)
+    q_todo &= Q(deadline=date_obj)
+
+    q_diary = Q()
+    q_diary &= Q(user=user)
+    q_diary &= Q(date=date_obj)
+
+    data = {
+        "events": [],
+        "todos": [],
+        "diary": "",
+    }
+
+    events = Event.objects.filter(q_event)
+    todos = Todo.objects.filter(q_todo)
+    diary = Diary.objects.filter(q_diary).first()
+
+    for event in events:
+        event_data = EventSerializer(event).data
+        data["events"].append(event_data)
+
+    for todo in todos:
+        todo_data = TodoSerializer(todo).data
+        data["todos"].append(todo_data)
+
+    if diary:
+        data["diary"] = diary.diary
+
+    return data
