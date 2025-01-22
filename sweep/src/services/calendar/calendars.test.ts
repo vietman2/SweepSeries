@@ -54,15 +54,21 @@ describe("getCalendarData", () => {
     const data = { id: 1, name: "Calendar 1" };
     axios.get = jest.fn().mockResolvedValue({ data });
 
-    const result = await getCalendarData(1, "2021-01");
+    const result = await getCalendarData(1, "2021-01", "month");
 
     expect(result).toEqual(data);
+  });
+
+  it("should return null if the id is not provided", async () => {
+    const result = await getCalendarData(undefined, "2021-01", "month");
+
+    expect(result).toBeNull();
   });
 
   it("should return null if the request fails", async () => {
     axios.get = jest.fn().mockRejectedValue(null);
 
-    const result = await getCalendarData(1, "2021-01");
+    const result = await getCalendarData(1, "2021-01-01", "day");
 
     expect(result).toBeNull();
   });

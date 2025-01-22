@@ -21,3 +21,13 @@ export async function createTodo(
     return null;
   }
 }
+
+export async function toggleTodoStatus(todoId: number) {
+  try {
+    await axios.patch(`/v1/todos/${todoId}/toggle/`);
+
+    return true;
+  } catch {
+    return null;
+  }
+}

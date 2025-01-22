@@ -18,12 +18,20 @@ export async function getCalendar(id: string) {
   }
 }
 
-export async function getCalendarData(id: number, month: string) {
+export async function getCalendarData(id: number | undefined, query: string, type: string) {
+  // type == "month" 이면, paramdms {month: "2021-09"} 형태로 
+  // type == "day" 이면, params {day: "2021-09-01"} 형태로
+  if (!id) {
+    return null;
+  }
+
+  const params = {
+    [type]: query,
+  };
+
   try {
     const response = await axios.get(`/v1/calendars/${id}/schedules/`, {
-      params: {
-        month,
-      },
+      params,
     });
 
     return response.data;
