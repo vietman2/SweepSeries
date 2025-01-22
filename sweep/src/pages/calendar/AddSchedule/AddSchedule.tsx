@@ -119,7 +119,9 @@ export function AddSchedule() {
       setSelectedStartDateTime(currentDate);
 
       if (currentDate > selectedEndDateTime) {
-        setSelectedEndDateTime(new Date(currentDate.getTime() + 60 * 60 * 1000));
+        setSelectedEndDateTime(
+          new Date(currentDate.getTime() + 60 * 60 * 1000)
+        );
       }
     } else {
       setSelectedEndDateTime(currentDate);
