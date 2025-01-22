@@ -1,37 +1,37 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { router, useFocusEffect } from 'expo-router';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
+import { router, useFocusEffect } from "expo-router";
 import BottomSheet, {
   BottomSheetView,
   BottomSheetBackdrop,
   BottomSheetBackdropProps,
-} from '@gorhom/bottom-sheet';
+} from "@gorhom/bottom-sheet";
 import {
   Calendar as CalendarComponent,
   DateData,
-} from 'react-native-calendars';
+} from "react-native-calendars";
 
-import { CustomDay, CustomHeader } from '@components/Calendars';
-import { LoginNeeded } from '@components/Fallbacks';
-import { AppIcon } from '@components/Icons';
-import { Scroll } from '@components/ScrollView';
-import { Text } from '@components/Texts';
-import { useCalendar } from '@contexts/calendar';
-import { useTheme } from '@contexts/theme';
+import { CustomDay, CustomHeader } from "@components/Calendars";
+import { LoginNeeded } from "@components/Fallbacks";
+import { AppIcon } from "@components/Icons";
+import { Scroll } from "@components/ScrollView";
+import { Text } from "@components/Texts";
+import { useCalendar } from "@contexts/calendar";
+import { useTheme } from "@contexts/theme";
 import {
   CalendarButtons,
   CalendarTitle,
   CalendarSimple,
-} from '@fragments/Calendar';
-import { CalendarType, ScheduleResponseType } from '@models/calendar';
-import { alert } from '@services/alert';
-import { createCalendar, getCalendarData } from '@services/calendar';
-import { saveStorage } from '@services/storage';
-import { ThemeColorType } from '@themes/colors';
+} from "@fragments/Calendar";
+import { CalendarType, ScheduleResponseType } from "@models/calendar";
+import { alert } from "@services/alert";
+import { createCalendar, getCalendarData } from "@services/calendar";
+import { saveStorage } from "@services/storage";
+import { ThemeColorType } from "@themes/colors";
 
 export function Calendar() {
   const [schedules, setSchedules] = useState<ScheduleResponseType>();
-  const [selectedMonth, setSelectedMonth] = useState<string>('');
+  const [selectedMonth, setSelectedMonth] = useState<string>("");
 
   const [buttonsOpen, setButtonsOpen] = useState<boolean>(false);
   const [refreshCount, setRefreshCount] = useState<number>(0);
@@ -51,7 +51,7 @@ export function Calendar() {
   const handleCalendarSelect = (calendar: CalendarType) => {
     setSelectedCalendar(calendar);
     const storeSelectedCalendar = async () => {
-      await saveStorage('selectedCalendarId', calendar.id.toString());
+      await saveStorage("selectedCalendarId", calendar.id.toString());
     };
     storeSelectedCalendar();
     ref.current?.close();
@@ -63,16 +63,16 @@ export function Calendar() {
     if (response) {
       handleRefresh();
     } else {
-      alert('생성 실패', '캘린더 생성에 실패했습니다.');
+      alert("생성 실패", "캘린더 생성에 실패했습니다.");
     }
   };
 
   const handleSearchPress = () => {
-    router.push('/calendar/search');
+    router.push("/calendar/search");
   };
 
   const handleSettingsPress = () => {
-    router.push('/calendar/settings');
+    router.push("/calendar/settings");
   };
 
   const handleMonthChange = (date: DateData) => {
@@ -93,13 +93,14 @@ export function Calendar() {
 
       const response = await getCalendarData(
         selectedCalendar.id,
-        selectedMonth
+        selectedMonth,
+        "month"
       );
 
       if (response) {
         setSchedules(response);
       } else {
-        alert('데이터 불러오기 실패', '데이터를 불러오는데 실패했습니다.');
+        alert("데이터 불러오기 실패", "데이터를 불러오는데 실패했습니다.");
       }
     };
 
@@ -122,7 +123,7 @@ export function Calendar() {
 
     const handleNavigation = () => {
       router.push({
-        pathname: '/calendar/daily/[date]',
+        pathname: "/calendar/daily/[date]",
         params: { date: date.dateString },
       });
     };
@@ -158,7 +159,7 @@ export function Calendar() {
       <Pressable
         style={[
           StyleSheet.absoluteFill,
-          buttonsOpen && { backgroundColor: '#00000040', zIndex: 1 },
+          buttonsOpen && { backgroundColor: "#00000040", zIndex: 1 },
         ]}
         onPress={() => setButtonsOpen(false)}
         testID="close-buttons"
@@ -186,7 +187,7 @@ export function Calendar() {
         <CalendarButtons open={buttonsOpen} setOpen={setButtonsOpen} />
         <Scroll>
           <CalendarComponent
-            initialDate={new Date().toISOString().split('T')[0]}
+            initialDate={new Date().toISOString().split("T")[0]}
             customHeader={CustomHeader}
             dayComponent={dayComponent}
             onMonthChange={handleMonthChange}
@@ -241,9 +242,9 @@ const createStyles = (theme: ThemeColorType) =>
       backgroundColor: theme.background,
     },
     header: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
       paddingTop: 64,
       paddingBottom: 8,
       paddingHorizontal: 16,
@@ -251,8 +252,8 @@ const createStyles = (theme: ThemeColorType) =>
       backgroundColor: theme.background,
     },
     wrapper: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: "row",
+      alignItems: "center",
       gap: 12,
     },
     sheetContainer: {
@@ -262,7 +263,7 @@ const createStyles = (theme: ThemeColorType) =>
     },
     title: {
       fontSize: 20,
-      fontWeight: 'bold',
+      fontWeight: "bold",
       color: theme.primary,
     },
     calendarList: {
