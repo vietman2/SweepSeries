@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'auth.userprofile.apps.UserprofileConfig',
 
     'calendars.calendarapp.apps.CalendarappConfig',
+    'calendars.diary.apps.DiaryConfig',
     'calendars.schedule.apps.ScheduleConfig',
     'calendars.todo.apps.TodoConfig',
 
