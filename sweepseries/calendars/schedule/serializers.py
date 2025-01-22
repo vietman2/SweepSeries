@@ -7,11 +7,6 @@ from calendars.calendarapp.enums import AuthChoices
 from calendars.calendarapp.models import Calendar
 from .models import Schedule, Event
 
-class ScheduleSimpleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Schedule
-        fields = ['id', 'title', 'color']
-
 class ScheduleSerializer(serializers.ModelSerializer):
     calendar_id     = serializers.IntegerField(write_only=True)
     start_datetime  = serializers.DateTimeField(write_only=True)
@@ -133,3 +128,63 @@ class ScheduleSerializer(serializers.ModelSerializer):
             self.create_events(schedule, alarm, repeat, is_allday, start, end)
 
             return schedule
+
+class EventSerializer(serializers.ModelSerializer):
+    title       = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+    color       = serializers.SerializerMethodField()
+    time        = serializers.SerializerMethodField()
+    type        = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Event
+        fields = ['id', 'type', 'title', 'description', 'color', 'time']
+
+    def get_title(self, obj):
+        return obj.schedule.title
+
+    def get_description(self, obj):
+        return obj.schedule.description
+
+    def get_color(self, obj):
+        return obj.schedule.color
+
+    def get_type(self, obj):
+        return '일정'
+
+    def get_time_text(self, time):
+        ampm = '오전'
+        hour = time.strftime('%H')
+        minute = time.strftime('%M')
+
+        if hour > '12':
+            ampm = '오후'
+            hour = int(hour) - 12
+
+        if minute == '00':
+            return f'{ampm} {hour}시'
+
+        return f'{ampm} {hour}시 {minute}분'
+
+    def get_duration_text(self, duration):
+        days = duration.days
+        hours, remainder = divmod(duration.seconds, 3600)
+        minutes, _ = divmod(remainder, 60)
+
+        days_text = f'{days}일' if days else ''
+        hours_text = f'{hours}시간' if hours else ''
+        minutes_text = f'{minutes}분' if minutes else ''
+
+        return ' '.join([text for text in [days_text, hours_text, minutes_text] if text])
+
+    def get_time(self, obj):
+        if obj.is_allday:
+            return '종일'
+
+        start_time = self.get_time_text(obj.start_datetime)
+        end_time = self.get_time_text(obj.end_datetime)
+
+        duration = obj.end_datetime - obj.start_datetime
+        duration_text = self.get_duration_text(duration)
+
+        return f'{start_time} ~ {end_time} ({duration_text})'
