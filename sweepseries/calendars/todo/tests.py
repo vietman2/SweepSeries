@@ -36,6 +36,7 @@ class TodosAPITestCase(APITestCase):
         ## no auth: no permission
         self.client.force_authenticate(user=self.calendar_viewer)
         response = self.client.post(self.url, self.create_data)
+        self.assertEqual(response.status_code, 400)
 
         ## no data
         self.client.force_authenticate(user=self.calendar_owner)
