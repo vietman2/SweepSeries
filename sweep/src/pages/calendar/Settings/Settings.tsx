@@ -1,29 +1,30 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { router } from 'expo-router';
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { router } from "expo-router";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import DateTimePicker, {
   DateTimePickerEvent,
-} from '@react-native-community/datetimepicker';
+} from "@react-native-community/datetimepicker";
 
-import { SvgIconButton, TextButton, Toggle } from '@components/Buttons';
-import { useCalendar } from '@contexts/calendar';
-import { useTheme } from '@contexts/theme';
-import { CalendarMembers, CalendarOptions } from '@fragments/Calendar';
-import { alert } from '@services/alert';
+import { SvgIconButton, TextButton, Toggle } from "@components/Buttons";
+import { useCalendar } from "@contexts/calendar";
+import { useTheme } from "@contexts/theme";
+import { CalendarMembers, CalendarOptions } from "@fragments/Calendar";
+import { alert } from "@services/alert";
 import {
   toggleCalendarNotification,
   toggleCalendarDaily,
   deleteCalendar,
-} from '@services/calendar';
-import { ThemeColorType } from '@themes/colors';
+  leaveCalendar,
+} from "@services/calendar";
+import { ThemeColorType } from "@themes/colors";
 
 export function Settings() {
   const [selectedTime, setSelectedTime] = useState<Date>(new Date());
   const [openTimePicker, setOpenTimePicker] = useState<boolean>(false);
 
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ['40%'], []);
+  const snapPoints = useMemo(() => ["40%"], []);
   const { selectedCalendar, reloadData } = useCalendar();
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -34,7 +35,7 @@ export function Settings() {
     if (response) {
       reloadData();
     } else {
-      alert('오류 발생', '알림 설정을 변경하는 중 오류가 발생했습니다.');
+      alert("오류 발생", "알림 설정을 변경하는 중 오류가 발생했습니다.");
     }
   };
 
@@ -52,7 +53,7 @@ export function Settings() {
       reloadData();
       bottomSheetRef.current?.close();
     } else {
-      alert('오류 발생', '알림 시간을 변경하는 중 오류가 발생했습니다.');
+      alert("오류 발생", "알림 시간을 변경하는 중 오류가 발생했습니다.");
     }
   };
 
@@ -70,7 +71,17 @@ export function Settings() {
     if (response) {
       router.back();
     } else {
-      alert('오류 발생', '캘린더 삭제 중 오류가 발생했습니다.');
+      alert("오류 발생", "캘린더 삭제 중 오류가 발생했습니다.");
+    }
+  };
+
+  const handleLeaveCalendar = async () => {
+    const response = await leaveCalendar(selectedCalendar?.id);
+
+    if (response) {
+      router.back();
+    } else {
+      alert("오류 발생", "캘린더 연동 해제 중 오류가 발생했습니다.");
     }
   };
 
@@ -88,12 +99,12 @@ export function Settings() {
 
   const handleDailyToggle = async () => {
     if (selectedCalendar.notifications_today) {
-      const response = await toggleCalendarDaily(selectedCalendar.id, '');
+      const response = await toggleCalendarDaily(selectedCalendar.id, "");
 
       if (response) {
         reloadData();
       } else {
-        alert('오류 발생', '알림 시간을 해제하는 중 오류가 발생했습니다.');
+        alert("오류 발생", "알림 시간을 해제하는 중 오류가 발생했습니다.");
       }
     } else {
       setOpenTimePicker(true);
@@ -141,7 +152,7 @@ export function Settings() {
               {selectedCalendar.notifications && (
                 <View style={styles.horizontal}>
                   <Text>
-                    오늘 알림 받기{' '}
+                    오늘 알림 받기{" "}
                     {selectedCalendar.daily_time &&
                       `(${selectedCalendar.daily_time})`}
                   </Text>
@@ -157,10 +168,14 @@ export function Settings() {
             <TextButton
               text={
                 selectedCalendar.is_owner
-                  ? '캘린더 삭제하기'
-                  : '캘린더 연동해제'
+                  ? "캘린더 삭제하기"
+                  : "캘린더 연동해제"
               }
-              onPress={handleDeleteCalendar}
+              onPress={
+                selectedCalendar.is_owner
+                  ? handleDeleteCalendar
+                  : handleLeaveCalendar
+              }
               color={theme.lowEmphasis}
               backgroundColor={theme.background}
             />
@@ -208,17 +223,17 @@ const createStyles = (theme: ThemeColorType) =>
   StyleSheet.create({
     backdrop: {
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#00000060',
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "#00000060",
     },
     modal: {
       flex: 1,
-      position: 'absolute',
+      position: "absolute",
       top: 0,
       right: 0,
-      width: '80%',
-      height: '100%',
+      width: "80%",
+      height: "100%",
       paddingTop: 72,
       paddingBottom: 32,
       paddingHorizontal: 24,
@@ -232,20 +247,20 @@ const createStyles = (theme: ThemeColorType) =>
     },
     subtitle: {
       fontSize: 20,
-      fontWeight: 'bold',
+      fontWeight: "bold",
       color: theme.highEmphasis,
     },
     wrapper: {
       gap: 12,
     },
     horizontal: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
     },
     sheetContainer: {
       flex: 1,
-      alignItems: 'center',
+      alignItems: "center",
       marginBottom: 32,
       paddingTop: 8,
       paddingHorizontal: 24,
@@ -258,7 +273,7 @@ const createStyles = (theme: ThemeColorType) =>
       color: theme.highEmphasis,
     },
     buttonContainer: {
-      flexDirection: 'row',
+      flexDirection: "row",
       gap: 8,
     },
     buttonWrapper: {
