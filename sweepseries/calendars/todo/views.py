@@ -35,7 +35,7 @@ class TodoViewSet(ModelViewSet):
 
     @extend_schema(summary="할 일 토글", tags=["할 일"])
     @action(detail=True, methods=['patch'])
-    def toggle(self, request, pk=None):
+    def toggle(self, request, pk=None):  ## pylint: disable=unused-argument
         todo = self.get_object()
 
         allowed_auth = [AuthChoices.OWNER, AuthChoices.EDITOR]

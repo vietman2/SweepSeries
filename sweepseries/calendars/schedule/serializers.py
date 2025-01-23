@@ -22,12 +22,12 @@ class ScheduleSerializer(serializers.ModelSerializer):
             'start_datetime', 'end_datetime', 'alarm', 'repeat'
         ]
 
-    def validate(self, data):
+    def validate(self, attrs):
         ## 일정 시작 시간이 종료 시간보다 빠른지 확인
-        if data['start_datetime'] >= data['end_datetime']:
+        if attrs['start_datetime'] >= attrs['end_datetime']:
             raise serializers.ValidationError('일정 시작 시간이 종료 시간보다 빠릅니다.')
 
-        return data
+        return attrs
 
     def get_alarm_time(self, start_datetime, delta, unit):
         units = {0: 'minutes', 1: 'hours', 2: 'days', 3: 'weeks'}
@@ -40,18 +40,19 @@ class ScheduleSerializer(serializers.ModelSerializer):
     def get_time(self, time, period, index):
         if period == 0: ## 매일
             return time + timedelta(days=index)
-        elif period == 1: ## 매주
+        if period == 1: ## 매주
             return time + timedelta(weeks=index)
-        elif period == 2: ## 매월
+        if period == 2: ## 매월
             return time + relativedelta(months=index)
-        elif period == 3: ## 매년
+        if period == 3: ## 매년
             return time + relativedelta(years=index)
-        else:
-            raise serializers.ValidationError('반복 주기가 올바르지 않습니다.')
+
+        raise serializers.ValidationError('반복 주기가 올바르지 않습니다.')
 
     def create_event(self, schedule, alarm, is_allday, start, end):
         start_datetime = start
         end_datetime = end
+
         if is_allday:
             start_datetime = start.replace(hour=0, minute=0, second=0)
             end_datetime = end.replace(hour=23, minute=59, second=59)
@@ -87,8 +88,8 @@ class ScheduleSerializer(serializers.ModelSerializer):
                     start_time = self.get_time(start, period, i)
                     end_time = self.get_time(end, period, i)
                     self.create_event(schedule, alarm, is_allday, start_time, end_time)
-            except ValueError:
-                raise serializers.ValidationError('반복 횟수가 올바르지 않습니다.')
+            except ValueError as e:
+                raise serializers.ValidationError('반복 횟수가 올바르지 않습니다.') from e
         elif break_rule.endswith('까지'):
             ## input: 'yyyy.mm.dd까지'
             try:
@@ -101,8 +102,8 @@ class ScheduleSerializer(serializers.ModelSerializer):
                         break
                     self.create_event(schedule, alarm, is_allday, start_time, end_time)
                     i += 1
-            except ValueError:
-                raise serializers.ValidationError('반복 종료일이 올바르지 않습니다.')
+            except ValueError as e:
+                raise serializers.ValidationError('반복 종료일이 올바르지 않습니다.') from e
         else:
             raise serializers.ValidationError('잘못된 요청입니다.')
 

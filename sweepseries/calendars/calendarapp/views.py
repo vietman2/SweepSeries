@@ -170,11 +170,11 @@ class CalendarViewSet(ModelViewSet):
 
         if month_query:
             data = get_monthly_data(month_query, calendar)
+            return Response(data, status=status.HTTP_200_OK)
 
-        if daily_query:
-            data = get_daily_data(daily_query, calendar, request.user)
-
+        data = get_daily_data(daily_query, calendar, request.user)
         return Response(data, status=status.HTTP_200_OK)
+
 
 def get_monthly_data(month_query, calendar):
     month = month_query.split('-')[1]
@@ -185,8 +185,8 @@ def get_monthly_data(month_query, calendar):
         year = int(year)
         start_date = date(year, month, 1)
         end_date = start_date + relativedelta(months=1)
-    except ValueError:
-        raise ValidationError("올바른 형식이 아닙니다.")
+    except ValueError as e:
+        raise ValidationError("올바른 형식이 아닙니다.") from e
 
     q = Q()
     q &= Q(schedule__calendar=calendar)
@@ -207,12 +207,10 @@ def get_monthly_data(month_query, calendar):
     return data
 
 def get_daily_data(daily_query, calendar, user):
-    date_str = daily_query
-
     try:
-        date_obj = date.fromisoformat(date_str)
-    except ValueError:
-        raise ValidationError("올바른 형식이 아닙니다.")
+        date_obj = date.fromisoformat(daily_query)
+    except ValueError as e:
+        raise ValidationError("올바른 형식이 아닙니다.") from e
 
     q_event = Q()
     q_event &= Q(schedule__calendar=calendar)
