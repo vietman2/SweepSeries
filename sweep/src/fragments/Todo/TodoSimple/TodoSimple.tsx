@@ -9,16 +9,21 @@ import { ThemeColorType } from "@themes/colors";
 
 interface Props {
   todo: TodoType;
+  onPress: () => Promise<boolean>;
 }
 
-export function TodoSimple({ todo }: Readonly<Props>) {
-  const [isDone, setIsDone] = useState(todo.isDone);
+export function TodoSimple({ todo, onPress }: Readonly<Props>) {
+  const [isDone, setIsDone] = useState(todo.completed);
 
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  const handleToggle = () => {
-    setIsDone((prev) => !prev);
+  const handleToggle = async () => {
+    const result = await onPress();
+
+    if (result) {
+      setIsDone(!isDone);
+    }
   };
 
   return (
@@ -35,7 +40,7 @@ export function TodoSimple({ todo }: Readonly<Props>) {
       >
         <AppIcon icon="check" size={14} color="white" />
       </View>
-      <Text style={styles.text}>{todo.text}</Text>
+      <Text style={styles.text}>{todo.title}</Text>
     </TouchableOpacity>
   );
 }

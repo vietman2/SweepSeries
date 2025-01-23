@@ -12,9 +12,11 @@ import {
 } from "react-native-calendars";
 
 import { CustomDay, CustomHeader } from "@components/Calendars";
+import { LoginNeeded } from "@components/Fallbacks";
 import { AppIcon } from "@components/Icons";
 import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
+import { useCalendar } from "@contexts/calendar";
 import { useTheme } from "@contexts/theme";
 import {
   CalendarButtons,
@@ -23,20 +25,18 @@ import {
 } from "@fragments/Calendar";
 import { CalendarType, ScheduleResponseType } from "@models/calendar";
 import { alert } from "@services/alert";
-import { createCalendar, getCalendars } from "@services/calendar";
-import { saveStorage, getStorage } from "@services/storage";
-import { sampleScheduleResponse } from "@testdata/calendar";
+import { createCalendar, getCalendarData } from "@services/calendar";
+import { saveStorage } from "@services/storage";
 import { ThemeColorType } from "@themes/colors";
 
 export function Calendar() {
   const [schedules, setSchedules] = useState<ScheduleResponseType>();
-  const [selectedCalendar, setSelectedCalendar] = useState<CalendarType>();
-  const [calendars, setCalendars] = useState<CalendarType[]>([]);
   const [selectedMonth, setSelectedMonth] = useState<string>("");
 
   const [buttonsOpen, setButtonsOpen] = useState<boolean>(false);
   const [refreshCount, setRefreshCount] = useState<number>(0);
   const ref = useRef<BottomSheet>(null);
+  const { calendars, selectedCalendar, setSelectedCalendar } = useCalendar();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -72,10 +72,15 @@ export function Calendar() {
   };
 
   const handleSettingsPress = () => {
-    router.push({
-      pathname: "/calendar/settings",
-      params: { calendarId: selectedCalendar?.id },
-    });
+    router.push("/calendar/settings");
+  };
+
+  const handleMonthChange = (date: DateData) => {
+    const { year, month } = date;
+
+    const monthText = month < 10 ? `0${month}` : month;
+
+    setSelectedMonth(`${year}-${monthText}`);
   };
 
   useFocusEffect(
@@ -85,9 +90,22 @@ export function Calendar() {
   );
 
   useEffect(() => {
-    // TODO: Fetch data from API
-    setSchedules(sampleScheduleResponse);
-  }, [selectedMonth]);
+    const fetchData = async () => {
+      if (!selectedCalendar) return;
+
+      const response = await getCalendarData(
+        selectedCalendar.id,
+        selectedMonth,
+        "month"
+      );
+
+      if (response) {
+        setSchedules(response);
+      }
+    };
+
+    fetchData();
+  }, [selectedMonth, selectedCalendar, refreshCount]);
 
   useEffect(() => {
     const getCurrentMonth = () => {
@@ -97,27 +115,8 @@ export function Calendar() {
       return `${year}-${month < 10 ? `0${month}` : month}`;
     };
 
-    const fetchData = async () => {
-      const response = await getCalendars();
-      const selectedCalendarId = await getStorage("selectedCalendarId");
-
-      if (response) {
-        setCalendars(response);
-        if (selectedCalendarId) {
-          const selected = response.find(
-            (calendar: CalendarType) =>
-              calendar.id === Number(selectedCalendarId)
-          );
-          setSelectedCalendar(selected || response[0]);
-        } else {
-          setSelectedCalendar(response[0]);
-        }
-      }
-    };
-
-    fetchData();
     setSelectedMonth(getCurrentMonth());
-  }, [refreshCount]);
+  }, []);
 
   const dayComponent = ({ date }: { date: DateData }) => {
     const schedule = schedules?.[date.dateString];
@@ -151,7 +150,9 @@ export function Calendar() {
     []
   );
 
-  if (!selectedCalendar) return null;
+  if (!selectedCalendar) {
+    return <LoginNeeded />;
+  }
 
   return (
     <>
@@ -189,6 +190,7 @@ export function Calendar() {
             initialDate={new Date().toISOString().split("T")[0]}
             customHeader={CustomHeader}
             dayComponent={dayComponent}
+            onMonthChange={handleMonthChange}
             hideExtraDays
           />
         </Scroll>

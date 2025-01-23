@@ -69,6 +69,24 @@ jest.mock("@react-navigation/material-top-tabs", () => {
     })),
   };
 });
+jest.mock("@quidone/react-native-wheel-picker", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+
+  return {
+    __esModule: true,
+    default: ({
+      onValueChanged,
+    }: {
+      onValueChanged: (event: { item: { value: number } }) => void;
+    }) => (
+      <TouchableOpacity
+        onPress={() => onValueChanged({ item: { value: 1 } })}
+        testID="wheel-picker"
+      />
+    ),
+    ValueChangedEvent: jest.fn(),
+  };
+});
 jest.mock("@components/Buttons", () => ({
   SvgIconButton: ({ icon, onPress }: { icon: string; onPress: () => void }) => {
     const { TouchableOpacity } = jest.requireActual("react-native");
@@ -318,6 +336,16 @@ jest.mock("@contexts/auth", () => ({
     logout: jest.fn(),
     mode: "guest",
     selectedProfile: null,
+  }),
+}));
+jest.mock("@contexts/calendar", () => ({
+  CalendarProvider: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  useCalendar: () => ({
+    calendars: [],
+    selectedCalendar: null,
+    setSelectedCalendar: jest.fn(),
   }),
 }));
 jest.mock("@contexts/theme", () => ({

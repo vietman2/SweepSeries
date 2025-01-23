@@ -1,0 +1,92 @@
+[
+  {
+    "model": "schedule.schedule",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-01-20T22:24:14.714",
+      "updated_at": "2025-01-20T22:24:14.714",
+      "calendar": 1,
+      "title": "일정 1",
+      "description": "일정 1 입니다.",
+      "color": "#FF6B6B",
+      "repeat_type": "N",
+      "repeat_until": null,
+      "repeat_count": 0
+    }
+  },
+  {
+    "model": "schedule.event",
+    "pk": 1,
+    "fields": {
+      "schedule": 1,
+      "start_datetime": "2025-02-01T03:00:43",
+      "end_datetime": "2025-02-01T04:30:43",
+      "is_allday": false,
+      "notify": false,
+      "notify_time": null
+    }
+  },
+  {
+    "model": "schedule.schedule",
+    "pk": 2,
+    "fields": {
+      "created_at": "2025-01-20T22:24:14.714",
+      "updated_at": "2025-01-20T22:24:14.714",
+      "calendar": 1,
+      "title": "일정 2",
+      "description": "일정 2 입니다.",
+      "color": "#FF6B6B",
+      "repeat_type": "N",
+      "repeat_until": null,
+      "repeat_count": 0
+    }
+  },
+  {
+    "model": "schedule.event",
+    "pk": 2,
+    "fields": {
+      "schedule": 2,
+      "start_datetime": "2025-02-01T15:00:43",
+      "end_datetime": "2025-02-01T16:30:43",
+      "is_allday": false,
+      "notify": false,
+      "notify_time": null
+    }
+  },
+  {
+    "model": "schedule.schedule",
+    "pk": 3,
+    "fields": {
+      "created_at": "2025-01-20T22:24:14.714",
+      "updated_at": "2025-01-20T22:24:14.714",
+      "calendar": 1,
+      "title": "일정 3",
+      "description": "일정 3 입니다.",
+      "color": "#FF6B6B",
+      "repeat_type": "N",
+      "repeat_until": null,
+      "repeat_count": 0
+    }
+  },
+  {
+    "model": "schedule.event",
+    "pk": 3,
+    "fields": {
+      "schedule": 3,
+      "start_datetime": "2025-02-01T00:00:43",
+      "end_datetime": "2025-02-01T23:59:43",
+      "is_allday": true,
+      "notify": false,
+      "notify_time": null
+    }
+  },
+  {
+    "model": "diary.diary",
+    "pk": 1,
+    "fields": {
+      "user": "223e4567-e89b-12d3-a456-426614174000",
+      "diary": "- 다이어리 내용\n\n- 다이어리 내용\n\n- 다이어리 내용",
+      "date": "2025-02-01"
+    }
+  }
+]

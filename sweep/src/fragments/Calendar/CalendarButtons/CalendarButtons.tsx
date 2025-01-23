@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import React, { StyleSheet, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 
 import { AppIcon } from "@components/Icons";
@@ -18,12 +18,18 @@ export function CalendarButtons({ open, setOpen }: Readonly<Props>) {
   const styles = createStyles(theme);
 
   const handleTodoPress = () => {
-    router.push("/calendar/addtodo");
+    router.push({
+      pathname: "/calendar/addtodo/[date]",
+      params: { date: new Date().toISOString() },
+    });
     setOpen(false);
   };
 
   const handleSchedulePress = () => {
-    router.push("/calendar/addschedule");
+    router.push({
+      pathname: "/calendar/addschedule/[date]",
+      params: { date: new Date().toISOString() },
+    });
     setOpen(false);
   };
 
@@ -68,28 +74,16 @@ export function CalendarButtons({ open, setOpen }: Readonly<Props>) {
             </TouchableOpacity>
           </View>
           {mode === "pro" && (
-            <>
-              <View style={styles.wrapper}>
-                <Text style={styles.text}>예약 추가</Text>
-                <TouchableOpacity style={styles.button}>
-                  <AppIcon
-                    icon="calendar-pointer"
-                    size={20}
-                    color={theme.lowEmphasis}
-                  />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.wrapper}>
-                <Text style={styles.text}>예약 승인</Text>
-                <TouchableOpacity
-                  style={[styles.button, { backgroundColor: theme.primary }]}
-                  onPress={handleRequestPress}
-                  testID="requests"
-                >
-                  <AppIcon icon="checkbox" size={20} color={theme.background} />
-                </TouchableOpacity>
-              </View>
-            </>
+            <View style={styles.wrapper}>
+              <Text style={styles.text}>예약 승인</Text>
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: theme.primary }]}
+                onPress={handleRequestPress}
+                testID="requests"
+              >
+                <AppIcon icon="checkbox" size={20} color={theme.background} />
+              </TouchableOpacity>
+            </View>
           )}
         </>
       ) : (

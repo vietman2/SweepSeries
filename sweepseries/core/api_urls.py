@@ -14,6 +14,9 @@ from auth.user.views import UserViewSet, UserLoginView, KakaoLoginView, NaverLog
 
 ## Calendar
 from calendars.calendarapp.views import CalendarViewSet
+from calendars.diary.views import DiaryViewSet
+from calendars.schedule.views import ScheduleViewSet
+from calendars.todo.views import TodoViewSet
 
 ## Community
 from community.comment.views import (
@@ -37,6 +40,9 @@ router.register(r'people', PersonViewSet, basename='people')
 router.register(r'users', UserViewSet, basename='users')
 
 router.register(r'calendars', CalendarViewSet, basename='calendars')
+router.register(r'diaries', DiaryViewSet, basename='diaries')
+router.register(r'schedules', ScheduleViewSet, basename='schedules')
+router.register(r'todos', TodoViewSet, basename='todos')
 
 router.register(r'comments', CommentViewSet, basename='comments')
 router.register(r'recomments', ReCommentViewSet, basename='recomments')

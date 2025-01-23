@@ -5,6 +5,23 @@ import * as CalendarsAPI from "@services/calendar/calendars";
 import { sampleCalendars } from "@testdata/calendar";
 import { renderWithProviders } from "@utils/test-utils";
 
+jest.mock("../ColorModal/ColorModal", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+
+  return {
+    ColorModal: ({
+      handleUpdateColor,
+    }: {
+      handleUpdateColor: (color: string) => void;
+    }) => (
+      <TouchableOpacity
+        testID="update-color"
+        onPress={() => handleUpdateColor("#FF6B6B")}
+      />
+    ),
+  };
+});
+
 describe("<CalendarOptions />", () => {
   it("renders correctly and handles modals", async () => {
     jest.spyOn(CalendarsAPI, "updateCalendarInfo").mockResolvedValue(true);
@@ -20,9 +37,7 @@ describe("<CalendarOptions />", () => {
       fireEvent.press(getByTestId("open-name-modal"));
       fireEvent.press(getByTestId("confirm-name-modal"));
       fireEvent.press(getByTestId("open-color-modal"));
-      fireEvent.press(getByTestId("close-color-modal"));
-      fireEvent.press(getByTestId("open-color-modal"));
-      fireEvent.press(getByTestId("select-color-#FF6B6B"));
+      fireEvent.press(getByTestId("update-color"));
     });
   });
 
@@ -35,8 +50,7 @@ describe("<CalendarOptions />", () => {
     await waitFor(() => {
       fireEvent.press(getByTestId("open-name-modal"));
       fireEvent.press(getByTestId("confirm-name-modal"));
-      fireEvent.press(getByTestId("open-color-modal"));
-      fireEvent.press(getByTestId("select-color-#FF6B6B"));
+      fireEvent.press(getByTestId("update-color"));
     });
   });
 });

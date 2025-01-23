@@ -1,3 +1,4 @@
+import React from "react";
 import { fireEvent } from "@testing-library/react-native";
 
 import { ScheduleSimple } from "./ScheduleSimple";

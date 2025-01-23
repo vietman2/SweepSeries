@@ -1,6 +1,7 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { Settings } from "./Settings";
+import * as CalendarContext from "@contexts/calendar";
 import * as CalendarsAPI from "@services/calendar/calendars";
 import { sampleCalendars } from "@testdata/calendar";
 import { renderWithProviders } from "@utils/test-utils";
@@ -20,6 +21,12 @@ jest.mock("@gorhom/bottom-sheet", () => {
     BottomSheetView: ({ children }: { children: React.ReactNode }) => children,
   };
 });
+jest.mock("@contexts/calendar", () => ({
+  CalendarProvider: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  useCalendar: jest.fn(),
+}));
 jest.mock("@fragments/Calendar", () => ({
   CalendarMembers: () => "CalendarMembers",
   CalendarOptions: () => "CalendarOptions",
@@ -27,64 +34,89 @@ jest.mock("@fragments/Calendar", () => ({
 
 describe("<Settings />", () => {
   beforeEach(() => {
-    jest
-      .spyOn(CalendarsAPI, "getCalendar")
-      .mockResolvedValue(sampleCalendars[0]);
-  });
-
-  it("should render and handles toggle", async () => {
-    jest.spyOn(CalendarsAPI, "toggleCalendarNotification").mockResolvedValue(true);
-    jest.spyOn(CalendarsAPI, "toggleCalendarDaily").mockResolvedValue(true);
-    jest.spyOn(CalendarsAPI, "deleteCalendar").mockResolvedValue(true);
-    const { getAllByTestId, getByTestId } = renderWithProviders(<Settings />);
-
-    await waitFor(() => {
-      fireEvent.press(getAllByTestId("toggle")[1]); // 오늘 알림 끄기
-      fireEvent.press(getAllByTestId("toggle")[1]); // 오늘 알림 켜기
-      fireEvent.press(getByTestId("change-datetime")); // 시간 변경
-      fireEvent.press(getByTestId("확인"));
-      fireEvent.press(getAllByTestId("toggle")[0]); // 알림 끄기
-      fireEvent.press(getAllByTestId("toggle")[0]); // 알림 켜기
-      fireEvent.press(getAllByTestId("toggle")[1]); // 오늘 알림 켜기
-      fireEvent.press(getByTestId("change-datetime"));
-      fireEvent.press(getByTestId("확인"));
-      fireEvent.press(getByTestId("close-modal"));
-      fireEvent.press(getByTestId("캘린더 삭제하기"));
+    jest.spyOn(CalendarContext, "useCalendar").mockReturnValue({
+      calendars: sampleCalendars,
+      selectedCalendar: sampleCalendars[0],
+      setSelectedCalendar: jest.fn(),
+      reloadData: jest.fn(),
     });
   });
 
-  it("handles toggle and delete fail", async () => {
+  it("handles switch alarms off and delete", async () => {
+    jest
+      .spyOn(CalendarsAPI, "toggleCalendarNotification")
+      .mockResolvedValue(true);
+    jest.spyOn(CalendarsAPI, "toggleCalendarDaily").mockResolvedValueOnce(true);
+    jest.spyOn(CalendarsAPI, "deleteCalendar").mockResolvedValueOnce(true);
+    const { getAllByTestId, getByTestId, getByText } = renderWithProviders(
+      <Settings />
+    );
+
+    await waitFor(() => {
+      expect(getByText("오늘 알림 받기\n\n(09:00)")).toBeTruthy();
+    });
+
+    await waitFor(() => {
+      fireEvent.press(getAllByTestId("toggle")[1]); // 오늘 알림 끄기
+      fireEvent.press(getAllByTestId("toggle")[0]); // 알림 끄기
+      fireEvent.press(getByTestId("캘린더 삭제하기")); // 캘린더 삭제
+    });
+
     jest
       .spyOn(CalendarsAPI, "toggleCalendarNotification")
       .mockResolvedValue(null);
-    jest.spyOn(CalendarsAPI, "toggleCalendarDaily").mockResolvedValue(null);
-    jest.spyOn(CalendarsAPI, "deleteCalendar").mockResolvedValue(null);
+    jest.spyOn(CalendarsAPI, "toggleCalendarDaily").mockResolvedValueOnce(null);
+    jest.spyOn(CalendarsAPI, "deleteCalendar").mockResolvedValueOnce(null);
+
+    await waitFor(() => {
+      fireEvent.press(getAllByTestId("toggle")[1]); // 오늘 알림 끄기
+      fireEvent.press(getAllByTestId("toggle")[0]); // 알림 끄기
+      fireEvent.press(getByTestId("캘린더 삭제하기")); // 캘린더 삭제
+    });
+  });
+
+  it("handles daily alarms and leave", async () => {
+    jest.spyOn(CalendarContext, "useCalendar").mockReturnValue({
+      calendars: sampleCalendars,
+      selectedCalendar: {
+        ...sampleCalendars[0],
+        notifications_today: false,
+        is_owner: false,
+      },
+      setSelectedCalendar: jest.fn(),
+      reloadData: jest.fn(),
+    });
+    jest.spyOn(CalendarsAPI, "toggleCalendarDaily").mockResolvedValueOnce(true);
+    jest.spyOn(CalendarsAPI, "leaveCalendar").mockResolvedValueOnce(true);
     const { getAllByTestId, getByTestId } = renderWithProviders(<Settings />);
 
     await waitFor(() => {
-      fireEvent.press(getAllByTestId("toggle")[1]);
+      fireEvent.press(getAllByTestId("toggle")[1]); // 오늘 알림 켜기 스위치
       fireEvent.press(getByTestId("change-datetime"));
-      fireEvent.press(getByTestId("확인"));
-      fireEvent.press(getAllByTestId("toggle")[0]);
-      fireEvent.press(getByTestId("캘린더 삭제하기"));
+      fireEvent.press(getByTestId("cancel")); // DateTimePicker 취소
+      fireEvent.press(getByTestId("취소"));
+      fireEvent.press(getByTestId("확인")); // 요청
+      fireEvent.press(getByTestId("캘린더 연동해제")); // 캘린더 연동 해제
+    });
+
+    jest.spyOn(CalendarsAPI, "toggleCalendarDaily").mockResolvedValueOnce(null);
+    jest.spyOn(CalendarsAPI, "leaveCalendar").mockResolvedValueOnce(null);
+
+    await waitFor(() => {
+      fireEvent.press(getByTestId("확인")); // 요청
+      fireEvent.press(getByTestId("close-modal"));
+      fireEvent.press(getByTestId("캘린더 연동해제")); // 캘린더 연동 해제
     });
   });
 
   it("handles daily toggle on", async () => {
-    jest
-      .spyOn(CalendarsAPI, "getCalendar")
-      .mockResolvedValue({...sampleCalendars[0], notifications_today: false, is_owner: false});
-    const { getAllByTestId } = renderWithProviders(<Settings />);
-
-    await waitFor(() => {
-      fireEvent.press(getAllByTestId("toggle")[1]);
+    jest.spyOn(CalendarContext, "useCalendar").mockReturnValue({
+      calendars: sampleCalendars,
+      selectedCalendar: null,
+      setSelectedCalendar: jest.fn(),
+      reloadData: jest.fn(),
     });
-  });
 
-  it("handles api error", async () => {
-    jest
-      .spyOn(CalendarsAPI, "getCalendar")
-      .mockResolvedValue(null);
     renderWithProviders(<Settings />);
   });
 });

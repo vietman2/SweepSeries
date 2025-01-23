@@ -16,5 +16,18 @@
       "notifications": true,
       "notifications_today": true
     }
+  },
+  {
+    "model": "todo.todo",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-02-01T16:44:36.231",
+      "updated_at": "2025-02-01T16:44:36.232",
+      "calendar": 1,
+      "title": "할 일 1",
+      "deadline": "2025-02-01",
+      "color": "#FFD700",
+      "completed": false
+    }
   }
 ]

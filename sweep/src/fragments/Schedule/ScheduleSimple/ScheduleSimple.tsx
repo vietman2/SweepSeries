@@ -4,11 +4,11 @@ import { router } from "expo-router";
 import { VerticalDivider } from "@components/Dividers";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
-import { ScheduleSimpleType } from "@models/calendar";
+import { ScheduleType } from "@models/calendar";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
-  schedule: ScheduleSimpleType;
+  schedule: ScheduleType;
 }
 
 export function ScheduleSimple({ schedule }: Readonly<Props>) {
@@ -25,7 +25,11 @@ export function ScheduleSimple({ schedule }: Readonly<Props>) {
   };
 
   return (
-    <TouchableOpacity style={styles.container} onPress={handlePress} testID={`schedule-simple-${schedule.id}`}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={handlePress}
+      testID={`schedule-simple-${schedule.id}`}
+    >
       <Text style={styles.time}>{schedule.time}</Text>
       <View style={styles.horizontal}>
         <View style={[styles.chip, { backgroundColor: schedule.color }]}>
@@ -33,13 +37,10 @@ export function ScheduleSimple({ schedule }: Readonly<Props>) {
         </View>
         <VerticalDivider color={schedule.color} width={2} />
         <View style={styles.content}>
-          <Text style={styles.title}>{schedule.name}</Text>
-          {schedule.type === "레슨" && (
-            <Text style={styles.detail}>{schedule.detail}</Text>
-          )}
+          <Text style={styles.title}>{schedule.title}</Text>
+          <Text style={styles.detail}>{schedule.description}</Text>
         </View>
       </View>
-      {schedule.note && <Text style={styles.notes}>{schedule.note}</Text>}
     </TouchableOpacity>
   );
 }

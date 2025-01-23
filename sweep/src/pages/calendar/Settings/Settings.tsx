@@ -1,64 +1,41 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 
 import { SvgIconButton, TextButton, Toggle } from "@components/Buttons";
+import { useCalendar } from "@contexts/calendar";
 import { useTheme } from "@contexts/theme";
 import { CalendarMembers, CalendarOptions } from "@fragments/Calendar";
-import { CalendarType } from "@models/calendar";
 import { alert } from "@services/alert";
 import {
-  getCalendar,
   toggleCalendarNotification,
   toggleCalendarDaily,
   deleteCalendar,
+  leaveCalendar,
 } from "@services/calendar";
 import { ThemeColorType } from "@themes/colors";
 
 export function Settings() {
-  const [calendar, setCalendar] = useState<CalendarType>();
   const [selectedTime, setSelectedTime] = useState<Date>(new Date());
-  const { calendarId } = useLocalSearchParams<{ calendarId: string }>();
-  const [isNotificationOn, setIsNotificationOn] = useState<boolean>(false);
-  const [isDailyOn, setIsDailyOn] = useState<boolean>(false);
-  const [refreshCount, setRefreshCount] = useState<number>(0);
+  const [openTimePicker, setOpenTimePicker] = useState<boolean>(false);
 
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["40%"], []);
+  const { selectedCalendar, reloadData } = useCalendar();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  const handleRefresh = () => {
-    setRefreshCount((prev) => prev + 1);
-  };
-
   const handleNotificationToggle = async () => {
-    const response = await toggleCalendarNotification(calendarId);
+    const response = await toggleCalendarNotification(selectedCalendar?.id);
 
     if (response) {
-      setIsNotificationOn((prev) => !prev);
-      handleRefresh();
+      reloadData();
     } else {
       alert("오류 발생", "알림 설정을 변경하는 중 오류가 발생했습니다.");
-    }
-  };
-
-  const handleDailyToggle = async () => {
-    if (isDailyOn) {
-      const response = await toggleCalendarDaily(calendarId, "");
-
-      if (response) {
-        setIsDailyOn(false);
-        handleRefresh();
-      } else {
-        alert("오류 발생", "알림 시간을 해제하는 중 오류가 발생했습니다.");
-      }
-    } else {
-      setIsDailyOn(true);
     }
   };
 
@@ -68,13 +45,12 @@ export function Settings() {
 
   const handleConfirmTime = async () => {
     const response = await toggleCalendarDaily(
-      calendarId,
+      selectedCalendar?.id,
       selectedTime.toTimeString()
     );
 
     if (response) {
-      setIsDailyOn(true);
-      handleRefresh();
+      reloadData();
       bottomSheetRef.current?.close();
     } else {
       alert("오류 발생", "알림 시간을 변경하는 중 오류가 발생했습니다.");
@@ -90,7 +66,7 @@ export function Settings() {
   };
 
   const handleDeleteCalendar = async () => {
-    const response = await deleteCalendar(calendarId);
+    const response = await deleteCalendar(selectedCalendar?.id);
 
     if (response) {
       router.back();
@@ -99,37 +75,41 @@ export function Settings() {
     }
   };
 
+  const handleLeaveCalendar = async () => {
+    const response = await leaveCalendar(selectedCalendar?.id);
+
+    if (response) {
+      router.back();
+    } else {
+      alert("오류 발생", "캘린더 연동 해제 중 오류가 발생했습니다.");
+    }
+  };
+
   useEffect(() => {
-    if (isDailyOn) {
+    if (openTimePicker) {
       bottomSheetRef.current?.expand();
     } else {
       bottomSheetRef.current?.close();
     }
-  }, [isDailyOn]);
+  }, [openTimePicker]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await getCalendar(calendarId);
-
-      if (response) {
-        setCalendar(response);
-        setIsNotificationOn(response.notifications);
-        setIsDailyOn(response.notifications_today);
-      } else {
-        alert(
-          "오류 발생",
-          "캘린더 정보를 불러오는 중 오류가 발생했습니다.",
-          router.back
-        );
-      }
-    };
-
-    fetchData();
-  }, [calendarId, refreshCount]);
-
-  if (!calendar) {
+  if (!selectedCalendar) {
     return null;
   }
+
+  const handleDailyToggle = async () => {
+    if (selectedCalendar.notifications_today) {
+      const response = await toggleCalendarDaily(selectedCalendar.id, "");
+
+      if (response) {
+        reloadData();
+      } else {
+        alert("오류 발생", "알림 시간을 해제하는 중 오류가 발생했습니다.");
+      }
+    } else {
+      setOpenTimePicker(true);
+    }
+  };
 
   return (
     <>
@@ -143,7 +123,7 @@ export function Settings() {
           <View style={styles.content}>
             <View style={styles.wrapper}>
               <Text style={styles.subtitle}>공유하는 멤버</Text>
-              <CalendarMembers calendar={calendar} />
+              <CalendarMembers calendar={selectedCalendar} />
               <SvgIconButton
                 icon="person-add"
                 text="멤버 추가하기"
@@ -155,32 +135,47 @@ export function Settings() {
             </View>
             <View style={styles.wrapper}>
               <Text style={styles.subtitle}>캘린더 정보</Text>
-              <CalendarOptions calendar={calendar} onRefresh={handleRefresh} />
+              <CalendarOptions
+                calendar={selectedCalendar}
+                onRefresh={reloadData}
+              />
             </View>
             <View style={styles.wrapper}>
               <Text style={styles.subtitle}>알림</Text>
               <View style={styles.horizontal}>
                 <Text>알림 받기</Text>
                 <Toggle
-                  isOn={isNotificationOn}
+                  isOn={selectedCalendar.notifications}
                   onToggle={handleNotificationToggle}
                 />
               </View>
-              {isNotificationOn && (
+              {selectedCalendar.notifications && (
                 <View style={styles.horizontal}>
                   <Text>
                     오늘 알림 받기{" "}
-                    {calendar.daily_time && `(${calendar.daily_time})`}
+                    {selectedCalendar.daily_time &&
+                      `(${selectedCalendar.daily_time})`}
                   </Text>
-                  <Toggle isOn={isDailyOn} onToggle={handleDailyToggle} />
+                  <Toggle
+                    isOn={selectedCalendar.notifications_today}
+                    onToggle={handleDailyToggle}
+                  />
                 </View>
               )}
             </View>
           </View>
           <View>
             <TextButton
-              text={calendar.is_owner ? "캘린더 삭제하기" : "캘린더 연동해제"}
-              onPress={handleDeleteCalendar}
+              text={
+                selectedCalendar.is_owner
+                  ? "캘린더 삭제하기"
+                  : "캘린더 연동해제"
+              }
+              onPress={
+                selectedCalendar.is_owner
+                  ? handleDeleteCalendar
+                  : handleLeaveCalendar
+              }
               color={theme.lowEmphasis}
               backgroundColor={theme.background}
             />
@@ -206,6 +201,14 @@ export function Settings() {
             />
           </View>
           <View style={styles.buttonContainer}>
+            <View style={styles.buttonWrapper}>
+              <TextButton
+                text="취소"
+                onPress={() => setOpenTimePicker(false)}
+                color={theme.background}
+                backgroundColor={theme.lowEmphasis}
+              />
+            </View>
             <View style={styles.buttonWrapper}>
               <TextButton text="확인" onPress={handleConfirmTime} />
             </View>
@@ -271,6 +274,7 @@ const createStyles = (theme: ThemeColorType) =>
     },
     buttonContainer: {
       flexDirection: "row",
+      gap: 8,
     },
     buttonWrapper: {
       flex: 1,

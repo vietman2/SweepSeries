@@ -39,11 +39,7 @@ const formatPhoneNumber = (phonenumber: string) => {
 };
 
 export const formatPhoneNumberText = (number: string, text: string) => {
-  if (
-    text.length > 1 &&
-    number.length < text.length &&
-    text.endsWith("-")
-  ) {
+  if (text.length > 1 && number.length < text.length && text.endsWith("-")) {
     // Remove the last hyphen and reformat
     const newText = number.substring(0, number.length - 1);
     const formattedNumber = formatPhoneNumber(newText);
@@ -92,4 +88,17 @@ export const formatPrice = (price: number) => {
   }
 
   return formattedTotal;
+};
+
+export const formatDate = (date: Date) => {
+  // return (YYYY.MM.DD (day of the week))
+
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const dayOfWeek = date.getDay();
+
+  const dayOfWeekText = ["일", "월", "화", "수", "목", "금", "토"];
+
+  return `${year}.${month}.${day} (${dayOfWeekText[dayOfWeek]})`;
 };
