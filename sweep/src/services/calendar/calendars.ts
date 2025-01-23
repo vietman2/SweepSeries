@@ -62,6 +62,19 @@ export async function deleteCalendar(id: number | undefined) {
   }
 }
 
+export async function leaveCalendar(id: number | undefined) {
+  if (!id) {
+    return null;
+  }
+
+  try {
+    await axios.delete(`/v1/calendars/${id}/leave/`);
+    return true;
+  } catch {
+    return null;
+  }
+}
+
 export async function updateCalendarInfo(id: number, name: string, color: string) {
   try {
     const response = await axios.patch(`/v1/calendars/${id}/`, {

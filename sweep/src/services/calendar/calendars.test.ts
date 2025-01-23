@@ -6,6 +6,7 @@ import {
   getCalendarData,
   createCalendar,
   deleteCalendar,
+  leaveCalendar,
   updateCalendarInfo,
   toggleCalendarDaily,
   toggleCalendarNotification,
@@ -112,6 +113,30 @@ describe("deleteCalendar", () => {
     axios.delete = jest.fn().mockRejectedValue(null);
 
     const result = await deleteCalendar(1);
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("leaveCalendar", () => {
+  it("should return true if the user leaves the calendar", async () => {
+    axios.delete = jest.fn().mockResolvedValue(null);
+
+    const result = await leaveCalendar(1);
+
+    expect(result).toBe(true);
+  });
+
+  it("should return null if the id is not provided", async () => {
+    const result = await leaveCalendar(undefined);
+
+    expect(result).toBeNull();
+  });
+
+  it("should return null if the request fails", async () => {
+    axios.delete = jest.fn().mockRejectedValue(null);
+
+    const result = await leaveCalendar(1);
 
     expect(result).toBeNull();
   });
