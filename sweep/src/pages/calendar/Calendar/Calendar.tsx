@@ -99,8 +99,6 @@ export function Calendar() {
 
       if (response) {
         setSchedules(response);
-      } else {
-        alert("데이터 불러오기 실패", "데이터를 불러오는데 실패했습니다.");
       }
     };
 
