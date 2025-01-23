@@ -183,7 +183,9 @@ class EventSerializer(serializers.ModelSerializer):
     def get_color(self, obj):
         return obj.schedule.color
 
-    def get_type(self, obj):
+    def get_type(self, obj):  ## pylint: disable=unused-argument
+        ## TODO: 제대로 구현하고, pylint 무시 제거
+
         return '일정'
 
     def get_time_text(self, time):
