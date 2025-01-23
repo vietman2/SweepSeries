@@ -28,7 +28,9 @@ class CalendarViewSet(ModelViewSet):
     def get_permissions(self):
         permissions = [IsAuthenticated()]
 
-        if self.action in ['schedules']:
+        if self.action in [
+            'retrieve', 'partial_update', 'notification', 'daily', 'schedules', 'leave'
+        ]:
             permissions.append(IsMember())
         elif self.action in ['destroy']:
             permissions.append(IsOwner())
@@ -99,6 +101,18 @@ class CalendarViewSet(ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @extend_schema(summary="캘린더 연동 해제 (탈퇴)", tags=["캘린더"])
+    @action(detail=True, methods=['delete'])
+    def leave(self, request, pk=None):  # pylint: disable=unused-argument
+        ## remove the user from the calendar
+        instance = self.get_object()
+        user = request.user
+
+        calendar_user = CalendarUser.objects.get(user=user, calendar=instance)
+        calendar_user.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -174,7 +188,6 @@ class CalendarViewSet(ModelViewSet):
 
         data = get_daily_data(daily_query, calendar, request.user)
         return Response(data, status=status.HTTP_200_OK)
-
 
 def get_monthly_data(month_query, calendar):
     month = month_query.split('-')[1]

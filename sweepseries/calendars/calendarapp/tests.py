@@ -47,6 +47,10 @@ class CalendarAPITestCase(APITestCase):
         response = self.client.delete(f'{self.url}1/')
         self.assertEqual(response.status_code, 403)
 
+    def test_leave(self):
+        response = self.client.delete(f'{self.url}1/leave/')
+        self.assertEqual(response.status_code, 204)
+
     def test_toggle_notification(self):
         ## 1. turn off
         response = self.client.patch(f'{self.url}1/notification/')
