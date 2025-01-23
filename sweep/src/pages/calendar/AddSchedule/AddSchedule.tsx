@@ -15,9 +15,9 @@ import { useCalendar } from "@contexts/calendar";
 import { useTheme } from "@contexts/theme";
 import { AlarmModal, ColorModal, RepeatModal } from "@fragments/Calendar";
 import { DateTimeHeader, ScheduleInput } from "@fragments/Schedule";
-import { ThemeColorType } from "@themes/colors";
 import { alert } from "@services/alert";
 import { createSchedule } from "@services/calendar";
+import { ThemeColorType } from "@themes/colors";
 
 const periodOptions = ["매일", "매주", "매월", "매년"];
 
@@ -74,32 +74,32 @@ export function AddSchedule() {
   };
 
   const handleUpdateAlarm = (
-    use: boolean,
+    use_alarm: boolean,
     newDelta: number,
     newUnit: number
   ) => {
-    if (use) {
-      setUseAlarm(use);
+    if (use_alarm) {
+      setUseAlarm(use_alarm);
       setDelta(newDelta);
       setUnit(newUnit);
     } else {
-      setUseAlarm(use);
+      setUseAlarm(use_alarm);
       setDelta(0);
       setUnit(0);
     }
   };
 
   const handleUpdateRepeat = (
-    use: boolean,
+    use_repeat: boolean,
     newPeriod: number,
     newBreak: string
   ) => {
-    if (use) {
-      setUseRepeat(use);
+    if (use_repeat) {
+      setUseRepeat(use_repeat);
       setRepeatPeriod(newPeriod);
       setRepeatBreak(newBreak);
     } else {
-      setUseRepeat(use);
+      setUseRepeat(use_repeat);
       setRepeatPeriod(0);
       setRepeatBreak("");
     }
