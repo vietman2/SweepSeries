@@ -74,17 +74,20 @@ class ScheduleSerializer(serializers.ModelSerializer):
 
         return event
 
-    def create_events(self, schedule, alarm, repeat, is_allday, start, end):
+    def create_events(self, events_data):
+        repeat = events_data['repeat']
+        alarm = events_data['alarm']
+
         use_repeat = repeat['use']
         break_rule = repeat['break']
         period = repeat['period']
 
         if not use_repeat:
             event_data = {
-                'schedule': schedule,
-                'start': start,
-                'end': end,
-                'is_allday': is_allday,
+                'schedule': events_data['schedule'],
+                'start': events_data['start'],
+                'end': events_data['end'],
+                'is_allday': events_data['is_allday'],
                 'alarm': alarm
             }
             self.create_event(event_data)
@@ -93,13 +96,13 @@ class ScheduleSerializer(serializers.ModelSerializer):
             try:
                 repeat_count = int(break_rule[:-1])
                 for i in range(repeat_count):
-                    start_time = self.get_time(start, period, i)
-                    end_time = self.get_time(end, period, i)
+                    start_time = self.get_time(events_data['start'], period, i)
+                    end_time = self.get_time(events_data['end'], period, i)
                     event_data = {
-                        'schedule': schedule,
+                        'schedule': events_data['schedule'],
                         'start': start_time,
                         'end': end_time,
-                        'is_allday': is_allday,
+                        'is_allday': events_data['is_allday'],
                         'alarm': alarm
                     }
                     self.create_event(event_data)
@@ -111,15 +114,15 @@ class ScheduleSerializer(serializers.ModelSerializer):
                 repeat_until = datetime.strptime(break_rule[:-2], '%Y.%m.%d')
                 i = 0
                 while True:
-                    start_time = self.get_time(start, period, i)
-                    end_time = self.get_time(end, period, i)
+                    start_time = self.get_time(events_data['start'], period, i)
+                    end_time = self.get_time(events_data['end'], period, i)
                     if start_time > repeat_until:
                         break
                     event_data = {
-                        'schedule': schedule,
+                        'schedule': events_data['schedule'],
                         'start': start_time,
                         'end': end_time,
-                        'is_allday': is_allday,
+                        'is_allday': events_data['is_allday'],
                         'alarm': alarm
                     }
                     self.create_event(event_data)
@@ -148,7 +151,15 @@ class ScheduleSerializer(serializers.ModelSerializer):
 
             schedule = Schedule.objects.create(calendar=calendar, **validated_data)
 
-            self.create_events(schedule, alarm, repeat, is_allday, start, end)
+            events_data = {
+                'schedule': schedule,
+                'start': start,
+                'end': end,
+                'is_allday': is_allday,
+                'alarm': alarm,
+                'repeat': repeat
+            }
+            self.create_events(events_data)
 
             return schedule
 
