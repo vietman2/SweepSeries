@@ -78,7 +78,9 @@ export function Calendar() {
   const handleMonthChange = (date: DateData) => {
     const { year, month } = date;
 
-    setSelectedMonth(`${year}-${month < 10 ? `0${month}` : month}`);
+    const monthText = month < 10 ? `0${month}` : month;
+
+    setSelectedMonth(`${year}-${monthText}`);
   };
 
   useFocusEffect(
