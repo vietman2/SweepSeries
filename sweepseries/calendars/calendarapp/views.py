@@ -248,12 +248,10 @@ def get_daily_data(daily_query, calendar, user):
     diary = Diary.objects.filter(q_diary).first()
 
     for event in events:
-        event_data = EventSerializer(event).data
-        data["events"].append(event_data)
+        data["events"].append(EventSerializer(event).data)
 
     for todo in todos:
-        todo_data = TodoSerializer(todo).data
-        data["todos"].append(todo_data)
+        data["todos"].append(TodoSerializer(todo).data)
 
     if diary:
         data["diary"] = diary.diary
