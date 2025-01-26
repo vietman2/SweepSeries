@@ -20,8 +20,19 @@ export function MainLogo({ size = 160, color, blur = false }: Readonly<Props>) {
         width={size}
         height={size}
         color={color}
-        opacity={blur ? 0.3 : 1}
+        opacity={blur ? 0.2 : 1}
       />
+    </View>
+  );
+}
+
+export function AuthLogo() {
+  return (
+    <View style={styles.header}>
+      <MainLogo />
+      <Text style={styles.headerText}>
+        {"지금 로그인하고\nCatch B에서 야구를 즐겨보세요!"}
+      </Text>
     </View>
   );
 }
@@ -61,6 +72,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     width: "100%",
     gap: 64,
+  },
+  header: {
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 24,
+  },
+  headerText: {
+    fontSize: 20,
+    textAlign: "center",
   },
   customContainer: {
     flexDirection: "row",
