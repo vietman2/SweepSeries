@@ -1,4 +1,4 @@
-import { getAgreements } from "./agreements";
+import { getAgreements, getAgreementContent } from "./agreements";
 import { login, kakaoLogin, naverLogin, logout, refresh, getProfile } from "./auth";
 import { checkUsernameEmail, checkPassword } from "./register";
 
@@ -10,6 +10,7 @@ export {
   refresh,
   getProfile,
   getAgreements,
+  getAgreementContent,
   checkUsernameEmail,
   checkPassword,
 };
