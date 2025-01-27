@@ -1,84 +1,37 @@
-import { useEffect, useState } from "react";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
 import { Checkbox } from "@components/Checkbox";
 import { Divider } from "@components/Dividers";
+import { useSignup } from "@contexts/signup";
 import { SignUpForm } from "@fragments/SignUp";
-import { AgreementSimpleType } from "@models/auth";
-import { getAgreements } from "@services/auth";
-
-type CheckType = {
-  id: number;
-  checked: boolean;
-  required: boolean;
-};
 
 export function Terms() {
-  const [agreements, setAgreements] = useState<AgreementSimpleType[]>([]);
-  const [checkList, setCheckList] = useState<CheckType[]>([]);
+  const { terms, checkedTerms, setCheck, checkAll } = useSignup();
+  const { mode } = useLocalSearchParams<{ mode: string }>();
 
-  const allChecked = checkList.every((check) => check.checked);
+  const allChecked = checkedTerms.every((check) => check.checked);
 
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<boolean>(false);
-
-  const toggleCheckAll = () => {
-    if (allChecked) {
-      setCheckList(checkList.map((check) => ({ ...check, checked: false })));
-    } else {
-      setCheckList(checkList.map((check) => ({ ...check, checked: true })));
-    }
-  };
-
-  const isButtonActive = checkList.every(
+  const isButtonActive = checkedTerms.every(
     (check) => !check.required || check.checked
   );
 
   const handleButtonPress = () => {
-    router.push("/signup/3");
+    if (mode === "catchb") {
+      router.push("/signup/username");
+    } else {
+      // TODO: 네이버, 카카오 회원가입
+    }
+  };
+
+  const handleTermPress = (id: number) => {
+    router.push(`/signup/terms/${id}`);
   };
 
   const isChecked = (id: number) => {
-    const check = checkList.find((check) => check.id === id);
+    const check = checkedTerms.find((check) => check.id === id);
 
     return check ? check.checked : false;
   };
-
-  const setCheck = (id: number) => {
-    setCheckList(
-      checkList.map((check) =>
-        check.id === id ? { ...check, checked: !check.checked } : check
-      )
-    );
-  };
-
-  useEffect(() => {
-    const fetchAgreements = async () => {
-      setLoading(true);
-
-      const response = await getAgreements();
-
-      if (response) {
-        setAgreements(response);
-      } else {
-        setError(true);
-      }
-
-      setLoading(false);
-    };
-
-    fetchAgreements();
-  }, []);
-
-  useEffect(() => {
-    setCheckList(
-      agreements.map((agreement) => ({
-        id: agreement.id,
-        checked: false,
-        required: agreement.required,
-      }))
-    );
-  }, [agreements]);
 
   return (
     <SignUpForm
@@ -87,23 +40,26 @@ export function Terms() {
       buttonText="다음으로"
       buttonOnPress={handleButtonPress}
       buttonDisabled={!isButtonActive}
-      loading={loading}
-      error={error}
+      loading={terms.length === 0}
     >
       <Divider />
       <Checkbox
         text="모두 동의 합니다."
         checked={allChecked}
-        onChange={toggleCheckAll}
+        onChange={checkAll}
       />
       <Divider />
-      {agreements.map((agreement) => (
+      {terms.map((agreement) => (
         <Checkbox
           key={agreement.id}
           text={`(${agreement.required ? "필수" : "선택"}) ${agreement.title}`}
           checked={isChecked(agreement.id)}
           onChange={() => setCheck(agreement.id)}
-          rightPress={agreement.has_content ? () => {} : undefined}
+          rightPress={
+            agreement.has_content
+              ? () => handleTermPress(agreement.id)
+              : undefined
+          }
         />
       ))}
     </SignUpForm>
