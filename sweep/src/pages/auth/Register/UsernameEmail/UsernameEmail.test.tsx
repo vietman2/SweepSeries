@@ -27,7 +27,7 @@ describe("<UsernameEmail />", () => {
   it("handles bad request correctly", () => {
     jest
       .spyOn(AuthAPI, "checkUsernameEmail")
-      .mockResolvedValue({ status: 400, data: { message: "bad request" } });
+      .mockResolvedValue({ status: 400, data: { error: "bad request" } });
     const { getByTestId } = renderWithProviders(<UsernameEmail />);
 
     waitFor(() => fireEvent.press(getByTestId("button")));
