@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-//import { router } from "expo-router";
+import { router } from "expo-router";
 
 import { TextInput } from "@components/Inputs";
 import { Text } from "@components/Texts";
+import { useSignup } from "@contexts/signup";
 import { useTheme } from "@contexts/theme";
 import { SignUpForm } from "@fragments/SignUp";
 import { checkPassword } from "@services/auth";
@@ -14,6 +15,7 @@ export function Password() {
   const [password2, setPassword2] = useState<string>("");
   const [error, setError] = useState<string>("");
 
+  const { setPasswords } = useSignup();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -23,10 +25,10 @@ export function Password() {
     const response = await checkPassword(password, password2);
 
     if (response.status === 200) {
-      //router.push("/signup/4");
-      console.log("password check success");
+      setPasswords(password, password2);
+      router.push("/signup/phone");
     } else {
-      setError(response.data.message);
+      setError(response.data.error);
     }
   };
 
