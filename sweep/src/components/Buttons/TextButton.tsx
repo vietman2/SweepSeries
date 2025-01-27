@@ -22,6 +22,8 @@ export function TextButton({
   const { theme } = useTheme();
 
   backgroundColor = active ? backgroundColor : theme.border;
+  color = active ? color : theme.lowEmphasis;
+  const borderColor = active ? color : "transparent";
 
   return (
     <TouchableOpacity
@@ -29,7 +31,7 @@ export function TextButton({
         styles.container,
         {
           backgroundColor,
-          borderColor: color,
+          borderColor: borderColor,
         },
       ]}
       onPress={onPress}
