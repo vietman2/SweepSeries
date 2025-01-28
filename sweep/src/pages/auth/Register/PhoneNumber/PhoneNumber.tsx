@@ -4,6 +4,7 @@ import { router } from "expo-router";
 
 import { TextButton } from "@components/Buttons";
 import { TextInput } from "@components/Inputs";
+import { useSignup } from "@contexts/signup";
 import { useTheme } from "@contexts/theme";
 import { SignUpForm } from "@fragments/SignUp";
 import { alert } from "@services/alert";
@@ -20,6 +21,7 @@ export function PhoneNumber() {
   const [error, setError] = useState<string>("");
   const [timer, setTimer] = useState<number>(0);
 
+  const { setNamePhone } = useSignup();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -46,6 +48,7 @@ export function PhoneNumber() {
     if (response.status === 200) {
       setVerified(true);
       setError("");
+      setNamePhone(name, phoneNumber);
       alert("인증 성공", "휴대폰 번호가 인증되었습니다.");
     } else {
       setError(response.data.error);
