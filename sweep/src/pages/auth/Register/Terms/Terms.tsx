@@ -1,16 +1,28 @@
+import { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 
 import { Checkbox } from "@components/Checkbox";
 import { Divider } from "@components/Dividers";
 import { useSignup } from "@contexts/signup";
 import { SignUpForm } from "@fragments/SignUp";
+import { AgreementSimpleType } from "@models/auth";
+import { getAgreements } from "@services/auth";
+
+type CheckType = {
+  id: number;
+  checked: boolean;
+  required: boolean;
+};
 
 export function Terms() {
-  const { terms, checkedTerms, setCheck, checkAll } = useSignup();
+  const [agreements, setAgreements] = useState<AgreementSimpleType[]>([]);
+  const [checkedTerms, setCheckedTerms] = useState<CheckType[]>([]);
+  const [notificationsTermId, setNotificationsTermId] = useState<number>(-1);
+
+  const { setNotificationsAgreed } = useSignup();
   const { mode } = useLocalSearchParams<{ mode: string }>();
 
   const allChecked = checkedTerms.every((check) => check.checked);
-
   const isButtonActive = checkedTerms.every(
     (check) => !check.required || check.checked
   );
@@ -33,6 +45,59 @@ export function Terms() {
     return check ? check.checked : false;
   };
 
+  const setCheck = (id: number) => {
+    setCheckedTerms(
+      checkedTerms.map((check) =>
+        check.id === id ? { ...check, checked: !check.checked } : check
+      )
+    );
+
+    if (id === notificationsTermId) {
+      setNotificationsAgreed(!isChecked(id));
+    }
+  };
+
+  const checkAll = () => {
+    const allChecked = checkedTerms.every((check) => check.checked);
+
+    if (allChecked) {
+      setCheckedTerms(
+        checkedTerms.map((term) => ({ ...term, checked: false }))
+      );
+      setNotificationsAgreed(false);
+    } else {
+      setCheckedTerms(checkedTerms.map((term) => ({ ...term, checked: true })));
+      setNotificationsAgreed(true);
+    }
+  };
+
+  useEffect(() => {
+    const fetchAgreements = async () => {
+      const response = await getAgreements();
+
+      if (response) {
+        setAgreements(response);
+      }
+    };
+
+    fetchAgreements();
+  }, []);
+
+  useEffect(() => {
+    setCheckedTerms(
+      agreements.map((agreement) => ({
+        id: agreement.id,
+        checked: false,
+        required: agreement.required,
+      }))
+    );
+
+    const notificationsTerm = agreements.find(
+      (agreement) => agreement.title.includes("알림 수신 동의")
+    );
+    setNotificationsTermId(notificationsTerm?.id ?? -1);
+  }, [agreements]);
+
   return (
     <SignUpForm
       title="Catch B 약관에 동의해주세요!"
@@ -40,7 +105,7 @@ export function Terms() {
       buttonText="다음으로"
       buttonOnPress={handleButtonPress}
       buttonDisabled={!isButtonActive}
-      loading={terms.length === 0}
+      loading={agreements.length === 0}
     >
       <Divider />
       <Checkbox
@@ -49,7 +114,7 @@ export function Terms() {
         onChange={checkAll}
       />
       <Divider />
-      {terms.map((agreement) => (
+      {agreements.map((agreement) => (
         <Checkbox
           key={agreement.id}
           text={`(${agreement.required ? "필수" : "선택"}) ${agreement.title}`}
