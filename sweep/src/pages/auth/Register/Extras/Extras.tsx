@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 
@@ -19,7 +19,7 @@ export function Extras() {
   const [birthdate, setBirthdate] = useState<string>("");
   const [gender, setGender] = useState<string>("남성");
 
-  const { mode, user, notificationsAgreed } = useSignup();
+  const { mode, user, profile, notificationsAgreed } = useSignup();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -37,18 +37,30 @@ export function Extras() {
     const response = await register(
       mode,
       user,
-      { nickname, birthdate, gender, profileImage: "" },
+      { nickname, birthdate, gender, profileImage: profile.profileImage },
       notificationsAgreed
     );
 
     if (response) {
       alert("회원가입이 완료", "회원가입이 완료되었습니다. 로그인해주세요.");
       router.dismissAll();
-      router.replace("/login");
+      if (mode === "catchb") {
+        router.replace("/login");
+      } else {
+        router.replace("/");
+      }
     } else {
       alert("회원가입 실패", "회원가입에 실패했습니다. 다시 시도해주세요.");
     }
   };
+
+  useEffect(() => {
+    if (mode !== "catchb") {
+      setNickname(profile.nickname);
+      setGender(profile.gender);
+      setBirthdate(profile.birthdate);
+    }
+  }, []);
 
   return (
     <SignUpForm
