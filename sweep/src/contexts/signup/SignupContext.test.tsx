@@ -1,49 +1,130 @@
-import { Text, TouchableOpacity, View } from "react-native";
-import { fireEvent, render, waitFor } from "@testing-library/react-native";
+import { TouchableOpacity, View } from "react-native";
+import { fireEvent, render } from "@testing-library/react-native";
+import * as Router from "expo-router";
 
 import { SignupProvider, useSignup } from "./SignupContext";
-import * as AgreementsAPI from "@services/auth/agreements";
-import { sampleAgreements } from "@testdata/auth";
 
 jest.unmock("@contexts/signup");
 
 const TestComponent = () => {
-  const { terms, setCheck, checkAll } = useSignup();
+  const {
+    setNotificationsAgreed,
+    setUsernameEmail,
+    setPasswords,
+    setNamePhone,
+  } = useSignup();
 
   return (
     <View>
-      {terms.map((agreement) => (
-        <Text key={agreement.id}>{agreement.title}</Text>
-      ))}
-      <TouchableOpacity onPress={checkAll} testID="checkAll" />
-      <TouchableOpacity onPress={() => setCheck(1)} testID="setCheck" />
+      <TouchableOpacity
+        onPress={() => setNotificationsAgreed(true)}
+        testID="check-noti"
+      />
+      <TouchableOpacity
+        onPress={() => setUsernameEmail("username", "email")}
+        testID="set-username-email"
+      />
+      <TouchableOpacity
+        onPress={() => setPasswords("qwer1234", "qwer1234")}
+        testID="set-passwords"
+      />
+      <TouchableOpacity
+        onPress={() => setNamePhone("name", "phone")}
+        testID="set-name-phone"
+      />
     </View>
   );
 };
 
 describe("<SignupProvider />", () => {
-  it("renders and updates checked terms correctly", async () => {
-    jest
-      .spyOn(AgreementsAPI, "getAgreements")
-      .mockResolvedValue(sampleAgreements);
+  const commonParams = {
+    username: "username",
+    email: "email",
+    name: "name",
+    phone: "phone",
+    nickname: "nickname",
+    profileImage: "profileImage",
+  };
 
-    const { getByTestId, getByText } = render(
+  const emptyParams = {
+    username: "",
+    email: "",
+    name: "",
+    phone: "",
+    birthday: "",
+    birthyear: "",
+    gender: "",
+    nickname: "",
+    profileImage: "",
+  };
+
+  it("renders and updates checked terms correctly (catchb)", () => {
+    jest.spyOn(Router, "useLocalSearchParams").mockReturnValue({
+      mode: "catchb",
+    });
+
+    const { getByTestId } = render(
       <SignupProvider>
         <TestComponent />
       </SignupProvider>
     );
 
-    await waitFor(() => {
-      expect(getByText("약관 1")).toBeDefined();
-    });
-
-    fireEvent.press(getByTestId("checkAll")); // 전체 선택
-    fireEvent.press(getByTestId("checkAll")); // 전체 해제
-    fireEvent.press(getByTestId("setCheck")); // 1번 선택
+    fireEvent.press(getByTestId("check-noti"));
+    fireEvent.press(getByTestId("set-username-email"));
+    fireEvent.press(getByTestId("set-passwords"));
+    fireEvent.press(getByTestId("set-name-phone"));
   });
 
-  it("handles agreements fetch error", async () => {
-    jest.spyOn(AgreementsAPI, "getAgreements").mockResolvedValue(null);
+  it("handles params correctly (kakao)", () => {
+    jest.spyOn(Router, "useLocalSearchParams").mockReturnValue({
+      mode: "kakao",
+      birthday: "0101",
+      birthyear: "1990",
+      gender: "female",
+      ...commonParams,
+    });
+
+    render(
+      <SignupProvider>
+        <TestComponent />
+      </SignupProvider>
+    );
+  });
+
+  it("handles params correctly (kakao) 2", () => {
+    jest.spyOn(Router, "useLocalSearchParams").mockReturnValue({
+      mode: "kakao",
+      ...emptyParams,
+    });
+
+    render(
+      <SignupProvider>
+        <TestComponent />
+      </SignupProvider>
+    );
+  });
+
+  it("handles params correctly (naver)", () => {
+    jest.spyOn(Router, "useLocalSearchParams").mockReturnValue({
+      mode: "naver",
+      birthday: "01-01",
+      birthyear: "1990",
+      gender: "F",
+      ...commonParams,
+    });
+
+    render(
+      <SignupProvider>
+        <TestComponent />
+      </SignupProvider>
+    );
+  });
+
+  it("handles params correctly (naver) 2", () => {
+    jest.spyOn(Router, "useLocalSearchParams").mockReturnValue({
+      mode: "naver",
+      ...emptyParams,
+    });
 
     render(
       <SignupProvider>

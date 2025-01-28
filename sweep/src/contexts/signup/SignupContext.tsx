@@ -1,81 +1,166 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-
-import { AgreementSimpleType } from "@models/auth";
-import { getAgreements } from "@services/auth";
+import { useLocalSearchParams } from "expo-router";
 
 interface SignupContextType {
-  terms: AgreementSimpleType[];
-  checkedTerms: CheckType[];
-  setCheck: (id: number) => void;
-  checkAll: () => void;
+  setNotificationsAgreed: (agreed: boolean) => void;
+  setUsernameEmail: (username: string, email: string) => void;
+  setPasswords: (password: string, password2: string) => void;
+  setNamePhone: (name: string, phone: string) => void;
+  mode: string;
+  user: {
+    username: string;
+    email: string;
+    password: string;
+    password2: string;
+    name: string;
+    phone: string;
+  };
+  profile: {
+    gender: string;
+    birthdate: string;
+    nickname: string;
+    profileImage: string;
+  };
+  notificationsAgreed: boolean;
 }
 
 const SignupContext = createContext<SignupContextType | undefined>(undefined);
 
-type CheckType = {
-  id: number;
-  checked: boolean;
-  required: boolean;
+type SignupContextParams = {
+  mode: string;
+  username?: string;
+  email?: string;
+  name?: string;
+  phone?: string;
+  birthday?: string;
+  birthyear?: string;
+  gender?: string;
+  nickname?: string;
+  profileImage?: string;
 };
 
 export const SignupProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [agreements, setAgreements] = useState<AgreementSimpleType[]>([]);
-  const [checkedTerms, setCheckedTerms] = useState<CheckType[]>([]);
+  const [mode, setMode] = useState<"catchb" | "naver" | "kakao">("catchb");
 
-  const setCheck = (id: number) => {
-    setCheckedTerms(
-      checkedTerms.map((check) =>
-        check.id === id ? { ...check, checked: !check.checked } : check
-      )
-    );
+  const [notificationsAgreed, setNotificationsAgreed] =
+    useState<boolean>(false);
+
+  const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+
+  const [password, setPassword] = useState<string>("");
+  const [password2, setPassword2] = useState<string>("");
+
+  const [name, setName] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [gender, setGender] = useState<string>("");
+  const [birthdate, setBirthdate] = useState<string>("");
+  const [nickname, setNickname] = useState<string>("");
+  const [profileImage, setProfileImage] = useState<string>("");
+
+  const params = useLocalSearchParams<SignupContextParams>();
+
+  const setUsernameEmail = (username: string, email: string) => {
+    setUsername(username);
+    setEmail(email);
   };
 
-  const checkAll = () => {
-    const allChecked = checkedTerms.every((check) => check.checked);
+  const setPasswords = (password: string, password2: string) => {
+    setPassword(password);
+    setPassword2(password2);
+  };
 
-    if (allChecked) {
-      setCheckedTerms(
-        checkedTerms.map((check) => ({ ...check, checked: false }))
-      );
-    } else {
-      setCheckedTerms(
-        checkedTerms.map((check) => ({ ...check, checked: true }))
-      );
-    }
+  const setNamePhone = (name: string, phone: string) => {
+    setName(name);
+    setPhone(phone);
   };
 
   useEffect(() => {
-    const fetchAgreements = async () => {
-      const response = await getAgreements();
+    if (params.mode === "naver") {
+      const getBirthdate = () => {
+        if (params.birthday && params.birthyear) {
+          return `${params.birthyear}-${params.birthday}`;
+        }
+        return "";
+      };
 
-      if (response) {
-        setAgreements(response);
-      }
-    };
+      const getGender = () => {
+        if (params.gender === "F") {
+          return "여성";
+        }
 
-    fetchAgreements();
+        return "남성";
+      };
+
+      setMode("naver");
+      setUsername(params.username || "");
+      setEmail(params.email || "");
+      setName(params.name || "");
+      setPhone(params.phone || "");
+      setBirthdate(getBirthdate());
+      setGender(getGender());
+      setNickname(params.nickname || "");
+      setProfileImage(params.profileImage || "");
+    } else if (params.mode === "kakao") {
+      const getGender = () => {
+        if (params.gender === "female") {
+          return "여성";
+        }
+
+        return "남성";
+      };
+
+      const getBirthdate = () => {
+        if (params.birthday && params.birthyear) {
+          const month = params.birthday.slice(0, 2);
+          const day = params.birthday.slice(2, 4);
+
+          return `${params.birthyear}-${month}-${day}`;
+        }
+        return "";
+      };
+
+      setMode("kakao");
+      setUsername(params.username || "");
+      setEmail(params.email || "");
+      setName(params.name || "");
+      setPhone(params.phone || "");
+      setBirthdate(getBirthdate());
+      setGender(getGender());
+      setNickname(params.nickname || "");
+      setProfileImage(params.profileImage || "");
+    }
   }, []);
 
-  useEffect(() => {
-    setCheckedTerms(
-      agreements.map((agreement) => ({
-        id: agreement.id,
-        checked: false,
-        required: agreement.required,
-      }))
-    );
-  }, [agreements]);
+  const user = useMemo(
+    () => ({ username, email, password, password2, name, phone }),
+    [username, email, password, password2, name, phone]
+  );
+
+  const profile = useMemo(
+    () => ({
+      gender,
+      birthdate,
+      nickname,
+      profileImage,
+    }),
+    [gender, birthdate, nickname, profileImage]
+  );
 
   const value = useMemo(
     () => ({
-      terms: agreements,
-      checkedTerms,
-      setCheck,
-      checkAll,
+      setNotificationsAgreed,
+      setUsernameEmail,
+      setPasswords,
+      setNamePhone,
+      mode,
+      user: user,
+      profile: profile,
+      notificationsAgreed,
     }),
-    [checkedTerms]
+    [mode, user, profile, notificationsAgreed]
   );
 
   return (
