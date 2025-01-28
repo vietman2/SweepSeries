@@ -20,6 +20,21 @@ class AgreementVersionSimpleSerializer(serializers.ModelSerializer):
         model = AgreementVersion
         fields = ['id', 'created_at', 'summary']
 
+class AgreementContentSerializer(serializers.ModelSerializer):
+    content         = serializers.SerializerMethodField()
+    last_updated    = serializers.SerializerMethodField()
+    class Meta:
+        model = Agreement
+        fields = ['title', 'content', 'last_updated']
+
+    def get_content(self, obj):
+        version = AgreementVersion.objects.filter(agreement=obj).first()
+        return version.content if version else ""
+
+    def get_last_updated(self, obj):
+        version = AgreementVersion.objects.filter(agreement=obj).first()
+        return version.created_at.strftime('%Y-%m-%d') if version else ""
+
 class AgreementDetailSerializer(serializers.ModelSerializer):
     content     = serializers.SerializerMethodField(read_only=True)
     created_at  = serializers.DateTimeField(format='%Y-%m-%d', read_only=True)
