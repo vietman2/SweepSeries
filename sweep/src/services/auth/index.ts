@@ -1,11 +1,10 @@
 import { getAgreements, getAgreementContent } from "./agreements";
-import { login, kakaoLogin, naverLogin, logout, refresh, getProfile } from "./auth";
+import { login, socialLogin, logout, refresh, getProfile } from "./auth";
 import { checkUsernameEmail, checkPassword, requestCode, verifyCode, register } from "./register";
 
 export {
   login,
-  kakaoLogin,
-  naverLogin,
+  socialLogin,
   logout,
   refresh,
   getProfile,
