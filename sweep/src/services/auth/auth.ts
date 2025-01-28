@@ -50,6 +50,10 @@ export const naverLogin = async (data: GetProfileResponse) => {
       profile_image: data.response.profile_image || "",
     });
 
+    if (response.data.result === "not_registered") {
+      return "REDIRECT";
+    }
+
     axios.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${response.data.access}`;

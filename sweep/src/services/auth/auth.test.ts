@@ -134,6 +134,15 @@ describe("naverLogin", () => {
     expect(result).toEqual(response.data);
   });
 
+  it("should return REDIRECT on not_registered", async () => {
+    const response = { data: { result: "not_registered" } };
+    jest.spyOn(axios, "post").mockResolvedValue(response);
+
+    const result = await naverLogin(data);
+
+    expect(result).toBe("REDIRECT");
+  });
+
   it("should return null on failure", async () => {
     jest
       .spyOn(axios, "post")
