@@ -31,7 +31,7 @@ export function Terms() {
     if (mode === "catchb") {
       router.push("/signup/username");
     } else {
-      // TODO: 네이버, 카카오 회원가입
+      router.push("/signup/phone");
     }
   };
 
@@ -92,8 +92,8 @@ export function Terms() {
       }))
     );
 
-    const notificationsTerm = agreements.find(
-      (agreement) => agreement.title.includes("알림 수신 동의")
+    const notificationsTerm = agreements.find((agreement) =>
+      agreement.title.includes("알림 수신 동의")
     );
     setNotificationsTermId(notificationsTerm?.id ?? -1);
   }, [agreements]);
