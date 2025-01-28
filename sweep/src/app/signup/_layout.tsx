@@ -2,6 +2,7 @@ import { TouchableOpacity } from "react-native";
 import { Stack, router } from "expo-router";
 
 import { AppIcon } from "@components/Icons";
+import { SignupProvider } from "@contexts/signup";
 import { useTheme } from "@contexts/theme";
 
 export default function SignupLayout() {
@@ -20,16 +21,21 @@ export default function SignupLayout() {
   };
 
   return (
-    <Stack
-      screenOptions={{
-        headerLeft: BackButton,
-        headerTitle: "회원가입",
-      }}
-      initialRouteName="1"
-    >
-      <Stack.Screen name="1" />
-      <Stack.Screen name="2" />
-      <Stack.Screen name="3" />
-    </Stack>
+    <SignupProvider>
+      <Stack
+        screenOptions={{
+          headerLeft: BackButton,
+          headerTitle: "회원가입",
+        }}
+        initialRouteName="terms/index"
+      >
+        <Stack.Screen name="terms/[id]" />
+        <Stack.Screen name="terms/index" />
+        <Stack.Screen name="username" />
+        <Stack.Screen name="password" />
+        <Stack.Screen name="phone" />
+        <Stack.Screen name="extras" />
+      </Stack>
+    </SignupProvider>
   );
 }

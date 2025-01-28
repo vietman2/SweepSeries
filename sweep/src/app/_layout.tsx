@@ -8,6 +8,8 @@ import { useFonts } from "expo-font";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, SplashScreen } from "expo-router";
 import axios from "axios";
+import { initializeKakaoSDK } from "@react-native-kakao/core";
+import NaverLogin from "@react-native-seoul/naver-login";
 
 import { AuthProvider, useAuth } from "@contexts/auth";
 import { ThemeProvider } from "@contexts/theme";
@@ -95,7 +97,26 @@ function AppRouter() {
       }
     };
 
+    const initializeKakao = async () => {
+      const kakaoAppKey = process.env.EXPO_PUBLIC_KAKAO_APP_KEY;
+      initializeKakaoSDK(kakaoAppKey || "");
+    };
+
+    const initializeNaver = async () => {
+      const naverAppKey = process.env.EXPO_PUBLIC_NAVER_CONSUMER_KEY;
+      const naverAppSecret = process.env.EXPO_PUBLIC_NAVER_CONSUMER_SECRET;
+
+      NaverLogin.initialize({
+        appName: "Catch B",
+        consumerKey: naverAppKey || "",
+        consumerSecret: naverAppSecret || "",
+        serviceUrlSchemeIOS: "catchb",
+      });
+    };
+
     refreshToken();
+    initializeKakao();
+    initializeNaver();
   }, []);
 
   if (!ready) {
@@ -105,6 +126,7 @@ function AppRouter() {
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="login" options={{ headerShown: false }} />
       <Stack.Screen name="signup" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
     </Stack>
