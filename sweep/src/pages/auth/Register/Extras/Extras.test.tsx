@@ -11,37 +11,9 @@ jest.mock("expo-router", () => ({
     replace: jest.fn(),
   },
 }));
-jest.mock("@contexts/signup", () => ({
-  SignupProvider: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
-  useSignup: jest.fn(),
-}));
 
 describe("<Extras />", () => {
   beforeEach(() => {
-    jest.spyOn(SignupContext, "useSignup").mockReturnValue({
-      setNotificationsAgreed: jest.fn(),
-      setUsernameEmail: jest.fn(),
-      setPasswords: jest.fn(),
-      setNamePhone: jest.fn(),
-      mode: "catchb",
-      user: {
-        username: "",
-        email: "",
-        password: "",
-        password2: "",
-        name: "",
-        phone: "",
-      },
-      profile: {
-        gender: "",
-        birthdate: "",
-        nickname: "",
-        profileImage: "",
-      },
-      notificationsAgreed: false,
-    });
     jest.spyOn(RegisterAPI, "register").mockResolvedValue(true);
   });
 
@@ -83,13 +55,6 @@ describe("<Extras />", () => {
     });
 
     const { getByTestId } = renderWithProviders(<Extras />);
-
-    fireEvent.changeText(getByTestId("닉네임을 입력해주세요."), "nickname");
-    fireEvent.changeText(
-      getByTestId("생년월일을 입력해주세요. (YYYYMMDD)"),
-      "2020-01-01"
-    );
-    fireEvent.press(getByTestId("남성"));
 
     fireEvent.press(getByTestId("button"));
   });
