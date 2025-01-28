@@ -354,14 +354,26 @@ jest.mock("@contexts/signup", () => ({
     <div>{children}</div>
   ),
   useSignup: jest.fn().mockReturnValue({
-    terms: [],
-    checkedTerms: [],
-    setCheck: jest.fn(),
-    checkAll: jest.fn(),
+    setNotificationsAgreed: jest.fn(),
     setUsernameEmail: jest.fn(),
     setPasswords: jest.fn(),
     setNamePhone: jest.fn(),
-    signup: jest.fn(),
+    mode: "catchb",
+    user: {
+      username: "",
+      email: "",
+      password: "",
+      password2: "",
+      name: "",
+      phone: "",
+    },
+    profile: {
+      gender: "",
+      birthdate: "",
+      nickname: "",
+      profileImage: "",
+    },
+    notificationsAgreed: false,
   }),
 }));
 jest.mock("@contexts/theme", () => ({
