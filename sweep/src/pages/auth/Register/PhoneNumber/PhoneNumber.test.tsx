@@ -1,6 +1,7 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { PhoneNumber } from "./PhoneNumber";
+import * as SignupContext from "@contexts/signup";
 import * as RegisterAPI from "@services/auth/register";
 import { renderWithProviders } from "@utils/test-utils";
 
@@ -46,6 +47,33 @@ describe("<PhoneNumber />", () => {
     await waitFor(() => {
       fireEvent.press(getByTestId("button"));
     });
+  });
+
+  it("handles auto fill correctly", async () => {
+    jest.spyOn(SignupContext, "useSignup").mockReturnValue({
+      setNotificationsAgreed: jest.fn(),
+      setUsernameEmail: jest.fn(),
+      setPasswords: jest.fn(),
+      setNamePhone: jest.fn(),
+      mode: "naver",
+      user: {
+        username: "",
+        email: "",
+        password: "",
+        password2: "",
+        name: "",
+        phone: "",
+      },
+      profile: {
+        gender: "",
+        birthdate: "",
+        nickname: "",
+        profileImage: "",
+      },
+      notificationsAgreed: false,
+    });
+
+    renderWithProviders(<PhoneNumber />);
   });
 
   it("handles api errors", async () => {

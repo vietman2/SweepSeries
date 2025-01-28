@@ -21,7 +21,7 @@ export function PhoneNumber() {
   const [error, setError] = useState<string>("");
   const [timer, setTimer] = useState<number>(0);
 
-  const { setNamePhone } = useSignup();
+  const { setNamePhone, mode, user } = useSignup();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -38,7 +38,7 @@ export function PhoneNumber() {
       setTimer(180);
       setError("");
     } else {
-      alert("오류 발생", "인증번호 발송에 실패했습니다. 다시 시도해주세요.");
+      alert("오류 발생", "이미 가입된 전화번호입니다.");
     }
   };
 
@@ -74,6 +74,12 @@ export function PhoneNumber() {
     }
     return () => clearInterval(timerInterval);
   }, [timer]);
+
+  useEffect(() => {
+    if (mode === "naver") {
+      setName(user.name);
+    }
+  }, [mode, user]);
 
   return (
     <SignUpForm
