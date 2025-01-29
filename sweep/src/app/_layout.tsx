@@ -120,6 +120,7 @@ function AppRouter() {
   }, []);
 
   if (!ready) {
+    // TODO: 서버 연결에 실패. 로딩 화면 띄우기
     return null;
   }
 
