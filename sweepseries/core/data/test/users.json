@@ -64,6 +64,23 @@
     }
   },
   {
+    "model": "user.user",
+    "pk": "323e4567-e89b-12d3-a456-426614174000",
+    "fields": {
+      "password": "",
+      "last_login": "2024-11-25T13:01:15.740",
+      "username": "coachuser",
+      "email": "coach@user.com",
+      "person": 3,
+      "joined_at": "2024-11-20T16:39:13.192",
+      "updated_at": "2024-11-20T16:39:13.206",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_blocked": false,
+      "is_active": true
+    }
+  },
+  {
     "model": "userprofile.userprofile",
     "pk": 1,
     "fields": {
@@ -80,6 +97,17 @@
     "fields": {
       "user": "223e4567-e89b-12d3-a456-426614174000",
       "nickname": "별명",
+      "profile_image": "",
+      "default_color": "#FFFFFF",
+      "introduction": "자기소개"
+    }
+  },
+  {
+    "model": "userprofile.userprofile",
+    "pk": 3,
+    "fields": {
+      "user": "323e4567-e89b-12d3-a456-426614174000",
+      "nickname": "코치",
       "profile_image": "",
       "default_color": "#FFFFFF",
       "introduction": "자기소개"
