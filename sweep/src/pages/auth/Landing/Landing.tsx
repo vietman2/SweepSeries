@@ -183,47 +183,11 @@ const createStyles = (theme: ThemeColorType) =>
       backgroundColor: theme.background,
       gap: 16,
     },
-    header: {
-      alignItems: "center",
-      justifyContent: "center",
-      gap: 24,
-    },
-    headerText: {
-      fontSize: 20,
-      textAlign: "center",
-    },
     buttons: {
       width: "100%",
       justifyContent: "center",
       paddingHorizontal: 24,
       gap: 8,
-    },
-    inputs: {
-      width: "100%",
-      marginVertical: 8,
-      paddingHorizontal: 24,
-    },
-    input: {
-      width: "100%",
-      height: 40,
-      paddingVertical: 8,
-      paddingHorizontal: 16,
-      marginBottom: 8,
-      borderWidth: 1,
-      borderRadius: 4,
-      borderColor: theme.border,
-    },
-    row: {
-      flexDirection: "row",
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 16,
-      gap: 24,
-    },
-    helpText: {
-      color: theme.lowEmphasis,
-      fontSize: 16,
-      textAlign: "center",
     },
     dividerWrapper: {
       width: "100%",
