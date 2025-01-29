@@ -1,147 +1,88 @@
-import { useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { router, Redirect } from "expo-router";
-import { initializeKakaoSDK } from "@react-native-kakao/core";
+import { useState } from "react";
 import {
-  me as getProfile,
-  login as kakaoLogin,
-  isLogined as isKakaoLoggedIn,
-} from "@react-native-kakao/user";
-import NaverLogin from "@react-native-seoul/naver-login";
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { router } from "expo-router";
 
-import { KakaoButton, NaverButton, TextButton } from "@components/Buttons";
-import { MainLogo } from "@components/Icons";
+import { TextButton } from "@components/Buttons";
+import { VerticalDivider } from "@components/Dividers";
+import { AuthLogo } from "@components/Icons";
 import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
 import { alert } from "@services/alert";
-import { naverLogin as naverLoginRequest } from "@services/auth";
+import { login as loginRequest } from "@services/auth";
 import { ThemeColorType } from "@themes/colors";
 
 export function Login() {
-  const { login, selectedProfile } = useAuth();
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const { login } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  const handleGuest = () => {
-    router.replace("/home");
+  const handleBack = () => {
+    router.back();
   };
 
-  const handleKakaoLogin = async () => {
-    // 1. 카카오 로그인 요청
-    const fetchProfile = async () => {
-      await getProfile();
-    };
+  const handleLogin = async () => {
+    const response = await loginRequest(username, password);
 
-    try {
-      const isLoggedIn = await isKakaoLoggedIn();
-      if (isLoggedIn) {
-        await fetchProfile();
-      } else {
-        await kakaoLogin();
-        await fetchProfile();
-      }
-    } catch {
-      alert(
-        "카카오 로그인 실패",
-        "카카오 로그인에 실패했습니다. 다시 시도해주세요."
-      );
-    }
-    // TODO: Finish Kakao Login
-    /*const result = await kakaoLogin();
-
-    if (result) {
-      console.log(result);
-      // 2. 카카오 로그인 성공 시 프로필 요청
-      const profile = await getProfile();
-
-      if (profile) {
-        console.log(profile);
-      }
-    }*/
-  };
-
-  const handleNaverLogin = async () => {
-    const result = await NaverLogin.login();
-
-    try {
-      const token = result.successResponse?.accessToken;
-      if (!token) {
-        alert(
-          "네이버 로그인 실패",
-          "네이버 로그인에 실패했습니다. 다시 시도해주세요."
-        );
-        return;
-      }
-      const profile = await NaverLogin.getProfile(token);
-
-      const response = await naverLoginRequest(profile);
-      if (response) {
-        login(response.user.mode, response.user.profile);
-        router.replace("/home");
-      } else {
-        alert(
-          "네이버 로그인 실패",
-          "네이버 로그인에 실패했습니다. 다시 시도해주세요."
-        );
-      }
-    } catch {
-      alert(
-        "네이버 로그인 실패",
-        "네이버 로그인에 실패했습니다. 다시 시도해주세요."
-      );
+    if (response) {
+      login(response.user.mode, response.user.profile);
+      router.dismissAll();
+      router.replace("/home");
+    } else {
+      alert("로그인 실패", "로그인에 실패했습니다. 다시 시도해주세요.");
     }
   };
-
-  useEffect(() => {
-    const initializeKakao = async () => {
-      const kakaoAppKey = process.env.EXPO_PUBLIC_KAKAO_APP_KEY;
-      initializeKakaoSDK(kakaoAppKey || "");
-    };
-
-    const initializeNaver = async () => {
-      const naverAppKey = process.env.EXPO_PUBLIC_NAVER_CONSUMER_KEY;
-      const naverAppSecret = process.env.EXPO_PUBLIC_NAVER_CONSUMER_SECRET;
-
-      NaverLogin.initialize({
-        appName: "Catch B",
-        consumerKey: naverAppKey || "",
-        consumerSecret: naverAppSecret || "",
-        serviceUrlSchemeIOS: "catchb",
-      });
-    };
-
-    /*const reset = async () => {
-      try {
-        await unlink();
-        await NaverLogin.deleteToken();
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    reset();*/
-
-    initializeKakao();
-    initializeNaver();
-  }, []);
-
-  if (selectedProfile) {
-    return <Redirect href="/home" />;
-  }
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <MainLogo />
-        <Text style={styles.headerText}>
-          {"지금 로그인하고\nCatch B에서 야구를 즐겨보세요!"}
-        </Text>
-      </View>
-      <View style={styles.buttons}>
-        <KakaoButton onPress={handleKakaoLogin} />
-        <NaverButton onPress={handleNaverLogin} />
+      <AuthLogo />
+      <View style={styles.inputs}>
+        <TextInput
+          placeholder="아이디"
+          value={username}
+          onChangeText={setUsername}
+          placeholderTextColor={theme.lowEmphasis}
+          style={styles.input}
+          testID="아이디"
+        />
+        <TextInput
+          placeholder="비밀번호"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          placeholderTextColor={theme.lowEmphasis}
+          style={styles.input}
+          testID="비밀번호"
+        />
         <TextButton
-          text="비회원으로 둘러보기"
-          onPress={handleGuest}
+          text="로그인"
+          onPress={handleLogin}
+          fontSize={16}
+          backgroundColor={theme.primary}
+          color={theme.background}
+        />
+        <View style={styles.row}>
+          <TouchableOpacity>
+            <Text style={styles.helpText}>아이디 찾기</Text>
+          </TouchableOpacity>
+          <VerticalDivider width={1} color={theme.border} />
+          <TouchableOpacity>
+            <Text style={styles.helpText}>비밀번호 찾기</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View style={styles.wrapper}>
+        <TextButton
+          text="돌아가기"
+          onPress={handleBack}
           fontSize={18}
           backgroundColor={theme.background}
           color={theme.lowEmphasis}
@@ -158,27 +99,39 @@ const createStyles = (theme: ThemeColorType) =>
       alignItems: "center",
       justifyContent: "center",
       backgroundColor: theme.background,
-      gap: 48,
+      gap: 8,
     },
-    header: {
-      alignItems: "center",
+    inputs: {
+      width: "100%",
+      marginVertical: 8,
+      paddingHorizontal: 24,
+    },
+    input: {
+      width: "100%",
+      height: 40,
+      paddingVertical: 8,
+      paddingHorizontal: 16,
+      marginBottom: 8,
+      borderWidth: 1,
+      borderRadius: 4,
+      borderColor: theme.border,
+    },
+    row: {
+      flexDirection: "row",
       justifyContent: "center",
+      alignItems: "center",
+      marginTop: 16,
       gap: 24,
     },
-    headerText: {
-      fontSize: 20,
+    helpText: {
+      color: theme.lowEmphasis,
+      fontSize: 16,
       textAlign: "center",
     },
-    buttons: {
+    wrapper: {
       width: "100%",
       justifyContent: "center",
       paddingHorizontal: 24,
       gap: 8,
-    },
-    helper: {
-      textAlign: "center",
-      marginBottom: 8,
-      fontSize: 16,
-      color: theme.lowEmphasis,
     },
   });

@@ -9,7 +9,8 @@ from core.permissions import AdminOnly
 from core.utils import is_admin_page
 from .models import Agreement, AgreementVersion
 from .serializers import (
-    AgreementSimpleSerializer, AgreementDetailSerializer, AgreementUpdateSerializer
+    AgreementSimpleSerializer, AgreementDetailSerializer,
+    AgreementContentSerializer, AgreementUpdateSerializer
 )
 
 class AgreementViewSet(ModelViewSet):
@@ -19,7 +20,7 @@ class AgreementViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'delete', 'put']
 
     def get_permissions(self):
-        if self.action == 'list':
+        if self.action in ['list', 'retrieve']:
             return [AllowAny()]
         return super().get_permissions()
 
@@ -48,7 +49,14 @@ class AgreementViewSet(ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        serializer = AgreementDetailSerializer(instance)
+
+        user = request.user
+        if user.is_superuser and is_admin_page(request):
+            serializer = AgreementDetailSerializer(instance)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        serializer = AgreementContentSerializer(instance)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 

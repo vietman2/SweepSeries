@@ -4,29 +4,32 @@ import { router } from "expo-router";
 
 import { TextInput } from "@components/Inputs";
 import { Text } from "@components/Texts";
+import { useSignup } from "@contexts/signup";
 import { useTheme } from "@contexts/theme";
 import { SignUpForm } from "@fragments/SignUp";
 import { checkUsernameEmail } from "@services/auth";
 import { ThemeColorType } from "@themes/colors";
 
 export function UsernameEmail() {
-  const [username, setUsername] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
+  const [usernameInput, setUsernameInput] = useState<string>("");
+  const [emailInput, setEmailInput] = useState<string>("");
 
   const [error, setError] = useState<string>("");
 
+  const { setUsernameEmail } = useSignup();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  const isButtonActive = !!username && !!email;
+  const isButtonActive = !!usernameInput && !!emailInput;
 
   const handleUsernameEmailCheck = async () => {
-    const response = await checkUsernameEmail(username, email);
+    const response = await checkUsernameEmail(usernameInput, emailInput);
 
     if (response.status === 200) {
-      router.push("/signup/3");
+      setUsernameEmail(usernameInput, emailInput);
+      router.push("/signup/password");
     } else {
-      setError(response.data.message);
+      setError(response.data.error);
     }
   };
 
@@ -41,8 +44,8 @@ export function UsernameEmail() {
         <View>
           <Text style={styles.subtitle}>아이디</Text>
           <TextInput
-            value={username}
-            onChangeText={setUsername}
+            value={usernameInput}
+            onChangeText={setUsernameInput}
             placeholder="로그인 시 사용할 아이디를 입력해주세요."
             returnKeyType="next"
           />
@@ -50,8 +53,8 @@ export function UsernameEmail() {
         <View>
           <Text style={styles.subtitle}>이메일</Text>
           <TextInput
-            value={email}
-            onChangeText={setEmail}
+            value={emailInput}
+            onChangeText={setEmailInput}
             placeholder="이메일을 입력해주세요."
             type="email-address"
           />

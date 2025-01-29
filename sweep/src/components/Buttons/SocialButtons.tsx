@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   socialText: {
-    fontSize: 18,
+    fontSize: 16,
     textAlign: "center",
     fontWeight: "bold",
   },

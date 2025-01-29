@@ -1,3 +1,3 @@
-import { Login } from "@pages/auth";
+import { Landing } from "@pages/auth";
 
-export default Login;
+export default Landing;

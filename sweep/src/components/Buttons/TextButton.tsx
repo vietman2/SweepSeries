@@ -1,6 +1,6 @@
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
-import { useTheme } from '@contexts/theme';
+import { useTheme } from "@contexts/theme";
 
 interface Props {
   text: string;
@@ -15,17 +15,25 @@ export function TextButton({
   text,
   onPress,
   fontSize = 16,
-  backgroundColor = '#14863E',
-  color = '#FFFFFF',
+  backgroundColor = "#14863E",
+  color = "#FFFFFF",
   active = true,
 }: Readonly<Props>) {
   const { theme } = useTheme();
 
   backgroundColor = active ? backgroundColor : theme.border;
+  color = active ? color : theme.lowEmphasis;
+  const borderColor = active ? color : "transparent";
 
   return (
     <TouchableOpacity
-      style={[styles.container, { backgroundColor, borderColor: color }]}
+      style={[
+        styles.container,
+        {
+          backgroundColor,
+          borderColor: borderColor,
+        },
+      ]}
       onPress={onPress}
       disabled={!active}
     >
@@ -59,19 +67,19 @@ export function Link({ text, onPress }: Readonly<LinkProps>) {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingHorizontal: 16,
     paddingVertical: 12,
-    borderRadius: 8,
+    borderRadius: 4,
     borderWidth: 0.5,
   },
   text: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   link: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingHorizontal: 10,
   },
   linkText: {

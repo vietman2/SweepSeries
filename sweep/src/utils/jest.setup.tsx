@@ -169,6 +169,7 @@ jest.mock("@components/Filters", () => {
 });
 jest.mock("@components/Icons", () => ({
   AppIcon: () => null,
+  AuthLogo: () => null,
   CustomLogo: () => null,
   MainLogo: () => null,
   HorizontalLogo: () => null,
@@ -348,6 +349,33 @@ jest.mock("@contexts/calendar", () => ({
     setSelectedCalendar: jest.fn(),
   }),
 }));
+jest.mock("@contexts/signup", () => ({
+  SignupProvider: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  useSignup: jest.fn().mockReturnValue({
+    setNotificationsAgreed: jest.fn(),
+    setUsernameEmail: jest.fn(),
+    setPasswords: jest.fn(),
+    setNamePhone: jest.fn(),
+    mode: "catchb",
+    user: {
+      username: "",
+      email: "",
+      password: "",
+      password2: "",
+      name: "",
+      phone: "",
+    },
+    profile: {
+      gender: "",
+      birthdate: "",
+      nickname: "",
+      profileImage: "",
+    },
+    notificationsAgreed: false,
+  }),
+}));
 jest.mock("@contexts/theme", () => ({
   ThemeProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
@@ -393,3 +421,6 @@ jest.mock("@fragments/SignUp", () => {
     ),
   };
 });
+jest.mock("@services/alert/alert", () => ({
+  alert: jest.fn(),
+}));

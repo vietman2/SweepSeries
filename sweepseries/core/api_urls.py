@@ -10,7 +10,11 @@ from app.notices.views import NoticeViewSet
 ## Auth
 from auth.agreements.views import AgreementViewSet
 from auth.person.views import PersonViewSet
-from auth.user.views import UserViewSet, UserLoginView, KakaoLoginView, NaverLoginView
+from auth.user.register_views import (
+    CheckUsernameEmailView, CheckPasswordView, CreateVerificationCodeView,
+    VerifyPhoneView, RegisterView
+)
+from auth.user.views import UserViewSet, UserLoginView, SocialLoginView
 
 ## Calendar
 from calendars.calendarapp.views import CalendarViewSet
@@ -61,10 +65,15 @@ router.register(r'coaches', CoachViewSet, basename='coaches')
 router.register(r'programs', ProgramViewSet, basename='programs')
 
 urlpatterns = [
-    path('login/kakao/', KakaoLoginView.as_view(), name='kakao-login'),
-    path('login/naver/', NaverLoginView.as_view(), name='naver-login'),
+    path('login/social/', SocialLoginView.as_view(), name='kakao-login'),
     path('login/', UserLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path('register/', RegisterView.as_view(), name='register'),
+
+    path('check-username-email/', CheckUsernameEmailView.as_view(), name='check_username'),
+    path('check-password/', CheckPasswordView.as_view(), name='check_password'),
+    path('verification-code/', CreateVerificationCodeView.as_view(), name='verification_code'),
+    path('verify-phone/', VerifyPhoneView.as_view(), name='verify_phone'),
 
     path('tokens/refresh/', get_refresh_view().as_view(), name='token_refresh'),
 ]

@@ -51,6 +51,16 @@ export const formatPhoneNumberText = (number: string, text: string) => {
   }
 };
 
+export const formatMobileNumber = (number: string) => {
+  const digits = number.replace(/\D/g, "");
+
+  if (digits.length == 11) {
+  return digits.replace(/(\d{3})(\d{0,4})(\d{0,4})/, "$1-$2-$3").trim();
+  }
+
+  return digits;
+};
+
 export const formatRegistrationNumber = (number: string) => {
   const digits = number.replace(/\D/g, ""); // Remove non-numeric characters
   const length = digits.length;

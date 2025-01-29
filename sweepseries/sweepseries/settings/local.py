@@ -53,3 +53,6 @@ MEDIA_URL = 'https://kr.object.ncloudstorage.com/sweepdev/'
 
 NAVER_CLIENT_ID = config("NAVER_API_KEY_ID")
 NAVER_CLIENT_SECRET = config("NAVER_API_KEY")
+
+## SMS
+SMS_API_KEY = config("SMS_API_KEY")

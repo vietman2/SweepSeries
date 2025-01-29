@@ -1,12 +1,12 @@
-import { Text, TouchableOpacity, View } from 'react-native';
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { Text, TouchableOpacity, View } from "react-native";
+import { fireEvent, render, waitFor } from "@testing-library/react-native";
 
-import { CalendarProvider, useCalendar } from './CalendarContext';
-import * as CalendarsAPI from '@services/calendar/calendars';
-import * as StorageAPI from '@services/storage/asyncstorage';
-import { sampleCalendars } from '@testdata/calendar';
+import { CalendarProvider, useCalendar } from "./CalendarContext";
+import * as CalendarsAPI from "@services/calendar/calendars";
+import * as StorageAPI from "@services/storage/asyncstorage";
+import { sampleCalendars } from "@testdata/calendar";
 
-jest.unmock('@contexts/calendar');
+jest.unmock("@contexts/calendar");
 
 const TestComponent = () => {
   const { setSelectedCalendar, reloadData } = useCalendar();
@@ -27,10 +27,10 @@ const TestComponent = () => {
   );
 };
 
-describe('CalendarProvider', () => {
-  it('renders and updates selected calendar correctly', async () => {
-    jest.spyOn(CalendarsAPI, 'getCalendars').mockResolvedValue(sampleCalendars);
-    jest.spyOn(StorageAPI, 'getStorage').mockResolvedValue('2');
+describe("CalendarProvider", () => {
+  it("renders and updates selected calendar correctly", async () => {
+    jest.spyOn(CalendarsAPI, "getCalendars").mockResolvedValue(sampleCalendars);
+    jest.spyOn(StorageAPI, "getStorage").mockResolvedValue("2");
 
     const { getByTestId } = render(
       <CalendarProvider>
@@ -39,14 +39,14 @@ describe('CalendarProvider', () => {
     );
 
     await waitFor(() => {
-      fireEvent.press(getByTestId('setSelectedCalendar'));
-      fireEvent.press(getByTestId('reloadData'));
+      fireEvent.press(getByTestId("setSelectedCalendar"));
+      fireEvent.press(getByTestId("reloadData"));
     });
   });
 
-  it('handles saved calendar dne', async () => {
-    jest.spyOn(CalendarsAPI, 'getCalendars').mockResolvedValue(sampleCalendars);
-    jest.spyOn(StorageAPI, 'getStorage').mockResolvedValue('100');
+  it("handles saved calendar dne", async () => {
+    jest.spyOn(CalendarsAPI, "getCalendars").mockResolvedValue(sampleCalendars);
+    jest.spyOn(StorageAPI, "getStorage").mockResolvedValue("100");
 
     const { getByTestId } = render(
       <CalendarProvider>
@@ -55,13 +55,13 @@ describe('CalendarProvider', () => {
     );
 
     await waitFor(() => {
-      fireEvent.press(getByTestId('setSelectedCalendar'));
+      fireEvent.press(getByTestId("setSelectedCalendar"));
     });
   });
 
-  it('handles no saved calendar', async () => {
-    jest.spyOn(CalendarsAPI, 'getCalendars').mockResolvedValue(sampleCalendars);
-    jest.spyOn(StorageAPI, 'getStorage').mockResolvedValue(null);
+  it("handles no saved calendar", async () => {
+    jest.spyOn(CalendarsAPI, "getCalendars").mockResolvedValue(sampleCalendars);
+    jest.spyOn(StorageAPI, "getStorage").mockResolvedValue(null);
 
     const { getByTestId } = render(
       <CalendarProvider>
@@ -70,12 +70,12 @@ describe('CalendarProvider', () => {
     );
 
     await waitFor(() => {
-      fireEvent.press(getByTestId('setSelectedCalendar'));
+      fireEvent.press(getByTestId("setSelectedCalendar"));
     });
   });
 
-  it('handles api error', async () => {
-    jest.spyOn(CalendarsAPI, 'getCalendars').mockResolvedValue(null);
+  it("handles api error", async () => {
+    jest.spyOn(CalendarsAPI, "getCalendars").mockResolvedValue(null);
 
     const { getByTestId } = render(
       <CalendarProvider>
@@ -84,12 +84,12 @@ describe('CalendarProvider', () => {
     );
 
     await waitFor(() => {
-      fireEvent.press(getByTestId('setSelectedCalendar'));
+      fireEvent.press(getByTestId("setSelectedCalendar"));
     });
   });
 
-  it('handles context misuse', () => {
-    jest.spyOn(console, 'error').mockImplementation(() => {});
+  it("handles context misuse", () => {
+    jest.spyOn(console, "error").mockImplementation(() => {});
 
     expect(() => render(<TestComponent />)).toThrow();
   });

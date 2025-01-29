@@ -4,6 +4,10 @@ import { Password } from "./Password";
 import * as AuthAPI from "@services/auth/register";
 import { renderWithProviders } from "@utils/test-utils";
 
+jest.mock("expo-router", () => ({
+  router: { push: jest.fn() },
+}));
+
 describe("<Password />", () => {
   it("renders and handles checks correctly", () => {
     jest
@@ -21,7 +25,7 @@ describe("<Password />", () => {
   it("handles bad request correctly", () => {
     jest
       .spyOn(AuthAPI, "checkPassword")
-      .mockResolvedValue({ status: 400, data: { message: "bad request" } });
+      .mockResolvedValue({ status: 400, data: { error: "bad request" } });
     const { getByTestId } = renderWithProviders(<Password />);
 
     waitFor(() => fireEvent.press(getByTestId("button")));

@@ -1,6 +1,7 @@
 import {
   formatBirthDate,
   formatPhoneNumberText,
+  formatMobileNumber,
   formatRegistrationNumber,
   formatTime,
   formatPrice,
@@ -30,6 +31,11 @@ it("formats phone number text", () => {
   expect(formatPhoneNumberText("031123", "031-123")).toBe("031-123");
 
   expect(formatPhoneNumberText("03", "03")).toBe("03");
+});
+
+it("formats mobile number", () => {
+  expect(formatMobileNumber("01012341234")).toBe("010-1234-1234");
+  expect(formatMobileNumber("0101234")).toBe("0101234");
 });
 
 it("formats registration number", () => {

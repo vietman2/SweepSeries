@@ -1,8 +1,10 @@
 from django.conf import settings
+from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from auth.user.models import User
+from .models import Agreement
 
 class AgreementsAPITestCase(APITestCase):
     fixtures = ["core/data/test/agreements.json", "core/data/test/users.json"]
@@ -41,8 +43,13 @@ class AgreementsAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_agreements_retrieve(self):
+        ## 1. normal
         self.client.force_authenticate(self.admin)
         response = self.client.get(self.url + "1/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        ## 2. admin from admin page
+        response = self.client.get(self.url + "1/", HTTP_ORIGIN=settings.ADMIN_PAGE_URL)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_agreements_create(self):
@@ -92,3 +99,12 @@ class AgreementsAPITestCase(APITestCase):
         data.pop("summary")
         response = self.client.put(self.url + "1/", data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+class AgreementModelTest(TestCase):
+    fixtures = ["core/data/test/agreements.json"]
+
+    def setUp(self):
+        self.agreement = Agreement.objects.get(pk=1)
+
+    def test_agreement_str(self):
+        self.assertEqual(str(self.agreement), "Mandatory without content")

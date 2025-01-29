@@ -21,6 +21,7 @@ jobs:
       NAVER_API_KEY: "NAVER_API_KEY"
       AWS_ACCESS_KEY: "AWS_ACCESS_KEY"
       AWS_SECRET_KEY: "AWS_SECRET_KEY"
+      SMS_API_KEY: "SMS_API_KEY"
     strategy:
       max-parallel: 4
       matrix:

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
 import { Checkbox } from "@components/Checkbox";
 import { Divider } from "@components/Dividers";
+import { useSignup } from "@contexts/signup";
 import { SignUpForm } from "@fragments/SignUp";
 import { AgreementSimpleType } from "@models/auth";
 import { getAgreements } from "@services/auth";
@@ -15,69 +16,86 @@ type CheckType = {
 
 export function Terms() {
   const [agreements, setAgreements] = useState<AgreementSimpleType[]>([]);
-  const [checkList, setCheckList] = useState<CheckType[]>([]);
+  const [checkedTerms, setCheckedTerms] = useState<CheckType[]>([]);
+  const [notificationsTermId, setNotificationsTermId] = useState<number>(-1);
 
-  const allChecked = checkList.every((check) => check.checked);
+  const { setNotificationsAgreed } = useSignup();
+  const { mode } = useLocalSearchParams<{ mode: string }>();
 
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<boolean>(false);
-
-  const toggleCheckAll = () => {
-    if (allChecked) {
-      setCheckList(checkList.map((check) => ({ ...check, checked: false })));
-    } else {
-      setCheckList(checkList.map((check) => ({ ...check, checked: true })));
-    }
-  };
-
-  const isButtonActive = checkList.every(
+  const allChecked = checkedTerms.every((check) => check.checked);
+  const isButtonActive = checkedTerms.every(
     (check) => !check.required || check.checked
   );
 
   const handleButtonPress = () => {
-    router.push("/signup/3");
+    if (mode === "catchb") {
+      router.push("/signup/username");
+    } else {
+      router.push("/signup/phone");
+    }
+  };
+
+  const handleTermPress = (id: number) => {
+    router.push(`/signup/terms/${id}`);
   };
 
   const isChecked = (id: number) => {
-    const check = checkList.find((check) => check.id === id);
+    const check = checkedTerms.find((check) => check.id === id);
 
     return check ? check.checked : false;
   };
 
   const setCheck = (id: number) => {
-    setCheckList(
-      checkList.map((check) =>
+    setCheckedTerms(
+      checkedTerms.map((check) =>
         check.id === id ? { ...check, checked: !check.checked } : check
       )
     );
+
+    if (id === notificationsTermId) {
+      setNotificationsAgreed(!isChecked(id));
+    }
+  };
+
+  const checkAll = () => {
+    const allChecked = checkedTerms.every((check) => check.checked);
+
+    if (allChecked) {
+      setCheckedTerms(
+        checkedTerms.map((term) => ({ ...term, checked: false }))
+      );
+      setNotificationsAgreed(false);
+    } else {
+      setCheckedTerms(checkedTerms.map((term) => ({ ...term, checked: true })));
+      setNotificationsAgreed(true);
+    }
   };
 
   useEffect(() => {
     const fetchAgreements = async () => {
-      setLoading(true);
-
       const response = await getAgreements();
 
       if (response) {
         setAgreements(response);
-      } else {
-        setError(true);
       }
-
-      setLoading(false);
     };
 
     fetchAgreements();
   }, []);
 
   useEffect(() => {
-    setCheckList(
+    setCheckedTerms(
       agreements.map((agreement) => ({
         id: agreement.id,
         checked: false,
         required: agreement.required,
       }))
     );
+
+    const notificationsTerm = agreements.find((agreement) =>
+      agreement.title.includes("알림 수신 동의")
+    );
+    setNotificationsTermId(notificationsTerm?.id ?? -1);
   }, [agreements]);
 
   return (
@@ -87,14 +105,13 @@ export function Terms() {
       buttonText="다음으로"
       buttonOnPress={handleButtonPress}
       buttonDisabled={!isButtonActive}
-      loading={loading}
-      error={error}
+      loading={agreements.length === 0}
     >
       <Divider />
       <Checkbox
         text="모두 동의 합니다."
         checked={allChecked}
-        onChange={toggleCheckAll}
+        onChange={checkAll}
       />
       <Divider />
       {agreements.map((agreement) => (
@@ -103,7 +120,11 @@ export function Terms() {
           text={`(${agreement.required ? "필수" : "선택"}) ${agreement.title}`}
           checked={isChecked(agreement.id)}
           onChange={() => setCheck(agreement.id)}
-          rightPress={agreement.has_content ? () => {} : undefined}
+          rightPress={
+            agreement.has_content
+              ? () => handleTermPress(agreement.id)
+              : undefined
+          }
         />
       ))}
     </SignUpForm>

@@ -1,4 +1,5 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
+import * as Router from "expo-router";
 
 import { Terms } from "./Terms";
 import * as AgreementsAPI from "@services/auth/agreements";
@@ -9,26 +10,52 @@ jest.mock("expo-router", () => ({
   router: {
     push: jest.fn(),
   },
+  useLocalSearchParams: jest.fn(),
 }));
 
 describe("<Terms />", () => {
-  it("renders and handles presses correctly", async () => {
+  beforeEach(() => {
+    jest
+      .spyOn(Router, "useLocalSearchParams")
+      .mockReturnValue({ mode: "catchb" });
     jest
       .spyOn(AgreementsAPI, "getAgreements")
       .mockResolvedValue(sampleAgreements);
+  });
+
+  it("renders and handles presses correctly", async () => {
     const { getByTestId } = renderWithProviders(<Terms />);
 
     await waitFor(() => {
-      fireEvent.press(getByTestId("모두 동의 합니다."));
-      fireEvent.press(getByTestId("모두 동의 합니다."));
-      fireEvent.press(getByTestId("(필수) 약관 1"));
-      fireEvent.press(getByTestId("(필수) 약관 1-right"));
+      expect(getByTestId("(필수) 약관 1")).toBeTruthy();
+    });
+
+    fireEvent.press(getByTestId("모두 동의 합니다."));
+    fireEvent.press(getByTestId("모두 동의 합니다."));
+
+    await waitFor(() => {
       fireEvent.press(getByTestId("button"));
     });
   });
 
-  it("handles error correctly", async () => {
+  it("handles social mode", async () => {
+    jest
+      .spyOn(Router, "useLocalSearchParams")
+      .mockReturnValue({ mode: "kakao" });
+
+    const { getByTestId } = renderWithProviders(<Terms />);
+
+    await waitFor(() => {
+      fireEvent.press(getByTestId("(필수) 약관 1"));
+      fireEvent.press(getByTestId("(필수) 약관 1-right"));
+      fireEvent.press(getByTestId("(선택) 알림 수신 동의"));
+      fireEvent.press(getByTestId("button"));
+    });
+  });
+
+  it("handles api error", async () => {
     jest.spyOn(AgreementsAPI, "getAgreements").mockResolvedValue(null);
-    waitFor(() => renderWithProviders(<Terms />));
+
+    renderWithProviders(<Terms />);
   });
 });

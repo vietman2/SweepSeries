@@ -6,8 +6,7 @@ export type AgreementSimpleType = {
 };
 
 export type AgreementType = {
-  id: number;
   title: string;
   content: string;
-  required: boolean;
+  last_updated: string;
 };

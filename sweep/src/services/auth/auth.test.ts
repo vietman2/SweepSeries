@@ -4,8 +4,7 @@ import {
   login,
   logout,
   refresh,
-  kakaoLogin,
-  naverLogin,
+  socialLogin,
   getProfile,
 } from "./auth";
 import * as StorageAPI from "@services/storage/secure";
@@ -80,7 +79,7 @@ describe("refresh", () => {
   });
 });
 
-describe("kakaoLogin", () => {
+describe("socialLogin", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -89,73 +88,24 @@ describe("kakaoLogin", () => {
     const response = { data: { access: "access", refresh: "refresh" } };
     jest.spyOn(axios, "post").mockResolvedValue(response);
 
-    const result = await kakaoLogin();
+    const result = await socialLogin(1);
 
     expect(result).toEqual(response.data);
+  });
+
+  it("should return REDIRECT on not_registered", async () => {
+    const response = { data: { result: "not_registered" } };
+    jest.spyOn(axios, "post").mockResolvedValue(response);
+
+    const result = await socialLogin(1);
+
+    expect(result).toBe("REDIRECT");
   });
 
   it("should return null on failure", async () => {
     jest.spyOn(axios, "post").mockRejectedValue(null);
 
-    const result = await kakaoLogin();
-
-    expect(result).toBeNull();
-  });
-});
-
-describe("naverLogin", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-  const data = {
-    response: {
-      id: "id",
-      email: "email",
-      name: "name",
-      mobile: "mobile",
-      birthday: "birthday",
-      birthyear: 2000,
-      gender: "M",
-      nickname: "nickname",
-      profile_image: "profile_image",
-      age: null,
-      mobile_e164: "mobile_e164",
-    },
-    resultcode: "00",
-    message: "message",
-  };
-
-  it("should return response data on success", async () => {
-    const response = { data: { access: "access", refresh: "refresh" } };
-    jest.spyOn(axios, "post").mockResolvedValue(response);
-
-    const result = await naverLogin(data);
-
-    expect(result).toEqual(response.data);
-  });
-
-  it("should return null on failure", async () => {
-    jest
-      .spyOn(axios, "post")
-      .mockRejectedValue({ response: { data: "error" } });
-
-    const result = await naverLogin({
-      response: {
-        id: "id",
-        email: "email",
-        name: "name",
-        mobile: "mobile",
-        birthday: null,
-        birthyear: null,
-        gender: null,
-        nickname: null,
-        profile_image: null,
-        age: null,
-        mobile_e164: "mobile_e164",
-      },
-      resultcode: "00",
-      message: "message",
-    });
+    const result = await socialLogin("1");
 
     expect(result).toBeNull();
   });

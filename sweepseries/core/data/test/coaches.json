@@ -16,5 +16,23 @@
       "status": 1,
       "professions": [1, 2, 3]
     }
+  },
+  {
+    "model": "coach.coach",
+    "pk": "823e4567-e89b-12d3-a456-426614174999",
+    "fields": {
+      "person": 3,
+      "academy": "123e4567-e89b-12d3-a456-426614174999",
+      "introduction": "",
+      "certificate": "products/coaches/923e4567-e89b-12d3-a456-426614174999/certificate/IMG_0002.jpg",
+      "profile_image": "products/coaches/923e4567-e89b-12d3-a456-426614174999/IMG_0002.jpg",
+      "career": 2,
+      "is_verified": true,
+      "verified_at": "2024-11-20T16:39:13.192",
+      "is_rejected": false,
+      "reject_reason": "",
+      "status": 1,
+      "professions": [1, 2, 3]
+    }
   }
 ]
