@@ -72,7 +72,7 @@ urlpatterns = [
 
     path('check-username-email/', CheckUsernameEmailView.as_view(), name='check_username'),
     path('check-password/', CheckPasswordView.as_view(), name='check_password'),
-    path('verification-code/', CreateVerificationCodeView.as_view(), name='create_verification_code'),
+    path('verification-code/', CreateVerificationCodeView.as_view(), name='verification_code'),
     path('verify-phone/', VerifyPhoneView.as_view(), name='verify_phone'),
 
     path('tokens/refresh/', get_refresh_view().as_view(), name='token_refresh'),
