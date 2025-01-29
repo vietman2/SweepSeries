@@ -2,7 +2,6 @@ import { fireEvent, waitFor } from "@testing-library/react-native";
 import * as Router from "expo-router";
 
 import { Terms } from "./Terms";
-import * as SignupContext from "@contexts/signup";
 import * as AgreementsAPI from "@services/auth/agreements";
 import { sampleAgreements } from "@testdata/auth";
 import { renderWithProviders } from "@utils/test-utils";
@@ -43,28 +42,6 @@ describe("<Terms />", () => {
     jest
       .spyOn(Router, "useLocalSearchParams")
       .mockReturnValue({ mode: "kakao" });
-    jest.spyOn(SignupContext, "useSignup").mockReturnValue({
-      setNotificationsAgreed: jest.fn(),
-      setUsernameEmail: jest.fn(),
-      setPasswords: jest.fn(),
-      setNamePhone: jest.fn(),
-      mode: "kakao",
-      user: {
-        username: "",
-        email: "",
-        password: "",
-        password2: "",
-        name: "",
-        phone: "",
-      },
-      profile: {
-        gender: "",
-        birthdate: "",
-        nickname: "",
-        profileImage: "",
-      },
-      notificationsAgreed: false,
-    });
 
     const { getByTestId } = renderWithProviders(<Terms />);
 

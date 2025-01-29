@@ -91,10 +91,13 @@ describe("<SignupProvider />", () => {
     );
   });
 
-  it("handles params correctly (kakao) 2", () => {
+  it("handles params correctly (naver)", () => {
     jest.spyOn(Router, "useLocalSearchParams").mockReturnValue({
-      mode: "kakao",
-      ...emptyParams,
+      mode: "naver",
+      birthday: "01-01",
+      birthyear: "1990",
+      gender: "F",
+      ...commonParams,
     });
 
     render(
@@ -104,13 +107,10 @@ describe("<SignupProvider />", () => {
     );
   });
 
-  it("handles params correctly (naver)", () => {
+  it("handles params correctly (kakao) 2", () => {
     jest.spyOn(Router, "useLocalSearchParams").mockReturnValue({
-      mode: "naver",
-      birthday: "01-01",
-      birthyear: "1990",
-      gender: "F",
-      ...commonParams,
+      mode: "kakao",
+      ...emptyParams,
     });
 
     render(
