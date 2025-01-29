@@ -82,6 +82,9 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 MEDIA_URL = 'https://kr.object.ncloudstorage.com/sweepseries/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+## SMS
+SMS_API_KEY = config("SMS_API_KEY")
+
 CORS_ALLOWED_ORIGINS = [
     "https://sweepseries.com",
     "https://www.sweepseries.com",
