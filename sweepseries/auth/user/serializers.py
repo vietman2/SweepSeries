@@ -9,7 +9,6 @@ from auth.person.models import Person
 from auth.person.serializers import PersonSerializer
 from auth.userprofile.models import UserProfile
 from auth.userprofile.serializers import UserProfileSerializer
-from auth.userprofile.utils import random_nickname_generator
 from product.academy.models import Academy
 from product.coach.models import Coach
 from .models import User
@@ -87,7 +86,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             try:
                 username_validator(username)
             except ValidationError as e:
-                raise ValidationError(e.detail[0])
+                raise ValidationError(e.detail[0]) from e
 
             password = user['password']
             password2 = user.pop('password2')
@@ -98,7 +97,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             try:
                 validate_password(password)
             except ValidationError as e:
-                raise ValidationError(e)
+                raise ValidationError(e) from e
         else:
             user['password'] = User.objects.make_random_password()
             user.pop('password2')
@@ -109,7 +108,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         try:
             email_validator(email)
         except ValidationError as e:
-            raise ValidationError(e.detail[0])
+            raise ValidationError(e.detail[0]) from e
 
         return attrs
 
@@ -147,7 +146,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         if not birthdate_data:
             birth_date = None
-        
+
         ## if birthdate_data does not have YYYY-MM-DD format
         try:
             birth_date = datetime.strptime(birthdate_data, '%Y-%m-%d')
@@ -161,9 +160,9 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         if gender_data == '남성':
             return GenderChoices.MALE
-        elif gender_data == '여성':
+        if gender_data == '여성':
             return GenderChoices.FEMALE
-        elif gender_data == '기타':
+        if gender_data == '기타':
             return GenderChoices.OTHER
 
         return GenderChoices.UNDEFINED

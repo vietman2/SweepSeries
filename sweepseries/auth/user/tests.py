@@ -1,6 +1,6 @@
 import json
-import requests_mock
 from unittest.mock import patch
+import requests_mock
 from django.conf import settings
 from django.contrib.admin import AdminSite
 from django.test import TestCase, RequestFactory
@@ -236,6 +236,7 @@ class RegisterAPITestCase(APITestCase):
             "password": "",
             "password2": ""
         }, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         ## 2. not match
         response = self.client.post("/v1/check-password/", {

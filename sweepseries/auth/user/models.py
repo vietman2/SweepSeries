@@ -48,6 +48,8 @@ class PhoneVerification(models.Model):
     verification_code   = models.CharField(max_length=6, default=generate_verification_code)
     created_at          = models.DateTimeField(auto_now_add=True)
 
+    objects             = models.Manager()
+
     class Meta:
         db_table    = 'phone_verification'
         verbose_name = '휴대폰 인증'

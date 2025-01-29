@@ -98,7 +98,8 @@ class CreateVerificationCodeView(GenericAPIView):
                     "receiver": phone_number,
                     "msg": message,
                     "testmode_yn": "Y",     ## TOOO: Switch this
-                }
+                },
+                timeout=5,
             )
 
             if int(res.json()['result_code']) != 1:
@@ -128,9 +129,11 @@ class VerifyPhoneView(GenericAPIView):
                 "error": "전화번호와 코드를 입력해주세요.",
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        try:
-            phone_verification = PhoneVerification.objects.filter(phone_number=phone_number).latest('created_at')
-        except PhoneVerification.DoesNotExist:
+        phone_verification = PhoneVerification.objects.filter(
+            phone_number=phone_number
+        ).order_by('-created_at').first()
+
+        if phone_verification is None:
             return Response(data={
                 "error": "인증번호를 발급받지 않았습니다.",
             }, status=status.HTTP_400_BAD_REQUEST)
