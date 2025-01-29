@@ -4,6 +4,7 @@ from django.db import models
 
 from auth.person.models import Person
 from .managers import UserManager
+from .utils import generate_verification_code
 
 class User(AbstractBaseUser):
     uuid            = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -20,6 +21,9 @@ class User(AbstractBaseUser):
     is_active       = models.BooleanField(default=True)
     naver_linked    = models.BooleanField(default=False)
     kakao_linked    = models.BooleanField(default=False)
+
+    noti_permitted  = models.BooleanField(default=False)
+    agreed_at       = models.DateTimeField(null=True, blank=True)
 
     USERNAME_FIELD  = 'username'
 
@@ -38,3 +42,13 @@ class User(AbstractBaseUser):
         db_table    = 'user'
         verbose_name = '회원'
         verbose_name_plural = '회원'
+
+class PhoneVerification(models.Model):
+    phone_number        = models.CharField(max_length=20)
+    verification_code   = models.CharField(max_length=6, default=generate_verification_code)
+    created_at          = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table    = 'phone_verification'
+        verbose_name = '휴대폰 인증'
+        verbose_name_plural = '휴대폰 인증'
