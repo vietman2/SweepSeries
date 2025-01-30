@@ -68,22 +68,22 @@ class UserSerializer(serializers.ModelSerializer):
         ]
 
     def get_profiles(self, obj):
-        id = self.context.get('profile_id', None)
+        profile_id = self.context.get('profile_id', None)
 
-        if id:
+        if profile_id:
             return None
 
         profiles = UserProfile.objects.filter(user=obj)
 
         return UserProfileSerializer(profiles, many=True).data
 
-    def get_selected_profile(self, obj):
-        id = self.context.get('profile_id', None)
+    def get_selected_profile(self, obj):  ## pylint: disable=unused-argument
+        profile_id = self.context.get('profile_id', None)
 
-        if not id:
+        if not profile_id:
             return None
 
-        profile = UserProfile.objects.get(id=id)
+        profile = UserProfile.objects.get(id=profile_id)
 
         return UserProfileSerializer(profile).data
 

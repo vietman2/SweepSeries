@@ -30,7 +30,7 @@ class UserProfileViewSet(ModelViewSet):
 
     @action(detail=True, methods=['patch'])
     @extend_schema(summary="프로필 사진 수정", tags=["프로필"])
-    def image(self, request, pk=None):
+    def image(self, request, pk=None):  ## pylint: disable=unused-argument
         instance = self.get_object()
         serializer = UserProfileImageSerializer(instance, data=request.data)
 
