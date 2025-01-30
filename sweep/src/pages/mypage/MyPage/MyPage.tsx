@@ -1,3 +1,4 @@
+import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
 
@@ -67,7 +68,7 @@ export function MyPage() {
     <>
       <Scroll style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.profile}>
-          <MainProfile />
+          <MainProfile profile={selectedProfile} />
           {mode === "normal" && (
             <TextButton
               text="아카데미/코치로 등록하기"
@@ -141,7 +142,7 @@ export function MyPage() {
       <View style={styles.footer}>
         <Link text="개인정보 처리방침" onPress={() => {}} />
         <Link text="이용약관" onPress={() => {}} />
-        <Text>현재 버전 Beta.0.1</Text>
+        <Text style={styles.versionText}>현재 버전 Beta.0.1</Text>
       </View>
       {/* 
       <Withdrawal
@@ -193,4 +194,7 @@ const createStyles = (theme: ThemeColorType) =>
     dividerWrapper: {
       marginVertical: 8,
     },
+    versionText: {
+      fontSize: 12,
+    }
   });

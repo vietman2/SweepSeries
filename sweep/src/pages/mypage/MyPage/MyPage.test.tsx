@@ -15,12 +15,6 @@ jest.mock("expo-router", () => ({
     push: jest.fn(),
   },
 }));
-jest.mock("@contexts/auth", () => ({
-  AuthProvider: ({ children }: { children: React.ReactNode }) => (
-    <>{children}</>
-  ),
-  useAuth: jest.fn(),
-}));
 jest.mock("@fragments/Profile", () => ({
   MainProfile: () => null,
 }));
