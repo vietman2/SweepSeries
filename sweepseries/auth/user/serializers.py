@@ -53,16 +53,39 @@ class UserRelatedSerializer(serializers.ModelSerializer):
         return obj.person.name
 
 class UserSerializer(serializers.ModelSerializer):
-    uuid        = serializers.UUIDField(read_only=True)
-    username    = serializers.CharField(read_only=True)
-    email       = serializers.EmailField(read_only=True)
-    person      = PersonSerializer(read_only=True)
-    joined_at   = serializers.DateTimeField(read_only=True, format='%Y-%m-%d')
-    profiles    = UserProfileSerializer(many=True)
+    uuid                = serializers.UUIDField(read_only=True)
+    username            = serializers.CharField(read_only=True)
+    email               = serializers.EmailField(read_only=True)
+    person              = PersonSerializer(read_only=True)
+    joined_at           = serializers.DateTimeField(read_only=True, format='%Y-%m-%d')
+    profiles            = serializers.SerializerMethodField(read_only=True)
+    selected_profile    = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
-        fields = ['uuid', 'username', 'email', 'person', 'joined_at', 'profiles']
+        fields = [
+            'uuid', 'username', 'email', 'person', 'joined_at', 'profiles', 'selected_profile'
+        ]
+
+    def get_profiles(self, obj):
+        id = self.context.get('profile_id', None)
+
+        if id:
+            return None
+
+        profiles = UserProfile.objects.filter(user=obj)
+
+        return UserProfileSerializer(profiles, many=True).data
+
+    def get_selected_profile(self, obj):
+        id = self.context.get('profile_id', None)
+
+        if not id:
+            return None
+
+        profile = UserProfile.objects.get(id=id)
+
+        return UserProfileSerializer(profile).data
 
 class RegisterSerializer(serializers.ModelSerializer):
     mode            = serializers.CharField(write_only=True)
