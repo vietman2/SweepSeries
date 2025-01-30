@@ -1,10 +1,12 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { PostCreate } from "./PostCreate";
+import * as AuthContext from "@contexts/auth";
 import * as PostsAPI from "@services/community/posts";
 import * as TagsAPI from "@services/community/tags";
 import { sampleTagResponse } from "@testdata/community";
 import { renderWithProviders } from "@utils/test-utils";
+import { sampleAuthor } from "@testdata/auth";
 
 jest.mock("expo-router", () => ({
   router: {
@@ -18,6 +20,12 @@ jest.mock("@fragments/Post", () => ({
 describe("<PostCreate />", () => {
   beforeEach(() => {
     jest.resetAllMocks();
+    jest.spyOn(AuthContext, "useAuth").mockReturnValue({
+      login: jest.fn(),
+      logout: jest.fn(),
+      mode: "normal",
+      selectedProfile: sampleAuthor,
+    });
     jest.spyOn(TagsAPI, "getTags").mockResolvedValue(sampleTagResponse);
   });
 
