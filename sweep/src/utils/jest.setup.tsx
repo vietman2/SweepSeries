@@ -332,7 +332,7 @@ jest.mock("@contexts/auth", () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
   ),
-  useAuth: () => ({
+  useAuth: jest.fn().mockReturnValue({
     login: jest.fn(),
     logout: jest.fn(),
     mode: "guest",
