@@ -1,12 +1,18 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 
+import { ProfileImage } from "../ProfileImage/ProfileImage";
 import { AppIcon } from "@components/Icons";
 import { useTheme } from "@contexts/theme";
+import { UserProfileType } from "@models/auth";
 import { ThemeColorType } from "@themes/colors";
 
-export function MainProfile() {
+interface Props {
+  profile: UserProfileType;
+}
+
+export function MainProfile({ profile }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -17,10 +23,7 @@ export function MainProfile() {
   return (
     <View>
       <View style={styles.wrapper}>
-        <Image
-          src="https://kr.object.ncloudstorage.com/sweepdev/test_images/hong.jpg"
-          style={styles.image}
-        />
+        <ProfileImage uri={profile.profile_image} size="large" color={profile.color} />
       </View>
       <LinearGradient
         colors={["#00BF60", "#00592D"]}
@@ -28,7 +31,7 @@ export function MainProfile() {
         end={[1, 0]}
         style={styles.nickname}
       >
-        <Text style={styles.nicknameText}>홍길동</Text>
+        <Text style={styles.nicknameText}>{profile.nickname}</Text>
       </LinearGradient>
       <TouchableOpacity
         style={styles.edit}
