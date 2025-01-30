@@ -6,6 +6,7 @@ import {
   refresh,
   socialLogin,
   getProfile,
+  me,
 } from "./auth";
 import * as StorageAPI from "@services/storage/secure";
 
@@ -128,6 +129,28 @@ describe("getProfile", () => {
     jest.spyOn(axios, "get").mockRejectedValue(null);
 
     const result = await getProfile("token");
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("me", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should return response data on success", async () => {
+    jest.spyOn(axios, "get").mockResolvedValue({ data: {} });
+
+    const result = await me(1);
+
+    expect(result).toEqual({});
+  });
+
+  it("should return null on failure", async () => {
+    jest.spyOn(axios, "get").mockRejectedValue(null);
+
+    const result = await me(1);
 
     expect(result).toBeNull();
   });

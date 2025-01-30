@@ -86,3 +86,17 @@ export const getProfile = async (token: string) => {
     return null;
   }
 };
+
+export const me = async (profile_id: number | null) => {
+  try {
+    const response = await axios.get("/v1/users/me/", {
+      params: {
+        full: true,
+        profile_id,
+      },
+    });
+    return response.data;
+  } catch {
+    return null;
+  }
+};

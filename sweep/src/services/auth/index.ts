@@ -1,5 +1,6 @@
 import { getAgreements, getAgreementContent } from "./agreements";
-import { login, socialLogin, logout, refresh, getProfile } from "./auth";
+import { login, socialLogin, logout, refresh, getProfile, me } from "./auth";
+import { updateProfile, uploadProfileImage } from "./profiles";
 import { checkUsernameEmail, checkPassword, requestCode, verifyCode, register } from "./register";
 
 export {
@@ -8,8 +9,11 @@ export {
   logout,
   refresh,
   getProfile,
+  me,
   getAgreements,
   getAgreementContent,
+  updateProfile,
+  uploadProfileImage,
   checkUsernameEmail,
   checkPassword,
   requestCode,
