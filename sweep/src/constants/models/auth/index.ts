@@ -1,4 +1,4 @@
 import { AgreementSimpleType, AgreementType } from "./agreements";
-import { UserProfileType } from "./user";
+import { UserProfileType, UserType } from "./user";
 
-export { AgreementSimpleType, AgreementType, UserProfileType };
+export { AgreementSimpleType, AgreementType, UserProfileType, UserType };
