@@ -40,6 +40,7 @@ export default function HomeLayout() {
         }}
       />
       <Stack.Screen name="academy/coach/[id]" />
+      <Stack.Screen name="academy/notice/[id]" />
       <Stack.Screen name="academy/[id]" />
     </Stack>
   );
