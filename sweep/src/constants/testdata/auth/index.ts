@@ -1,4 +1,10 @@
 import { sampleAgreements, sampleAgreement } from "./agreements";
-import { sampleAuthor, sampleAuthorNoImage } from "./users";
+import { sampleAuthor, sampleAuthorNoImage, sampleUser } from "./users";
 
-export { sampleAgreements, sampleAgreement, sampleAuthor, sampleAuthorNoImage };
+export {
+  sampleAgreements,
+  sampleAgreement,
+  sampleAuthor,
+  sampleAuthorNoImage,
+  sampleUser,
+};

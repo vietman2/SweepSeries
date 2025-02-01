@@ -8,15 +8,19 @@ interface Props {
   uri?: string;
   edit?: boolean;
   color?: string;
+  size?: "small" | "large";
 }
 
-export function ProfileImage({ uri, edit, color }: Readonly<Props>) {
+export function ProfileImage({ uri, edit, color, size="small" }: Readonly<Props>) {
   const { theme } = useTheme();
 
   if (uri) {
     return (
-      <View style={styles.imageLarge}>
-        <Image src={uri} style={styles.imageLarge} />
+      <View style={size === "small" ? styles.imageSmall : styles.imageLarge}>
+        <Image
+          src={uri}
+          style={size === "small" ? styles.imageSmall : styles.imageLarge}
+        />
         {edit ? (
           <View style={styles.edit}>
             <AppIcon icon="camera" size={25} color={theme.lowEmphasis} />
@@ -26,11 +30,16 @@ export function ProfileImage({ uri, edit, color }: Readonly<Props>) {
     );
   } else {
     return (
-      <View style={[styles.iconLarge, { backgroundColor: color }]}>
+      <View
+        style={[
+          size === "small" ? styles.iconSmall : styles.iconLarge,
+          { backgroundColor: color },
+        ]}
+      >
         <SvgCssUri
           uri="https://kr.object.ncloudstorage.com/catchb.resources/appicons/default_profile.svg"
-          width={"60"}
-          height={"60"}
+          width={size === "small" ? "60" : "135"}
+          height={size === "small" ? "60" : "135"}
         />
         {edit ? (
           <View style={styles.edit}>
@@ -47,17 +56,29 @@ export function ProfileImage({ uri, edit, color }: Readonly<Props>) {
   }
 }
 const styles = StyleSheet.create({
-  imageLarge: {
+  imageSmall: {
     width: 70,
     height: 70,
     borderRadius: 35,
   },
-  iconLarge: {
+  imageLarge: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+  },
+  iconSmall: {
     width: 70,
     height: 70,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 45,
+  },
+  iconLarge: {
+    width: 150,
+    height: 150,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 75,
   },
   edit: {
     position: "absolute",

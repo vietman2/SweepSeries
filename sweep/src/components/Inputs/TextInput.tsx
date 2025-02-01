@@ -47,7 +47,7 @@ export function TextInput({
 const createStyles = (theme: ThemeColorType) =>
   StyleSheet.create({
     container: {
-      marginVertical: 5,
+      marginVertical: 4,
     },
     input: {
       flexDirection: "row",

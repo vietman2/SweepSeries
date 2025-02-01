@@ -7,7 +7,7 @@ describe("<ProfileImage />", () => {
   });
   
   it("renders default correctly with edit option", () => {
-    renderWithProviders(<ProfileImage edit />);
+    renderWithProviders(<ProfileImage edit size="large" />);
   });
 
   it("renders with image correctly", () => {
@@ -15,6 +15,6 @@ describe("<ProfileImage />", () => {
   });
 
   it("renders with image correctly with edit option", () => {
-    renderWithProviders(<ProfileImage uri="https://example.com" edit />);
+    renderWithProviders(<ProfileImage uri="https://example.com" edit size="large" />);
   });
 });

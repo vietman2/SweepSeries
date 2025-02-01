@@ -46,8 +46,15 @@ class UserViewSet(ModelViewSet):
     @extend_schema(summary="유저 정보 조회", tags=["유저"])
     @action(detail=False, methods=['get'])
     def me(self, request, *args, **kwargs): ## pylint: disable=unused-argument
+        full = request.query_params.get('full', False)
+        profile_id = request.query_params.get('profile_id', None)
+
         user = request.user
-        serializer = UserAuthSerializer(user)
+        if full:
+            serializer = UserSerializer(user)
+            serializer.context['profile_id'] = profile_id
+        else:
+            serializer = UserAuthSerializer(user)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 

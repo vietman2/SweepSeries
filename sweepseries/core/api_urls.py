@@ -15,6 +15,7 @@ from auth.user.register_views import (
     VerifyPhoneView, RegisterView
 )
 from auth.user.views import UserViewSet, UserLoginView, SocialLoginView
+from auth.userprofile.views import UserProfileViewSet
 
 ## Calendar
 from calendars.calendarapp.views import CalendarViewSet
@@ -42,6 +43,7 @@ router.register(r'notices', NoticeViewSet, basename='notices')
 router.register(r'agreements', AgreementViewSet, basename='agreements')
 router.register(r'people', PersonViewSet, basename='people')
 router.register(r'users', UserViewSet, basename='users')
+router.register(r'profiles', UserProfileViewSet, basename='user-profiles')
 
 router.register(r'calendars', CalendarViewSet, basename='calendars')
 router.register(r'diaries', DiaryViewSet, basename='diaries')

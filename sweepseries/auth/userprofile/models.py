@@ -9,7 +9,7 @@ class UserProfile(models.Model):
     nickname        = models.CharField(max_length=150, default=random_nickname_generator)
     profile_image   = models.URLField(null=True)
     default_color   = models.CharField(max_length=7, default=random_color_generator)
-    introduction    = models.CharField(max_length=300, default='')
+    introduction    = models.CharField(max_length=300, default='', blank=True)
 
     objects = models.Manager()
 
