@@ -3,22 +3,20 @@ import { StyleSheet, View } from "react-native";
 
 import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
+import { useFront } from "@contexts/front";
 import { useTheme } from "@contexts/theme";
 import { CoachRequest, CoachSimple } from "@fragments/Coach";
 import { CoachSimpleType } from "@models/products";
 import { getEmployedCoaches } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
-interface Props {
-  uuid: string;
-}
-
-export function EmployeeManagement({ uuid }: Readonly<Props>) {
+export function EmployeeManagement() {
   const [coaches, setCoaches] = useState<CoachSimpleType[]>([]);
   const [requests, setRequests] = useState<CoachSimpleType[]>([]);
 
   const [refreshCount, setRefreshCount] = useState(0);
 
+  const { uuid } = useFront();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 

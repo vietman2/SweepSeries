@@ -5,6 +5,7 @@ import { Divider } from "@components/Dividers";
 import { AppIcon } from "@components/Icons";
 import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
+import { useFront } from "@contexts/front";
 import { useTheme } from "@contexts/theme";
 import {
   AcademyProfile,
@@ -13,31 +14,37 @@ import {
   WorkingHours,
 } from "@fragments/Academy";
 import { AcademyDetailType, FacilityType } from "@models/products";
-import { getFacilityOptions } from "@services/products";
+import { getFacilityOptions, getAcademyDetail } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
-interface Props {
-  academy: AcademyDetailType;
-  onRefresh?: () => void;
-}
-
-export function ProfileManagement({ academy, onRefresh }: Readonly<Props>) {
+export function ProfileManagement() {
+  const [academy, setAcademy] = useState<AcademyDetailType>();
   const [facilityOptions, setFacilityOptions] = useState<FacilityType[]>([]);
+  const [refreshCount, setRefreshCount] = useState<number>(0);
 
+  const onRefresh = () => {
+    setRefreshCount((prev) => prev + 1);
+  };
+
+  const { uuid } = useFront();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   useEffect(() => {
-    const fetchOptions = async () => {
+    const fetchData = async () => {
+      const response = await getAcademyDetail(uuid);
       const options = await getFacilityOptions();
 
-      if (options) {
+      if (options && response) {
+        setAcademy(response);
         setFacilityOptions(options);
       }
     };
 
-    fetchOptions();
-  }, []);
+    fetchData();
+  }, [refreshCount, uuid]);
+
+  if (!academy) return null;
 
   return (
     <Scroll style={styles.container}>
