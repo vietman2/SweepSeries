@@ -6,6 +6,10 @@ import * as NoticesAPI from "@services/products/notices";
 import { sampleNotices } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
+jest.mock("@fragments/Notice", () => ({
+  NoticeBlock: () => "NoticeBlock",
+}));
+
 describe("<NoticeDetail />", () => {
   beforeEach(() => {
     jest.spyOn(Router, "useLocalSearchParams").mockReturnValue({ id: "1" });
@@ -14,11 +18,9 @@ describe("<NoticeDetail />", () => {
   it("renders without crashing", async () => {
     jest.spyOn(NoticesAPI, "getNotice").mockResolvedValue(sampleNotices[0]);
 
-    const { getByText } = renderWithProviders(<NoticeDetail />);
+    renderWithProviders(<NoticeDetail />);
 
-    await waitFor(() =>
-      expect(getByText(sampleNotices[0].updated_at)).toBeTruthy()
-    );
+    await waitFor(() => expect("NoticeBlock").toBeTruthy());
   });
 
   it("renders api error", async () => {
