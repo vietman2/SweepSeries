@@ -20,7 +20,7 @@ export function NoticeList() {
   const handleNoticePress = (noticeId: number) => {
     router.push({
       pathname: "/home/academy/notice/[id]",
-      params: { id: noticeId },
+      params: { id: noticeId, academyId: id },
     });
   };
 
