@@ -299,9 +299,12 @@ class AcademyNoticeViewSet(ModelViewSet):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @extend_schema(exclude=True)
+    @extend_schema(summary="공지사항 상세 조회", tags=["아카데미"])
     def retrieve(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        notice = self.get_object()
+
+        serializer = AcademyNoticeSerializer(notice)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema(summary="공지사항 등록", tags=["아카데미"])
     def create(self, request, *args, **kwargs):

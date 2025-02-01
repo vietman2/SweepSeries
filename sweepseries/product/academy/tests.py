@@ -334,7 +334,7 @@ class AcademyNoticeTestCase(APITestCase):
 
     def test_academy_notice_detail(self):
         response = self.client.get(f"{self.url}1/")
-        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.status_code, 200)
 
     def test_academy_notice_create(self):
         self.client.force_authenticate(user=self.user)
