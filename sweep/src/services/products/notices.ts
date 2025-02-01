@@ -26,3 +26,13 @@ export async function getNotices(academyId: string) {
     return null;
   }
 }
+
+export async function getNotice(noticeId: string) {
+  try {
+    const response = await axios.get(`/v1/notices/${noticeId}/`);
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}

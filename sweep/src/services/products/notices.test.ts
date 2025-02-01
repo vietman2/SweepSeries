@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { createNotice, getNotices } from "./notices";
+import { createNotice, getNotices, getNotice } from "./notices";
 
 describe("createNotice", () => {
   it("should create a notice", async () => {
@@ -47,6 +47,29 @@ describe("getNotices", () => {
     jest.spyOn(axios, "get").mockRejectedValue(null);
 
     const result = await getNotices(academyId);
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("getNotice", () => {
+  it("should get a notice", async () => {
+    const noticeId = "1";
+
+    const response = { data: "data" };
+    jest.spyOn(axios, "get").mockResolvedValue(response);
+
+    const result = await getNotice(noticeId);
+
+    expect(result).toEqual(response.data);
+  });
+
+  it("should return null when an error occurs", async () => {
+    const noticeId = "1";
+
+    jest.spyOn(axios, "get").mockRejectedValue(null);
+
+    const result = await getNotice(noticeId);
 
     expect(result).toBeNull();
   });
