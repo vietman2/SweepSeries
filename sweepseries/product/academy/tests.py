@@ -336,11 +336,35 @@ class AcademyNoticeTestCase(APITestCase):
         response = self.client.get(f"{self.url}1/")
         self.assertEqual(response.status_code, 200)
 
-    def test_academy_notice_create(self):
+    @patch('django.core.files.storage.default_storage.save')
+    def test_academy_notice_create(self, mock_save):
         self.client.force_authenticate(user=self.user)
+        ## 1. normal notice + no image
         response = self.client.post(f"{self.url}", {
             "title": "제목",
             "content": "내용",
+            "type": "공지",
+        })
+        self.assertEqual(response.status_code, 201)
+
+        ## 2. event + image
+        test_image = SimpleUploadedFile(
+            "test.png", b"file_content", content_type="image/png"
+        )
+        mock_save.return_value = 'test.png'
+        response = self.client.post(f"{self.url}", {
+            "title": "제목",
+            "content": "내용",
+            "type": "이벤트",
+            "image": test_image,
+        })
+        self.assertEqual(response.status_code, 201)
+
+        # 3. other + no image
+        response = self.client.post(f"{self.url}", {
+            "title": "제목",
+            "content": "내용",
+            "type": "기타",
         })
         self.assertEqual(response.status_code, 201)
 
@@ -361,3 +385,12 @@ class AcademyNoticeTestCase(APITestCase):
             "content": "내용",
         })
         self.assertEqual(response.status_code, 403)
+
+        ## 3. invalid type
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post(f"{self.url}", {
+            "title": "제목",
+            "content": "내용",
+            "type": "테스트",
+        })
+        self.assertEqual(response.status_code, 400)

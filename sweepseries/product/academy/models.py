@@ -4,7 +4,7 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 from auth.user.models import User
-from .enums import FacilityTypeChoices, DayChoices
+from .enums import FacilityTypeChoices, DayChoices, NoticeTypeChoices
 
 class AcademyFacility(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -119,9 +119,24 @@ class AcademyNotice(models.Model):
     content     = models.TextField()
     created_at  = models.DateTimeField(auto_now_add=True)
     updated_at  = models.DateTimeField(auto_now=True)
+    type        = models.PositiveSmallIntegerField(
+        choices=NoticeTypeChoices.choices, default=NoticeTypeChoices.NOTICE
+    )
 
     objects     = models.Manager()
 
     class Meta:
         db_table = 'academy_notice'
         ordering = ['-created_at']
+
+class AcademyNoticeAttachment(models.Model):
+    notice      = models.ForeignKey(
+        AcademyNotice, on_delete=models.CASCADE, related_name='attachments'
+    )
+    file        = models.FileField()
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    objects     = models.Manager()
+
+    class Meta:
+        db_table = 'academy_notice_attachment'
