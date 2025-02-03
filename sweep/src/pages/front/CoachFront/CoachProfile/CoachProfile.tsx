@@ -14,6 +14,7 @@ import { TextInput } from "@components/Inputs";
 import { SimpleModal } from "@components/Modals";
 import { Scroll } from "@components/ScrollView";
 import { CalloutSmall, Text } from "@components/Texts";
+import { useFront } from "@contexts/front";
 import { useTheme } from "@contexts/theme";
 import { CoachDetailType } from "@models/products";
 import { alert } from "@services/alert";
@@ -24,11 +25,7 @@ import {
 } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
-interface Props {
-  uuid: string;
-}
-
-export function CoachProfile({ uuid }: Readonly<Props>) {
+export function CoachProfile() {
   const [coach, setCoach] = useState<CoachDetailType>();
   const [introInput, setIntroInput] = useState<string>("");
   const [introModalVisible, setIntroModalVisible] = useState<boolean>(false);
@@ -37,6 +34,7 @@ export function CoachProfile({ uuid }: Readonly<Props>) {
   const [snsModalVisible, setSnsModalVisible] = useState<boolean>(false);
   const [refreshCount, setRefreshCount] = useState<number>(0);
 
+  const { uuid } = useFront();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
