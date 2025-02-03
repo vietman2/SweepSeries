@@ -3,6 +3,7 @@ import { render, RenderOptions } from "@testing-library/react-native";
 
 import { AuthProvider } from "@contexts/auth";
 import { CalendarProvider } from "@contexts/calendar";
+import { FrontProvider } from "@contexts/front";
 import { SignupProvider } from "@contexts/signup";
 import { ThemeProvider } from "@contexts/theme";
 
@@ -16,9 +17,11 @@ export const renderWithProviders = (
     return (
       <AuthProvider>
         <CalendarProvider>
-          <SignupProvider>
-            <ThemeProvider>{children}</ThemeProvider>
-          </SignupProvider>
+          <FrontProvider>
+            <SignupProvider>
+              <ThemeProvider>{children}</ThemeProvider>
+            </SignupProvider>
+          </FrontProvider>
         </CalendarProvider>
       </AuthProvider>
     );

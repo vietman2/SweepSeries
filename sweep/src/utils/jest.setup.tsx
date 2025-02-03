@@ -349,6 +349,21 @@ jest.mock("@contexts/calendar", () => ({
     setSelectedCalendar: jest.fn(),
   }),
 }));
+jest.mock("@contexts/front", () => ({
+  FrontProvider: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  useFront: jest.fn().mockReturnValue({
+    mode: null,
+    uuid: "1",
+    academies: [],
+    coach: undefined,
+    headerImage: "",
+    headerText: "",
+    selectAcademy: jest.fn(),
+    selectCoach: jest.fn(),
+  }),
+}));
 jest.mock("@contexts/signup", () => ({
   SignupProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
