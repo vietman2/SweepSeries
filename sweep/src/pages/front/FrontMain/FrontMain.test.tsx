@@ -1,9 +1,5 @@
-import { fireEvent, waitFor } from "@testing-library/react-native";
-
 import { Front } from "./FrontMain";
-import * as AcademiesAPI from "@services/products/academy";
-import * as CoachesAPI from "@services/products/coach";
-import { sampleAcademies, sampleCoaches } from "@testdata/products";
+import * as FrontContext from "@contexts/front";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("../AcademyFront/AcademyFront", () => ({
@@ -14,34 +10,40 @@ jest.mock("../CoachFront/CoachFront", () => ({
 }));
 
 describe("<FrontMain />", () => {
-  beforeEach(() => {
-    jest.spyOn(console, "warn").mockImplementation(() => null);
-    jest
-      .spyOn(AcademiesAPI, "getMyAcademies")
-      .mockResolvedValue(sampleAcademies);
-    jest
-      .spyOn(CoachesAPI, "getMyCoachProfile")
-      .mockResolvedValue(sampleCoaches[1]);
-  });
+  const commonParams = {
+    uuid: "1",
+    academies: [],
+    coach: undefined,
+    headerImage: "",
+    headerText: "",
+    selectAcademy: jest.fn(),
+    selectCoach: jest.fn(),
+  };
 
-  it("handles bad responses", async () => {
-    jest.spyOn(AcademiesAPI, "getMyAcademies").mockResolvedValue(null);
-    jest
-      .spyOn(CoachesAPI, "getMyCoachProfile")
-      .mockResolvedValue(null);
+  it("renders null correctly", async () => {
+    jest.spyOn(FrontContext, "useFront").mockReturnValue({
+      ...commonParams,
+      mode: null,
+    });
+
     renderWithProviders(<Front />);
   });
 
-  it("renders correctly and handles profile change", async () => {
-    const { getByTestId } = renderWithProviders(<Front />);
-
-    await waitFor(() => {
-      fireEvent.press(getByTestId("opensheet"));
-      fireEvent.press(getByTestId("close"));
-      fireEvent.press(getByTestId("opensheet"));
-      fireEvent.press(getByTestId("academy-1"));
-      fireEvent.press(getByTestId("opensheet"));
-      fireEvent.press(getByTestId("coach"));
+  it("renders academy correctly", async () => {
+    jest.spyOn(FrontContext, "useFront").mockReturnValue({
+      ...commonParams,
+      mode: "academy",
     });
+
+    renderWithProviders(<Front />);
+  });
+
+  it("renders coach correctly", async () => {
+    jest.spyOn(FrontContext, "useFront").mockReturnValue({
+      ...commonParams,
+      mode: "coach",
+    });
+
+    renderWithProviders(<Front />);
   });
 });
