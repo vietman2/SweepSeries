@@ -29,6 +29,7 @@ export type FacilityType = {
 };
 
 export type AcademyDetailType = {
+  uuid: string;
   name: string;
   logo: string;
   images: string[];
