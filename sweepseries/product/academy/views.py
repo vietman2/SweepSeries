@@ -437,7 +437,9 @@ class AcademyImageViewSet(ModelViewSet):
             )
 
         serializer_data = [{"image": image} for image in images]
-        serializer = AcademyImageSerializer(data=serializer_data, many=True, context={"academy": academy})
+        serializer = AcademyImageSerializer(
+            data=serializer_data, many=True, context={"academy": academy}
+        )
 
         try:
             serializer.is_valid(raise_exception=True)
