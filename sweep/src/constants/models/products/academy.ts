@@ -1,3 +1,5 @@
+import { ImageType } from "@models/app";
+
 export type AcademySimpleType = {
   uuid: string;
   logo: string;
@@ -32,7 +34,7 @@ export type AcademyDetailType = {
   uuid: string;
   name: string;
   logo: string;
-  images: string[];
+  images: ImageType[];
   address: string;
   rating: number;
   num_reviews: number;
