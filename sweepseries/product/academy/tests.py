@@ -1,4 +1,5 @@
 import json
+from botocore.exceptions import ClientError
 from io import BytesIO
 from unittest.mock import patch
 import requests_mock
@@ -335,7 +336,7 @@ class AcademyUpdatesTestCase(APITestCase):
         self.assertEqual(response.status_code, 400)
 
         ## upload fail
-        mock_save.side_effect = Exception
+        mock_save.side_effect = ClientError(error_response={}, operation_name='test')
         response = self.client.patch(f"{self.url}{self.academy.uuid}/logo/", {
             "main_logo": self.test_image1
         })
