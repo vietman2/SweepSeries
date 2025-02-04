@@ -1,3 +1,5 @@
+from django.core.files.storage import default_storage
+
 from .enums import DayChoices
 from .models import BusinessHours
 
@@ -120,3 +122,10 @@ def update_daily_schedule(day, new_schedule):
     day.save()
 
     return day
+
+def upload_logo(uuid, file):
+    filename = file.name.split("/")[-1]
+    path = f"products/academies/{uuid}/main_logo/{filename}"
+    default_storage.save(path, file)
+
+    return path

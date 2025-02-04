@@ -13,7 +13,7 @@ from .enums import NoticeTypeChoices
 from .models import (
     Academy, AcademyFacility, AcademyNotice, BusinessHours, AcademyNoticeAttachment
 )
-from .utils import get_weekly_schedule, get_schedule_details
+from .utils import get_weekly_schedule, get_schedule_details, upload_logo
 
 class ConvenienceSerializer(serializers.ModelSerializer):
     id          = serializers.IntegerField()
@@ -194,10 +194,8 @@ class AcademyRegisterSerializer(serializers.ModelSerializer):
     def upload_main_logo(self, **kwargs):
         new_id = kwargs['uuid']
         file = self.validated_data['main_logo']
-        filename = file.name.split('/')[-1]
-        path = f"products/academies/{new_id}/main_logo/{filename}"
-        default_storage.save(path, file)
-        return path
+
+        return upload_logo(new_id, file)
 
     def create_address(self, **kwargs):
         new_id = kwargs['uuid']
