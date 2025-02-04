@@ -57,6 +57,15 @@ class Academy(models.Model):
     class Meta:
         db_table = 'academy'
 
+class AcademyImage(models.Model):
+    academy     = models.ForeignKey(Academy, on_delete=models.CASCADE, related_name='images')
+    image       = models.ImageField()
+
+    objects     = models.Manager()
+
+    class Meta:
+        db_table = 'academy_image'
+
 class AcademyLike(models.Model):
     academy     = models.ForeignKey(Academy, on_delete=models.CASCADE, related_name='likes')
     user        = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liked_academies')

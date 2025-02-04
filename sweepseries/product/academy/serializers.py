@@ -11,7 +11,7 @@ from product.address.models import Address, Sigungu
 from product.address.utils import get_coordinates, fetch_map_image
 from .enums import NoticeTypeChoices
 from .models import (
-    Academy, AcademyFacility, AcademyNotice, BusinessHours, AcademyNoticeAttachment
+    Academy, AcademyFacility, AcademyNotice, BusinessHours, AcademyNoticeAttachment, AcademyImage
 )
 from .utils import get_weekly_schedule, get_schedule_details, upload_logo
 
@@ -107,8 +107,7 @@ class AcademyDetailSerializer(serializers.ModelSerializer):
         return get_presigned_url(obj.address.map_image)
 
     def get_images(self, obj):
-        print(obj)
-        return []
+        return AcademyImageSerializer(obj.images.all(), many=True).data
 
     def get_rating(self, obj):
         reviews = obj.reviews.all()
@@ -305,3 +304,31 @@ class AcademyNoticeSerializer(serializers.ModelSerializer):
                 AcademyNoticeAttachment.objects.create(notice=notice, file=image)
 
             return notice
+
+class AcademyImageSerializer(serializers.ModelSerializer):
+    id      = serializers.IntegerField(read_only=True)
+    image   = serializers.FileField(write_only=True)
+    uri     = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AcademyImage
+        fields = ["id", "image", "uri"]
+
+    def get_uri(self, obj):
+        return get_presigned_url(obj.image)
+
+    def validate_image(self, value):
+        ## 이미지 파일 형식 확인
+        if not value.name.endswith(('.jpg', '.jpeg', '.png')):
+            raise serializers.ValidationError("올바른 이미지 파일 형식이 아닙니다.")
+
+        return value
+
+    def create(self, validated_data):
+        academy = self.context['academy']
+        image = validated_data['image']
+        filename = image.name.split('/')[-1]
+        path = f"products/academies/{academy.uuid}/images/{filename}"
+        default_storage.save(path, image)
+
+        return AcademyImage.objects.create(academy=academy, image=path)
