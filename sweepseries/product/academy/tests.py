@@ -394,3 +394,46 @@ class AcademyNoticeTestCase(APITestCase):
             "type": "테스트",
         })
         self.assertEqual(response.status_code, 400)
+
+    def test_academy_notice_update(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.patch(f"{self.url}1/", {
+            "title": "제목",
+            "content": "내용",
+        })
+        self.assertEqual(response.status_code, 200)
+
+    def test_academy_notice_update_fail(self):
+        ## 1. empty data
+        self.client.force_authenticate(user=self.user)
+        response = self.client.patch(f"{self.url}1/", {
+            "title": "",
+            "content": "",
+        })
+        self.assertEqual(response.status_code, 400)
+
+        ## 2. no auth
+        user = User.objects.get(username="admin")
+        self.client.force_authenticate(user=user)
+        response = self.client.patch(f"{self.url}1/", {
+            "title": "제목",
+            "content": "내용",
+        })
+        self.assertEqual(response.status_code, 403)
+
+    def test_academy_notice_delete(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.delete(f"{self.url}1/")
+        self.assertEqual(response.status_code, 204)
+
+    def test_academy_notice_delete_fail(self):
+        ## 1. no auth
+        user = User.objects.get(username="admin")
+        self.client.force_authenticate(user=user)
+        response = self.client.delete(f"{self.url}1/")
+        self.assertEqual(response.status_code, 403)
+
+        ## 2. not found
+        self.client.force_authenticate(user=self.user)
+        response = self.client.delete(f"{self.url}999/")
+        self.assertEqual(response.status_code, 404)

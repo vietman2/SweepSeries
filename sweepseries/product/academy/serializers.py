@@ -287,6 +287,14 @@ class AcademyNoticeSerializer(serializers.ModelSerializer):
         default_storage.save(path, file)
         return path
 
+    def update(self, instance, validated_data):
+        ## only update title and content
+        instance.title = validated_data.get('title', instance.title)
+        instance.content = validated_data.get('content', instance.content)
+        instance.save()
+
+        return instance
+
     def create(self, validated_data):
         academy = self.context['academy']
 
