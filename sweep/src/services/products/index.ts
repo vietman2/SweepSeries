@@ -19,7 +19,7 @@ import {
   updateCoachIntro,
   updateCoachSNS,
 } from "./coach";
-import { createNotice, getNotices, getNotice } from "./notices";
+import { createNotice, getNotices, getNotice, deleteNotice, editNotice } from "./notices";
 import { getTargets, getPositions, createProgram, getPrograms } from "./programs";
 
 export {
@@ -43,6 +43,8 @@ export {
   createNotice,
   getNotices,
   getNotice,
+  deleteNotice,
+  editNotice,
   getTargets,
   getPositions,
   getPrograms,

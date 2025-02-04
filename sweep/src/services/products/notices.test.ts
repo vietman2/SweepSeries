@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { createNotice, getNotices, getNotice } from "./notices";
+import { createNotice, getNotices, getNotice, deleteNotice, editNotice } from "./notices";
 
 jest.mock("form-data", () => {
   return jest.fn().mockImplementation(() => {
@@ -84,6 +84,43 @@ describe("getNotice", () => {
     jest.spyOn(axios, "get").mockRejectedValue(null);
 
     const result = await getNotice("1", "2");
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("deleteNotice", () => {
+  it("should delete a notice", async () => {
+    jest.spyOn(axios, "delete").mockResolvedValue({ data: "data" });
+
+    const result = await deleteNotice("1", "2");
+
+    expect(result).toEqual(true);
+  });
+
+  it("should return null when an error occurs", async () => {
+    jest.spyOn(axios, "delete").mockRejectedValue(null);
+
+    const result = await deleteNotice("1", "2");
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("editNotice", () => {
+  it("should edit a notice", async () => {
+    const response = { data: "data" };
+    jest.spyOn(axios, "patch").mockResolvedValue(response);
+
+    const result = await editNotice("1", "2", "title", "content");
+
+    expect(result).toEqual(response.data);
+  });
+
+  it("should return null when an error occurs", async () => {
+    jest.spyOn(axios, "patch").mockRejectedValue(null);
+
+    const result = await editNotice("1", "2", "title", "content");
 
     expect(result).toBeNull();
   });

@@ -59,3 +59,36 @@ export async function getNotice(academyId: string, noticeId: string) {
     return null;
   }
 }
+
+export async function deleteNotice(academyId: string, noticeId: string) {
+  try {
+    await axios.delete(
+      `/v1/academies/${academyId}/notices/${noticeId}/`
+    );
+
+    return true;
+  } catch {
+    return null;
+  }
+}
+
+export async function editNotice(
+  academyId: string,
+  noticeId: string,
+  title: string,
+  content: string
+) {
+  try {
+    const response = await axios.patch(
+      `/v1/academies/${academyId}/notices/${noticeId}/`,
+      {
+        title,
+        content,
+      }
+    );
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
