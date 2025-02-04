@@ -10,6 +10,8 @@ import {
   updateFacilities,
   updateBusinessHours,
   updateLogo,
+  uploadImage,
+  deleteImage,
 } from "./academy";
 
 jest.mock("form-data", () => {
@@ -223,6 +225,49 @@ describe("updateLogo", () => {
     jest.spyOn(axios, "patch").mockRejectedValue(null);
 
     const result = await updateLogo("uuid", file);
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("uploadImage", () => {
+  const file = {
+    uri: "uri",
+    fileName: "fileName",
+    width: 1,
+    height: 1,
+  };
+
+  it("should upload image", async () => {
+    jest.spyOn(axios, "post").mockResolvedValue({ data: {} });
+
+    const result = await uploadImage("uuid", [file]);
+
+    expect(result).toEqual({});
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "post").mockRejectedValue(null);
+
+    const result = await uploadImage("uuid", [file]);
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("deleteImage", () => {
+  it("should delete image", async () => {
+    jest.spyOn(axios, "delete").mockResolvedValue({});
+
+    const result = await deleteImage("uuid", 1);
+
+    expect(result).toBe(true);
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "delete").mockRejectedValue(null);
+
+    const result = await deleteImage("uuid", 1);
 
     expect(result).toBeNull();
   });

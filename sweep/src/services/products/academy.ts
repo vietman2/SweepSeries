@@ -215,3 +215,35 @@ export async function updateLogo(uuid: string, logo: ImagePickerAsset) {
     return null;
   }
 }
+
+export async function uploadImage(uuid: string, images: ImagePickerAsset[]) {
+  const form = new FormData();
+  images.forEach((image) => {
+    form.append("images", {
+      uri: image.uri,
+      name: image.fileName,
+    });
+  });
+
+  try {
+    const response = await axios.post(`/v1/academies/${uuid}/images/`, form, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
+export async function deleteImage(uuid: string, imageId: number) {
+  try {
+    await axios.delete(`/v1/academies/${uuid}/images/${imageId}/`);
+
+    return true;
+  } catch {
+    return null;
+  }
+}

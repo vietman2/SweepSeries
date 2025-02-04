@@ -8,6 +8,8 @@ import {
   updateFacilities,
   updateBusinessHours,
   updateLogo,
+  uploadImage,
+  deleteImage,
 } from "./academy";
 import {
   createCoach,
@@ -33,6 +35,8 @@ export {
   updateFacilities,
   updateBusinessHours,
   updateLogo,
+  uploadImage,
+  deleteImage,
   createCoach,
   getCoaches,
   getCoachDetails,
