@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 import { launchImageLibraryAsync, ImagePickerAsset } from "expo-image-picker";
@@ -6,7 +6,7 @@ import { launchImageLibraryAsync, ImagePickerAsset } from "expo-image-picker";
 import { Divider } from "@components/Dividers";
 import { AppIcon } from "@components/Icons";
 import { SimpleModal } from "@components/Modals";
-import { Scroll } from "@components/ScrollView";
+import { ScrollView } from "@components/ScrollView";
 import { Text } from "@components/Texts";
 import { useFront } from "@contexts/front";
 import { useTheme } from "@contexts/theme";
@@ -27,6 +27,7 @@ export function NoticeManagement() {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const [refreshCount, setRefreshCount] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { uuid } = useFront();
   const { theme } = useTheme();
@@ -80,6 +81,8 @@ export function NoticeManagement() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+
       const response = await getNotices(uuid);
 
       if (response) {
@@ -87,14 +90,16 @@ export function NoticeManagement() {
       } else {
         setNotices([]);
       }
+
+      setLoading(false);
     };
 
     fetchData();
   }, [refreshCount]);
 
   return (
-    <>
-      <Scroll style={styles.container}>
+    <View style={styles.container}>
+      <ScrollView refreshing={loading} onRefresh={handleRefresh}>
         <View style={styles.content}>
           <View style={styles.header}>
             <Text style={styles.title}>내 소식</Text>
@@ -119,7 +124,7 @@ export function NoticeManagement() {
             </View>
           ))}
         </View>
-      </Scroll>
+      </ScrollView>
       <SimpleModal
         title="소식 작성"
         buttonText="저장"
@@ -188,7 +193,7 @@ export function NoticeManagement() {
           </View>
         </View>
       </SimpleModal>
-    </>
+    </View>
   );
 }
 
