@@ -195,3 +195,23 @@ export async function updateBusinessHours(
     return null;
   }
 }
+
+export async function updateLogo(uuid: string, logo: ImagePickerAsset) {
+  const form = new FormData();
+  form.append("main_logo", {
+    uri: logo.uri,
+    name: logo.fileName,
+  });
+
+  try {
+    const response = await axios.patch(`/v1/academies/${uuid}/logo/`, form, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}

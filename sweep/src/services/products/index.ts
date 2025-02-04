@@ -7,6 +7,7 @@ import {
   updateAcademyIntroduction,
   updateFacilities,
   updateBusinessHours,
+  updateLogo,
 } from "./academy";
 import {
   createCoach,
@@ -31,6 +32,7 @@ export {
   updateAcademyIntroduction,
   updateFacilities,
   updateBusinessHours,
+  updateLogo,
   createCoach,
   getCoaches,
   getCoachDetails,
