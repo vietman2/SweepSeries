@@ -2,14 +2,15 @@ import React, { useEffect, useState } from "react";
 import {
   Dimensions,
   Image,
+  ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
 } from "react-native";
 
+import { ImagesModal } from "./ImagesModal";
 import { LogoModal } from "./LogoModal";
 import { AppIcon } from "@components/Icons";
-import { SimpleModal } from "@components/Modals";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
 import { AcademyDetailType } from "@models/products";
@@ -30,20 +31,12 @@ export function AcademyProfile({ academy, pro, onRefresh }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  const hideImageModal = () => {
-    setImagesModalVisible(false);
-  };
-
   const openImageModal = () => {
     setImagesModalVisible(true);
   };
 
   const openLogoModal = () => {
     setLogoModalVisible(true);
-  };
-
-  const changeImagesSubmit = async () => {
-    hideImageModal();
   };
 
   useEffect(() => {
@@ -54,7 +47,7 @@ export function AcademyProfile({ academy, pro, onRefresh }: Readonly<Props>) {
 
   return (
     <>
-      <View style={styles.container} pointerEvents={pro ? "box-none" : "none"}>
+      <View style={styles.container} pointerEvents="box-none">
         <View style={styles.wrapper}>
           {pro && (
             <>
@@ -77,7 +70,19 @@ export function AcademyProfile({ academy, pro, onRefresh }: Readonly<Props>) {
             </>
           )}
           {academy.images.length > 0 ? (
-            <Image source={{ uri: academy.images[0] }} style={styles.image} />
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              pagingEnabled
+            >
+              {academy.images.map((image) => (
+                <Image
+                  key={image.id}
+                  source={{ uri: image.uri }}
+                  style={styles.image}
+                />
+              ))}
+            </ScrollView>
           ) : (
             <View style={styles.placeholderImage} />
           )}
@@ -99,15 +104,12 @@ export function AcademyProfile({ academy, pro, onRefresh }: Readonly<Props>) {
           </View>
         </View>
       </View>
-      <SimpleModal
-        title="사진 변경"
-        buttonText="저장하기"
-        visible={imagesModalVisible}
-        hideModal={hideImageModal}
-        onButtonPress={changeImagesSubmit}
-      >
-        <View />
-      </SimpleModal>
+      <ImagesModal
+        modalOpen={imagesModalVisible}
+        setModalOpen={setImagesModalVisible}
+        uuid={academy.uuid}
+        currentImages={academy.images}
+      />
       <LogoModal
         modalOpen={logoModalVisible}
         setModalOpen={setLogoModalVisible}
@@ -156,6 +158,7 @@ const createStyles = (theme: ThemeColorType) =>
       flex: 1,
       width,
       height: (width * 9) / 16,
+      resizeMode: "contain",
       zIndex: 0,
     },
     header: {
