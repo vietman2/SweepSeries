@@ -31,7 +31,9 @@ from community.post.views import PostViewSet, PostReportViewSet
 from community.tag.views import TagViewSet
 
 ## Product
-from product.academy.views import AcademyViewSet, FacilityViewSet, AcademyNoticeViewSet
+from product.academy.views import (
+    AcademyViewSet, FacilityViewSet, AcademyNoticeViewSet, AcademyImageViewSet
+)
 from product.coach.views import CoachViewSet
 from product.program.views import ProgramViewSet
 
@@ -60,6 +62,9 @@ router.register(r'tags', TagViewSet, basename='tags')
 
 router.register(
     r'academies/(?P<academy_id>[^/.]+)/notices', AcademyNoticeViewSet, basename='academy-notices'
+)
+router.register(
+    r'academies/(?P<academy_id>[^/.]+)/images', AcademyImageViewSet, basename='academy-images'
 )
 router.register(r'academies', AcademyViewSet, basename='academies')
 router.register(r'facilities', FacilityViewSet, basename='facilities')
