@@ -1,22 +1,31 @@
 import { fireEvent } from "@testing-library/react-native";
 
 import { AcademyProfile } from "./AcademyProfile";
-import { renderWithProviders } from "@utils/test-utils";
 import { sampleAcademyDetail } from "@testdata/products";
+import { renderWithProviders } from "@utils/test-utils";
+
+jest.mock("./ImagesModal", () => ({
+  ImagesModal: () => "ImagesModal",
+}));
+jest.mock("./LogoModal", () => ({
+  LogoModal: () => "LogoModal",
+}));
 
 describe("<AcademyProfile />", () => {
-  it("renders correctly", () => {
+  it("renders normal mode correctly", () => {
     renderWithProviders(<AcademyProfile academy={sampleAcademyDetail} />);
   });
 
-  it("renders pro mode and handles image modal correctly", () => {
+  it("handles pro mode modals correctly and no images", () => {
     const { getByTestId } = renderWithProviders(
-      <AcademyProfile academy={{ ...sampleAcademyDetail, images: [] }} pro />
+      <AcademyProfile
+        academy={{ ...sampleAcademyDetail, images: [] }}
+        pro
+        onRefresh={jest.fn()}
+      />
     );
 
-    fireEvent.press(getByTestId("open-modal"));
-    fireEvent.press(getByTestId("hide"));
-    fireEvent.press(getByTestId("open-modal"));
-    fireEvent.press(getByTestId("저장하기"));
+    fireEvent.press(getByTestId("open-image-modal"));
+    fireEvent.press(getByTestId("open-logo-modal"));
   });
 });

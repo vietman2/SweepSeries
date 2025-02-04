@@ -22,8 +22,11 @@ export function ProfileManagement() {
   const [facilityOptions, setFacilityOptions] = useState<FacilityType[]>([]);
   const [refreshCount, setRefreshCount] = useState<number>(0);
 
+  const { refresh } = useFront();
+
   const onRefresh = () => {
     setRefreshCount((prev) => prev + 1);
+    refresh();
   };
 
   const { uuid } = useFront();
@@ -48,7 +51,7 @@ export function ProfileManagement() {
 
   return (
     <Scroll style={styles.container}>
-      <AcademyProfile pro academy={academy} />
+      <AcademyProfile pro academy={academy} onRefresh={onRefresh} />
       <View style={styles.content}>
         <Divider />
         <Introduction

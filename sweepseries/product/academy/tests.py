@@ -1,6 +1,7 @@
 import json
 from io import BytesIO
 from unittest.mock import patch
+from botocore.exceptions import ClientError
 import requests_mock
 from PIL import Image
 from django.conf import settings
@@ -223,6 +224,25 @@ class AcademyTestCase(APITestCase):
         response = self.client.post(f"{self.url}123e4567-e89b-12d3-a456-426614174111/reject/")
         self.assertEqual(response.status_code, 400)
 
+    def test_academy_employees(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(f"{self.url}{self.academy.uuid}/employees/")
+        self.assertEqual(response.status_code, 200)
+
+class AcademyUpdatesTestCase(APITestCase):
+    fixtures = [
+        "core/data/test/users.json", "core/data/initial/regions.json",
+        "core/data/test/academies.json", "core/data/initial/facilities.json",
+    ]
+
+    def setUp(self):
+        self.url = "/v1/academies/"
+        self.user = User.objects.get(username="normaluser")
+        self.academy = Academy.objects.get(name="아카데미 1")
+        self.test_image1 = SimpleUploadedFile(
+            "test1.png", b"file_content", content_type="image/png"
+        )
+
     def test_update_introduction(self):
         self.client.force_authenticate(user=self.user)
         response = self.client.patch(f"{self.url}{self.academy.uuid}/introduction/", {
@@ -298,10 +318,28 @@ class AcademyTestCase(APITestCase):
         )
         self.assertEqual(response.status_code, 400)
 
-    def test_academy_employees(self):
+    @patch('django.core.files.storage.default_storage.save')
+    def test_academy_lodo_update(self, mock_save):
         self.client.force_authenticate(user=self.user)
-        response = self.client.get(f"{self.url}{self.academy.uuid}/employees/")
+        mock_save.return_value = 'test.png'
+        response = self.client.patch(f"{self.url}{self.academy.uuid}/logo/", {
+            "main_logo": self.test_image1
+        })
         self.assertEqual(response.status_code, 200)
+
+    @patch('django.core.files.storage.default_storage.save')
+    def test_academy_lodo_update_fail(self, mock_save):
+        ## no image
+        self.client.force_authenticate(user=self.user)
+        response = self.client.patch(f"{self.url}{self.academy.uuid}/logo/")
+        self.assertEqual(response.status_code, 400)
+
+        ## upload fail
+        mock_save.side_effect = ClientError(error_response={}, operation_name='test')
+        response = self.client.patch(f"{self.url}{self.academy.uuid}/logo/", {
+            "main_logo": self.test_image1
+        })
+        self.assertEqual(response.status_code, 400)
 
 class FacilityTestCase(APITestCase):
     fixtures = ["core/data/initial/facilities.json"]
@@ -427,6 +465,62 @@ class AcademyNoticeTestCase(APITestCase):
         self.assertEqual(response.status_code, 204)
 
     def test_academy_notice_delete_fail(self):
+        ## 1. no auth
+        user = User.objects.get(username="admin")
+        self.client.force_authenticate(user=user)
+        response = self.client.delete(f"{self.url}1/")
+        self.assertEqual(response.status_code, 403)
+
+        ## 2. not found
+        self.client.force_authenticate(user=self.user)
+        response = self.client.delete(f"{self.url}999/")
+        self.assertEqual(response.status_code, 404)
+
+class AcademyImageTestCase(APITestCase):
+    fixtures = [
+        "core/data/test/users.json", "core/data/initial/regions.json",
+        "core/data/test/academies.json", "core/data/initial/facilities.json",
+    ]
+
+    def setUp(self):
+        self.url = "/v1/academies/123e4567-e89b-12d3-a456-426614174999/images/"
+        self.user = User.objects.get(username="normaluser")
+        self.test_image1 = SimpleUploadedFile(
+            "test1.png", b"file_content", content_type="image/png"
+        )
+
+    @patch('django.core.files.storage.default_storage.save')
+    def test_upload_image(self, mock_save):
+        self.client.force_authenticate(user=self.user)
+        mock_save.return_value = 'test.png'
+        response = self.client.post(self.url, {"images": [self.test_image1]}, format="multipart")
+        self.assertEqual(response.status_code, 201)
+
+    def test_upload_image_fail(self):
+        ## 1. no auth
+        user = User.objects.get(username="admin")
+        self.client.force_authenticate(user=user)
+        response = self.client.post(self.url, {"images": [self.test_image1]}, format="multipart")
+        self.assertEqual(response.status_code, 403)
+
+        ## 2. no image
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post(self.url, {}, format="multipart")
+        self.assertEqual(response.status_code, 400)
+
+        ## 3. invalid image
+        bad_image = SimpleUploadedFile(
+            "test1.txt", b"file_content", content_type="text/plain"
+        )
+        response = self.client.post(self.url, {"images": [bad_image]}, format="multipart")
+        self.assertEqual(response.status_code, 400)
+
+    def test_delete_image(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.delete(f"{self.url}1/")
+        self.assertEqual(response.status_code, 204)
+
+    def test_delete_image_fail(self):
         ## 1. no auth
         user = User.objects.get(username="admin")
         self.client.force_authenticate(user=user)

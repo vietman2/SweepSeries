@@ -12,6 +12,7 @@ interface FrontContextType {
   headerText: string;
   selectAcademy: (academy: AcademySimpleType) => void;
   selectCoach: (coach: CoachSimpleType) => void;
+  refresh: () => void;
 }
 
 const FrontContext = createContext<FrontContextType | undefined>(undefined);
@@ -25,6 +26,11 @@ export const FrontProvider: React.FC<{ children: React.ReactNode }> = ({
   const [uuid, setUuid] = useState<string>("");
   const [headerImage, setHeaderImage] = useState<string>("");
   const [headerText, setHeaderText] = useState<string>("");
+  const [refreshCount, setRefreshCount] = useState<number>(0);
+
+  const handleRefresh = () => {
+    setRefreshCount((prev) => prev + 1);
+  };
 
   const selectAcademy = (academy: AcademySimpleType) => {
     setUuid(academy.uuid);
@@ -63,7 +69,7 @@ export const FrontProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     fetchData();
-  }, []);
+  }, [refreshCount]);
 
   const value = useMemo(
     () => ({
@@ -75,6 +81,7 @@ export const FrontProvider: React.FC<{ children: React.ReactNode }> = ({
       headerText,
       selectAcademy,
       selectCoach,
+      refresh: handleRefresh,
     }),
     [mode, uuid, academies, coach, headerImage, headerText]
   );

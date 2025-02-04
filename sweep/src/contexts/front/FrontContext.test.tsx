@@ -9,7 +9,7 @@ import { sampleAcademies, sampleCoaches } from "@testdata/products";
 jest.unmock("@contexts/front");
 
 const TestComponent = () => {
-  const { selectAcademy, selectCoach } = useFront();
+  const { selectAcademy, selectCoach, refresh } = useFront();
 
   return (
     <View>
@@ -21,6 +21,7 @@ const TestComponent = () => {
         testID="selectCoach"
         onPress={() => selectCoach(sampleCoaches[0])}
       />
+      <TouchableOpacity testID="refresh" onPress={refresh} />
     </View>
   );
 };
@@ -43,6 +44,7 @@ describe("FrontProvider", () => {
     await waitFor(() => {
       fireEvent.press(getByTestId("selectAcademy"));
       fireEvent.press(getByTestId("selectCoach"));
+      fireEvent.press(getByTestId("refresh"));
     });
   });
 

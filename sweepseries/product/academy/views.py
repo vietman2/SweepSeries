@@ -1,4 +1,5 @@
 import json
+from botocore.exceptions import ClientError
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db.models import Q
 from django.utils import timezone
@@ -15,13 +16,14 @@ from core.utils import is_admin_page
 from product.coach.enums import CoachApplicationStatus
 from product.coach.serializers import CoachSimpleSerializer
 from .enums import DayChoices
-from .models import Academy, AcademyFacility, AcademyNotice, BusinessHours
+from .models import Academy, AcademyFacility, AcademyNotice, BusinessHours, AcademyImage
 from .permissions import IsAcademyOwner
 from .serializers import (
     AcademySimpleSerializer, AcademyRegisterSerializer, AcademyStatusSerializer,
-    AcademyDetailSerializer, AcademyNoticeSerializer, ConvenienceSerializer
+    AcademyDetailSerializer, AcademyNoticeSerializer, ConvenienceSerializer,
+    AcademyImageSerializer
 )
-from .utils import update_daily_schedule
+from .utils import update_daily_schedule, upload_logo
 
 class AcademyViewSet(ModelViewSet):
     queryset = Academy.objects.all()
@@ -265,6 +267,33 @@ class AcademyViewSet(ModelViewSet):
             }
         )
 
+    @extend_schema(summary="아카데미 로고 변경", tags=["아카데미"])
+    @action(detail=True, methods=['patch'])
+    def logo(self, request, pk=None): # pylint: disable=unused-argument
+        academy = self.get_object()
+        logo = request.FILES.get('main_logo', None)
+
+        if logo is None:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={"error": "로고를 입력해주세요."}
+            )
+
+        try:
+            uploaded_logo = upload_logo(academy.uuid, logo)
+            academy.logo = uploaded_logo
+            academy.save()
+        except ClientError:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={"error": "로고 업로드에 실패했습니다."}
+            )
+
+        return Response(
+            status=status.HTTP_200_OK,
+            data={"message": "로고가 변경되었습니다."}
+        )
+
 class FacilityViewSet(ModelViewSet):
     queryset = AcademyFacility.objects.all()
     serializer_class = ConvenienceSerializer
@@ -381,3 +410,63 @@ class AcademyNoticeViewSet(ModelViewSet):
             status=status.HTTP_200_OK,
             data=serializer.data
         )
+
+class AcademyImageViewSet(ModelViewSet):
+    queryset = AcademyImage.objects.all()
+    serializer_class = AcademyNoticeSerializer
+    permission_classes = [IsAuthenticated]
+    http_method_names = ['post', 'delete']
+
+    @extend_schema(summary="이미지 등록", tags=["아카데미"])
+    def create(self, request, *args, **kwargs):
+        academy = Academy.objects.get(uuid=kwargs['academy_id'])
+        images = request.FILES.getlist('images')
+
+        if len(images) == 0:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={"error": "이미지를 입력해주세요."}
+            )
+
+        user = request.user
+
+        if user != academy.owner:
+            return Response(
+                status=status.HTTP_403_FORBIDDEN,
+                data={"error": "권한이 없습니다."}
+            )
+
+        serializer_data = [{"image": image} for image in images]
+        serializer = AcademyImageSerializer(
+            data=serializer_data, many=True, context={"academy": academy}
+        )
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        except ValidationError as e:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={"error": e.detail}
+            )
+
+        return Response(
+            status=status.HTTP_201_CREATED,
+            data=serializer.data
+        )
+
+    @extend_schema(summary="이미지 삭제", tags=["아카데미"])
+    def destroy(self, request, *args, **kwargs):
+        image = self.get_object()
+
+        user = request.user
+        academy = image.academy
+
+        if user != academy.owner:
+            return Response(
+                status=status.HTTP_403_FORBIDDEN,
+                data={"error": "권한이 없습니다."}
+            )
+
+        image.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

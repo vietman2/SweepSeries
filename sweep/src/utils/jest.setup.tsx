@@ -362,6 +362,7 @@ jest.mock("@contexts/front", () => ({
     headerText: "",
     selectAcademy: jest.fn(),
     selectCoach: jest.fn(),
+    refresh: jest.fn(),
   }),
 }));
 jest.mock("@contexts/signup", () => ({
