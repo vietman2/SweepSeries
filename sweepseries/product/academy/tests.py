@@ -303,6 +303,29 @@ class AcademyTestCase(APITestCase):
         response = self.client.get(f"{self.url}{self.academy.uuid}/employees/")
         self.assertEqual(response.status_code, 200)
 
+    @patch('django.core.files.storage.default_storage.save')
+    def test_academy_lodo_update(self, mock_save):
+        self.client.force_authenticate(user=self.user)
+        mock_save.return_value = 'test.png'
+        response = self.client.patch(f"{self.url}{self.academy.uuid}/logo/", {
+            "main_logo": self.test_image1
+        })
+        self.assertEqual(response.status_code, 200)
+
+    @patch('django.core.files.storage.default_storage.save')
+    def test_academy_lodo_update_fail(self, mock_save):
+        ## no image
+        self.client.force_authenticate(user=self.user)
+        response = self.client.patch(f"{self.url}{self.academy.uuid}/logo/")
+        self.assertEqual(response.status_code, 400)
+
+        ## upload fail
+        mock_save.side_effect = Exception
+        response = self.client.patch(f"{self.url}{self.academy.uuid}/logo/", {
+            "main_logo": self.test_image1
+        })
+        self.assertEqual(response.status_code, 400)
+
 class FacilityTestCase(APITestCase):
     fixtures = ["core/data/initial/facilities.json"]
 

@@ -21,7 +21,7 @@ from .serializers import (
     AcademySimpleSerializer, AcademyRegisterSerializer, AcademyStatusSerializer,
     AcademyDetailSerializer, AcademyNoticeSerializer, ConvenienceSerializer
 )
-from .utils import update_daily_schedule
+from .utils import update_daily_schedule, upload_logo
 
 class AcademyViewSet(ModelViewSet):
     queryset = Academy.objects.all()
@@ -263,6 +263,34 @@ class AcademyViewSet(ModelViewSet):
                 "accepted": accepted_serializer.data,
                 "pending": pending_serializer.data
             }
+        )
+
+
+    @extend_schema(summary="아카데미 로고 변경", tags=["아카데미"])
+    @action(detail=True, methods=['patch'])
+    def logo(self, request, pk=None): # pylint: disable=unused-argument
+        academy = self.get_object()
+        logo = request.FILES.get('main_logo', None)
+
+        if logo is None:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={"error": "로고를 입력해주세요."}
+            )
+
+        try:
+            uploaded_logo = upload_logo(academy.uuid, logo)
+            academy.logo = uploaded_logo
+            academy.save()
+        except Exception:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={"error": "로고 업로드에 실패했습니다."}
+            )
+
+        return Response(
+            status=status.HTTP_200_OK,
+            data={"message": "로고가 변경되었습니다."}
         )
 
 class FacilityViewSet(ModelViewSet):
