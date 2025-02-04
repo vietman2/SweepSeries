@@ -29,6 +29,7 @@ const daily = {
 };
 
 export const sampleAcademyDetail: AcademyDetailType = {
+  uuid: "1",
   name: "Catch B 아카데미",
   address: "인천시 서구 청라한내로 72번길 17, 416호",
   rating: 4.2,
@@ -150,9 +151,18 @@ export const sampleAcademyDetail: AcademyDetailType = {
   ],
   logo: "https://yaguin.com/lf_img/lfi15856190990.jpeg",
   images: [
-    "https://kr.object.ncloudstorage.com/sweepdev/test_images/academy1.jpg",
-    "https://kr.object.ncloudstorage.com/sweepdev/test_images/academy2.jpg",
-    "https://kr.object.ncloudstorage.com/sweepdev/test_images/academy3.jpg",
+    {
+      id: 1,
+      uri: "https://kr.object.ncloudstorage.com/sweepdev/test_images/academy1.jpg",
+    },
+    {
+      id: 2,
+      uri: "https://kr.object.ncloudstorage.com/sweepdev/test_images/academy2.jpg",
+    },
+    {
+      id: 3,
+      uri: "https://kr.object.ncloudstorage.com/sweepdev/test_images/academy3.jpg",
+    },
   ],
   map: "https://kr.object.ncloudstorage.com/sweepdev/test_images/map.png",
 };
