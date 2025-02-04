@@ -279,7 +279,7 @@ class AcademyNoticeSerializer(serializers.ModelSerializer):
 
         raise serializers.ValidationError("올바른 공지 타입을 입력해주세요.")
 
-    def upload_image(self, **kwargs):
+    def upload_image(self):
         file = self.validated_data['image']
         filename = file.name.split('/')[-1]
         academy = self.context['academy']
