@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dimensions,
   Image,
@@ -7,6 +7,7 @@ import {
   View,
 } from "react-native";
 
+import { LogoModal } from "./LogoModal";
 import { AppIcon } from "@components/Icons";
 import { SimpleModal } from "@components/Modals";
 import { Text } from "@components/Texts";
@@ -19,45 +20,64 @@ const { width } = Dimensions.get("window");
 interface Props {
   academy: AcademyDetailType;
   pro?: boolean;
+  onRefresh?: () => void;
 }
 
-export function AcademyProfile({ academy, pro }: Readonly<Props>) {
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
+export function AcademyProfile({ academy, pro, onRefresh }: Readonly<Props>) {
+  const [logoModalVisible, setLogoModalVisible] = useState<boolean>(false);
+  const [imagesModalVisible, setImagesModalVisible] = useState<boolean>(false);
 
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  const hideModal = () => {
-    setModalVisible(false);
+  const hideImageModal = () => {
+    setImagesModalVisible(false);
   };
 
-  const openModal = () => {
-    setModalVisible(true);
+  const openImageModal = () => {
+    setImagesModalVisible(true);
   };
 
-  const editProfileImage = async () => {
-    hideModal();
+  const openLogoModal = () => {
+    setLogoModalVisible(true);
   };
+
+  const changeImagesSubmit = async () => {
+    hideImageModal();
+  };
+
+  useEffect(() => {
+    if (pro && onRefresh) {
+      onRefresh();
+    }
+  }, [logoModalVisible, imagesModalVisible]);
 
   return (
     <>
       <View style={styles.container} pointerEvents={pro ? "box-none" : "none"}>
         <View style={styles.wrapper}>
           {pro && (
-            <TouchableOpacity
-              style={styles.button}
-              onPress={openModal}
-              testID="open-modal"
-            >
-              <AppIcon icon="images" size={20} color="white" />
-              <Text style={styles.buttonText}>대표 사진 변경</Text>
-            </TouchableOpacity>
+            <>
+              <TouchableOpacity
+                style={[styles.button, styles.imagesButton]}
+                onPress={openImageModal}
+                testID="open-image-modal"
+              >
+                <AppIcon icon="images" size={20} color="white" />
+                <Text style={styles.buttonText}>대표 사진 변경</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.logoButton]}
+                onPress={openLogoModal}
+                testID="open-logo-modal"
+              >
+                <AppIcon icon="images" size={20} color="white" />
+                <Text style={styles.buttonText}>아카데미 로고 변경</Text>
+              </TouchableOpacity>
+            </>
           )}
           {academy.images.length > 0 ? (
-            <Image
-              source={{ uri: academy.images[0] }}
-              style={styles.image}
-            />
+            <Image source={{ uri: academy.images[0] }} style={styles.image} />
           ) : (
             <View style={styles.placeholderImage} />
           )}
@@ -69,25 +89,31 @@ export function AcademyProfile({ academy, pro }: Readonly<Props>) {
           </View>
           <View style={styles.horizontal}>
             <AppIcon icon="location" size={20} color={theme.lowEmphasis} />
-            <Text style={styles.infoText}>
-              {academy.address}
-            </Text>
+            <Text style={styles.infoText}>{academy.address}</Text>
           </View>
           <View style={styles.horizontal}>
             <AppIcon icon="star" size={20} color="#F2B517" />
-            <Text style={styles.infoText}>{academy.rating} ({academy.num_reviews})</Text>
+            <Text style={styles.infoText}>
+              {academy.rating} ({academy.num_reviews})
+            </Text>
           </View>
         </View>
       </View>
       <SimpleModal
-        title="아카데미 로고 변경"
+        title="사진 변경"
         buttonText="저장하기"
-        visible={modalVisible}
-        hideModal={hideModal}
-        onButtonPress={editProfileImage}
+        visible={imagesModalVisible}
+        hideModal={hideImageModal}
+        onButtonPress={changeImagesSubmit}
       >
         <View />
       </SimpleModal>
+      <LogoModal
+        modalOpen={logoModalVisible}
+        setModalOpen={setLogoModalVisible}
+        uuid={academy.uuid}
+        currentLogo={academy.logo}
+      />
     </>
   );
 }
@@ -109,12 +135,19 @@ const createStyles = (theme: ThemeColorType) =>
       paddingHorizontal: 8,
       paddingVertical: 4,
       gap: 8,
-      position: "absolute",
-      right: 8,
-      bottom: 8,
       borderRadius: 8,
       backgroundColor: "#00000050",
       zIndex: 200,
+    },
+    imagesButton: {
+      position: "absolute",
+      right: 8,
+      bottom: 8,
+    },
+    logoButton: {
+      position: "absolute",
+      left: 8,
+      top: 8,
     },
     buttonText: {
       color: "white",
