@@ -1,7 +1,7 @@
 import json
-from botocore.exceptions import ClientError
 from io import BytesIO
 from unittest.mock import patch
+from botocore.exceptions import ClientError
 import requests_mock
 from PIL import Image
 from django.conf import settings
