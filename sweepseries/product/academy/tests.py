@@ -223,6 +223,26 @@ class AcademyTestCase(APITestCase):
         response = self.client.post(f"{self.url}123e4567-e89b-12d3-a456-426614174111/reject/")
         self.assertEqual(response.status_code, 400)
 
+    def test_academy_employees(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(f"{self.url}{self.academy.uuid}/employees/")
+        self.assertEqual(response.status_code, 200)
+
+class AcademyUpdatesTestCase(APITestCase):
+    fixtures = [
+        "core/data/test/users.json", "core/data/initial/regions.json",
+        "core/data/test/academies.json", "core/data/initial/facilities.json",
+        "core/data/test/coaches.json", "core/data/initial/professions.json",
+    ]
+
+    def setUp(self):
+        self.url = "/v1/academies/"
+        self.user = User.objects.get(username="normaluser")
+        self.academy = Academy.objects.get(name="아카데미 1")
+        self.test_image1 = SimpleUploadedFile(
+            "test1.png", b"file_content", content_type="image/png"
+        )
+
     def test_update_introduction(self):
         self.client.force_authenticate(user=self.user)
         response = self.client.patch(f"{self.url}{self.academy.uuid}/introduction/", {
@@ -297,11 +317,6 @@ class AcademyTestCase(APITestCase):
             f"{self.url}{self.academy.uuid}/hours/", {"data": json.dumps(data)}
         )
         self.assertEqual(response.status_code, 400)
-
-    def test_academy_employees(self):
-        self.client.force_authenticate(user=self.user)
-        response = self.client.get(f"{self.url}{self.academy.uuid}/employees/")
-        self.assertEqual(response.status_code, 200)
 
     @patch('django.core.files.storage.default_storage.save')
     def test_academy_lodo_update(self, mock_save):
