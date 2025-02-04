@@ -72,6 +72,14 @@
     }
   },
   {
+    "model": "academy.academyimage",
+    "pk": 1,
+    "fields": {
+      "academy": "123e4567-e89b-12d3-a456-426614174333",
+      "image": "products/academies/123e4567-e89b-12d3-a456-426614174333/images/IMG_0001.jpg"
+    }
+  },
+  {
     "model": "address.address",
     "pk": 1,
     "fields": {
