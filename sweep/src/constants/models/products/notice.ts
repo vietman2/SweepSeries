@@ -3,4 +3,5 @@ export type NoticeSimpleType = {
   title: string;
   content: string;
   updated_at: string;
+  image?: string;
 };

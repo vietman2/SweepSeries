@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
@@ -15,6 +15,9 @@ export function NoticeSimple({ notice }: Readonly<Props>) {
 
   return (
     <View style={styles.container}>
+      {notice.image && (
+        <Image source={{ uri: notice.image }} style={styles.image} />
+      )}
       <View style={styles.content}>
         <View style={styles.wrapper}>
           <Text style={styles.title} numberOfLines={2}>
@@ -39,7 +42,7 @@ const createStyles = (theme: ThemeColorType) =>
     image: {
       width: 115,
       height: 115,
-      borderRadius: 8,
+      borderRadius: 4,
     },
     content: {
       flex: 1,

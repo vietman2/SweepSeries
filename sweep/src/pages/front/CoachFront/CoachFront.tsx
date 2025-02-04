@@ -1,5 +1,8 @@
 import { Dimensions, View } from "react-native";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import {
+  createMaterialTopTabNavigator,
+  MaterialTopTabBarProps,
+} from "@react-navigation/material-top-tabs";
 
 import { CoachProfile } from "./CoachProfile/CoachProfile";
 import { TabBar } from "@components/Tabs";
@@ -9,25 +12,21 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
 const Placeholder = () => <View />;
 
-interface Props {
-  uuid: string;
-}
-
-export function CoachFront({ uuid }: Readonly<Props>) {
-  const Profile = () => <CoachProfile uuid={uuid} />;
-
+export function CoachFront() {
   return (
     <Tab.Navigator
       initialRouteName="profile"
       initialLayout={{ width: screenWidth, height: screenHeight }}
-      tabBar={(props) => <TabBar {...props} scrollable />}
+      tabBar={(props: MaterialTopTabBarProps) => (
+        <TabBar {...props} scrollable />
+      )}
       screenOptions={{
         tabBarScrollEnabled: true,
       }}
     >
       <Tab.Screen
         name="profile"
-        component={Profile}
+        component={CoachProfile}
         options={{
           title: "프로필",
         }}

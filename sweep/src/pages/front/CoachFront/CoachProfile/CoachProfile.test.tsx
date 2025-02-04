@@ -7,16 +7,12 @@ import { renderWithProviders } from "@utils/test-utils";
 
 describe("<CoachProfile />", () => {
   it("handles data fetch fail", async () => {
-    jest
-      .spyOn(CoachesAPI, "getCoachDetails")
-      .mockResolvedValue(null);
+    jest.spyOn(CoachesAPI, "getCoachDetails").mockResolvedValue(null);
 
-    renderWithProviders(
-      <CoachProfile uuid="uuid" />
-    );
+    renderWithProviders(<CoachProfile />);
 
     await waitFor(() => {
-        expect("LoadingComponent").toBeTruthy();
+      expect("LoadingComponent").toBeTruthy();
     });
   });
 
@@ -28,7 +24,7 @@ describe("<CoachProfile />", () => {
     jest.spyOn(CoachesAPI, "updateCoachSNS").mockResolvedValue(true);
 
     const { getByTestId, getAllByTestId } = renderWithProviders(
-      <CoachProfile uuid="uuid" />
+      <CoachProfile />
     );
 
     await waitFor(() => {
@@ -52,12 +48,15 @@ describe("<CoachProfile />", () => {
   it("handles intro and sns open and update fail", async () => {
     jest
       .spyOn(CoachesAPI, "getCoachDetails")
-      .mockResolvedValue({...sampleCoachDetail, instagram: "instagram.com/instagramid"});
+      .mockResolvedValue({
+        ...sampleCoachDetail,
+        instagram: "instagram.com/instagramid",
+      });
     jest.spyOn(CoachesAPI, "updateCoachIntro").mockResolvedValue(false);
     jest.spyOn(CoachesAPI, "updateCoachSNS").mockResolvedValue(false);
 
     const { getByTestId, getAllByTestId } = renderWithProviders(
-      <CoachProfile uuid="uuid" />
+      <CoachProfile />
     );
 
     await waitFor(() => {

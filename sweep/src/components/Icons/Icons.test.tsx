@@ -1,5 +1,7 @@
+import React from "react";
+
 import { AppIcon } from "./AppIcon";
-import { CustomLogo, MainLogo, HorizontalLogo } from "./Logo";
+import { CustomLogo, MainLogo, HorizontalLogo, AuthLogo } from "./Logo";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.unmock("@components/Icons");
@@ -37,5 +39,11 @@ describe("<MainLogo />", () => {
 describe("<HorizontalLogo />", () => {
   it("renders correctly", () => {
     renderWithProviders(<HorizontalLogo />);
+  });
+});
+
+describe("<AuthLogo />", () => {
+  it("renders correctly", () => {
+    renderWithProviders(<AuthLogo />);
   });
 });

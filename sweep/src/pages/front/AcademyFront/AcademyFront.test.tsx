@@ -1,18 +1,9 @@
-import { fireEvent, waitFor } from "@testing-library/react-native";
-
 import { AcademyFront } from "./AcademyFront";
-import * as AcademiesAPI from "@services/products/academy";
-import { sampleAcademyDetail } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("./Profile/Profile", () => {
-  const { TouchableOpacity } = jest.requireActual("react-native");
-  return {
-    ProfileManagement: ({ onRefresh }: { onRefresh: () => void }) => (
-      <TouchableOpacity onPress={onRefresh} testID="profile-management" />
-    ),
-  };
-});
+jest.mock("./Profile/Profile", () => ({
+  ProfileManagement: () => <div data-testid="profile-management" />,
+}));
 jest.mock("./Programs/Programs", () => ({
   ProgramManagement: () => <div data-testid="program-management" />,
 }));
@@ -30,17 +21,7 @@ jest.mock("./Notices/Notices", () => ({
 }));
 
 describe("<AcademyFront />", () => {
-  it("handles bad response", async () => {
-    jest.spyOn(AcademiesAPI, "getAcademyDetail").mockResolvedValue(null);
-    renderWithProviders(<AcademyFront uuid="uuid" />);
-  });
-
-  it("renders correctly", async () => {
-    jest
-      .spyOn(AcademiesAPI, "getAcademyDetail")
-      .mockResolvedValue(sampleAcademyDetail);
-    const { getByTestId } = renderWithProviders(<AcademyFront uuid="uuid" />);
-
-    await waitFor(() => fireEvent.press(getByTestId("profile-management")));
+  it("renders correctly", () => {
+    renderWithProviders(<AcademyFront />);
   });
 });

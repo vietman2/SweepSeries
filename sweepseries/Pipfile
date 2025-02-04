@@ -10,7 +10,6 @@ djangorestframework = "*"
 drf-spectacular = "*"
 python-decouple = "*"
 psycopg2-binary = "*"
-boto3 = "*"
 django-storages = "*"
 pillow = "*"
 django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
@@ -22,6 +21,8 @@ gunicorn = "*"
 whitenoise = "*"
 requests = "*"
 python-dateutil = "*"
+boto3 = "==1.35.83"
+botocore = "==1.35.83"
 
 [dev-packages]
 coverage = "*"

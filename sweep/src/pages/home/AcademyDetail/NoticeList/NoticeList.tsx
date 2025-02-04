@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { router, useLocalSearchParams } from "expo-router";
 
 import { Divider } from "@components/Dividers";
 import { Text } from "@components/Texts";
@@ -16,6 +16,13 @@ export function NoticeList() {
 
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  const handleNoticePress = (noticeId: number) => {
+    router.push({
+      pathname: "/home/academy/notice/[id]",
+      params: { id: noticeId, academyId: id },
+    });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,10 +43,15 @@ export function NoticeList() {
       {notices.length > 0 ? (
         <>
           {notices.map((notice) => (
-            <View key={notice.id} style={styles.notice}>
+            <TouchableOpacity
+              key={notice.id}
+              style={styles.notice}
+              onPress={() => handleNoticePress(notice.id)}
+              testID={`notice-${notice.id}`}
+            >
               <NoticeSimple key={notice.id} notice={notice} />
               <Divider />
-            </View>
+            </TouchableOpacity>
           ))}
         </>
       ) : (
@@ -70,5 +82,5 @@ const createStyles = (theme: ThemeColorType) =>
     emptyText: {
       fontSize: 24,
       color: theme.mediumEmphasis,
-    }
+    },
   });

@@ -3,19 +3,17 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 
 import { AppIcon } from "@components/Icons";
+import { useFront } from "@contexts/front";
 import { useTheme } from "@contexts/theme";
 import { ProgramSimple } from "@fragments/Program";
 import { ProgramSimpleType } from "@models/products";
 import { getPrograms } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
-interface Props {
-  uuid: string;
-}
-
-export function ProgramManagement({ uuid }: Readonly<Props>) {
+export function ProgramManagement() {
   const [programs, setPrograms] = useState<ProgramSimpleType[]>([]);
 
+  const { uuid } = useFront();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 

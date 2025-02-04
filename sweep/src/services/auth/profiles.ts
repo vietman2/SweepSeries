@@ -2,8 +2,13 @@ import axios from "axios";
 import FormData from "form-data";
 import { ImagePickerAsset } from "expo-image-picker";
 
-export async function updateProfile(id: number | undefined, nickname: string, birth: string, introduction: string) {
-    if (!id) return null;
+export async function updateProfile(
+  id: number | undefined,
+  nickname: string,
+  birth: string,
+  introduction: string
+) {
+  if (!id) return null;
 
   try {
     const response = await axios.patch(`/v1/profiles/${id}/`, {
@@ -18,8 +23,11 @@ export async function updateProfile(id: number | undefined, nickname: string, bi
   }
 }
 
-export async function uploadProfileImage(id: number | undefined, image: ImagePickerAsset) {
-    if (!id) return null;
+export async function uploadProfileImage(
+  id: number | undefined,
+  image: ImagePickerAsset
+) {
+  if (!id) return null;
 
   try {
     const form = new FormData();

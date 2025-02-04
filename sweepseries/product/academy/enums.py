@@ -13,3 +13,8 @@ class DayChoices(models.IntegerChoices):
     FRIDAY          = 4, '금요일'
     SATURDAY        = 5, '토요일'
     SUNDAY          = 6, '일요일'
+
+class NoticeTypeChoices(models.IntegerChoices):
+    NOTICE      = 1, '공지'
+    EVENT       = 2, '이벤트'
+    OTHERS      = 3, '기타'
