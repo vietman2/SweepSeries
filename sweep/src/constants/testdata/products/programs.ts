@@ -11,13 +11,16 @@ export const sampleProgramPositions: PositionTargetType[] = [
   },
 ];
 
-export const sampleProgramTargets: PositionTargetType[] = [{
-  id: 1,
-  name: "선수반",
-}, {
-  id: 2,
-  name: "사회인야구반",
-}];
+export const sampleProgramTargets: PositionTargetType[] = [
+  {
+    id: 1,
+    name: "선수반",
+  },
+  {
+    id: 2,
+    name: "사회인야구반",
+  },
+];
 
 export const sampleAcademyPrograms: ProgramSimpleType[] = [
   {
@@ -27,6 +30,8 @@ export const sampleAcademyPrograms: ProgramSimpleType[] = [
     target: sampleProgramTargets[0],
     positions: sampleProgramPositions,
     lowest_price: 150000,
+    duration: 60,
+    academy_uuid: "1",
   },
   {
     id: 2,
@@ -35,6 +40,8 @@ export const sampleAcademyPrograms: ProgramSimpleType[] = [
     target: sampleProgramTargets[0],
     positions: sampleProgramPositions,
     lowest_price: 120000,
+    duration: 60,
+    academy_uuid: "1",
   },
   {
     id: 3,
@@ -43,6 +50,8 @@ export const sampleAcademyPrograms: ProgramSimpleType[] = [
     target: sampleProgramTargets[1],
     positions: sampleProgramPositions,
     lowest_price: 80000,
+    duration: 60,
+    academy_uuid: "1",
   },
   {
     id: 4,
@@ -51,5 +60,7 @@ export const sampleAcademyPrograms: ProgramSimpleType[] = [
     target: sampleProgramTargets[1],
     positions: sampleProgramPositions,
     lowest_price: 80000,
+    duration: 60,
+    academy_uuid: "1",
   },
 ];
