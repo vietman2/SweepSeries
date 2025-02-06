@@ -49,6 +49,7 @@ describe("<CalendarButtons />", () => {
     );
 
     fireEvent.press(getByTestId("requests"));
+    fireEvent.press(getByTestId("addlesson"));
   });
 
   it("renders closed correctly", () => {
