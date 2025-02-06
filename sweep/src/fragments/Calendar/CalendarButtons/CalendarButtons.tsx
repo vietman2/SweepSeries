@@ -33,6 +33,14 @@ export function CalendarButtons({ open, setOpen }: Readonly<Props>) {
     setOpen(false);
   };
 
+  const handleLessonPress = () => {
+    router.push({
+      pathname: "/calendar/addlesson/[date]",
+      params: { date: new Date().toISOString() },
+    });
+    setOpen(false);
+  };
+
   const handleRequestPress = () => {
     router.push("/calendar/requests");
     setOpen(false);
@@ -74,16 +82,32 @@ export function CalendarButtons({ open, setOpen }: Readonly<Props>) {
             </TouchableOpacity>
           </View>
           {mode === "pro" && (
-            <View style={styles.wrapper}>
-              <Text style={styles.text}>예약 승인</Text>
-              <TouchableOpacity
-                style={[styles.button, { backgroundColor: theme.primary }]}
-                onPress={handleRequestPress}
-                testID="requests"
-              >
-                <AppIcon icon="checkbox" size={20} color={theme.background} />
-              </TouchableOpacity>
-            </View>
+            <>
+              <View style={styles.wrapper}>
+                <Text style={styles.text}>레슨 추가</Text>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={handleLessonPress}
+                  testID="addlesson"
+                >
+                  <AppIcon
+                    icon="person-plus"
+                    size={24}
+                    color={theme.lowEmphasis}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.wrapper}>
+                <Text style={styles.text}>예약 승인</Text>
+                <TouchableOpacity
+                  style={[styles.button, { backgroundColor: theme.primary }]}
+                  onPress={handleRequestPress}
+                  testID="requests"
+                >
+                  <AppIcon icon="checkbox" size={20} color={theme.background} />
+                </TouchableOpacity>
+              </View>
+            </>
           )}
         </>
       ) : (

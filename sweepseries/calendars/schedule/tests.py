@@ -241,3 +241,49 @@ class ScheduleAPITestCase(APITestCase):
         self.client.force_authenticate(user=self.calendar_viewer)
         response = self.client.post(self.url, self.base_data, format="json")
         self.assertEqual(response.status_code, 400)
+
+class LessonAPITestCase(APITestCase):
+    fixtures = [
+        "core/data/test/users.json", "core/data/initial/professions.json",
+        "core/data/test/coaches.json", "core/data/initial/regions.json",
+        "core/data/test/academies.json", "core/data/initial/facilities.json",
+        "core/data/test/programs.json", "core/data/initial/programs.json",
+    ]
+
+    def setUp(self):
+        self.url = "/v1/lessons/"
+        self.user = User.objects.get(username="normaluser")
+        self.create_data = {
+            "program": 1,
+            "coaches": ["923e4567-e89b-12d3-a456-426614174999"],
+            "start_datetime": "2025-02-01T00:00:00Z",
+            "person": {
+                "name": "lesson",
+                "phone": "lesson",
+            },
+        }
+        self.create_data2 = {
+            "program": 1,
+            "coaches": ["923e4567-e89b-12d3-a456-426614174999"],
+            "start_datetime": "2025-02-01T00:00:00Z",
+            "person": {
+                "name": "lesson",
+                "phone": "+821000000000",
+            },
+        }
+
+    def test_create_lesson_normal(self):
+        self.client.force_authenticate(user=self.user)
+        ## 1. new person
+        response = self.client.post(self.url, self.create_data, format="json")
+        self.assertEqual(response.status_code, 201)
+
+        ## 2. existing person
+        response = self.client.post(self.url, self.create_data2, format="json")
+        self.assertEqual(response.status_code, 201)
+
+    def test_create_lesson_fail(self):
+        self.client.force_authenticate(user=self.user)
+
+        response = self.client.post(self.url, {}, format="json")
+        self.assertEqual(response.status_code, 400)

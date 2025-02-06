@@ -1,11 +1,15 @@
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.transaction import atomic
 from rest_framework import serializers
 
+from auth.person.models import Person
 from calendars.calendarapp.enums import AuthChoices
 from calendars.calendarapp.models import Calendar
-from .models import Schedule, Event
+from product.coach.models import Coach
+from product.program.models import Program
+from .models import Schedule, Event, Lesson, Session
 
 class ScheduleSerializer(serializers.ModelSerializer):
     calendar_id     = serializers.IntegerField(write_only=True)
@@ -224,3 +228,65 @@ class EventSerializer(serializers.ModelSerializer):
         duration_text = self.get_duration_text(duration)
 
         return f'{start_time} ~ {end_time} ({duration_text})'
+
+class LessonSerializer(serializers.ModelSerializer):
+    program         = serializers.IntegerField(write_only=True)
+    coaches         = serializers.ListField(child=serializers.CharField(), write_only=True)
+    start_datetime  = serializers.DateTimeField(write_only=True)
+    person          = serializers.JSONField(write_only=True)
+
+    class Meta:
+        model = Lesson
+        fields = ['program', 'coaches', 'start_datetime', 'person']
+
+    def get_or_create_new_student(self, name, phone_number):
+        try:
+            person = Person.objects.get(phone_number=phone_number)
+        except ObjectDoesNotExist:
+            person = Person.objects.create(name=name, phone_number=phone_number)
+
+        return person
+
+    def create_lesson(self, program, coaches, student):
+        lesson = Lesson.objects.create(program=program, student=student)
+
+        for coach in coaches:
+            lesson.coaches.add(coach)
+            lesson.save()
+
+        return lesson
+
+    def create_session(self, lesson, start_datetime, program):
+        duration = program.duration
+        end_datetime = start_datetime + timedelta(minutes=duration)
+
+        session = Session.objects.create(
+            lesson=lesson,
+            start_datetime=start_datetime,
+            end_datetime=end_datetime
+        )
+
+        return session
+
+    def add_student_to_academy(self, student, academy):
+        ## add student to academy if not exists
+        if not academy.students.filter(pk=student.pk).exists():
+            academy.students.add(student)
+            academy.save()
+
+    def create(self, validated_data):
+        program_id = validated_data.pop('program')
+        coach_uuids = validated_data.pop('coaches')
+        person_data = validated_data.pop('person')
+        name = person_data.get('name', '')
+
+        program = Program.objects.get(pk=program_id)
+        coaches = [Coach.objects.get(uuid=uuid) for uuid in coach_uuids]
+        student = self.get_or_create_new_student(name, person_data['phone'])
+
+        self.add_student_to_academy(student, program.academy)
+
+        lesson = self.create_lesson(program, coaches, student)
+        self.create_session(lesson, validated_data['start_datetime'], program)
+
+        return lesson

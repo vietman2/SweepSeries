@@ -207,6 +207,16 @@ class AcademyTestCase(APITestCase):
         response = self.client.get(f"{self.url}my/")
         self.assertEqual(response.status_code, 404)
 
+    def test_academy_students(self):
+        self.client.force_authenticate(user=self.user)
+        ## 1. normal
+        response = self.client.get(f"{self.url}{self.academy.uuid}/students/")
+        self.assertEqual(response.status_code, 200)
+
+        ## 2. with query
+        response = self.client.get(f"{self.url}{self.academy.uuid}/students/?query=학생")
+        self.assertEqual(response.status_code, 200)
+
     def test_academy_approve(self):
         self.client.force_authenticate(user=User.objects.get(username="admin"))
         response = self.client.post(f"{self.url}123e4567-e89b-12d3-a456-426614174111/approve/")

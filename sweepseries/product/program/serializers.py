@@ -33,13 +33,20 @@ class ProgramSerializer(serializers.ModelSerializer):
     positions       = PositionSerializer(many=True, read_only=True)
     curriculums     = CurriculumSerializer(many=True)
     lowest_price    = serializers.SerializerMethodField()
+    academy_uuid    = serializers.SerializerMethodField()
 
     class Meta:
         model = Program
-        fields = ["id", "name", "duration", "target", "positions", "curriculums", "lowest_price"]
+        fields = [
+            "id", "name", "duration", "target", "positions",
+            "curriculums", "lowest_price", "academy_uuid"
+        ]
 
     def get_lowest_price(self, obj):
         return obj.curriculums.order_by("price").first().price
+
+    def get_academy_uuid(self, obj):
+        return obj.academy.uuid
 
     def validate_duration(self, value):
         if value % 30 != 0:

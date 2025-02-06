@@ -77,10 +77,20 @@ class CoachTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_coach_list_normal(self):
+        ## by academy
         self.client.force_authenticate(user=User.objects.get(username="normaluser"))
         param = {'academy': '123e4567-e89b-12d3-a456-426614174999', }
         response = self.client.get(self.url, param)
         self.assertEqual(response.status_code, 200)
+
+        ## by profile (coach)
+        response = self.client.get(f"{self.url}?profile=3")
+        self.assertEqual(response.status_code, 200)
+
+        ## by profile (academy)
+        response = self.client.get(f"{self.url}?profile=2")
+        self.assertEqual(response.status_code, 200)
+
 
     def test_coach_list_fail(self):
         self.client.force_authenticate(user=User.objects.get(username="admin"))
@@ -88,9 +98,18 @@ class CoachTestCase(APITestCase):
         response = self.client.get(self.url, param, HTTP_ORIGIN=settings.ADMIN_PAGE_URL)
         self.assertEqual(response.status_code, 400)
 
+        ## no auth
         self.client.force_authenticate(user=User.objects.get(username="normaluser"))
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 400)
+
+        ## no coach
+        response = self.client.get(f"{self.url}?profile=1")
+        self.assertEqual(response.status_code, 404)
+
+        ## not found
+        response = self.client.get(f"{self.url}?profile=999")
+        self.assertEqual(response.status_code, 404)
 
     def test_coach_detail(self):
         self.client.force_authenticate(user=User.objects.get(username="admin"))

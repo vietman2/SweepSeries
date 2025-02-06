@@ -103,6 +103,66 @@ export function DateTimeHeader({
   );
 }
 
+interface DisabledProps {
+  selectedStartDateTime: Date;
+  selectedEndDateTime: Date;
+}
+
+export function DateTimeHeaderDisabled({
+  selectedStartDateTime,
+  selectedEndDateTime,
+}: DisabledProps) {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+
+  return (
+    <View style={styles.header}>
+      <View style={styles.left}>
+        <Text style={[styles.headerText, { color: theme.highEmphasis }]}>
+          {selectedStartDateTime.toLocaleDateString("ko-KR", {
+            weekday: "short",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          })}
+        </Text>
+        <Text style={[styles.headerText, { color: theme.highEmphasis }]}>
+          {selectedStartDateTime.toLocaleTimeString("ko-KR", {
+            hour: "numeric",
+            minute: "numeric",
+          })}
+        </Text>
+      </View>
+      <Svg height="100%" width="20%">
+        <Line
+          x1="65%"
+          y1="0"
+          x2="35%"
+          y2="100%"
+          stroke="rgba(0, 0, 0, 0.2)"
+          strokeWidth="1"
+        ></Line>
+      </Svg>
+      <View style={styles.right}>
+        <Text style={styles.headerText}>
+          {selectedEndDateTime.toLocaleDateString("ko-KR", {
+            weekday: "short",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          })}
+        </Text>
+        <Text style={styles.headerText}>
+          {selectedEndDateTime.toLocaleTimeString("ko-KR", {
+            hour: "numeric",
+            minute: "numeric",
+          })}
+        </Text>
+      </View>
+    </View>
+  );
+}
+
 const createStyles = (theme: ThemeColorType) =>
   StyleSheet.create({
     header: {

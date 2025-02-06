@@ -8,8 +8,10 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from drf_spectacular.utils import extend_schema
 
+from auth.userprofile.models import UserProfile
 from core.permissions import AdminOnly
 from core.utils import is_admin_page
+from product.academy.models import Academy
 from product.validators import validate_instagram_url, normalize_instagram_url
 from .enums import CoachApplicationStatus
 from .models import Coach
@@ -58,6 +60,52 @@ class CoachViewSet(ModelViewSet):
             data={"message": "코치 등록에 성공했습니다."}
         )
 
+    def get_coaches_by_academy(self, request, academy_uuid):
+        q = Q(academy__uuid=academy_uuid)
+
+        q &= Q(is_verified=True, status=CoachApplicationStatus.APPROVED)
+        self.queryset = self.queryset.filter(q)
+        serializer = CoachSimpleSerializer(self.queryset, many=True)
+        serializer.context['request'] = request
+
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+    def get_coaches_by_profile(self, request, profile_id):
+        profile = UserProfile.objects.filter(id=profile_id).first()
+
+        if profile is None:
+            return Response(
+                status=status.HTTP_404_NOT_FOUND,
+                data={"error": "유저 정보가 없습니다."}
+            )
+
+        user = profile.user
+        academy = Academy.objects.filter(owner=user).first()
+
+        if academy is not None:
+            q = Q(academy=academy)
+            self.queryset = self.queryset.filter(q)
+            serializer = CoachSimpleSerializer(self.queryset, many=True)
+            serializer.context['request'] = request
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        coach = Coach.objects.filter(person=user.person).first()
+
+        if coach is not None:
+            q = Q(academy=coach.academy)
+
+            self.queryset = self.queryset.filter(q)
+            serializer = CoachSimpleSerializer(self.queryset, many=True)
+            serializer.context['request'] = request
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(
+            status=status.HTTP_404_NOT_FOUND,
+            data={"error": "코치 정보가 없습니다."}
+        )
+
     @extend_schema(summary="코치 리스트 조회", tags=["코치"])
     def list(self, request, *args, **kwargs):
         user = request.user
@@ -83,19 +131,18 @@ class CoachViewSet(ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         academy_uuid = request.query_params.get('academy', None)
-        if academy_uuid is None:
-            return Response(
-                status=status.HTTP_400_BAD_REQUEST,
-                data={"error": "아카데미 uuid를 입력해주세요."}
-            )
-        q &= Q(academy__uuid=academy_uuid)
+        profile_id = request.query_params.get('profile', None)
 
-        q &= Q(is_verified=True, status=CoachApplicationStatus.APPROVED)
-        self.queryset = self.queryset.filter(q)
-        serializer = CoachSimpleSerializer(self.queryset, many=True)
-        serializer.context['request'] = request
+        if academy_uuid is not None:
+            return self.get_coaches_by_academy(request, academy_uuid)
 
-        return Response(serializer.data,status=status.HTTP_200_OK)
+        if profile_id is not None:
+            return self.get_coaches_by_profile(request, profile_id)
+
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST,
+            data={"error": "아카데미 uuid를 입력해주세요."}
+        )
 
     @extend_schema(summary="코치 상세 조회", tags=["코치"])
     def retrieve(self, request, *args, **kwargs):

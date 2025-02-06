@@ -8,20 +8,23 @@ jest.unmock("@components/Search");
 describe("<SearchAddress />", () => {
   it("renders correctly", () => {
     render(
-      <>
-        <SearchAddress
-          address1="Address1"
-          address2="Address2"
-          onChangeText={jest.fn()}
-          onButtonPress={jest.fn()}
-        />
-        <SearchAddress
-          address1=""
-          address2="Address2"
-          onChangeText={jest.fn()}
-          onButtonPress={jest.fn()}
-        />
-      </>
+      <SearchAddress
+        address1="Address1"
+        address2="Address2"
+        onChangeText={jest.fn()}
+        onButtonPress={jest.fn()}
+      />
+    );
+  });
+
+  it("renders no address 1 correctly", () => {
+    render(
+      <SearchAddress
+        address1=""
+        address2="Address2"
+        onChangeText={jest.fn()}
+        onButtonPress={jest.fn()}
+      />
     );
   });
 });
@@ -35,6 +38,12 @@ describe("<Searchbar />", () => {
         onChange={jest.fn()}
         onSubmit={jest.fn()}
       />
+    );
+  });
+
+  it("renders no onSubmit correctly", () => {
+    render(
+      <Searchbar placeholder="Placeholder" value="Value" onChange={jest.fn()} />
     );
   });
 });

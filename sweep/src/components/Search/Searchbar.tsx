@@ -27,10 +27,12 @@ export function Searchbar({ placeholder, value, onChange, onSubmit }: Props) {
           onSubmitEditing={onSubmit}
         />
       </View>
-      {onSubmit && (
+      {onSubmit ? (
         <TouchableOpacity onPress={onSubmit}>
           <AppIcon icon="search" size={16} color={theme.primary} />
         </TouchableOpacity>
+      ) : (
+        <AppIcon icon="search" size={14} color={theme.primary} />
       )}
     </View>
   );

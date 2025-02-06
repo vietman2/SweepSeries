@@ -20,7 +20,8 @@
       "verified_at": "2024-12-10T03:46:52.247",
       "is_rejected": false,
       "reject_reason": "",
-      "convenience": []
+      "convenience": [],
+      "students": [1, 2]
     }
   },
   {
@@ -44,7 +45,8 @@
       "verified_at": null,
       "is_rejected": false,
       "reject_reason": "",
-      "convenience": []
+      "convenience": [],
+      "students": []
     }
   },
   {
@@ -68,7 +70,8 @@
       "verified_at": null,
       "is_rejected": true,
       "reject_reason": "거절되었습니다.",
-      "convenience": []
+      "convenience": [],
+      "students": []
     }
   },
   {

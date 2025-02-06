@@ -3,6 +3,7 @@ from django.core.validators import MinValueValidator as Min, MaxValueValidator a
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
+from auth.person.models import Person
 from auth.user.models import User
 from .enums import FacilityTypeChoices, DayChoices, NoticeTypeChoices
 
@@ -51,6 +52,10 @@ class Academy(models.Model):
     verified_at             = models.DateTimeField(null=True)
     is_rejected             = models.BooleanField(default=False)
     reject_reason           = models.TextField(blank=True)
+
+    students                = models.ManyToManyField(
+        Person, related_name='academies', blank=True
+    )
 
     objects                 = models.Manager()
 

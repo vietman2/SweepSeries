@@ -10,6 +10,7 @@ import {
   toggleCalendarNotification,
 } from "./calendars";
 import { createDiary } from "./diaries";
+import { createLesson } from "./lessons";
 import { createSchedule } from "./schedules";
 import { createTodo, toggleTodoStatus } from "./todos";
 
@@ -24,6 +25,7 @@ export {
   toggleCalendarDaily,
   toggleCalendarNotification,
   createDiary,
+  createLesson,
   createSchedule,
   createTodo,
   toggleTodoStatus,

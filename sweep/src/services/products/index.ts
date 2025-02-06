@@ -14,6 +14,7 @@ import {
 import {
   createCoach,
   getCoaches,
+  getCoachesByProfile,
   getCoachDetails,
   getEmployedCoaches,
   acceptCoach,
@@ -22,8 +23,21 @@ import {
   updateCoachIntro,
   updateCoachSNS,
 } from "./coach";
-import { createNotice, getNotices, getNotice, deleteNotice, editNotice } from "./notices";
-import { getTargets, getPositions, createProgram, getPrograms } from "./programs";
+import {
+  createNotice,
+  getNotices,
+  getNotice,
+  deleteNotice,
+  editNotice,
+} from "./notices";
+import {
+  getTargets,
+  getPositions,
+  createProgram,
+  getPrograms,
+  getProgramsByProfile,
+} from "./programs";
+import { getStudents } from "./students";
 
 export {
   createAcademy,
@@ -39,6 +53,7 @@ export {
   deleteImage,
   createCoach,
   getCoaches,
+  getCoachesByProfile,
   getCoachDetails,
   getEmployedCoaches,
   acceptCoach,
@@ -55,4 +70,6 @@ export {
   getPositions,
   getPrograms,
   createProgram,
+  getProgramsByProfile,
+  getStudents,
 };

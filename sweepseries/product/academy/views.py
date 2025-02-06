@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from drf_spectacular.utils import extend_schema
 
+from auth.person.serializers import StudentSimpleSerializer
 from core.permissions import AdminOnly
 from core.utils import is_admin_page
 from product.coach.enums import CoachApplicationStatus
@@ -126,6 +127,27 @@ class AcademyViewSet(ModelViewSet):
         return Response(
             status=status.HTTP_200_OK,
             data=academies.data
+        )
+
+    @extend_schema(summary="내 아카데미 수강생 조회", tags=["아카데미"])
+    @action(detail=True, methods=['get'])
+    def students(self, request, pk=None): # pylint: disable=unused-argument
+        academy = self.get_object()
+        query = request.query_params.get('query', None)
+
+        q = Q()
+
+        if query:
+            ## name or phone number
+            q &= Q(name__icontains=query) | Q(phone_number__icontains=query)
+
+        students = academy.students.filter(q)
+
+        serializer = StudentSimpleSerializer(students, many=True)
+
+        return Response(
+            status=status.HTTP_200_OK,
+            data=serializer.data
         )
 
     @extend_schema(summary="아카데미 등록 승인", tags=["아카데미"])

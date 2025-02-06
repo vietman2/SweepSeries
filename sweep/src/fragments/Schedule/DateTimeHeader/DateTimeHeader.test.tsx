@@ -1,4 +1,6 @@
-import { DateTimeHeader } from "./DateTimeHeader";
+import React from "react";
+
+import { DateTimeHeader, DateTimeHeaderDisabled } from "./DateTimeHeader";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("react-native-svg", () => ({
@@ -30,7 +32,7 @@ describe("<DateTimeHeader />", () => {
       </>
     );
   });
-  
+
   it("renders all day mode correctly", () => {
     renderWithProviders(
       <>
@@ -51,6 +53,17 @@ describe("<DateTimeHeader />", () => {
           isAllDay={true}
         />
       </>
+    );
+  });
+});
+
+describe("<DateTimeHeaderDisabled />", () => {
+  it("renders correctly", () => {
+    renderWithProviders(
+      <DateTimeHeaderDisabled
+        selectedStartDateTime={new Date()}
+        selectedEndDateTime={new Date()}
+      />
     );
   });
 });

@@ -5,6 +5,8 @@ export type ProgramSimpleType = {
   positions: PositionTargetType[];
   target: PositionTargetType;
   lowest_price: number;
+  duration: number;
+  academy_uuid: string;
 };
 
 export type PositionTargetType = {

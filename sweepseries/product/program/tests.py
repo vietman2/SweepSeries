@@ -6,13 +6,15 @@ from product.academy.models import Academy
 class ProgramTestCase(APITestCase):
     fixtures = [
         "core/data/test/users.json", "core/data/initial/regions.json",
-        "core/data/test/academies.json", "core/data/initial/facilities.json",
-        "core/data/initial/programs.json",
+        "core/data/test/academies.json", "core/data/test/coaches.json",
+        "core/data/test/programs.json", "core/data/initial/facilities.json",
+        "core/data/initial/programs.json", "core/data/initial/professions.json"
     ]
 
     def setUp(self):
         self.url = "/v1/programs/"
         self.user = User.objects.get(username="normaluser")
+        self.userprofile = self.user.profiles.first()
         self.academy = Academy.objects.get(name="아카데미 1")
         self.data = {
             "name": "프로그램 1",
@@ -37,12 +39,30 @@ class ProgramTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_list(self):
+        ## 1. search by academy
         response = self.client.get(f"{self.url}?academy={self.academy.uuid}")
         self.assertEqual(response.status_code, 200)
 
+        ## 2. search by profile (academy)
+        response = self.client.get(f"{self.url}?profile={self.userprofile.id}")
+        self.assertEqual(response.status_code, 200)
+
+        ## 2. search by profile (coach)
+        response = self.client.get(f"{self.url}?profile=3")
+        self.assertEqual(response.status_code, 200)
+
     def test_list_fail(self):
+        ## 1. no params
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 400)
+
+        ## 2. search by profile: normal user
+        response = self.client.get(f"{self.url}?profile=1")
+        self.assertEqual(response.status_code, 400)
+
+        ## 3. search by profile: not found
+        response = self.client.get(f"{self.url}?profile=999")
+        self.assertEqual(response.status_code, 404)
 
     def test_create(self):
         response = self.client.post(self.url, data=self.data, format="json")

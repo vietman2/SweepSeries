@@ -302,14 +302,23 @@ jest.mock("@components/ScrollView", () => {
   };
 });
 jest.mock("@components/Search", () => {
-  const { TouchableOpacity } = jest.requireActual("react-native");
+  const { TouchableOpacity, View } = jest.requireActual("react-native");
 
   return {
     SearchAddress: ({ onButtonPress }: { onButtonPress: () => void }) => (
       <TouchableOpacity testID="search" onPress={onButtonPress} />
     ),
-    Searchbar: ({ onSubmit }: { onSubmit: () => void }) => (
-      <TouchableOpacity onPress={onSubmit} testID="search" />
+    Searchbar: ({
+      onSubmit,
+      onChange,
+    }: {
+      onSubmit: () => void;
+      onChange: (input: string) => void;
+    }) => (
+      <View>
+        <TouchableOpacity onPress={onSubmit} testID="search" />
+        <TouchableOpacity onPress={() => onChange("input")} testID="input" />
+      </View>
     ),
   };
 });

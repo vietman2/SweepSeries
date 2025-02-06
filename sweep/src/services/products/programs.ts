@@ -52,3 +52,16 @@ export async function getPrograms(uuid: string) {
     return null;
   }
 }
+
+export async function getProgramsByProfile(profile_id: number | undefined) {
+  if (!profile_id) {
+    return null;
+  }
+
+  try {
+    const response = await axios.get(`/v1/programs/?profile=${profile_id}`);
+    return response.data;
+  } catch {
+    return null;
+  }
+}

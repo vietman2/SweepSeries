@@ -14,3 +14,20 @@ class PersonSerializer(serializers.ModelSerializer):
 
     def get_phone_number(self, obj):
         return obj.phone_number.as_national
+
+class StudentSimpleSerializer(serializers.ModelSerializer):
+    phone_number = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Person
+        fields = ["id", "name", "phone_number"]
+
+    def get_phone_number(self, obj):
+        number = obj.phone_number.as_national
+
+        ## if phone number is 010-aaaa-bbbb,
+        ## return 010-xxxx-xxbb
+        if len(number) == 13:
+            return f"{number[:9]}xx{number[-2:]}"
+
+        return number

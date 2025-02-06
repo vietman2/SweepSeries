@@ -1,7 +1,10 @@
 from django.db import models
 
+from auth.person.models import Person
 from calendars.calendarapp.models import Calendar
 from core.models import TimeStampedModel
+from product.coach.models import Coach
+from product.program.models import Program
 from .enums import RepeatTypeChoices
 
 class Schedule(TimeStampedModel):
@@ -40,3 +43,28 @@ class Event(models.Model):
     class Meta:
         db_table = 'events'
         ordering = ['start_datetime']
+
+class Lesson(TimeStampedModel):
+    program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='lessons')
+    student = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='lessons')
+    coaches = models.ManyToManyField(Coach, related_name='lessons')
+
+    notes   = models.TextField(null=True, blank=True)
+
+    objects = models.Manager()
+
+    class Meta:
+        db_table = 'lessons'
+
+class Session(models.Model):
+    lesson          = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='sessions')
+    start_datetime  = models.DateTimeField()
+    end_datetime    = models.DateTimeField()
+
+    notify          = models.BooleanField(default=False)
+    notify_time     = models.DateTimeField(null=True, blank=True)
+
+    objects         = models.Manager()
+
+    class Meta:
+        db_table = 'sessions'
