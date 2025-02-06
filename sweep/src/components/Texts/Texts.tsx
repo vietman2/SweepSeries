@@ -69,9 +69,9 @@ const createStyles = (theme: ThemeColorType) =>
     },
     calloutSmall: {
       paddingVertical: 4,
-      paddingHorizontal: 16,
+      paddingHorizontal: 12,
       backgroundColor: theme.backgroundGray,
-      borderRadius: 16,
+      borderRadius: 8,
     },
     calloutText: {
       color: theme.lowEmphasis,
