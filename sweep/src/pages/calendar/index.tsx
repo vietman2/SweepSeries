@@ -1,3 +1,4 @@
+import { AddLesson } from "./AddLesson/AddLesson";
 import { AddSchedule } from "./AddSchedule/AddSchedule";
 import { AddTodo } from "./AddTodo/AddTodo";
 import { Calendar } from "./Calendar/Calendar";
@@ -8,6 +9,7 @@ import { ReservationRequests } from "./ReservationRequests/ReservationRequests";
 import { Settings } from "./Settings/Settings";
 
 export {
+  AddLesson,
   AddSchedule,
   AddTodo,
   Calendar,
