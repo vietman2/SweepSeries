@@ -19,6 +19,7 @@ from .enums import AuthChoices
 from .models import Calendar, CalendarUser
 from .permissions import IsMember, IsOwner
 from .serializers import CalendarSerializer
+from .utils import create_new_calendar
 
 class CalendarViewSet(ModelViewSet):
     queryset = Calendar.objects.all()
@@ -41,10 +42,7 @@ class CalendarViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         user = request.user
 
-        calendar = Calendar.objects.create(name="새 캘린더")
-        calendar_user = CalendarUser.objects.create(
-            user=user, calendar=calendar, auth=AuthChoices.OWNER, display_name="새 캘린더"
-        )
+        calendar_user = create_new_calendar("새 캘린더", user)
 
         serializer = CalendarSerializer(calendar_user)
 
