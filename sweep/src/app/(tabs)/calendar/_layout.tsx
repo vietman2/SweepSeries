@@ -41,6 +41,14 @@ export default function CalendarLayout() {
           }}
         />
         <Stack.Screen
+          name="addlesson/[date]"
+          options={{
+            presentation: "modal",
+            headerShown: true,
+            headerTitle: "레슨 추가",
+          }}
+        />
+        <Stack.Screen
           name="addschedule/[date]"
           options={{
             presentation: "modal",
