@@ -51,6 +51,8 @@ class Lesson(TimeStampedModel):
 
     notes   = models.TextField(null=True, blank=True)
 
+    objects = models.Manager()
+
     class Meta:
         db_table = 'lessons'
 

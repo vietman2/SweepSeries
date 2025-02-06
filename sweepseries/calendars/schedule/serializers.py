@@ -7,7 +7,6 @@ from rest_framework import serializers
 from auth.person.models import Person
 from calendars.calendarapp.enums import AuthChoices
 from calendars.calendarapp.models import Calendar
-from product.academy.models import Academy
 from product.coach.models import Coach
 from product.program.models import Program
 from .models import Schedule, Event, Lesson, Session

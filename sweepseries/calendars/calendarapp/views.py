@@ -15,7 +15,6 @@ from calendars.schedule.models import Event
 from calendars.schedule.serializers import EventSerializer
 from calendars.todo.models import Todo
 from calendars.todo.serializers import TodoSerializer
-from .enums import AuthChoices
 from .models import Calendar, CalendarUser
 from .permissions import IsMember, IsOwner
 from .serializers import CalendarSerializer

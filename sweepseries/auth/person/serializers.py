@@ -1,6 +1,5 @@
 from rest_framework import serializers
 
-from core.utils import get_presigned_url
 from .models import Person
 
 class PersonSerializer(serializers.ModelSerializer):
