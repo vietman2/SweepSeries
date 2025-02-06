@@ -3,6 +3,7 @@ import axios from "axios";
 import {
   createCoach,
   getCoaches,
+  getCoachesByProfile,
   getCoachDetails,
   getMyCoachProfile,
   getEmployedCoaches,
@@ -51,6 +52,30 @@ describe("getCoachDetails", () => {
     jest.spyOn(axios, "get").mockRejectedValue(null);
 
     const result = await getCoachDetails("coachId");
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("getCoachesByProfile", () => {
+  it("should get coaches by profile", async () => {
+    jest.spyOn(axios, "get").mockResolvedValue({ data: {} });
+
+    const result = await getCoachesByProfile(1);
+
+    expect(result).toEqual({});
+  });
+
+  it("should return null if profileId is not provided", async () => {
+    const result = await getCoachesByProfile(undefined);
+
+    expect(result).toBeNull();
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "get").mockRejectedValue(null);
+
+    const result = await getCoachesByProfile(1);
 
     expect(result).toBeNull();
   });

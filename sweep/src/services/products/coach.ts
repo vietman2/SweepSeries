@@ -47,6 +47,20 @@ export async function getCoaches(academyId: string) {
   }
 }
 
+export async function getCoachesByProfile(profileId: number | undefined) {
+  if (!profileId) return null;
+
+  try {
+    const response = await axios.get("/v1/coaches/", {
+      params: { profile: profileId },
+    });
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
 export async function getCoachDetails(coachId: string) {
   try {
     const response = await axios.get(`/v1/coaches/${coachId}/`);
@@ -114,7 +128,11 @@ export async function updateCoachIntro(
   }
 }
 
-export async function updateCoachSNS(uuid: string | undefined, instagram: string, blog: string) {
+export async function updateCoachSNS(
+  uuid: string | undefined,
+  instagram: string,
+  blog: string
+) {
   if (!uuid) return null;
 
   try {
