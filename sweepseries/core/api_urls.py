@@ -20,7 +20,7 @@ from auth.userprofile.views import UserProfileViewSet
 ## Calendar
 from calendars.calendarapp.views import CalendarViewSet
 from calendars.diary.views import DiaryViewSet
-from calendars.schedule.views import ScheduleViewSet
+from calendars.schedule.views import ScheduleViewSet, LessonViewSet
 from calendars.todo.views import TodoViewSet
 
 ## Community
@@ -49,6 +49,7 @@ router.register(r'profiles', UserProfileViewSet, basename='user-profiles')
 
 router.register(r'calendars', CalendarViewSet, basename='calendars')
 router.register(r'diaries', DiaryViewSet, basename='diaries')
+router.register(r'lessons', LessonViewSet, basename='lessons')
 router.register(r'schedules', ScheduleViewSet, basename='schedules')
 router.register(r'todos', TodoViewSet, basename='todos')
 
