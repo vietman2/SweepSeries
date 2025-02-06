@@ -8,9 +8,11 @@ import { ThemeColorType } from "@themes/colors";
 
 interface Props {
   program: ProgramSimpleType;
+  type?: "price" | "check";
+  color?: string;
 }
 
-export function ProgramSimple({ program }: Readonly<Props>) {
+export function ProgramSimple({ program, type = "price", color = "#000000" }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -31,7 +33,13 @@ export function ProgramSimple({ program }: Readonly<Props>) {
           </View>
         </View>
       </View>
-      <Text style={styles.bold}>{program.lowest_price.toLocaleString()}~</Text>
+      {type === "price" ? (
+        <Text style={styles.bold}>
+          {program.lowest_price.toLocaleString()}~
+        </Text>
+      ) : (
+        <AppIcon icon="check-circle" size={24} color={color} />
+      )}
     </View>
   );
 }

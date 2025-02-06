@@ -6,4 +6,14 @@ describe("<ProgramSimple />", () => {
   it("renders correctly", () => {
     renderWithProviders(<ProgramSimple program={sampleAcademyPrograms[0]} />);
   });
+
+  it("renders correctly with props", () => {
+    renderWithProviders(
+      <ProgramSimple
+        program={sampleAcademyPrograms[0]}
+        type="check"
+        color="black"
+      />
+    );
+  });
 });
