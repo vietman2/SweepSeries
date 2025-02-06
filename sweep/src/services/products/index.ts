@@ -37,6 +37,7 @@ import {
   getPrograms,
   getProgramsByProfile,
 } from "./programs";
+import { getStudents } from "./students";
 
 export {
   createAcademy,
@@ -70,4 +71,5 @@ export {
   getPrograms,
   createProgram,
   getProgramsByProfile,
+  getStudents,
 };
