@@ -12,6 +12,11 @@ import {
 import { createDiary } from "./diaries";
 import { createLesson } from "./lessons";
 import { createSchedule } from "./schedules";
+import {
+  getSessionDetails,
+  updateSessionFeedback,
+  updateSessionNotes,
+} from "./sessions";
 import { createTodo, toggleTodoStatus } from "./todos";
 
 export {
@@ -27,6 +32,9 @@ export {
   createDiary,
   createLesson,
   createSchedule,
+  getSessionDetails,
+  updateSessionFeedback,
+  updateSessionNotes,
   createTodo,
   toggleTodoStatus,
 };
