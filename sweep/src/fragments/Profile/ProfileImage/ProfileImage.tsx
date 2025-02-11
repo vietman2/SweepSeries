@@ -13,53 +13,80 @@ interface Props {
 
 export function ProfileImage({
   uri,
-  edit,
   color,
+  edit = false,
   size = "small",
 }: Readonly<Props>) {
   const { theme } = useTheme();
 
   if (uri) {
-    return (
-      <View style={size === "small" ? styles.imageSmall : styles.imageLarge}>
-        <Image
-          src={uri}
-          style={size === "small" ? styles.imageSmall : styles.imageLarge}
-        />
-        {edit ? (
-          <View style={styles.edit}>
-            <AppIcon icon="camera" size={25} color={theme.lowEmphasis} />
-          </View>
-        ) : null}
-      </View>
-    );
+    return <ActualImage uri={uri} size={size} edit={edit} />;
   } else {
     return (
-      <View
-        style={[
-          size === "small" ? styles.iconSmall : styles.iconLarge,
-          { backgroundColor: color },
-        ]}
-      >
-        <SvgCssUri
-          uri="https://kr.object.ncloudstorage.com/catchb.resources/appicons/default_profile.svg"
-          width={size === "small" ? "72" : "135"}
-          height={size === "small" ? "72" : "135"}
-        />
-        {edit ? (
-          <View style={styles.edit}>
-            <SvgCssUri
-              uri="https://kr.object.ncloudstorage.com/catchb.resources/appicons/camera-icon.svg"
-              width="25"
-              height="25"
-              color={theme.lowEmphasis}
-            />
-          </View>
-        ) : null}
-      </View>
+      <Placeholder size={size} color={color || theme.secondary} edit={edit} />
     );
   }
 }
+
+interface ImageProps {
+  uri: string;
+  size: "small" | "large";
+  edit: boolean;
+}
+
+function ActualImage({ uri, size, edit }: Readonly<ImageProps>) {
+  const { theme } = useTheme();
+
+  return (
+    <View style={size === "small" ? styles.imageSmall : styles.imageLarge}>
+      <Image
+        src={uri}
+        style={size === "small" ? styles.imageSmall : styles.imageLarge}
+      />
+      {edit ? (
+        <View style={styles.edit}>
+          <AppIcon icon="camera" size={25} color={theme.lowEmphasis} />
+        </View>
+      ) : null}
+    </View>
+  );
+}
+
+interface PlaceholderProps {
+  size: "small" | "large";
+  color: string;
+  edit: boolean;
+}
+
+function Placeholder({ size, color, edit }: Readonly<PlaceholderProps>) {
+  const { theme } = useTheme();
+
+  return (
+    <View
+      style={[
+        size === "small" ? styles.iconSmall : styles.iconLarge,
+        { backgroundColor: color },
+      ]}
+    >
+      <SvgCssUri
+        uri="https://kr.object.ncloudstorage.com/catchb.resources/appicons/default_profile.svg"
+        width={size === "small" ? "72" : "135"}
+        height={size === "small" ? "72" : "135"}
+      />
+      {edit ? (
+        <View style={styles.edit}>
+          <SvgCssUri
+            uri="https://kr.object.ncloudstorage.com/catchb.resources/appicons/camera-icon.svg"
+            width="25"
+            height="25"
+            color={theme.lowEmphasis}
+          />
+        </View>
+      ) : null}
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   imageSmall: {
     width: 70,
