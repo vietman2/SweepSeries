@@ -1,6 +1,4 @@
-from collections import defaultdict
-from datetime import date, time as time_module
-from dateutil.relativedelta import relativedelta
+from datetime import time as time_module
 from django.db.models import Q
 from rest_framework import status
 from rest_framework.decorators import action
@@ -10,15 +8,10 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from drf_spectacular.utils import extend_schema
 
-from calendars.diary.models import Diary
-from calendars.schedule.models import Event
-from calendars.schedule.serializers import EventSerializer
-from calendars.todo.models import Todo
-from calendars.todo.serializers import TodoSerializer
 from .models import Calendar, CalendarUser
 from .permissions import IsMember, IsOwner
 from .serializers import CalendarSerializer
-from .utils import create_new_calendar
+from .utils import create_new_calendar, get_monthly_data, get_daily_data
 
 class CalendarViewSet(ModelViewSet):
     queryset = Calendar.objects.all()
@@ -185,72 +178,3 @@ class CalendarViewSet(ModelViewSet):
 
         data = get_daily_data(daily_query, calendar, request.user)
         return Response(data, status=status.HTTP_200_OK)
-
-def get_monthly_data(month_query, calendar):
-    month = month_query.split('-')[1]
-    year = month_query.split('-')[0]
-
-    try:
-        month = int(month)
-        year = int(year)
-        start_date = date(year, month, 1)
-        end_date = start_date + relativedelta(months=1)
-    except ValueError as e:
-        raise ValidationError("올바른 형식이 아닙니다.") from e
-
-    q = Q()
-    q &= Q(schedule__calendar=calendar)
-    q &= Q(start_datetime__range=[start_date, end_date])
-
-    data = defaultdict(list)
-
-    events = Event.objects.filter(q)
-
-    for event in events:
-        date_str = event.start_datetime.date().strftime('%Y-%m-%d')
-        data[date_str].append({
-            'id': event.id,
-            'title': event.schedule.title,
-            'color': event.schedule.color,
-        })
-
-    return data
-
-def get_daily_data(daily_query, calendar, user):
-    try:
-        date_obj = date.fromisoformat(daily_query)
-    except ValueError as e:
-        raise ValidationError("올바른 형식이 아닙니다.") from e
-
-    q_event = Q()
-    q_event &= Q(schedule__calendar=calendar)
-    q_event &= Q(start_datetime__date=date_obj)
-
-    q_todo = Q()
-    q_todo &= Q(calendar=calendar)
-    q_todo &= Q(deadline=date_obj)
-
-    q_diary = Q()
-    q_diary &= Q(user=user)
-    q_diary &= Q(date=date_obj)
-
-    data = {
-        "events": [],
-        "todos": [],
-        "diary": "",
-    }
-
-    events = Event.objects.filter(q_event)
-    todos = Todo.objects.filter(q_todo)
-    diary = Diary.objects.filter(q_diary).first()
-
-    for event in events:
-        data["events"].append(EventSerializer(event).data)
-
-    for todo in todos:
-        data["todos"].append(TodoSerializer(todo).data)
-
-    if diary:
-        data["diary"] = diary.diary
-
-    return data
