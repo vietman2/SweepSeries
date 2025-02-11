@@ -1,3 +1,3 @@
-import { LessonHeader } from "./LessonHeader/LessonHeader";
+import { LessonSimple } from "./LessonSimple/LessonSimple";
 
-export { LessonHeader };
+export { LessonSimple };
