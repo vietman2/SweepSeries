@@ -9,7 +9,7 @@ from app.notices.views import NoticeViewSet
 
 ## Auth
 from auth.agreements.views import AgreementViewSet
-from auth.person.views import PersonViewSet
+from auth.person.views import PersonViewSet, AcademyStudentViewSet
 from auth.user.register_views import (
     CheckUsernameEmailView, CheckPasswordView, CreateVerificationCodeView,
     VerifyPhoneView, RegisterView
@@ -20,7 +20,7 @@ from auth.userprofile.views import UserProfileViewSet
 ## Calendar
 from calendars.calendarapp.views import CalendarViewSet
 from calendars.diary.views import DiaryViewSet
-from calendars.schedule.views import ScheduleViewSet, LessonViewSet
+from calendars.schedule.views import ScheduleViewSet, LessonViewSet, SessionViewSet
 from calendars.todo.views import TodoViewSet
 
 ## Community
@@ -51,6 +51,7 @@ router.register(r'calendars', CalendarViewSet, basename='calendars')
 router.register(r'diaries', DiaryViewSet, basename='diaries')
 router.register(r'lessons', LessonViewSet, basename='lessons')
 router.register(r'schedules', ScheduleViewSet, basename='schedules')
+router.register(r'sessions', SessionViewSet, basename='sessions')
 router.register(r'todos', TodoViewSet, basename='todos')
 
 router.register(r'comments', CommentViewSet, basename='comments')
@@ -66,6 +67,9 @@ router.register(
 )
 router.register(
     r'academies/(?P<academy_id>[^/.]+)/images', AcademyImageViewSet, basename='academy-images'
+)
+router.register(
+    r'academies/(?P<academy_id>[^/.]+)/students', AcademyStudentViewSet, basename='aca-students'
 )
 router.register(r'academies', AcademyViewSet, basename='academies')
 router.register(r'facilities', FacilityViewSet, basename='facilities')
