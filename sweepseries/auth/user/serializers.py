@@ -220,7 +220,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     def set_notifications(self, user, notifications):
         if notifications:
             user.noti_permitted = True
-            user.agreed_at = datetime.now()
+            user.agreed_at = datetime.now().astimezone()
 
         return user
 
