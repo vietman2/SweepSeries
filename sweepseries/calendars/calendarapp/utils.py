@@ -51,6 +51,7 @@ def get_monthly_sessions(data, start_date, end_date):
             'color': '#14863E',
         })
 
+    return data
 
 def get_monthly_data(month_query, calendar):
     month = month_query.split('-')[1]
