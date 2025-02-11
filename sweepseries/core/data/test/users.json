@@ -34,16 +34,17 @@
     "pk": "123e4567-e89b-12d3-a456-426614174000",
     "fields": {
       "password": "",
-      "last_login": "2024-11-25T13:01:15.740",
+      "last_login": "2024-11-25T13:01:15.740Z",
       "username": "admin",
       "email": "admin@admin.com",
       "person": 1,
-      "joined_at": "2024-11-20T16:39:13.192",
-      "updated_at": "2024-11-20T16:39:13.206",
+      "joined_at": "2024-11-20T16:39:13.192Z",
+      "updated_at": "2024-11-20T16:39:13.206Z",
       "is_superuser": true,
       "is_staff": true,
       "is_blocked": false,
-      "is_active": true
+      "is_active": true,
+      "agreed_at": "2024-11-20T16:39:13.192Z"
     }
   },
   {
@@ -51,16 +52,17 @@
     "pk": "223e4567-e89b-12d3-a456-426614174000",
     "fields": {
       "password": "",
-      "last_login": "2024-11-25T13:01:15.740",
+      "last_login": "2024-11-25T13:01:15.740Z",
       "username": "normaluser",
       "email": "normal@user.com",
       "person": 2,
-      "joined_at": "2024-11-20T16:39:13.192",
-      "updated_at": "2024-11-20T16:39:13.206",
+      "joined_at": "2024-11-20T16:39:13.192Z",
+      "updated_at": "2024-11-20T16:39:13.206Z",
       "is_superuser": false,
       "is_staff": false,
       "is_blocked": false,
-      "is_active": true
+      "is_active": true,
+      "agreed_at": "2024-11-20T16:39:13.192Z"
     }
   },
   {
@@ -68,16 +70,17 @@
     "pk": "323e4567-e89b-12d3-a456-426614174000",
     "fields": {
       "password": "",
-      "last_login": "2024-11-25T13:01:15.740",
+      "last_login": "2024-11-25T13:01:15.740Z",
       "username": "coachuser",
       "email": "coach@user.com",
       "person": 3,
-      "joined_at": "2024-11-20T16:39:13.192",
-      "updated_at": "2024-11-20T16:39:13.206",
+      "joined_at": "2024-11-20T16:39:13.192Z",
+      "updated_at": "2024-11-20T16:39:13.206Z",
       "is_superuser": false,
       "is_staff": false,
       "is_blocked": false,
-      "is_active": true
+      "is_active": true,
+      "agreed_at": "2024-11-20T16:39:13.192Z"
     }
   },
   {
