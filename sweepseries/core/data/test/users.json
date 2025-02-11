@@ -14,7 +14,7 @@
     "pk": 2,
     "fields": {
       "name": "홍길동",
-      "phone_number": "+821011111111",
+      "phone_number": "+8221231234",
       "birth_date": "2000-01-01",
       "gender": "M"
     }
@@ -23,10 +23,20 @@
     "model": "person.person",
     "pk": 3,
     "fields": {
-      "name": "영희",
+      "name": "김영희",
       "phone_number": "+821022222222",
       "birth_date": "2001-01-01",
       "gender": "F"
+    }
+  },
+  {
+    "model": "person.person",
+    "pk": 4,
+    "fields": {
+      "name": "전우치",
+      "phone_number": "+821033333333",
+      "birth_date": "2002-01-01",
+      "gender": "M"
     }
   },
   {
@@ -89,7 +99,7 @@
     "fields": {
       "user": "123e4567-e89b-12d3-a456-426614174000",
       "nickname": "닉네임",
-      "profile_image": "",
+      "profile_image": "https://placeimg.com/640/480/any",
       "default_color": "#000000",
       "introduction": "자기소개"
     }
@@ -100,7 +110,7 @@
     "fields": {
       "user": "223e4567-e89b-12d3-a456-426614174000",
       "nickname": "별명",
-      "profile_image": "",
+      "profile_image": null,
       "default_color": "#FFFFFF",
       "introduction": "자기소개"
     }
