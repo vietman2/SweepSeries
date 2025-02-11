@@ -98,6 +98,23 @@ function FrontStack() {
             headerShown: true,
           }}
         />
+        <Stack.Screen
+          name="customer/[id]"
+          options={{
+            headerLeft: () => <BackButton />,
+            headerTitle: "",
+            headerShown: true,
+          }}
+        />
+        <Stack.Screen
+          name="lesson/[id]"
+          options={{
+            headerLeft: () => <BackButton />,
+            headerTitle: "레슨 상세",
+            headerShown: true,
+          }}
+          initialParams={{ mode: "pro" }}
+        />
       </Stack>
       <BottomSheet
         ref={ref}
