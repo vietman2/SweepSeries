@@ -1,11 +1,12 @@
 import { sampleCalendars } from "./calendars";
-import { sampleLessons } from "./lessons";
+import { sampleLesson, sampleLessonSimple } from "./lessons";
 import { sampleSchedules, sampleScheduleResponse } from "./schedules";
 import { sampleTodos } from "./todos";
 
 export {
   sampleCalendars,
-  sampleLessons,
+  sampleLesson,
+  sampleLessonSimple,
   sampleSchedules,
   sampleScheduleResponse,
   sampleTodos,

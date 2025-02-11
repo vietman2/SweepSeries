@@ -3,7 +3,7 @@
     "model": "agreements.agreement",
     "pk": 1,
     "fields": {
-      "created_at": "2024-11-18T10:14:06.943",
+      "created_at": "2024-11-18T10:14:06.943Z",
       "title": "Mandatory without content",
       "required": true,
       "deleted": false,
@@ -14,7 +14,7 @@
     "model": "agreements.agreement",
     "pk": 2,
     "fields": {
-      "created_at": "2024-11-18T10:14:31.290",
+      "created_at": "2024-11-18T10:14:31.290Z",
       "title": "Mandatory with content",
       "required": true,
       "deleted": false,
@@ -25,7 +25,7 @@
     "model": "agreements.agreement",
     "pk": 3,
     "fields": {
-      "created_at": "2024-11-18T10:14:45.520",
+      "created_at": "2024-11-18T10:14:45.520Z",
       "title": "Optional without content",
       "required": false,
       "deleted": false,
@@ -36,7 +36,7 @@
     "model": "agreements.agreement",
     "pk": 4,
     "fields": {
-      "created_at": "2024-11-18T10:15:09.334",
+      "created_at": "2024-11-18T10:15:09.334Z",
       "title": "Optional with content",
       "required": false,
       "deleted": false,
@@ -47,11 +47,11 @@
     "model": "agreements.agreement",
     "pk": 5,
     "fields": {
-      "created_at": "2024-11-18T10:15:09.334",
+      "created_at": "2024-11-18T10:15:09.334Z",
       "title": "Deleted",
       "required": false,
       "deleted": true,
-      "deleted_at": "2024-11-20T10:15:09.334"
+      "deleted_at": "2024-11-20T10:15:09.334Z"
     }
   },
   {
@@ -61,7 +61,7 @@
       "agreement": 1,
       "content": "",
       "summary": "신규 생성",
-      "created_at": "2024-11-30T00:28:29.954"
+      "created_at": "2024-11-30T00:28:29.954Z"
     }
   },
   {
@@ -71,7 +71,7 @@
       "agreement": 2,
       "content": "",
       "summary": "신규 생성",
-      "created_at": "2024-11-30T00:28:29.954"
+      "created_at": "2024-11-30T00:28:29.954Z"
     }
   },
   {
@@ -81,7 +81,7 @@
       "agreement": 3,
       "content": "",
       "summary": "신규 생성",
-      "created_at": "2024-11-30T00:28:29.954"
+      "created_at": "2024-11-30T00:28:29.954Z"
     }
   },
   {
@@ -91,7 +91,7 @@
       "agreement": 4,
       "content": "",
       "summary": "신규 생성",
-      "created_at": "2024-11-30T00:28:29.954"
+      "created_at": "2024-11-30T00:28:29.954Z"
     }
   }
 ]

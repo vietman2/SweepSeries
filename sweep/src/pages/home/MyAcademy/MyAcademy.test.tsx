@@ -12,7 +12,7 @@ jest.mock("@fragments/Academy", () => ({
   AcademyCard: () => null,
 }));
 jest.mock("@fragments/Lesson", () => ({
-  LessonHeader: () => null,
+  LessonSimple: () => null,
 }));
 
 describe("<MyAcademy />", () => {

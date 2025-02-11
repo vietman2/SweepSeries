@@ -76,7 +76,9 @@ class CalendarAPITestCase(APITestCase):
 class ScheduleAPITestCase(APITestCase):
     fixtures = [
         'core/data/test/users.json', 'core/data/test/calendars.json',
-        'core/data/test/schedules.json'
+        'core/data/test/schedules.json', 'core/data/test/coaches.json',
+        'core/data/test/programs.json', 'core/data/test/academies.json',
+        'core/data/initial/regions.json', 'core/data/initial/professions.json',
     ]
 
     def setUp(self):

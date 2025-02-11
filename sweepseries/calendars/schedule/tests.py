@@ -51,8 +51,8 @@ class ScheduleAPITestCase(APITestCase):
         self.assertEqual(Schedule.objects.count(), 2)
         self.assertEqual(Event.objects.count(), 2)
         event = Event.objects.get(schedule__title="alarm, all day")
-        self.assertEqual(event.start_datetime.isoformat(), '2025-02-01T00:00:00')
-        self.assertEqual(event.end_datetime.isoformat(), '2025-02-01T23:59:59')
+        self.assertEqual(event.start_datetime.isoformat(), '2025-02-01T15:00:00+00:00')
+        self.assertEqual(event.end_datetime.isoformat(), '2025-02-02T14:59:59+00:00')
         self.assertEqual(event.is_allday, True)
 
     def test_create_schedule_repeat(self):
@@ -70,7 +70,7 @@ class ScheduleAPITestCase(APITestCase):
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertEqual(Schedule.objects.count(), 1)
-        self.assertEqual(Event.objects.count(), 7)
+        self.assertEqual(Event.objects.count(), 6)
 
         ## 2. repeat: weekly + break: date
         data["title"] = "weekly repeat"
@@ -83,7 +83,7 @@ class ScheduleAPITestCase(APITestCase):
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertEqual(Schedule.objects.count(), 2)
-        self.assertEqual(Event.objects.count(), 11)
+        self.assertEqual(Event.objects.count(), 10)
 
         ## 3. repeat: monthly + break: date
         data["title"] = "monthly repeat"
@@ -96,7 +96,7 @@ class ScheduleAPITestCase(APITestCase):
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertEqual(Schedule.objects.count(), 3)
-        self.assertEqual(Event.objects.count(), 22)
+        self.assertEqual(Event.objects.count(), 21)
 
         ## 4. repeat: yearly + break: number
         data["title"] = "yearly repeat"
@@ -109,9 +109,9 @@ class ScheduleAPITestCase(APITestCase):
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertEqual(Schedule.objects.count(), 4)
-        self.assertEqual(Event.objects.count(), 27)
+        self.assertEqual(Event.objects.count(), 26)
         last = Event.objects.last()
-        self.assertEqual(last.start_datetime.isoformat(), '2029-02-01T00:00:00')
+        self.assertEqual(last.start_datetime.isoformat(), '2029-02-01T00:00:00+00:00')
 
     def test_create_schedule_alarm(self):
         self.client.force_authenticate(user=self.calendar_owner)
@@ -129,7 +129,7 @@ class ScheduleAPITestCase(APITestCase):
         self.assertEqual(response.status_code, 201)
         event = Event.objects.get(schedule__title="alarm minutes")
         self.assertEqual(event.notify, True)
-        self.assertEqual(event.notify_time.isoformat(), '2025-01-31T23:50:00')
+        self.assertEqual(event.notify_time.isoformat(), '2025-01-31T23:50:00+00:00')
 
         ## 2. alarm: hours
         data["title"] = "alarm hours"
@@ -142,7 +142,7 @@ class ScheduleAPITestCase(APITestCase):
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 201)
         event = Event.objects.get(schedule__title="alarm hours")
-        self.assertEqual(event.notify_time.isoformat(), '2025-01-31T23:00:00')
+        self.assertEqual(event.notify_time.isoformat(), '2025-01-31T23:00:00+00:00')
 
         ## 3. alarm: days
         data["title"] = "alarm days"
@@ -155,7 +155,7 @@ class ScheduleAPITestCase(APITestCase):
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 201)
         event = Event.objects.get(schedule__title="alarm days")
-        self.assertEqual(event.notify_time.isoformat(), '2025-01-29T00:00:00')
+        self.assertEqual(event.notify_time.isoformat(), '2025-01-29T00:00:00+00:00')
 
         ## 4. alarm: weeks
         data["title"] = "alarm weeks"
@@ -168,7 +168,7 @@ class ScheduleAPITestCase(APITestCase):
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 201)
         event = Event.objects.get(schedule__title="alarm weeks")
-        self.assertEqual(event.notify_time.isoformat(), '2025-01-18T00:00:00')
+        self.assertEqual(event.notify_time.isoformat(), '2025-01-18T00:00:00+00:00')
 
     def test_create_schedule_fail(self):
         ## 1. not authenticated
@@ -286,4 +286,44 @@ class LessonAPITestCase(APITestCase):
         self.client.force_authenticate(user=self.user)
 
         response = self.client.post(self.url, {}, format="json")
+        self.assertEqual(response.status_code, 400)
+
+class SessionAPITestCase(APITestCase):
+    fixtures = [
+        "core/data/test/users.json", "core/data/test/calendars.json",
+        "core/data/test/schedules.json", 'core/data/test/coaches.json',
+        'core/data/test/programs.json', 'core/data/test/academies.json',
+        'core/data/initial/regions.json', 'core/data/initial/professions.json',
+    ]
+
+    def setUp(self):
+        self.url = "/v1/sessions/"
+        self.user = User.objects.get(username="normaluser")
+
+    def test_list_session_normal(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 405)
+
+    def test_retrieve_session_normal(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(f"{self.url}1/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_update_session_notes(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.patch(f"{self.url}1/", {"notes": "test"}, format="json")
+        self.assertEqual(response.status_code, 200)
+
+    def test_update_session_feedback(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.patch(f"{self.url}1/", {"feedback": "test"}, format="json")
+        self.assertEqual(response.status_code, 200)
+
+    def test_update_session_fail(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.patch(f"{self.url}1/", {"feedback": ""}, format="json")
+        self.assertEqual(response.status_code, 400)
+
+        response = self.client.patch(f"{self.url}1/", {"notes": ""}, format="json")
         self.assertEqual(response.status_code, 400)

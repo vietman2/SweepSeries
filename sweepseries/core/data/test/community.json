@@ -3,8 +3,8 @@
     "model": "post.image",
     "pk": 1,
     "fields": {
-      "created_at": "2024-07-21T01:44:17.103",
-      "updated_at": "2024-07-21T01:44:17.103",
+      "created_at": "2024-07-21T01:44:17.103Z",
+      "updated_at": "2024-07-21T01:44:17.103Z",
       "is_deleted": false,
       "deleted_at": null,
       "image": "/path/image.jpg"
@@ -14,8 +14,8 @@
     "model": "post.post",
     "pk": 2024072300000001,
     "fields": {
-      "created_at": "2024-07-21T01:44:48.656",
-      "updated_at": "2024-07-21T11:54:14.349",
+      "created_at": "2024-07-21T01:44:48.656Z",
+      "updated_at": "2024-07-21T11:54:14.349Z",
       "is_deleted": false,
       "deleted_at": null,
       "forum": 1,
@@ -32,8 +32,8 @@
     "model": "post.post",
     "pk": 2024072300000002,
     "fields": {
-      "created_at": "2024-07-21T01:44:48.656",
-      "updated_at": "2024-07-21T11:54:14.349",
+      "created_at": "2024-07-21T01:44:48.656Z",
+      "updated_at": "2024-07-21T11:54:14.349Z",
       "is_deleted": false,
       "deleted_at": null,
       "forum": 2,
@@ -50,8 +50,8 @@
     "model": "post.postreport",
     "pk": 1,
     "fields": {
-      "created_at": "2024-11-29T03:12:42.141",
-      "updated_at": "2024-11-29T18:54:35.589",
+      "created_at": "2024-11-29T03:12:42.141Z",
+      "updated_at": "2024-11-29T18:54:35.589Z",
       "report_user": "223e4567-e89b-12d3-a456-426614174000",
       "report_content": "스팸이에요",
       "report_reason": "도배/스팸/광고",
@@ -97,8 +97,8 @@
     "model": "comment.comment",
     "pk": 1,
     "fields": {
-      "created_at": "2024-07-24T16:49:45.505",
-      "updated_at": "2024-07-24T16:49:45.505",
+      "created_at": "2024-07-24T16:49:45.505Z",
+      "updated_at": "2024-07-24T16:49:45.505Z",
       "is_deleted": false,
       "deleted_at": null,
       "post": 2024072300000001,
@@ -110,8 +110,8 @@
     "model": "comment.comment",
     "pk": 2,
     "fields": {
-      "created_at": "2024-07-24T16:49:45.505",
-      "updated_at": "2024-07-24T16:49:45.505",
+      "created_at": "2024-07-24T16:49:45.505Z",
+      "updated_at": "2024-07-24T16:49:45.505Z",
       "post": 2024072300000002,
       "author": 1,
       "content": "댓글 내용 2",
@@ -123,10 +123,10 @@
     "model": "comment.comment",
     "pk": 3,
     "fields": {
-      "created_at": "2024-07-24T16:49:45.505",
-      "updated_at": "2024-07-24T16:49:45.505",
+      "created_at": "2024-07-24T16:49:45.505Z",
+      "updated_at": "2024-07-24T16:49:45.505Z",
       "is_deleted": true,
-      "deleted_at": "2024-07-27T16:49:45.505",
+      "deleted_at": "2024-07-27T16:49:45.505Z",
       "post": 2024072300000001,
       "author": 1,
       "content": "삭제된 댓글 내용 1"
@@ -136,8 +136,8 @@
     "model": "comment.commentreport",
     "pk": 1,
     "fields": {
-      "created_at": "2024-11-28T01:33:51.628",
-      "updated_at": "2024-11-29T22:34:28.764",
+      "created_at": "2024-11-28T01:33:51.628Z",
+      "updated_at": "2024-11-29T22:34:28.764Z",
       "report_user": "223e4567-e89b-12d3-a456-426614174000",
       "report_content": "ㅋㅋㅋㅋ",
       "report_reason": "욕설/비방",
@@ -150,8 +150,8 @@
     "model": "comment.recomment",
     "pk": 1,
     "fields": {
-      "created_at": "2024-07-26T16:48:45.122",
-      "updated_at": "2024-07-26T16:48:45.122",
+      "created_at": "2024-07-26T16:48:45.122Z",
+      "updated_at": "2024-07-26T16:48:45.122Z",
       "is_deleted": false,
       "deleted_at": null,
       "comment": 1,
@@ -163,8 +163,8 @@
     "model": "comment.recomment",
     "pk": 2,
     "fields": {
-      "created_at": "2024-07-26T16:48:45.122",
-      "updated_at": "2024-07-26T16:48:45.122",
+      "created_at": "2024-07-26T16:48:45.122Z",
+      "updated_at": "2024-07-26T16:48:45.122Z",
       "comment": 2,
       "author": 1,
       "content": "대댓글 내용 2",
@@ -176,8 +176,8 @@
     "model": "comment.recommentreport",
     "pk": 1,
     "fields": {
-      "created_at": "2024-11-28T01:44:54.042",
-      "updated_at": "2024-11-29T22:36:29.466",
+      "created_at": "2024-11-28T01:44:54.042Z",
+      "updated_at": "2024-11-29T22:36:29.466Z",
       "report_user": "223e4567-e89b-12d3-a456-426614174000",
       "report_content": "ㅠㅠㅠㅠ",
       "report_reason": "욕설/비방",
@@ -190,10 +190,10 @@
     "model": "comment.recomment",
     "pk": 3,
     "fields": {
-      "created_at": "2024-07-26T16:48:45.122",
-      "updated_at": "2024-07-26T16:48:45.122",
+      "created_at": "2024-07-26T16:48:45.122Z",
+      "updated_at": "2024-07-26T16:48:45.122Z",
       "is_deleted": true,
-      "deleted_at": "2024-07-27T16:48:45.122",
+      "deleted_at": "2024-07-27T16:48:45.122Z",
       "comment": 1,
       "author": 1,
       "content": "삭제된 대댓글 내용 1"
@@ -205,8 +205,8 @@
     "fields": {
       "post": 2024072300000002,
       "user": "2",
-      "viewed_first_at": "2024-07-21T01:44:49.078",
-      "viewed_last_at": "2024-07-23T11:54:14.365"
+      "viewed_first_at": "2024-07-21T01:44:49.078Z",
+      "viewed_last_at": "2024-07-23T11:54:14.365Z"
     }
   }
 ]

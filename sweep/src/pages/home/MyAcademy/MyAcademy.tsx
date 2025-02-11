@@ -9,9 +9,9 @@ import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
 import { AcademyCard } from "@fragments/Academy";
-import { LessonHeader } from "@fragments/Lesson";
+import { LessonSimple } from "@fragments/Lesson";
 import { LessonDetailType } from "@models/calendar";
-import { sampleLessons } from "@testdata/calendar";
+import { sampleLesson } from "@testdata/calendar";
 import { ThemeColorType } from "@themes/colors";
 
 export function MyAcademy() {
@@ -38,7 +38,7 @@ export function MyAcademy() {
     };
 
     setSelectedMonth(getCurrentMonth());
-    setSchedules(sampleLessons);
+    setSchedules([sampleLesson]);
     setLoading(false);
   }, []);
 
@@ -59,7 +59,7 @@ export function MyAcademy() {
               onPress={() => handleLessonPress(schedule)}
               testID={`lesson-${schedule.id}`}
             >
-              <LessonHeader lesson={schedule} />
+              <LessonSimple lesson={schedule} />
             </TouchableOpacity>
             <Divider />
           </View>

@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.transaction import atomic
+from django.utils import timezone
 from rest_framework import serializers
 
 from auth.person.models import Person
@@ -10,6 +11,7 @@ from calendars.calendarapp.models import Calendar
 from product.coach.models import Coach
 from product.program.models import Program
 from .models import Schedule, Event, Lesson, Session
+from .utils import get_time_text, get_duration_text
 
 class ScheduleSerializer(serializers.ModelSerializer):
     calendar_id     = serializers.IntegerField(write_only=True)
@@ -120,7 +122,7 @@ class ScheduleSerializer(serializers.ModelSerializer):
                 while True:
                     start_time = self.get_time(events_data['start'], period, i)
                     end_time = self.get_time(events_data['end'], period, i)
-                    if start_time > repeat_until:
+                    if start_time > timezone.make_aware(repeat_until):
                         break
                     event_data = {
                         'schedule': events_data['schedule'],
@@ -188,44 +190,17 @@ class EventSerializer(serializers.ModelSerializer):
         return obj.schedule.color
 
     def get_type(self, obj):  ## pylint: disable=unused-argument
-        ## TODO: 제대로 구현하고, pylint 무시 제거
-
         return '일정'
-
-    def get_time_text(self, time):
-        ampm = '오전'
-        hour = time.strftime('%H')
-        minute = time.strftime('%M')
-
-        if hour > '12':
-            ampm = '오후'
-            hour = int(hour) - 12
-
-        if minute == '00':
-            return f'{ampm} {hour}시'
-
-        return f'{ampm} {hour}시 {minute}분'
-
-    def get_duration_text(self, duration):
-        days = duration.days
-        hours, remainder = divmod(duration.seconds, 3600)
-        minutes, _ = divmod(remainder, 60)
-
-        days_text = f'{days}일' if days else ''
-        hours_text = f'{hours}시간' if hours else ''
-        minutes_text = f'{minutes}분' if minutes else ''
-
-        return ' '.join([text for text in [days_text, hours_text, minutes_text] if text])
 
     def get_time(self, obj):
         if obj.is_allday:
             return '종일'
 
-        start_time = self.get_time_text(obj.start_datetime)
-        end_time = self.get_time_text(obj.end_datetime)
+        start_time = get_time_text(obj.start_datetime)
+        end_time = get_time_text(obj.end_datetime)
 
         duration = obj.end_datetime - obj.start_datetime
-        duration_text = self.get_duration_text(duration)
+        duration_text = get_duration_text(duration)
 
         return f'{start_time} ~ {end_time} ({duration_text})'
 
@@ -290,3 +265,94 @@ class LessonSerializer(serializers.ModelSerializer):
         self.create_session(lesson, validated_data['start_datetime'], program)
 
         return lesson
+
+class SessionSerializer(serializers.ModelSerializer):
+    id          = serializers.SerializerMethodField()
+    title       = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+    color       = serializers.SerializerMethodField()
+    time        = serializers.SerializerMethodField()
+    type        = serializers.SerializerMethodField()
+    done        = serializers.SerializerMethodField(read_only=True)
+    date        = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Session
+        fields = ['id', 'type', 'title', 'description', 'color', 'time', 'done', 'date']
+
+    def get_id(self, obj):
+        return f"s{obj.lesson.id}"
+
+    def get_title(self, obj):
+        return obj.lesson.program.name
+
+    def get_description(self, obj):
+        coaches = ', '.join([coach.person.name for coach in obj.lesson.coaches.all()])
+        student = obj.lesson.student.name
+
+        return f'코치: {coaches}\t수강생: {student}'
+
+    def get_color(self, obj):  ## pylint: disable=unused-argument
+        return "#14863E"
+
+    def get_type(self, obj):  ## pylint: disable=unused-argument
+        return '레슨'
+
+    def get_time(self, obj):
+        start_time = get_time_text(obj.start_datetime)
+        end_time = get_time_text(obj.end_datetime)
+
+        duration = obj.end_datetime - obj.start_datetime
+        duration_text = get_duration_text(duration)
+
+        return f'{start_time} ~ {end_time} ({duration_text})'
+
+    def get_done(self, obj):
+        ## True if end_datetime is past
+        ## timezone aware
+        current_time = timezone.now()
+        return obj.end_datetime < current_time
+
+    def get_date(self, obj):
+        ## return timezone aware {day}일. {dayofweek}
+        dow = ['월', '화', '수', '목', '금', '토', '일']
+        tz = timezone.get_current_timezone()
+        day = obj.start_datetime.astimezone(tz).day
+        dayofweek = obj.start_datetime.astimezone(tz).weekday()
+
+        return f'{day}일. {dow[dayofweek]}'
+
+class SessionDetailSerializer(SessionSerializer):
+    coaches = serializers.SerializerMethodField()
+    student = serializers.SerializerMethodField()
+
+    class Meta(SessionSerializer.Meta):
+        fields = SessionSerializer.Meta.fields + ['notes', 'feedback', 'coaches', 'student']
+
+    def get_date(self, obj):
+        ## return timezone aware {day}일. {dayofweek}
+        dow = ['월', '화', '수', '목', '금', '토', '일']
+        tz = timezone.get_current_timezone()
+        month = obj.start_datetime.astimezone(tz).month
+        day = obj.start_datetime.astimezone(tz).day
+        dayofweek = obj.start_datetime.astimezone(tz).weekday()
+
+        return f'{month}월 {day}일. {dow[dayofweek]}'
+
+    def get_coaches(self, obj):
+        return [coach.person.id for coach in obj.lesson.coaches.all()]
+
+    def get_student(self, obj):
+        return obj.lesson.student.id
+
+    def validate_feedback(self, value):
+        if value == '':
+            raise serializers.ValidationError('피드백을 입력해주세요.')
+
+        return value
+
+    def validate_notes(self, value):
+        if value == '':
+            raise serializers.ValidationError('노트를 입력해주세요.')
+
+        return value

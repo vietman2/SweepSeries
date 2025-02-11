@@ -1,5 +1,5 @@
 export type ScheduleType = {
-  id: number;
+  id: string;
   time: string;
   type: string;
   title: string;
@@ -8,7 +8,7 @@ export type ScheduleType = {
 };
 
 export type ScheduleSimpleType = {
-  id: number;
+  id: string;
   title: string;
   color: string;
 }
@@ -17,15 +17,14 @@ export type ScheduleResponseType = {
   [date: string]: ScheduleSimpleType[];
 };
 
-export type LessonDetailType = {
-  id: number;
+export type LessonType = {
+  done: boolean;
   date: string;
-  time: string;
-  status: string;
-  color: string;
-  program: string;
-  coach: string;
-  player: string;
-  note: string;
+} & ScheduleType;
+
+export type LessonDetailType = {
+  notes: string;
   feedback: string;
-};
+  coaches: number[];
+  student: string;
+} & LessonType;
