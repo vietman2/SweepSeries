@@ -97,7 +97,6 @@
       "updated_at": "2025-02-01T00:46:07.331Z",
       "program": 1,
       "student": 1,
-      "notes": null,
       "coaches": ["923e4567-e89b-12d3-a456-426614174999"]
     }
   },
@@ -110,7 +109,7 @@
       "end_datetime": "2025-02-01T08:00:18Z",
       "notify": false,
       "notify_time": null,
-      "notes": null,
+      "notes": "",
       "feedback": "피드백 1"
     }
   }
