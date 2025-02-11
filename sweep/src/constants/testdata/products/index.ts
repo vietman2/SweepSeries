@@ -7,7 +7,7 @@ import {
   sampleProgramTargets,
 } from "./programs";
 import { sampleReviews } from "./review";
-import { sampleStudents } from "./students";
+import { sampleStudents, sampleStudentLesson } from "./students";
 
 export {
   sampleAcademies,
@@ -20,4 +20,5 @@ export {
   sampleProgramTargets,
   sampleReviews,
   sampleStudents,
+  sampleStudentLesson,
 };
