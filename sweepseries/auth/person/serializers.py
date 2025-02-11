@@ -55,7 +55,7 @@ class StudentSimpleSerializer(serializers.ModelSerializer):
         except ObjectDoesNotExist:
             return "#83CBFF"
 
-        return obj.user.profiles.first().default_color
+        return user.profiles.first().default_color
 
 class StudentDetailSerializer(serializers.ModelSerializer):
     lessons = serializers.SerializerMethodField(read_only=True)
