@@ -49,8 +49,6 @@ class Lesson(TimeStampedModel):
     student = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='lessons')
     coaches = models.ManyToManyField(Coach, related_name='lessons')
 
-    notes   = models.TextField(null=True, blank=True)
-
     objects = models.Manager()
 
     class Meta:
@@ -64,8 +62,8 @@ class Session(models.Model):
     notify          = models.BooleanField(default=False)
     notify_time     = models.DateTimeField(null=True, blank=True)
 
-    notes           = models.TextField(null=True, blank=True)
-    feedback        = models.TextField(null=True, blank=True)
+    notes           = models.TextField(blank=True)
+    feedback        = models.TextField(blank=True)
 
     objects         = models.Manager()
 
