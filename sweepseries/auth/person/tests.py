@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from auth.user.models import User
+from product.academy.models import Academy
 from .models import Person
 
 class PersonAPITestCase(APITestCase):
@@ -32,6 +33,37 @@ class PersonAPITestCase(APITestCase):
         self.client.force_authenticate(user=self.admin)
         response = self.client.get(self.url + "1/")
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+class AcademyStudentAPITestCase(APITestCase):
+    fixtures = [
+        "core/data/test/users.json", "core/data/initial/regions.json",
+        "core/data/test/academies.json", "core/data/initial/facilities.json"
+    ]
+
+    def setUp(self):
+        self.url = "/v1/academies/"
+        self.user = User.objects.get(username="normaluser")
+        self.academy = Academy.objects.get(name="아카데미 1")
+
+    def test_students_list(self):
+        self.client.force_authenticate(user=self.user)
+        ## 1. normal
+        response = self.client.get(f"{self.url}{self.academy.uuid}/students/")
+        self.assertEqual(response.status_code, 200)
+
+        ## 2. with query
+        response = self.client.get(f"{self.url}{self.academy.uuid}/students/?query=학생")
+        self.assertEqual(response.status_code, 200)
+
+    def test_students_retrieve(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(f"{self.url}{self.academy.uuid}/students/1/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_students_retrieve_fail(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(f"{self.url}{self.academy.uuid}/students/3/")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 class PersonModelTest(TestCase):
     fixtures = ["core/data/test/users.json"]
