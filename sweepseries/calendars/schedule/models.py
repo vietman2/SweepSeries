@@ -64,6 +64,9 @@ class Session(models.Model):
     notify          = models.BooleanField(default=False)
     notify_time     = models.DateTimeField(null=True, blank=True)
 
+    notes           = models.TextField(null=True, blank=True)
+    feedback        = models.TextField(null=True, blank=True)
+
     objects         = models.Manager()
 
     class Meta:
