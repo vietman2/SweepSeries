@@ -11,7 +11,12 @@ interface Props {
   size?: "small" | "large";
 }
 
-export function ProfileImage({ uri, edit, color, size="small" }: Readonly<Props>) {
+export function ProfileImage({
+  uri,
+  edit,
+  color,
+  size = "small",
+}: Readonly<Props>) {
   const { theme } = useTheme();
 
   if (uri) {
@@ -38,8 +43,8 @@ export function ProfileImage({ uri, edit, color, size="small" }: Readonly<Props>
       >
         <SvgCssUri
           uri="https://kr.object.ncloudstorage.com/catchb.resources/appicons/default_profile.svg"
-          width={size === "small" ? "60" : "135"}
-          height={size === "small" ? "60" : "135"}
+          width={size === "small" ? "72" : "135"}
+          height={size === "small" ? "72" : "135"}
         />
         {edit ? (
           <View style={styles.edit}>
@@ -67,11 +72,11 @@ const styles = StyleSheet.create({
     borderRadius: 75,
   },
   iconSmall: {
-    width: 70,
-    height: 70,
+    width: 80,
+    height: 80,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 45,
+    borderRadius: 40,
   },
   iconLarge: {
     width: 150,
