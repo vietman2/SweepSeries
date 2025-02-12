@@ -6,6 +6,7 @@ export async function createLesson(
   startDateTime: Date,
   person: {
     phone: string;
+    id?: number;
     name?: string;
   }
 ) {

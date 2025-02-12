@@ -271,6 +271,16 @@ class LessonAPITestCase(APITestCase):
                 "phone": "+821000000000",
             },
         }
+        self.create_data3 = {
+            "program": 1,
+            "coaches": ["923e4567-e89b-12d3-a456-426614174999"],
+            "start_datetime": "2025-02-01T00:00:00Z",
+            "person": {
+                "id": 1,
+                "name": "lesson",
+                "phone": "+821000000000",
+            },
+        }
 
     def test_create_lesson_normal(self):
         self.client.force_authenticate(user=self.user)
@@ -280,6 +290,10 @@ class LessonAPITestCase(APITestCase):
 
         ## 2. existing person
         response = self.client.post(self.url, self.create_data2, format="json")
+        self.assertEqual(response.status_code, 201)
+
+        ## 3. existing person (2)
+        response = self.client.post(self.url, self.create_data3, format="json")
         self.assertEqual(response.status_code, 201)
 
     def test_create_lesson_fail(self):

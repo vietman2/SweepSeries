@@ -53,9 +53,11 @@ class Lesson(TimeStampedModel):
 
     class Meta:
         db_table = 'lessons'
+        unique_together = ('program', 'student')
 
 class Session(models.Model):
     lesson          = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='sessions')
+    coaches         = models.ManyToManyField(Coach, related_name='sessions')
     start_datetime  = models.DateTimeField()
     end_datetime    = models.DateTimeField()
 

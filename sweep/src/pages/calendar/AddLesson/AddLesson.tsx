@@ -147,6 +147,8 @@ export function AddLesson() {
         selectedCoaches.map((coach) => coach.uuid),
         selectedStartDateTime,
         {
+          id: selectedStudent.id,
+          name: selectedStudent.name,
           phone: selectedStudent.phone_number,
         }
       );
