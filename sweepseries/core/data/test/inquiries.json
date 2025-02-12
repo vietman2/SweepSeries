@@ -1,0 +1,16 @@
+[
+  {
+    "model": "inquiry.inquiry",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-02-12T03:07:27.569Z",
+      "updated_at": "2025-02-12T03:07:27.569Z",
+      "title": "문의 1 제목",
+      "description": "문의 1 내용",
+      "reply": null,
+      "user": "123e4567-e89b-12d3-a456-426614174000",
+      "resolved": false,
+      "replied": false
+    }
+  }
+]

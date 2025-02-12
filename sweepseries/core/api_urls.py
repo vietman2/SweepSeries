@@ -5,6 +5,7 @@ from rest_framework.routers import DefaultRouter
 
 ## Apps
 from app.faq.views import FaqViewSet
+from app.inquiry.views import InquiryViewSet
 from app.notices.views import NoticeViewSet
 
 ## Auth
@@ -40,6 +41,7 @@ from product.program.views import ProgramViewSet
 router = DefaultRouter()
 
 router.register(r'faqs', FaqViewSet, basename='faqs')
+router.register(r'inquiries', InquiryViewSet, basename='inquiries')
 router.register(r'notices', NoticeViewSet, basename='notices')
 
 router.register(r'agreements', AgreementViewSet, basename='agreements')
