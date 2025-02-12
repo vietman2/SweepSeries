@@ -14,7 +14,7 @@ export function InquirySimple({ inquiry }: Readonly<Props>) {
   const styles = createStyles();
 
   return (
-    <>
+    <View>
       <View style={styles.container}>
         <Text>
           [{inquiry.category}] {inquiry.title}
@@ -34,7 +34,7 @@ export function InquirySimple({ inquiry }: Readonly<Props>) {
         </Text>
       </View>
       <Divider />
-    </>
+    </View>
   );
 }
 

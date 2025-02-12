@@ -52,6 +52,7 @@ INSTALLED_APPS = [
 
     ## Custom Apps
     'app.faq.apps.FaqConfig',
+    'app.inquiry.apps.InquiryConfig',
     'app.notices.apps.NoticesConfig',
 
     'auth.agreements.apps.AgreementsConfig',
