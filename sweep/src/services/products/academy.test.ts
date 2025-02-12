@@ -3,6 +3,8 @@ import axios from "axios";
 import {
   createAcademy,
   getAcademies,
+  getLikedAcademies,
+  likeAcademy,
   getAcademyDetail,
   getMyAcademies,
   getFacilityOptions,
@@ -72,6 +74,42 @@ describe("getAcademies", () => {
     jest.spyOn(axios, "get").mockRejectedValue(null);
 
     const result = await getAcademies("query");
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("getLikedAcademies", () => {
+  it("should get liked academies", async () => {
+    jest.spyOn(axios, "get").mockResolvedValue({ data: {} });
+
+    const result = await getLikedAcademies();
+
+    expect(result).toEqual({});
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "get").mockRejectedValue(null);
+
+    const result = await getLikedAcademies();
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("likeAcademy", () => {
+  it("should like an academy", async () => {
+    jest.spyOn(axios, "post").mockResolvedValue({ data: {} });
+
+    const result = await likeAcademy("uuid");
+
+    expect(result).toEqual({});
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "post").mockRejectedValue(null);
+
+    const result = await likeAcademy("uuid");
 
     expect(result).toBeNull();
   });
@@ -168,21 +206,21 @@ describe("updateFacilities", () => {
 });
 
 describe("updateBusinessHours", () => {
-    const dailyScheduleData = {
-      open_time: "09:00",
-      close_time: "18:00",
-      is_closed: false,
-      is_allday: false,
-    };
-    const data = [
-      dailyScheduleData,
-      dailyScheduleData,
-      dailyScheduleData,
-      dailyScheduleData,
-      dailyScheduleData,
-      dailyScheduleData,
-      dailyScheduleData,
-    ];
+  const dailyScheduleData = {
+    open_time: "09:00",
+    close_time: "18:00",
+    is_closed: false,
+    is_allday: false,
+  };
+  const data = [
+    dailyScheduleData,
+    dailyScheduleData,
+    dailyScheduleData,
+    dailyScheduleData,
+    dailyScheduleData,
+    dailyScheduleData,
+    dailyScheduleData,
+  ];
   it("should update business hours (all types)", async () => {
     jest.spyOn(axios, "patch").mockResolvedValue({ data: {} });
 

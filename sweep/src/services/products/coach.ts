@@ -47,6 +47,28 @@ export async function getCoaches(academyId: string) {
   }
 }
 
+export async function getLikedCoaches() {
+  try {
+    const response = await axios.get("/v1/coaches/liked/");
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
+export async function likeCoach(coachId: string | undefined) {
+  if (!coachId) return null;
+
+  try {
+    const response = await axios.post(`/v1/coaches/${coachId}/like/`);
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
 export async function getCoachesByProfile(profileId: number | undefined) {
   if (!profileId) return null;
 

@@ -1,6 +1,7 @@
 import {
   createAcademy,
   getAcademies,
+  getLikedAcademies,
   getAcademyDetail,
   getMyAcademies,
   getFacilityOptions,
@@ -10,10 +11,13 @@ import {
   updateLogo,
   uploadImage,
   deleteImage,
+  likeAcademy,
 } from "./academy";
 import {
   createCoach,
   getCoaches,
+  getLikedCoaches,
+  likeCoach,
   getCoachesByProfile,
   getCoachDetails,
   getEmployedCoaches,
@@ -42,6 +46,7 @@ import { getStudents, getAcademyStudentDetail } from "./students";
 export {
   createAcademy,
   getAcademies,
+  getLikedAcademies,
   getAcademyDetail,
   getMyAcademies,
   getFacilityOptions,
@@ -51,8 +56,11 @@ export {
   updateLogo,
   uploadImage,
   deleteImage,
+  likeAcademy,
   createCoach,
   getCoaches,
+  getLikedCoaches,
+  likeCoach,
   getCoachesByProfile,
   getCoachDetails,
   getEmployedCoaches,
