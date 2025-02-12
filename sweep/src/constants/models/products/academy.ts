@@ -2,12 +2,14 @@ import { ImageType } from "@models/app";
 
 export type AcademySimpleType = {
   uuid: string;
-  logo: string;
   name: string;
-  location: string;
   rating: number;
   num_reviews: number;
+  location: string;
+  num_likes: number;
+  is_liked: boolean;
   top_review: string;
+  logo: string;
 };
 
 export type WorkingHoursType = {
@@ -43,4 +45,5 @@ export type AcademyDetailType = {
   schedule_details: ScheduleDetailType[];
   convenience: FacilityType[];
   map: string;
+  is_liked: boolean;
 };

@@ -3,11 +3,13 @@ import { AcademyDetailType, AcademySimpleType } from "@models/products";
 export const sampleAcademies: AcademySimpleType[] = [
   {
     uuid: "1",
-    logo: "https://yaguin.com/lf_img/lfi15856190990.jpeg",
     name: "유더스타 청라 아카데미",
-    location: "인천시 서구 청라동",
     rating: 5.0,
     num_reviews: 10,
+    location: "인천시 서구 청라동",
+    num_likes: 20,
+    is_liked: true,
+    logo: "https://yaguin.com/lf_img/lfi15856190990.jpeg",
     top_review: "최고의 시설과 코치진! 추천합니다!",
   },
   {
@@ -18,6 +20,8 @@ export const sampleAcademies: AcademySimpleType[] = [
     rating: 4.2,
     num_reviews: 14,
     top_review: "좋은 시설과 친절한 코치들이 많아요!",
+    num_likes: 0,
+    is_liked: false,
   },
 ];
 
@@ -165,4 +169,5 @@ export const sampleAcademyDetail: AcademyDetailType = {
     },
   ],
   map: "https://kr.object.ncloudstorage.com/sweepdev/test_images/map.png",
+  is_liked: false,
 };
