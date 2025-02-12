@@ -214,9 +214,9 @@ class LessonSerializer(serializers.ModelSerializer):
         model = Lesson
         fields = ['program', 'coaches', 'start_datetime', 'person']
 
-    def get_or_create_new_student(self, id, name, phone_number):
-        if id is not None:
-            return Person.objects.get(id=id)
+    def get_or_create_new_student(self, person_id, name, phone_number):
+        if person_id is not None:
+            return Person.objects.get(id=person_id)
 
         try:
             person = Person.objects.get(phone_number=phone_number)
@@ -261,11 +261,11 @@ class LessonSerializer(serializers.ModelSerializer):
         coach_uuids = validated_data.pop('coaches')
         person_data = validated_data.pop('person')
         name = person_data.get('name', '')
-        id = person_data.get('id', None)
+        person_id = person_data.get('id', None)
 
         program = Program.objects.get(pk=program_id)
         coaches = [Coach.objects.get(uuid=uuid) for uuid in coach_uuids]
-        student = self.get_or_create_new_student(id, name, person_data['phone'])
+        student = self.get_or_create_new_student(person_id, name, person_data['phone'])
 
         self.add_student_to_academy(student, program.academy)
 
