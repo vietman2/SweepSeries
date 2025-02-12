@@ -34,7 +34,7 @@ class StudentSimpleSerializer(serializers.ModelSerializer):
         ## if phone number is 010-aaaa-bbbb,
         ## return 010-xxxx-xxbb
         if len(number) == 13:
-            return f"{number[:9]}xx{number[-2:]}"
+            return f"{number[:3]}-xxxx-{number[-4:]}"
 
         return number
 
