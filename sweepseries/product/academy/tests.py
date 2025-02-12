@@ -190,8 +190,24 @@ class AcademyTestCase(APITestCase):
         response = self.client.get(f"{self.url}{academy2.uuid}/")
         self.assertEqual(response.status_code, 200)
 
+        self.client.force_authenticate(user=self.user)
         academy3 = Academy.objects.get(name="아카데미 3")
         response = self.client.get(f"{self.url}{academy3.uuid}/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_academy_liked(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(f"{self.url}liked/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_academy_like(self):
+        self.client.force_authenticate(user=self.user)
+        ## 1. like
+        response = self.client.post(f"{self.url}{self.academy.uuid}/like/")
+        self.assertEqual(response.status_code, 200)
+
+        ## 2. unlike
+        response = self.client.post(f"{self.url}{self.academy.uuid}/like/")
         self.assertEqual(response.status_code, 200)
 
     def test_my_academy(self):
