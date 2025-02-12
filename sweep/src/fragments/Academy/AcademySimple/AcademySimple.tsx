@@ -24,7 +24,14 @@ export function AcademySimple({ academy, quote = false }: Readonly<Props>) {
             <Text style={styles.name} numberOfLines={2}>
               {academy.name}
             </Text>
-            <AppIcon icon={"heart-outline"} size={20} color={theme.primary} />
+            <View style={styles.rating}>
+              <AppIcon
+                icon={academy.is_liked ? "heart" : "heart-outline"}
+                size={20}
+                color={theme.primary}
+              />
+              <Text style={styles.ratingText}>{academy.num_likes}</Text>
+            </View>
           </View>
           <View style={styles.rating}>
             <AppIcon icon="star" size={16} color="#F2B517" />
@@ -36,9 +43,7 @@ export function AcademySimple({ academy, quote = false }: Readonly<Props>) {
           <Text style={styles.location}>{academy.location}</Text>
         </View>
       </View>
-      {quote && (
-        <CalloutLarge text={academy.top_review} />
-      )}
+      {quote && <CalloutLarge text={academy.top_review} />}
     </View>
   );
 }

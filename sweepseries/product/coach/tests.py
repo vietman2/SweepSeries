@@ -91,7 +91,6 @@ class CoachTestCase(APITestCase):
         response = self.client.get(f"{self.url}?profile=2")
         self.assertEqual(response.status_code, 200)
 
-
     def test_coach_list_fail(self):
         self.client.force_authenticate(user=User.objects.get(username="admin"))
         param = {'status': 'invalid'}
@@ -114,6 +113,21 @@ class CoachTestCase(APITestCase):
     def test_coach_detail(self):
         self.client.force_authenticate(user=User.objects.get(username="admin"))
         response = self.client.get(f"{self.url}923e4567-e89b-12d3-a456-426614174999/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_coach_liked(self):
+        self.client.force_authenticate(user=User.objects.get(username="normaluser"))
+        response = self.client.get(f"{self.url}liked/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_coach_like(self):
+        self.client.force_authenticate(user=User.objects.get(username="normaluser"))
+        ## 1. like
+        response = self.client.post(f"{self.url}923e4567-e89b-12d3-a456-426614174999/like/")
+        self.assertEqual(response.status_code, 200)
+
+        ## 2. unlike
+        response = self.client.post(f"{self.url}923e4567-e89b-12d3-a456-426614174999/like/")
         self.assertEqual(response.status_code, 200)
 
     def test_me(self):

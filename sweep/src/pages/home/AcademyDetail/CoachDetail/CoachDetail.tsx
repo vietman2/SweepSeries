@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 
 import { Divider } from "@components/Dividers";
@@ -8,15 +8,29 @@ import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
 import { CoachDetailType } from "@models/products";
-import { getCoachDetails } from "@services/products";
+import { getCoachDetails, likeCoach } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
 export function CoachDetail() {
   const [coach, setCoach] = useState<CoachDetailType>();
+
+  const [refreshCount, setRefreshCount] = useState<number>(0);
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  const handleRefresh = () => {
+    setRefreshCount((prev) => prev + 1);
+  };
+
+  const handleLikePress = async () => {
+    const repsonse = await likeCoach(coach?.uuid);
+
+    if (repsonse) {
+      handleRefresh();
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,7 +42,7 @@ export function CoachDetail() {
     };
 
     fetchData();
-  }, []);
+  }, [refreshCount]);
 
   if (!coach) {
     return null;
@@ -47,11 +61,13 @@ export function CoachDetail() {
               <Text style={styles.sub}>코치</Text>
             </Text>
             <View style={styles.row}>
-              <AppIcon
-                icon="heart-outline"
-                size={20}
-                color={theme.lowEmphasis}
-              />
+              <TouchableOpacity onPress={handleLikePress} testID="like-button">
+                <AppIcon
+                  icon={coach.is_liked ? "heart" : "heart-outline"}
+                  size={20}
+                  color={theme.primary}
+                />
+              </TouchableOpacity>
               <AppIcon icon="share" size={20} color={theme.lowEmphasis} />
             </View>
           </View>

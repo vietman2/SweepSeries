@@ -16,7 +16,9 @@ from core.utils import is_admin_page
 from product.coach.enums import CoachApplicationStatus
 from product.coach.serializers import CoachSimpleSerializer
 from .enums import DayChoices
-from .models import Academy, AcademyFacility, AcademyNotice, BusinessHours, AcademyImage
+from .models import (
+    Academy, AcademyFacility, AcademyNotice, BusinessHours, AcademyImage, AcademyLike
+)
 from .permissions import IsAcademyOwner
 from .serializers import (
     AcademySimpleSerializer, AcademyRegisterSerializer, AcademyStatusSerializer,
@@ -108,6 +110,7 @@ class AcademyViewSet(ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         academy = self.get_object()
         serializer = AcademyDetailSerializer(academy)
+        serializer.context['request'] = request
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema(summary="내 아카데미 조회", tags=["아카데미"])
@@ -126,6 +129,43 @@ class AcademyViewSet(ModelViewSet):
         return Response(
             status=status.HTTP_200_OK,
             data=academies.data
+        )
+
+    @extend_schema(summary="좋아요 한 아카데미 조회", tags=["아카데미"])
+    @action(detail=False, methods=['get'])
+    def liked(self, request):
+        user = request.user
+        ## likes = AcademyLike object
+        likes = user.liked_academies.all()
+
+        ## get academy object from likes
+        academies = [like.academy for like in likes]
+        serializer = AcademySimpleSerializer(academies, many=True)
+        serializer.context['request'] = request
+
+        return Response(
+            status=status.HTTP_200_OK,
+            data=serializer.data
+        )
+
+    @extend_schema(summary="좋아요", tags=["아카데미"])
+    @action(detail=True, methods=['post'])
+    def like(self, request, pk=None): # pylint: disable=unused-argument
+        user = request.user
+        academy = self.get_object()
+
+        if AcademyLike.objects.filter(user=user, academy=academy).exists():
+            ## remove like = unlike
+            AcademyLike.objects.filter(user=user, academy=academy).delete()
+            return Response(
+                status=status.HTTP_200_OK,
+                data={"message": "좋아요 취소되었습니다."}
+            )
+
+        AcademyLike.objects.create(user=user, academy=academy)
+        return Response(
+            status=status.HTTP_200_OK,
+            data={"message": "좋아요 완료되었습니다."}
         )
 
     @extend_schema(summary="아카데미 등록 승인", tags=["아카데미"])

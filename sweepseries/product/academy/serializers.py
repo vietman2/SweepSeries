@@ -11,7 +11,8 @@ from product.address.models import Address, Sigungu
 from product.address.utils import get_coordinates, fetch_map_image
 from .enums import NoticeTypeChoices
 from .models import (
-    Academy, AcademyFacility, AcademyNotice, BusinessHours, AcademyNoticeAttachment, AcademyImage
+    Academy, AcademyFacility, AcademyNotice, BusinessHours,
+    AcademyNoticeAttachment, AcademyImage, AcademyLike
 )
 from .utils import get_weekly_schedule, get_schedule_details, upload_logo
 
@@ -64,7 +65,7 @@ class AcademySimpleSerializer(serializers.ModelSerializer):
         if user is None or not user.is_authenticated:
             return False
 
-        return obj.likes.filter(user=user).exists()
+        return AcademyLike.objects.filter(academy=obj, user=user).exists()
 
     def get_top_review(self, obj):
         reviews = obj.reviews.all()
@@ -89,12 +90,13 @@ class AcademyDetailSerializer(serializers.ModelSerializer):
     convenience         = ConvenienceSerializer(many=True)
     schedules           = serializers.SerializerMethodField()
     schedule_details    = serializers.SerializerMethodField()
+    is_liked            = serializers.SerializerMethodField()
 
     class Meta:
         model = Academy
         fields = [
-            "uuid", "name", "logo", "introduction", "address", "map", "images",
-            "rating", "num_reviews", "convenience", "schedules", "schedule_details"
+            "uuid", "name", "logo", "introduction", "address", "map", "images", "rating",
+            "num_reviews", "convenience", "schedules", "schedule_details", "is_liked"
         ]
 
     def get_address(self, obj):
@@ -118,6 +120,14 @@ class AcademyDetailSerializer(serializers.ModelSerializer):
 
     def get_num_reviews(self, obj):
         return obj.reviews.count()
+
+    def get_is_liked(self, obj):
+        request = self.context.get('request')
+        user = request.user if request else None
+        if user is None or not user.is_authenticated:
+            return False
+
+        return obj.likes.filter(user=user).exists()
 
     def get_schedules(self, obj):
         return get_weekly_schedule(obj)

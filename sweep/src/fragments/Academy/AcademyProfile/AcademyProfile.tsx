@@ -14,6 +14,7 @@ import { AppIcon } from "@components/Icons";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
 import { AcademyDetailType } from "@models/products";
+import { likeAcademy } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
 const { width } = Dimensions.get("window");
@@ -25,6 +26,8 @@ interface Props {
 }
 
 export function AcademyProfile({ academy, pro, onRefresh }: Readonly<Props>) {
+  const [liked, setLiked] = useState<boolean>(academy.is_liked);
+
   const [logoModalVisible, setLogoModalVisible] = useState<boolean>(false);
   const [imagesModalVisible, setImagesModalVisible] = useState<boolean>(false);
 
@@ -37,6 +40,14 @@ export function AcademyProfile({ academy, pro, onRefresh }: Readonly<Props>) {
 
   const openLogoModal = () => {
     setLogoModalVisible(true);
+  };
+
+  const handleLike = async () => {
+    const response = await likeAcademy(academy.uuid);
+
+    if (response) {
+      setLiked(!liked);
+    }
   };
 
   useEffect(() => {
@@ -88,9 +99,20 @@ export function AcademyProfile({ academy, pro, onRefresh }: Readonly<Props>) {
           )}
         </View>
         <View style={styles.header}>
-          <View style={styles.titleWrapper}>
-            <Image src={academy.logo} style={styles.logo} />
-            <Text style={styles.title}>{academy.name}</Text>
+          <View style={styles.row}>
+            <View style={styles.titleWrapper}>
+              <Image src={academy.logo} style={styles.logo} />
+              <Text style={styles.title}>{academy.name}</Text>
+            </View>
+            <View style={styles.horizontal}>
+              <TouchableOpacity onPress={handleLike} testID="like-button">
+                <AppIcon
+                  icon={liked ? "heart" : "heart-outline"}
+                  size={24}
+                  color={theme.primary}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
           <View style={styles.horizontal}>
             <AppIcon icon="location" size={20} color={theme.lowEmphasis} />
@@ -192,5 +214,12 @@ const createStyles = (theme: ThemeColorType) =>
       width,
       height: (width * 9) / 16,
       backgroundColor: theme.lowEmphasis,
+    },
+    row: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingRight: 8,
+      gap: 4,
     },
   });

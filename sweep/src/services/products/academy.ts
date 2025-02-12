@@ -59,6 +59,16 @@ export async function getAcademies(query?: string) {
   }
 }
 
+export async function getLikedAcademies() {
+  try {
+    const response = await axios.get("/v1/academies/liked/");
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
 export async function getAcademyDetail(uuid: string) {
   try {
     const response = await axios.get(`/v1/academies/${uuid}/`);
@@ -243,6 +253,16 @@ export async function deleteImage(uuid: string, imageId: number) {
     await axios.delete(`/v1/academies/${uuid}/images/${imageId}/`);
 
     return true;
+  } catch {
+    return null;
+  }
+}
+
+export async function likeAcademy(uuid: string) {
+  try {
+    const response = await axios.post(`/v1/academies/${uuid}/like/`);
+
+    return response.data;
   } catch {
     return null;
   }

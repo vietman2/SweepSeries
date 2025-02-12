@@ -14,7 +14,7 @@ from core.utils import is_admin_page
 from product.academy.models import Academy
 from product.validators import validate_instagram_url, normalize_instagram_url
 from .enums import CoachApplicationStatus
-from .models import Coach
+from .models import Coach, CoachLike
 from .permissions import IsSelf
 from .serializers import CoachSimpleSerializer, CoachRegisterSerializer, CoachStatusSerializer
 
@@ -148,6 +148,7 @@ class CoachViewSet(ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = CoachSimpleSerializer(instance)
+        serializer.context['request'] = request
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -232,6 +233,37 @@ class CoachViewSet(ModelViewSet):
         return Response(
             status=status.HTTP_200_OK,
             data={"message": "코치 거부에 성공했습니다."}
+        )
+
+    @extend_schema(summary="좋아요 한 코치 조회", tags=["코치"])
+    @action(detail=False, methods=['get'])
+    def liked(self, request, *args, **kwargs):    # pylint: disable=unused-argument
+        user = request.user
+        likes = user.liked_coaches.all()
+
+        coaches = [like.coach for like in likes]
+        serializer = CoachSimpleSerializer(coaches, many=True)
+        serializer.context['request'] = request
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(summary="코치 좋아요", tags=["코치"])
+    @action(detail=True, methods=['post'])
+    def like(self, request, pk=None):    # pylint: disable=unused-argument
+        user = request.user
+        coach = self.get_object()
+
+        if CoachLike.objects.filter(user=user, coach=coach).exists():
+            CoachLike.objects.filter(user=user, coach=coach).delete()
+            return Response(
+                status=status.HTTP_200_OK,
+                data={"message": "좋아요 취소에 성공했습니다."}
+            )
+
+        CoachLike.objects.create(user=user, coach=coach)
+        return Response(
+            status=status.HTTP_200_OK,
+            data={"message": "좋아요에 성공했습니다."}
         )
 
     @extend_schema(summary="내 코치 정보 조회", tags=["코치"])

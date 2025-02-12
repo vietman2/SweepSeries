@@ -3,6 +3,8 @@ import axios from "axios";
 import {
   createCoach,
   getCoaches,
+  getLikedCoaches,
+  likeCoach,
   getCoachesByProfile,
   getCoachDetails,
   getMyCoachProfile,
@@ -34,6 +36,48 @@ describe("getCoaches", () => {
     jest.spyOn(axios, "get").mockRejectedValue(null);
 
     const result = await getCoaches("academyId");
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("getLikedCoaches", () => {
+  it("should get liked coaches", async () => {
+    jest.spyOn(axios, "get").mockResolvedValue({ data: "data" });
+
+    const result = await getLikedCoaches();
+
+    expect(result).toEqual("data");
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "get").mockRejectedValue(null);
+
+    const result = await getLikedCoaches();
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("likeCoach", () => {
+  it("should like a coach", async () => {
+    jest.spyOn(axios, "post").mockResolvedValue({ data: "data" });
+
+    const result = await likeCoach("coachId");
+
+    expect(result).toEqual("data");
+  });
+
+  it("should return null if coachId is not provided", async () => {
+    const result = await likeCoach(undefined);
+
+    expect(result).toBeNull();
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "post").mockRejectedValue(null);
+
+    const result = await likeCoach("coachId");
 
     expect(result).toBeNull();
   });

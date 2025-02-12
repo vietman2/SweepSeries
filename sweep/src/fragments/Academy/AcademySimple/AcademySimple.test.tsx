@@ -8,6 +8,6 @@ describe("<AcademySimple />", () => {
   });
 
   it("renders with quote", () => {
-    renderWithProviders(<AcademySimple academy={sampleAcademies[0]} quote />);
+    renderWithProviders(<AcademySimple academy={sampleAcademies[1]} quote />);
   });
 });
