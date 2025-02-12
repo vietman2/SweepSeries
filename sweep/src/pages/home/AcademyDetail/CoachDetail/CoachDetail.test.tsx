@@ -1,7 +1,8 @@
+import { fireEvent, waitFor } from "@testing-library/react-native";
+
 import { CoachDetail } from "./CoachDetail";
 import * as CoachesAPI from "@services/products/coach";
 import { sampleCoachDetail } from "@testdata/products";
-import { waitFor } from "@testing-library/react-native";
 import { renderWithProviders } from "@utils/test-utils";
 
 describe("<CoachDetail />", () => {
@@ -10,12 +11,19 @@ describe("<CoachDetail />", () => {
     renderWithProviders(<CoachDetail />);
   });
 
-  it("renders correctly", async () => {
+  it("renders and handles like correctly", async () => {
     jest
       .spyOn(CoachesAPI, "getCoachDetails")
-      .mockResolvedValue(sampleCoachDetail);
-    const { getByText } = renderWithProviders(<CoachDetail />);
+      .mockResolvedValueOnce(sampleCoachDetail);
+    const { getByTestId } = renderWithProviders(<CoachDetail />);
 
-    await waitFor(() => expect(getByText("코치 소개")).toBeTruthy());
+    jest.spyOn(CoachesAPI, "likeCoach").mockResolvedValueOnce(null);
+    await waitFor(() => fireEvent.press(getByTestId("like-button")));
+
+    jest
+      .spyOn(CoachesAPI, "getCoachDetails")
+      .mockResolvedValueOnce({ ...sampleCoachDetail, is_liked: false });
+    jest.spyOn(CoachesAPI, "likeCoach").mockResolvedValueOnce(true);
+    await waitFor(() => fireEvent.press(getByTestId("like-button")));
   });
 });
