@@ -214,7 +214,10 @@ class LessonSerializer(serializers.ModelSerializer):
         model = Lesson
         fields = ['program', 'coaches', 'start_datetime', 'person']
 
-    def get_or_create_new_student(self, name, phone_number):
+    def get_or_create_new_student(self, id, name, phone_number):
+        if id is not None:
+            return Person.objects.get(id=id)
+
         try:
             person = Person.objects.get(phone_number=phone_number)
         except ObjectDoesNotExist:
@@ -223,7 +226,10 @@ class LessonSerializer(serializers.ModelSerializer):
         return person
 
     def create_lesson(self, program, coaches, student):
-        lesson = Lesson.objects.create(program=program, student=student)
+        if Lesson.objects.filter(program=program, student=student).exists():
+            lesson = Lesson.objects.get(program=program, student=student)
+        else:
+            lesson = Lesson.objects.create(program=program, student=student)
 
         for coach in coaches:
             lesson.coaches.add(coach)
@@ -231,15 +237,16 @@ class LessonSerializer(serializers.ModelSerializer):
 
         return lesson
 
-    def create_session(self, lesson, start_datetime, program):
+    def create_session(self, lesson, start_datetime, program, coaches):
         duration = program.duration
         end_datetime = start_datetime + timedelta(minutes=duration)
 
         session = Session.objects.create(
             lesson=lesson,
             start_datetime=start_datetime,
-            end_datetime=end_datetime
+            end_datetime=end_datetime,
         )
+        session.coaches.set(coaches)
 
         return session
 
@@ -254,15 +261,16 @@ class LessonSerializer(serializers.ModelSerializer):
         coach_uuids = validated_data.pop('coaches')
         person_data = validated_data.pop('person')
         name = person_data.get('name', '')
+        id = person_data.get('id', None)
 
         program = Program.objects.get(pk=program_id)
         coaches = [Coach.objects.get(uuid=uuid) for uuid in coach_uuids]
-        student = self.get_or_create_new_student(name, person_data['phone'])
+        student = self.get_or_create_new_student(id, name, person_data['phone'])
 
         self.add_student_to_academy(student, program.academy)
 
         lesson = self.create_lesson(program, coaches, student)
-        self.create_session(lesson, validated_data['start_datetime'], program)
+        self.create_session(lesson, validated_data['start_datetime'], program, coaches)
 
         return lesson
 
@@ -287,7 +295,7 @@ class SessionSerializer(serializers.ModelSerializer):
         return obj.lesson.program.name
 
     def get_description(self, obj):
-        coaches = ', '.join([coach.person.name for coach in obj.lesson.coaches.all()])
+        coaches = ', '.join([coach.person.name for coach in obj.coaches.all()])
         student = obj.lesson.student.name
 
         return f'코치: {coaches}\t수강생: {student}'
