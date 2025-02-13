@@ -68,8 +68,8 @@
       "num_plates": 0,
       "is_verified": false,
       "verified_at": null,
-      "is_rejected": true,
-      "reject_reason": "거절되었습니다.",
+      "is_rejected": false,
+      "reject_reason": "",
       "convenience": [],
       "students": []
     }
