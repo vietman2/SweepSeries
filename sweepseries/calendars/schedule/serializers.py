@@ -289,7 +289,7 @@ class SessionSerializer(serializers.ModelSerializer):
         fields = ['id', 'type', 'title', 'description', 'color', 'time', 'done', 'date']
 
     def get_id(self, obj):
-        return f"s{obj.lesson.id}"
+        return f"s{obj.id}"
 
     def get_title(self, obj):
         return obj.lesson.program.name
@@ -331,11 +331,14 @@ class SessionSerializer(serializers.ModelSerializer):
         return f'{day}일. {dow[dayofweek]}'
 
 class SessionDetailSerializer(SessionSerializer):
-    coaches = serializers.SerializerMethodField()
-    student = serializers.SerializerMethodField()
+    coaches     = serializers.SerializerMethodField()
+    student     = serializers.SerializerMethodField()
+    #can_review  = serializers.SerializerMethodField()
 
     class Meta(SessionSerializer.Meta):
-        fields = SessionSerializer.Meta.fields + ['notes', 'feedback', 'coaches', 'student']
+        fields = SessionSerializer.Meta.fields + [
+            'notes', 'feedback', 'coaches', 'student'#, 'can_review'
+        ]
 
     def get_date(self, obj):
         ## return timezone aware {day}일. {dayofweek}

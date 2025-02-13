@@ -316,8 +316,16 @@ class SessionAPITestCase(APITestCase):
 
     def test_list_session_normal(self):
         self.client.force_authenticate(user=self.user)
+        response = self.client.get(self.url, {"month": "2025-02"})
+        self.assertEqual(response.status_code, 200)
+
+    def test_list_session_fail(self):
+        self.client.force_authenticate(user=self.user)
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.status_code, 400)
+
+        response = self.client.get(self.url, {"month": "asdf-as"})
+        self.assertEqual(response.status_code, 400)
 
     def test_retrieve_session_normal(self):
         self.client.force_authenticate(user=self.user)

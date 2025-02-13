@@ -1,3 +1,8 @@
+from collections import defaultdict
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+from django.db.models import Q
+from django.utils import timezone
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
@@ -58,7 +63,40 @@ class SessionViewSet(ModelViewSet):
 
     @extend_schema(exclude=True)
     def list(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        month_query = request.query_params.get('month', None)
+
+        if month_query is None or month_query == "":
+            return Response(
+                data={"message": "잘못된 요청입니다."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        month = month_query.split('-')[1]
+        year = month_query.split('-')[0]
+
+        try:
+            month = int(month)
+            year = int(year)
+            start_date = datetime(year, month, 1)
+            end_date = start_date + relativedelta(months=1)
+        except ValueError as e:
+            raise ValidationError("올바른 형식이 아닙니다.") from e
+
+        tz = timezone.get_current_timezone()
+        start_date = timezone.make_aware(start_date, tz)
+        end_date = timezone.make_aware(end_date, tz)
+
+        data = []
+
+        q = Q(start_datetime__range=(start_date, end_date))
+        q &= Q(lesson__student=request.user.person)
+
+        sessions = Session.objects.filter(q)
+
+        for session in sessions:
+            data.append(SessionDetailSerializer(session).data)
+
+        return Response(data, status=status.HTTP_200_OK)
 
     @extend_schema(summary="레슨 상세 조회", tags=["레슨"])
     def retrieve(self, request, *args, **kwargs):
