@@ -7,11 +7,12 @@ import { Divider } from "@components/Dividers";
 import { LoadingComponent } from "@components/Fallbacks";
 import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
+import { useAuth } from "@contexts/auth";
 import { useTheme } from "@contexts/theme";
 import { AcademyCard } from "@fragments/Academy";
 import { LessonSimple } from "@fragments/Lesson";
 import { LessonDetailType } from "@models/calendar";
-import { sampleLesson } from "@testdata/calendar";
+import { getSessions } from "@services/calendar";
 import { ThemeColorType } from "@themes/colors";
 
 export function MyAcademy() {
@@ -19,13 +20,15 @@ export function MyAcademy() {
   const [selectedMonth, setSelectedMonth] = useState<string>("");
 
   const [loading, setLoading] = useState<boolean>(true);
+  const { mode } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   const handleLessonPress = (lesson: LessonDetailType) => {
+    const lessonId = lesson.id.slice(1);
     router.push({
-      pathname: "/calendar/lesson/[id]",
-      params: { id: lesson.id },
+      pathname: "/home/lesson/[id]",
+      params: { id: lessonId, mode },
     });
   };
 
@@ -38,9 +41,21 @@ export function MyAcademy() {
     };
 
     setSelectedMonth(getCurrentMonth());
-    setSchedules([sampleLesson]);
-    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getSessions(selectedMonth);
+
+      if (response) {
+        setSchedules(response);
+      }
+
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [selectedMonth]);
 
   if (loading) return <LoadingComponent />;
 
