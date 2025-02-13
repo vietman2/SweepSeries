@@ -19,7 +19,7 @@ from .permissions import IsSelf
 from .serializers import CoachSimpleSerializer, CoachRegisterSerializer, CoachStatusSerializer
 
 class CoachViewSet(ModelViewSet):
-    queryset = Coach.objects.all()
+    queryset = Coach.objects.filter(is_rejected=False)
     serializer_class = CoachSimpleSerializer
     http_method_names = ['get', 'post', 'patch']
 
@@ -126,7 +126,7 @@ class CoachViewSet(ModelViewSet):
                     data={"error": "잘못된 status 값입니다."}
                 )
 
-            self.queryset = self.queryset.filter(q)
+            self.queryset = Coach.objects.filter(q)
             serializer = CoachStatusSerializer(self.queryset, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 

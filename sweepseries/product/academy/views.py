@@ -28,7 +28,7 @@ from .serializers import (
 from .utils import update_daily_schedule, upload_logo
 
 class AcademyViewSet(ModelViewSet):
-    queryset = Academy.objects.all()
+    queryset = Academy.objects.filter(is_rejected=False)
     serializer_class = AcademySimpleSerializer
     http_method_names = ['get', 'post', 'patch']
 
@@ -92,7 +92,7 @@ class AcademyViewSet(ModelViewSet):
                     data={"error": "잘못된 status 값입니다."}
                 )
 
-            self.queryset = self.queryset.filter(q)
+            self.queryset = Academy.objects.filter(q)
             serializer = AcademyStatusSerializer(self.queryset, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
