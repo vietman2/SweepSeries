@@ -1,4 +1,3 @@
-from collections import defaultdict
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from django.db.models import Q
