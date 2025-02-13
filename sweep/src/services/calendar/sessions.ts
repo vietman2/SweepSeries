@@ -1,5 +1,17 @@
 import axios from "axios";
 
+export async function getSessions(month: string) {
+  try {
+    const response = await axios.get("/v1/sessions/", {
+      params: { month },
+    });
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
 export async function getSessionDetails(sessionId: string) {
   try {
     const response = await axios.get(`/v1/sessions/${sessionId}/`);

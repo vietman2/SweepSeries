@@ -13,6 +13,7 @@ import { createDiary } from "./diaries";
 import { createLesson } from "./lessons";
 import { createSchedule } from "./schedules";
 import {
+  getSessions,
   getSessionDetails,
   updateSessionFeedback,
   updateSessionNotes,
@@ -32,6 +33,7 @@ export {
   createDiary,
   createLesson,
   createSchedule,
+  getSessions,
   getSessionDetails,
   updateSessionFeedback,
   updateSessionNotes,
