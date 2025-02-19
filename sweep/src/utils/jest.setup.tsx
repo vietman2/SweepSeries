@@ -337,6 +337,25 @@ jest.mock("@components/Texts", () => {
     Text,
   };
 });
+jest.mock("@contexts/addlesson", () => ({
+  useAddLesson: jest.fn().mockReturnValue({
+    selectedProgram: null,
+    selectedStudent: null,
+    selectedCurriculum: null,
+    selectedCoaches: [],
+    selectedStartDateTime: new Date(),
+    setProgram: jest.fn(),
+    setStudent: jest.fn(),
+    setStudentTemp: jest.fn(),
+    setSelectedCurriculum: jest.fn(),
+    addCoach: jest.fn(),
+    setSelectedStartDateTime: jest.fn(),
+    handleSubmit: jest.fn(),
+  }),
+  AddLessonProvider: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+}));
 jest.mock("@contexts/auth", () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>

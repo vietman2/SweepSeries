@@ -38,13 +38,21 @@ def get_monthly_events(data, calendar, start_date, end_date):
 
     return data
 
-def get_monthly_sessions(data, start_date, end_date):
+def get_monthly_sessions(data, user, start_date, end_date):
     q2 = Q(start_datetime__range=[start_date, end_date])
+    ## student이거나, coach중에 한명이거나 program.academy.owner이거나
+    q2 &= (
+        Q(lesson__student=user.person) |
+        Q(coaches__person=user.person) |
+        Q(lesson__program__academy__owner=user)
+    )
 
-    sessions = Session.objects.filter(q2)
+    sessions = Session.objects.filter(q2).distinct()
 
     for session in sessions:
-        date_str = session.start_datetime.date().strftime('%Y-%m-%d')
+        ## date must be timezone aware
+        tz = timezone.get_current_timezone()
+        date_str = session.start_datetime.astimezone(tz).date().strftime('%Y-%m-%d')
         data[date_str].append({
             'id': f's{session.id}',
             'title': f'{session.lesson.student.name} 레슨',
@@ -53,7 +61,7 @@ def get_monthly_sessions(data, start_date, end_date):
 
     return data
 
-def get_monthly_data(month_query, calendar):
+def get_monthly_data(month_query, calendar, user):
     month = month_query.split('-')[1]
     year = month_query.split('-')[0]
 
@@ -72,7 +80,7 @@ def get_monthly_data(month_query, calendar):
     data = defaultdict(list)
 
     data = get_monthly_events(data, calendar, start_date, end_date)
-    data = get_monthly_sessions(data, start_date, end_date)
+    data = get_monthly_sessions(data, user, start_date, end_date)
 
     return data
 
@@ -88,10 +96,15 @@ def append_events(data, calendar, date_obj):
 
     return data
 
-def append_sessions(data, date_obj):
+def append_sessions(data, user, date_obj):
     q_session = Q(start_datetime__date=date_obj)
+    q_session &= (
+        Q(lesson__student=user.person) |
+        Q(coaches__person=user.person) |
+        Q(lesson__program__academy__owner=user)
+    )
 
-    sessions = Session.objects.filter(q_session)
+    sessions = Session.objects.filter(q_session).distinct()
 
     for session in sessions:
         data["events"].append(SessionSerializer(session).data)
@@ -138,7 +151,7 @@ def get_daily_data(daily_query, calendar, user):
     }
 
     data = append_events(data, calendar, date_obj)
-    data = append_sessions(data, date_obj)
+    data = append_sessions(data, user, date_obj)
     data = append_todos(data, calendar, date_obj)
     data = append_diary(data, user, date_obj)
 

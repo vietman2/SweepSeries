@@ -1,10 +1,29 @@
 import axios from "axios";
 
 import {
+  getSessions,
   getSessionDetails,
   updateSessionFeedback,
   updateSessionNotes,
 } from "./sessions";
+
+describe("getSessions", () => {
+  it("should return the sessions", async () => {
+    jest.spyOn(axios, "get").mockResolvedValue({ data: {} });
+
+    const sessions = await getSessions("2021-01");
+
+    expect(sessions).toEqual({});
+  });
+
+  it("should return null if the request fails", async () => {
+    jest.spyOn(axios, "get").mockRejectedValue(new Error());
+
+    const sessions = await getSessions("2021-01");
+
+    expect(sessions).toBeNull();
+  });
+});
 
 describe("getSessionDetails", () => {
   it("should return the session details", async () => {

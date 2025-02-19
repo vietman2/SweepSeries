@@ -186,6 +186,7 @@ class AcademyTestCase(APITestCase):
         response = self.client.get(f"{self.url}{self.academy.uuid}/")
         self.assertEqual(response.status_code, 200)
 
+        self.client.force_authenticate(user=self.user)
         academy2 = Academy.objects.get(name="아카데미 2")
         response = self.client.get(f"{self.url}{academy2.uuid}/")
         self.assertEqual(response.status_code, 200)

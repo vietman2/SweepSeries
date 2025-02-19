@@ -10,8 +10,12 @@ describe("<CalloutLarge />", () => {
 });
 
 describe("<CalloutSmall />", () => {
-  it("should render without subtitle", () => {
+  it("should render default", () => {
     renderWithProviders(<CalloutSmall text="Title" />);
+  });
+
+  it("should render with color", () => {
+    renderWithProviders(<CalloutSmall text="Title" color="black" />);
   });
 });
 

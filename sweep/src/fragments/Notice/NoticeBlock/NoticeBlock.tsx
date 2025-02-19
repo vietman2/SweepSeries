@@ -20,7 +20,7 @@ export function NoticeBlock({ notice }: Readonly<Props>) {
       {notice.image && (
         <Image
           source={{ uri: notice.image }}
-          style={{ width: "100%", height: 200 }}
+          style={styles.image}
         />
       )}
     </View>
@@ -47,5 +47,10 @@ const createStyles = (theme: ThemeColorType) =>
       fontSize: 16,
       color: theme.mediumEmphasis,
       lineHeight: 24,
+    },
+    image: {
+      width: "100%",
+      height: 200,
+      borderRadius: 12,
     },
   });

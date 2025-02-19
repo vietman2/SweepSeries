@@ -22,6 +22,19 @@ export const sampleProgramTargets: PositionTargetType[] = [
   },
 ];
 
+export const sampleCurriculums = [
+  {
+    id: 1,
+    num_lessons: 10,
+    price: 10000,
+  },
+  {
+    id: 2,
+    num_lessons: 10,
+    price: 10000,
+  },
+];
+
 export const sampleAcademyPrograms: ProgramSimpleType[] = [
   {
     id: 1,
@@ -32,6 +45,7 @@ export const sampleAcademyPrograms: ProgramSimpleType[] = [
     lowest_price: 150000,
     duration: 60,
     academy_uuid: "1",
+    curriculums: sampleCurriculums,
   },
   {
     id: 2,
@@ -42,6 +56,7 @@ export const sampleAcademyPrograms: ProgramSimpleType[] = [
     lowest_price: 120000,
     duration: 60,
     academy_uuid: "1",
+    curriculums: sampleCurriculums,
   },
   {
     id: 3,
@@ -52,6 +67,7 @@ export const sampleAcademyPrograms: ProgramSimpleType[] = [
     lowest_price: 80000,
     duration: 60,
     academy_uuid: "1",
+    curriculums: sampleCurriculums,
   },
   {
     id: 4,
@@ -62,5 +78,6 @@ export const sampleAcademyPrograms: ProgramSimpleType[] = [
     lowest_price: 80000,
     duration: 60,
     academy_uuid: "1",
+    curriculums: sampleCurriculums,
   },
 ];

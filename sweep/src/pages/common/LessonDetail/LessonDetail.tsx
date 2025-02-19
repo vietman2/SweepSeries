@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 
@@ -79,56 +79,69 @@ export function LessonDetail() {
   return (
     <View style={styles.container}>
       {lesson.done ? (
-        <>
-          <Scroll>
-            <View style={styles.innerContainer}>
-              <LessonSimple lesson={lesson} />
-              <View style={styles.wrapper}>
-                <Text style={styles.subtitle}>홍길동 님의 레슨 노트</Text>
-                <TextInput
-                  style={styles.input}
-                  multiline
-                  numberOfLines={4}
-                  value={notes}
-                  onChangeText={setNotes}
-                  editable={notesActive}
-                  testID="notes-input"
-                />
-              </View>
-              <Divider color={theme.border} />
-              <View style={styles.wrapper}>
-                <Text style={styles.subtitle}>코치님 피드백</Text>
-                <TextInput
-                  style={styles.input}
-                  multiline
-                  numberOfLines={4}
-                  value={feedback}
-                  onChangeText={setFeedback}
-                  editable={feedbackActive}
-                  testID="feedback-input"
-                />
-              </View>
-            </View>
-          </Scroll>
-          <TextButton
-            text="저장"
-            onPress={handleSubmit}
-            active={isButtonActive}
-          />
-        </>
-      ) : (
-        <>
+        <Scroll>
           <View style={styles.innerContainer}>
             <LessonSimple lesson={lesson} />
             <Divider color={theme.border} />
-            <View style={styles.alert}>
-              <AppIcon icon="warning-circle" size={48} color={theme.primary} />
-              <Text style={styles.alertText}>
-                아직 진행되지 않은 레슨입니다.
-              </Text>
+            <View style={styles.wrapper}>
+              <Text style={styles.subtitle}>코치님 피드백</Text>
+              <TextInput
+                style={[
+                  styles.input,
+                  feedbackActive && { backgroundColor: theme.background },
+                ]}
+                multiline
+                numberOfLines={4}
+                value={feedback}
+                onChangeText={setFeedback}
+                editable={feedbackActive}
+                testID="feedback-input"
+              />
+            </View>
+            <Divider color={theme.border} />
+            <View style={styles.wrapper}>
+              <Text style={styles.subtitle}>홍길동 님의 레슨 노트</Text>
+              <TextInput
+                style={[
+                  styles.input,
+                  notesActive && { backgroundColor: theme.background },
+                ]}
+                multiline
+                numberOfLines={4}
+                value={notes}
+                onChangeText={setNotes}
+                editable={notesActive}
+                testID="notes-input"
+              />
+            </View>
+            <TextButton
+              text="저장"
+              onPress={handleSubmit}
+              active={isButtonActive}
+            />
+          </View>
+        </Scroll>
+      ) : (
+        <View style={styles.innerContainer}>
+          <LessonSimple lesson={lesson} />
+          <Divider color={theme.border} />
+          <View style={styles.alert}>
+            <AppIcon icon="warning-circle" size={48} color={theme.primary} />
+            <Text style={styles.alertText}>아직 진행되지 않은 레슨입니다.</Text>
+          </View>
+          <View style={styles.buttonWrapper}>
+            <View style={styles.button}>
+              <TextButton text="예약 변경" onPress={() => {}} />
+            </View>
+            <View style={styles.button}>
+              <TextButton
+                text="예약 취소"
+                onPress={() => {}}
+                backgroundColor={theme.border}
+              />
             </View>
           </View>
-        </>
+        </View>
       )}
     </View>
   );

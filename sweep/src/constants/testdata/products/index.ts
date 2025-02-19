@@ -5,6 +5,7 @@ import {
   sampleAcademyPrograms,
   sampleProgramPositions,
   sampleProgramTargets,
+  sampleCurriculums,
 } from "./programs";
 import { sampleReviews } from "./review";
 import { sampleStudents, sampleStudentLesson } from "./students";
@@ -18,6 +19,7 @@ export {
   sampleAcademyPrograms,
   sampleProgramPositions,
   sampleProgramTargets,
+  sampleCurriculums,
   sampleReviews,
   sampleStudents,
   sampleStudentLesson,

@@ -180,7 +180,7 @@ const createStyles = (theme: ThemeColorType) =>
       flex: 1,
       width,
       height: (width * 9) / 16,
-      resizeMode: "contain",
+      resizeMode: "cover",
       zIndex: 0,
     },
     header: {

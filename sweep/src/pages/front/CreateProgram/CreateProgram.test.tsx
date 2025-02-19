@@ -1,8 +1,11 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { CreateProgram } from "./CreateProgram";
+import { CoachSimpleType } from "@models/products";
+import * as CoachesAPI from "@services/products/coach";
 import * as ProgramsAPI from "@services/products/programs";
 import {
+  sampleCoaches,
   sampleProgramPositions,
   sampleProgramTargets,
 } from "@testdata/products";
@@ -14,9 +17,36 @@ jest.mock("expo-router", () => ({
   },
   useLocalSearchParams: jest.fn(() => ({ uuid: "uuid" })),
 }));
+jest.mock("@fragments/Coach", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+  const { sampleCoaches } = jest.requireActual("@testdata/products");
+
+  return {
+    CoachModal: ({
+      addCoachTeam,
+      closeModal,
+    }: {
+      addCoachTeam: (coaches: CoachSimpleType[]) => void;
+      closeModal: () => void;
+    }) => (
+      <>
+        <TouchableOpacity
+          testID="add-coach-team"
+          onPress={() => addCoachTeam([sampleCoaches[0]])}
+        />
+        <TouchableOpacity testID="close-coach-modal" onPress={closeModal} />
+      </>
+    ),
+    CoachSelect: () => null,
+  };
+});
+jest.mock("@fragments/Program", () => ({
+  NewCurriculum: () => null,
+}));
 
 describe("<CreateProgram />", () => {
   beforeEach(() => {
+    jest.spyOn(CoachesAPI, "getCoaches").mockResolvedValue(sampleCoaches);
     jest
       .spyOn(ProgramsAPI, "getTargets")
       .mockResolvedValue(sampleProgramTargets);
@@ -30,29 +60,28 @@ describe("<CreateProgram />", () => {
     const { getByTestId } = renderWithProviders(<CreateProgram />);
 
     await waitFor(() => {
-      fireEvent.press(getByTestId("60분"));
-      fireEvent.press(getByTestId("120분"));
-      fireEvent.press(getByTestId("투수레슨"));
-      fireEvent.press(getByTestId("타격레슨"));
-      fireEvent.press(getByTestId("선수반"));
-      fireEvent.press(getByTestId("사회인야구반"));
-      fireEvent.press(getByTestId("plus"));
-      fireEvent.press(getByTestId("delete-button1"));
-      fireEvent.press(getByTestId("delete-button0"));
-      fireEvent.changeText(getByTestId("수업 수"), "");
-      fireEvent.changeText(getByTestId("수업 수"), "8");
-      fireEvent.changeText(getByTestId("가격"), "800000");
-      fireEvent.press(getByTestId("저장"));
+      fireEvent.press(getByTestId("60분")); // Select duration
+      fireEvent.press(getByTestId("투수레슨")); // Select position
+      fireEvent.press(getByTestId("선수반")); // Select target
+      fireEvent.press(getByTestId("plus")); // Open coach modal
+      fireEvent.press(getByTestId("add-coach-team")); // Select coaches
+      fireEvent.press(getByTestId("close-coach-modal")); // Close coach modal
+      fireEvent.press(getByTestId("remove-coach-0")); // Close coach modal
+      fireEvent.press(getByTestId("저장")); // Submit
     });
   });
 
-  it("handles create fail", async () => {
+  it("handles create fail and coach select toggle", async () => {
     jest.spyOn(ProgramsAPI, "createProgram").mockResolvedValue(null);
-    const { getByTestId, getByText } = renderWithProviders(<CreateProgram />);
+    const { getByTestId } = renderWithProviders(<CreateProgram />);
 
-    await waitFor(() => expect(getByText("투수레슨")).toBeTruthy());
-
+    await waitFor(() => {
+      fireEvent.press(getByTestId("60분")); // Select duration
+      fireEvent.press(getByTestId("투수레슨")); // Select position
+      fireEvent.press(getByTestId("선수반")); // Select target
+      fireEvent.press(getByTestId("toggle-coach-select")); // Close coach modal
       fireEvent.press(getByTestId("저장"));
+    });
   });
 
   it("handles bad initialization", async () => {

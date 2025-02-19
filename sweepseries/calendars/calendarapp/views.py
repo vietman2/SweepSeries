@@ -173,7 +173,7 @@ class CalendarViewSet(ModelViewSet):
             return Response({"detail": "잘못된 요청입니다."}, status=status.HTTP_400_BAD_REQUEST)
 
         if month_query:
-            data = get_monthly_data(month_query, calendar)
+            data = get_monthly_data(month_query, calendar, request.user)
             return Response(data, status=status.HTTP_200_OK)
 
         data = get_daily_data(daily_query, calendar, request.user)

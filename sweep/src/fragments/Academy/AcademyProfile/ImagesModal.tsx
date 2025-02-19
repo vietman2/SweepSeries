@@ -38,7 +38,6 @@ export function ImagesModal({
 
   const hideImagesModal = () => {
     setModalOpen(false);
-    setImages([]);
   };
 
   const handleImagePicker = async () => {

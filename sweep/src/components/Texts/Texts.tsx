@@ -25,15 +25,16 @@ export function InputTitle({ title, subtitle }: Readonly<Props>) {
 
 interface CalloutProps {
   text: string;
+  color?: string;
 }
 
-export function CalloutSmall({ text }: Readonly<CalloutProps>) {
+export function CalloutSmall({ text, color }: Readonly<CalloutProps>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   return (
     <View style={styles.calloutSmall}>
-      <Text style={styles.calloutText}>{text}</Text>
+      <Text style={[styles.calloutText, color && { color }]}>{text}</Text>
     </View>
   );
 }
@@ -74,6 +75,8 @@ const createStyles = (theme: ThemeColorType) =>
       borderRadius: 8,
     },
     calloutText: {
+      fontSize: 14,
+      lineHeight: 20,
       color: theme.lowEmphasis,
     },
     calloutLarge: {

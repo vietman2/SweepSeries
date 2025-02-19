@@ -1,6 +1,7 @@
 from django.db import models
 
 from product.academy.models import Academy
+from product.coach.models import Coach
 
 class Target(models.Model):
     name    = models.CharField(max_length=255)
@@ -24,6 +25,7 @@ class Program(models.Model):
     duration    = models.PositiveIntegerField()
     target      = models.ForeignKey(Target, on_delete=models.CASCADE, related_name='programs')
     positions   = models.ManyToManyField(Position, related_name='programs')
+    coaches     = models.ManyToManyField(Coach, related_name='programs')
 
     objects     = models.Manager()
 
