@@ -50,7 +50,9 @@ def get_monthly_sessions(data, user, start_date, end_date):
     sessions = Session.objects.filter(q2).distinct()
 
     for session in sessions:
-        date_str = session.start_datetime.date().strftime('%Y-%m-%d')
+        ## date must be timezone aware
+        tz = timezone.get_current_timezone()
+        date_str = session.start_datetime.astimezone(tz).date().strftime('%Y-%m-%d')
         data[date_str].append({
             'id': f's{session.id}',
             'title': f'{session.lesson.student.name} 레슨',
