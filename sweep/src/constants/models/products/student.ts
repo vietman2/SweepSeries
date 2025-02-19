@@ -8,6 +8,12 @@ export type StudentSimpleType = {
   default_color: string;
 };
 
+export type StudentInputType = {
+  phone: string;
+  id: number;
+  name?: string;
+}
+
 export type StudentLessonsType = {
   id: number;
   name: string;
