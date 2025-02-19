@@ -1,11 +1,12 @@
 from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from drf_spectacular.utils import extend_schema
 
-from core.permissions import AdminOnly
+from core.utils import is_admin_page
 from product.academy.models import Academy
 from .models import Person
 from .serializers import PersonSerializer, StudentSimpleSerializer, StudentDetailSerializer
@@ -13,17 +14,30 @@ from .serializers import PersonSerializer, StudentSimpleSerializer, StudentDetai
 class PersonViewSet(ModelViewSet):
     serializer_class = PersonSerializer
     queryset = Person.objects.all()
-    permission_classes = [AdminOnly]
+    permission_classes = [IsAuthenticated]
     http_method_names = ['get']
 
     def list(self, request, *args, **kwargs):
-        ## only return people with no user record
-        q = Q()
-        q &= Q(user=None)
+        ## 관리자 페이지에서 접근 시, 유저 정보가 없는 사람들만 조회
+        if request.user.is_superuser and is_admin_page(request):
+            q = Q()
+            q &= Q(user=None)
 
-        queryset = self.get_queryset().filter(q)
+            queryset = self.get_queryset().filter(q)
 
-        serializer = self.get_serializer(queryset, many=True)
+            serializer = self.get_serializer(queryset, many=True)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        ## 그렇지 않으면, 멤버 정보 검색 (레슨 추가시 검색용)
+        phone = request.query_params.get('phone', None)
+
+        try:
+            person = self.get_queryset().get(phone_number=phone)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = StudentSimpleSerializer(person)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
