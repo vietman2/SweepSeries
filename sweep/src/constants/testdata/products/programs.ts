@@ -28,6 +28,11 @@ export const sampleCurriculums = [
     num_lessons: 10,
     price: 10000,
   },
+  {
+    id: 2,
+    num_lessons: 10,
+    price: 10000,
+  },
 ];
 
 export const sampleAcademyPrograms: ProgramSimpleType[] = [
