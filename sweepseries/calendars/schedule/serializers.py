@@ -277,17 +277,17 @@ class LessonSerializer(serializers.ModelSerializer):
 
         return lesson
 
-    def create_session(self, lesson, start_datetime, program, coaches, contract):
-        duration = program.duration
-        end_datetime = start_datetime + timedelta(minutes=duration)
+    def create_session(self, data):
+        duration = data['program'].duration
+        end_datetime = data['start_datetime'] + timedelta(minutes=duration)
 
         session = Session.objects.create(
-            lesson=lesson,
-            start_datetime=start_datetime,
+            lesson=data['lesson'],
+            start_datetime=data['start_datetime'],
             end_datetime=end_datetime,
-            contract=contract
+            contract=data['contract']
         )
-        session.coaches.set(coaches)
+        session.coaches.set(data['coaches'])
 
         return session
 
@@ -315,7 +315,10 @@ class LessonSerializer(serializers.ModelSerializer):
 
             lesson = self.create_lesson(program, coaches, student)
             self.create_session(
-                lesson, validated_data['start_datetime'], program, coaches, contract
+                data={
+                    'lesson': lesson, 'start_datetime': validated_data['start_datetime'],
+                    'coaches': coaches, 'contract': contract, 'program': program
+                }
             )
 
             return lesson
