@@ -4,6 +4,7 @@ from auth.person.models import Person
 from calendars.calendarapp.models import Calendar
 from core.models import TimeStampedModel
 from product.coach.models import Coach
+from product.contract.models import Contract
 from product.program.models import Program
 from .enums import RepeatTypeChoices
 
@@ -58,6 +59,7 @@ class Lesson(TimeStampedModel):
 class Session(models.Model):
     lesson          = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='sessions')
     coaches         = models.ManyToManyField(Coach, related_name='sessions')
+    contract        = models.ForeignKey(Contract, on_delete=models.CASCADE, related_name='sessions')
     start_datetime  = models.DateTimeField()
     end_datetime    = models.DateTimeField()
 
