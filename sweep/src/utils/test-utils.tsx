@@ -1,6 +1,7 @@
 import { ReactElement, PropsWithChildren } from "react";
 import { render, RenderOptions } from "@testing-library/react-native";
 
+import { AddLessonProvider } from "@contexts/addlesson";
 import { AuthProvider } from "@contexts/auth";
 import { CalendarProvider } from "@contexts/calendar";
 import { FrontProvider } from "@contexts/front";
@@ -19,7 +20,9 @@ export const renderWithProviders = (
         <CalendarProvider>
           <FrontProvider>
             <SignupProvider>
-              <ThemeProvider>{children}</ThemeProvider>
+              <AddLessonProvider>
+                <ThemeProvider>{children}</ThemeProvider>
+              </AddLessonProvider>
             </SignupProvider>
           </FrontProvider>
         </CalendarProvider>
