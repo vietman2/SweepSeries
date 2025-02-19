@@ -110,7 +110,8 @@
       "notify": false,
       "notify_time": null,
       "notes": "",
-      "feedback": "피드백 1"
+      "feedback": "피드백 1",
+      "contract": 1
     }
   }
 ]
