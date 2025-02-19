@@ -19,7 +19,6 @@ export function ProgramManagement() {
 
   const handleCreate = () => {
     router.push("/front/program/create");
-    router.setParams({ uuid });
   };
 
   useEffect(() => {
