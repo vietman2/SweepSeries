@@ -14,7 +14,7 @@ const TestComponent = () => {
   return (
     <View>
       {sampleCalendars.map((calendar) => (
-        <Text key={calendar.id}>{calendar.name}</Text>
+        <Text key={calendar.uuid}>{calendar.title}</Text>
       ))}
       <TouchableOpacity
         onPress={() => {
@@ -29,7 +29,9 @@ const TestComponent = () => {
 
 describe("CalendarProvider", () => {
   it("renders and updates selected calendar correctly", async () => {
-    jest.spyOn(CalendarsAPI, "getCalendars").mockResolvedValue(sampleCalendars);
+    jest
+      .spyOn(CalendarsAPI, "getCalendars")
+      .mockResolvedValue({ calendars: sampleCalendars });
     jest.spyOn(StorageAPI, "getStorage").mockResolvedValue("2");
 
     const { getByTestId } = render(
@@ -45,7 +47,9 @@ describe("CalendarProvider", () => {
   });
 
   it("handles saved calendar dne", async () => {
-    jest.spyOn(CalendarsAPI, "getCalendars").mockResolvedValue(sampleCalendars);
+    jest
+      .spyOn(CalendarsAPI, "getCalendars")
+      .mockResolvedValue({ calendars: sampleCalendars });
     jest.spyOn(StorageAPI, "getStorage").mockResolvedValue("100");
 
     const { getByTestId } = render(
@@ -60,7 +64,9 @@ describe("CalendarProvider", () => {
   });
 
   it("handles no saved calendar", async () => {
-    jest.spyOn(CalendarsAPI, "getCalendars").mockResolvedValue(sampleCalendars);
+    jest
+      .spyOn(CalendarsAPI, "getCalendars")
+      .mockResolvedValue({ calendars: sampleCalendars });
     jest.spyOn(StorageAPI, "getStorage").mockResolvedValue(null);
 
     const { getByTestId } = render(

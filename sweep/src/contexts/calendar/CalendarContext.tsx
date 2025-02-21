@@ -7,6 +7,7 @@ import { getStorage } from "@services/storage";
 interface CalendarContextType {
   calendars: CalendarType[];
   selectedCalendar: CalendarType | null;
+  isReady: boolean;
   setSelectedCalendar: (calendar: CalendarType) => void;
   reloadData: () => void;
 }
@@ -23,6 +24,7 @@ export const CalendarProvider: React.FC<{ children: React.ReactNode }> = ({
     null
   );
   const [refreshCount, setRefreshCount] = useState<number>(0);
+  const [isReady, setIsReady] = useState<boolean>(false);
 
   const reloadData = () => {
     setRefreshCount((prev) => prev + 1);
@@ -34,26 +36,33 @@ export const CalendarProvider: React.FC<{ children: React.ReactNode }> = ({
       const selectedCalendarId = await getStorage("selectedCalendarId");
 
       if (response) {
-        setCalendars(response);
+        setCalendars(response.calendars);
 
         if (selectedCalendarId) {
-          const selected = response.find(
-            (calendar: CalendarType) =>
-              calendar.id === Number(selectedCalendarId)
+          const selected = response.calendars.find(
+            (calendar: CalendarType) => calendar.uuid === selectedCalendarId
           );
-          setSelectedCalendar(selected || response[0]);
+          setSelectedCalendar(selected || response.calendars[0]);
         } else {
-          setSelectedCalendar(response[0]);
+          setSelectedCalendar(response.calendars[0]);
         }
       }
+
+      setIsReady(true);
     };
 
     fetchData();
   }, [refreshCount]);
 
   const value = useMemo(
-    () => ({ calendars, selectedCalendar, setSelectedCalendar, reloadData }),
-    [calendars, selectedCalendar, setSelectedCalendar, reloadData]
+    () => ({
+      calendars,
+      selectedCalendar,
+      isReady,
+      setSelectedCalendar,
+      reloadData,
+    }),
+    [calendars, selectedCalendar, isReady]
   );
 
   return (
