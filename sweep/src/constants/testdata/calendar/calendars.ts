@@ -1,47 +1,24 @@
-import { CalendarMemberType, CalendarType } from "@models/calendar";
-
-const calendarOwner: CalendarMemberType = {
-  uuid: "1",
-  name: "홍길동",
-  profile_image: "https://picsum.photos/200",
-};
-
-const calendarMembers: CalendarMemberType[] = [
-  {
-    uuid: "2",
-    name: "김철수",
-    profile_image: "https://picsum.photos/200",
-  },
-  {
-    uuid: "3",
-    name: "이영희",
-    profile_image: "https://picsum.photos/200",
-  },
-];
+import { CalendarType } from "@models/calendar";
 
 export const sampleCalendars: CalendarType[] = [
   {
-    id: 1,
-    name: "Catch B 캘린더",
+    uuid: "1",
+    title: "Catch B 캘린더",
     color: "#FFD700",
-    owner: calendarOwner,
-    members: [],
-    is_owner: true,
-    num_members: 1,
     notifications: true,
     notifications_today: true,
     daily_time: "09:00",
+    role: "owner",
+    logo: "https://picsum.photos/200/200",
+    num_members: 1,
   },
   {
-    id: 2,
-    name: "홍길동 코치 개인 캘린더",
+    uuid: "2",
+    title: "홍길동 코치 개인 캘린더",
     color: "#FF6B6B",
-    owner: calendarOwner,
-    members: calendarMembers,
-    is_owner: false,
-    num_members: 2,
     notifications: false,
     notifications_today: false,
     daily_time: "",
+    role: "owner",
   },
 ];
