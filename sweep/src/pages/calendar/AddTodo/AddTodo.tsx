@@ -57,7 +57,6 @@ export function AddTodo() {
 
   const handleSubmit = async () => {
     const response = await createTodo(
-      selectedCalendar?.id,
       todo,
       selectedDate,
       color
@@ -105,7 +104,7 @@ export function AddTodo() {
           <View>
             <ScheduleInput
               icon="calendar-number-2"
-              text={selectedCalendar.name}
+              text={selectedCalendar.title}
               disabled
             />
             <ScheduleInput icon="palette" text="색상" onPress={openColorModal}>
