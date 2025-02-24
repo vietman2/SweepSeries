@@ -10,6 +10,6 @@ jest.mock("expo-router", () => ({
 
 describe("<ScheduleSimple />", () => {
   it("should render without crashing", () => {
-    renderWithProviders(<ScheduleSimple schedule={sampleSchedules[0]} />);
+    renderWithProviders(<ScheduleSimple schedule={sampleSchedules[0]} type="asdf" />);
   });
 });
