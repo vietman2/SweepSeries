@@ -11,6 +11,7 @@ export const sampleCalendars: CalendarType[] = [
     role: "owner",
     logo: "https://picsum.photos/200/200",
     num_members: 1,
+    type: "PERSONAL",
   },
   {
     uuid: "2",
@@ -20,5 +21,6 @@ export const sampleCalendars: CalendarType[] = [
     notifications_today: false,
     daily_time: "",
     role: "owner",
+    type: "ACADEMY",
   },
 ];
