@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 
 import { AppIcon } from "@components/Icons";
 import { Text } from "@components/Texts";
@@ -11,10 +11,14 @@ interface Props {
 export function CalendarTitle({ calendar }: Readonly<Props>) {
   return (
     <View style={styles.container}>
-      <View style={[styles.fill, { backgroundColor: calendar.color }]}>
-        <Text style={styles.character}>{calendar.name[0]}</Text>
-      </View>
-      <Text style={styles.title}>{calendar.name}</Text>
+      {calendar.logo ? (
+        <Image source={{ uri: calendar.logo }} style={styles.fill} />
+      ) : (
+        <View style={[styles.fill, { backgroundColor: calendar.color }]}>
+          <Text style={styles.character}>{calendar.title[0]}</Text>
+        </View>
+      )}
+      <Text style={styles.title}>{calendar.title}</Text>
       <AppIcon icon="chevron-down" size={16} color="gray" />
     </View>
   );
@@ -34,9 +38,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   character: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "bold",
-    color: "black",
+    color: "#000",
   },
   title: {
     fontSize: 20,
