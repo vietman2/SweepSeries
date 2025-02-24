@@ -143,7 +143,7 @@ export function AddSchedule() {
 
   const handleSubmit = async () => {
     const response = await createSchedule(
-      selectedCalendar?.id,
+      selectedCalendar?.type,
       title,
       description,
       {
@@ -161,7 +161,8 @@ export function AddSchedule() {
         use: useRepeat,
         period: repeatPeriod,
         break: repeatBreak,
-      }
+      },
+      selectedCalendar?.uuid
     );
 
     if (response) {
@@ -248,7 +249,7 @@ export function AddSchedule() {
             </View>
             <ScheduleInput
               icon="calendar-number-2"
-              text={selectedCalendar.name}
+              text={selectedCalendar.title}
               disabled
             />
             <ScheduleInput icon="clock" text="알림" onPress={toggleAlarmModal}>

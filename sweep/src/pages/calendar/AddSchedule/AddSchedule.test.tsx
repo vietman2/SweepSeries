@@ -151,6 +151,7 @@ describe("<AddSchedule />", () => {
       selectedCalendar: sampleCalendars[0],
       setSelectedCalendar: jest.fn(),
       reloadData: jest.fn(),
+      isReady: true,
     });
   });
 
@@ -219,6 +220,7 @@ describe("<AddSchedule />", () => {
       selectedCalendar: null,
       setSelectedCalendar: jest.fn(),
       reloadData: jest.fn(),
+      isReady: true,
     });
 
     renderWithProviders(<AddSchedule />);
