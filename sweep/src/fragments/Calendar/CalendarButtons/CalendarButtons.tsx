@@ -60,7 +60,7 @@ export function CalendarButtons({ open, setOpen }: Readonly<Props>) {
               <AppIcon
                 icon="check-circle-outline"
                 size={20}
-                color={theme.lowEmphasis}
+                color={theme.highEmphasis}
               />
             </TouchableOpacity>
           </View>
@@ -77,7 +77,7 @@ export function CalendarButtons({ open, setOpen }: Readonly<Props>) {
               <AppIcon
                 icon="calendar-plus"
                 size={20}
-                color={mode === "pro" ? theme.lowEmphasis : theme.background}
+                color={mode === "pro" ? theme.highEmphasis : theme.background}
               />
             </TouchableOpacity>
           </View>
@@ -93,7 +93,7 @@ export function CalendarButtons({ open, setOpen }: Readonly<Props>) {
                   <AppIcon
                     icon="person-plus"
                     size={24}
-                    color={theme.lowEmphasis}
+                    color={theme.highEmphasis}
                   />
                 </TouchableOpacity>
               </View>
@@ -148,7 +148,7 @@ const createStyles = (theme: ThemeColorType) =>
       height: 40,
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: theme.background,
+      backgroundColor: theme.backgroundGray,
       borderRadius: 20,
     },
   });
