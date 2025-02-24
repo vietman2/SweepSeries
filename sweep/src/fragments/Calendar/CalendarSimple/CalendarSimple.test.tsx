@@ -7,7 +7,7 @@ describe("<CalendarSimple />", () => {
     renderWithProviders(<CalendarSimple calendar={sampleCalendars[0]} />);
   });
 
-  it("renders new calendar correctly (empty props)", () => {
-    renderWithProviders(<CalendarSimple />);
+  it("renders new calendar correctly (no logo and no member)", () => {
+    renderWithProviders(<CalendarSimple calendar={{...sampleCalendars[0], logo: "", num_members: 0}} />);
   });
 });
