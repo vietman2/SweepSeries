@@ -2,9 +2,11 @@ import { fireEvent, waitFor } from "@testing-library/react-native";
 import * as Router from "expo-router";
 
 import { Calendar } from "./Calendar";
+import * as AuthContext from "@contexts/auth";
 import * as CalendarContext from "@contexts/calendar";
 import * as CalendarsAPI from "@services/calendar/calendars";
-import * as StorageAPI from "@services/storage/asyncstorage";
+//import * as StorageAPI from "@services/storage/asyncstorage";
+import { sampleAuthor } from "@testdata/auth";
 import { sampleCalendars, sampleScheduleResponse } from "@testdata/calendar";
 import { renderWithProviders } from "@utils/test-utils";
 
@@ -21,12 +23,6 @@ jest.mock("@gorhom/bottom-sheet", () => ({
   BottomSheetBackdropProps: null,
   BottomSheetView: ({ children }: { children: React.ReactNode }) => children,
 }));
-jest.mock("@contexts/calendar", () => ({
-  CalendarProvider: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
-  useCalendar: jest.fn(),
-}));
 jest.mock("@fragments/Calendar", () => ({
   CalendarButtons: () => <div>CalendarButtons</div>,
   CalendarTitle: () => <div>CalendarTitle</div>,
@@ -38,67 +34,81 @@ describe("<Calendar />", () => {
     jest.clearAllMocks();
     jest.useFakeTimers();
     jest.setSystemTime(new Date("2024-01-01").getTime());
+    jest.spyOn(AuthContext, "useAuth").mockReturnValue({
+      login: jest.fn(),
+      logout: jest.fn(),
+      selectedProfile: sampleAuthor,
+      mode: "pro",
+    });
     jest.spyOn(CalendarContext, "useCalendar").mockReturnValue({
       calendars: sampleCalendars,
       selectedCalendar: sampleCalendars[0],
       setSelectedCalendar: jest.fn(),
       reloadData: jest.fn(),
+      isReady: true,
     });
     jest
-      .spyOn(CalendarsAPI, "getCalendarData")
+      .spyOn(CalendarsAPI, "getMonthlyData")
       .mockResolvedValue(sampleScheduleResponse);
-    jest.spyOn(StorageAPI, "getStorage").mockResolvedValue("1");
   });
 
-  it("handles no calendar error", async () => {
+  it("handles no profile error", async () => {
+    jest.spyOn(AuthContext, "useAuth").mockReturnValue({
+      login: jest.fn(),
+      logout: jest.fn(),
+      selectedProfile: null,
+      mode: "pro",
+    });
+    waitFor(() => renderWithProviders(<Calendar />));
+  });
+
+  it("renders loading component", async () => {
     jest.spyOn(CalendarContext, "useCalendar").mockReturnValue({
       calendars: [],
       selectedCalendar: null,
       setSelectedCalendar: jest.fn(),
       reloadData: jest.fn(),
+      isReady: false,
     });
-    renderWithProviders(<Calendar />);
+    waitFor(() => renderWithProviders(<Calendar />));
   });
 
-  it("renders correctly (month >= 10) and open settings", async () => {
-    jest.spyOn(Router, "useFocusEffect").mockImplementationOnce((cb) => cb());
-    jest.spyOn(StorageAPI, "getStorage").mockResolvedValue(null);
+  it("renders error", async () => {
+    jest.spyOn(CalendarContext, "useCalendar").mockReturnValue({
+      calendars: [],
+      selectedCalendar: null,
+      setSelectedCalendar: jest.fn(),
+      reloadData: jest.fn(),
+      isReady: true,
+    });
+    waitFor(() => renderWithProviders(<Calendar />));
+  });
+
+  it("renders correctly (month >= 10) and handles buttons", async () => {
     jest.setSystemTime(new Date("2024-10-01").getTime());
 
     const { getByTestId } = renderWithProviders(<Calendar />);
 
-    await waitFor(() => fireEvent.press(getByTestId("open-settings")));
-  });
-
-  it("renders correctly (month < 10), bad response and handles search", async () => {
-    jest.spyOn(CalendarsAPI, "getCalendarData").mockResolvedValue(null);
-    const { getByTestId } = renderWithProviders(<Calendar />);
-
     await waitFor(() => {
-      fireEvent.press(getByTestId("open-list"));
-      fireEvent.press(getByTestId("search"));
+      fireEvent.press(getByTestId("open-list")); // Open Calendars List
+      fireEvent.press(getByTestId("calendar-2")); // Switch to Calendar 2
+      fireEvent.press(getByTestId("search")); // Press search
+      fireEvent.press(getByTestId("open-settings")); // Open Settings
+      fireEvent.press(getByTestId("day-2024-10-01")); // Open Daily Schedules
     });
   });
 
-  it("handles calendar select and create", async () => {
-    jest.spyOn(StorageAPI, "saveStorage").mockResolvedValue(undefined);
-    jest.spyOn(CalendarsAPI, "createCalendar").mockResolvedValue(true);
+  it("handles api error", async () => {
+    jest.spyOn(Router, "useFocusEffect").mockImplementationOnce((cb) => cb());
+    jest
+      .spyOn(CalendarsAPI, "getMonthlyData")
+      .mockResolvedValue(null);
+    jest.setSystemTime(new Date("2024-01-01").getTime());
+
     const { getByTestId } = renderWithProviders(<Calendar />);
 
     await waitFor(() => {
-      fireEvent.press(getByTestId("calendar-1"));
-      fireEvent.press(getByTestId("create-calendar"));
-      fireEvent.press(getByTestId("close-buttons"));
-    });
-  });
-
-  it("handles day navigate and create fail", async () => {
-    jest.spyOn(CalendarsAPI, "createCalendar").mockResolvedValue(null);
-    const { getByTestId } = renderWithProviders(<Calendar />);
-
-    await waitFor(() => {
-      fireEvent.press(getByTestId("day-2024-01-01"));
-      fireEvent.press(getByTestId("create-calendar"));
+      fireEvent.press(getByTestId("close-buttons")); // Close Modals
     });
   });
 });

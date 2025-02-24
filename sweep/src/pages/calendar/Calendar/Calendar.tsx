@@ -12,10 +12,15 @@ import {
 } from "react-native-calendars";
 
 import { CustomDay, CustomHeader } from "@components/Calendars";
-import { LoginNeeded } from "@components/Fallbacks";
+import {
+  ErrorPage,
+  LoadingComponent,
+  LoginNeeded,
+} from "@components/Fallbacks";
 import { AppIcon } from "@components/Icons";
 import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
+import { useAuth } from "@contexts/auth";
 import { useCalendar } from "@contexts/calendar";
 import { useTheme } from "@contexts/theme";
 import {
@@ -25,7 +30,7 @@ import {
 } from "@fragments/Calendar";
 import { CalendarType, ScheduleResponseType } from "@models/calendar";
 import { alert } from "@services/alert";
-import { createCalendar, getCalendarData } from "@services/calendar";
+import { getMonthlyData } from "@services/calendar";
 import { saveStorage } from "@services/storage";
 import { ThemeColorType } from "@themes/colors";
 
@@ -36,7 +41,10 @@ export function Calendar() {
   const [buttonsOpen, setButtonsOpen] = useState<boolean>(false);
   const [refreshCount, setRefreshCount] = useState<number>(0);
   const ref = useRef<BottomSheet>(null);
-  const { calendars, selectedCalendar, setSelectedCalendar } = useCalendar();
+
+  const { selectedProfile } = useAuth();
+  const { calendars, isReady, selectedCalendar, setSelectedCalendar } =
+    useCalendar();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -51,20 +59,12 @@ export function Calendar() {
   const handleCalendarSelect = (calendar: CalendarType) => {
     setSelectedCalendar(calendar);
     const storeSelectedCalendar = async () => {
-      await saveStorage("selectedCalendarId", calendar.id.toString());
+      if (calendar.uuid) {
+        await saveStorage("selectedCalendarId", calendar.uuid);
+      }
     };
     storeSelectedCalendar();
     ref.current?.close();
-  };
-
-  const handleCreateNewCalendar = async () => {
-    const response = await createCalendar();
-
-    if (response) {
-      handleRefresh();
-    } else {
-      alert("생성 실패", "캘린더 생성에 실패했습니다.");
-    }
   };
 
   const handleSearchPress = () => {
@@ -93,14 +93,16 @@ export function Calendar() {
     const fetchData = async () => {
       if (!selectedCalendar) return;
 
-      const response = await getCalendarData(
-        selectedCalendar.id,
+      const response = await getMonthlyData(
+        selectedCalendar.uuid,
         selectedMonth,
-        "month"
+        selectedCalendar.type
       );
 
       if (response) {
         setSchedules(response);
+      } else {
+        alert("오류 발생", "데이터를 불러오는 데 실패했습니다.");
       }
     };
 
@@ -150,8 +152,16 @@ export function Calendar() {
     []
   );
 
-  if (!selectedCalendar) {
+  if (!selectedProfile) {
     return <LoginNeeded />;
+  }
+
+  if (!isReady) {
+    return <LoadingComponent />;
+  }
+
+  if (!selectedCalendar) {
+    return <ErrorPage onRefresh={handleRefresh} />;
   }
 
   return (
@@ -159,7 +169,7 @@ export function Calendar() {
       <Pressable
         style={[
           StyleSheet.absoluteFill,
-          buttonsOpen && { backgroundColor: "#00000040", zIndex: 1 },
+          buttonsOpen && { backgroundColor: "#FFFFFF99", zIndex: 1 },
         ]}
         onPress={() => setButtonsOpen(false)}
         testID="close-buttons"
@@ -207,26 +217,19 @@ export function Calendar() {
           <View style={styles.calendarList}>
             {calendars.map((calendar) => (
               <TouchableOpacity
-                key={calendar.id}
+                key={calendar.uuid}
                 style={[
                   styles.calendar,
-                  selectedCalendar.id === calendar.id && {
+                  selectedCalendar.uuid === calendar.uuid && {
                     backgroundColor: theme.backgroundGray,
                   },
                 ]}
                 onPress={() => handleCalendarSelect(calendar)}
-                testID={`calendar-${calendar.id}`}
+                testID={`calendar-${calendar.uuid}`}
               >
                 <CalendarSimple calendar={calendar} />
               </TouchableOpacity>
             ))}
-            <TouchableOpacity
-              style={styles.calendar}
-              onPress={handleCreateNewCalendar}
-              testID="create-calendar"
-            >
-              <CalendarSimple />
-            </TouchableOpacity>
           </View>
           <View style={styles.void} />
         </BottomSheetView>
