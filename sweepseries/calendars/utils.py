@@ -3,7 +3,9 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
+from rest_framework import status
 from rest_framework.exceptions import ValidationError
+from rest_framework.response import Response
 
 from product.academy.models import Academy, AcademyStudent
 from product.coach.models import Coach
@@ -57,16 +59,22 @@ def get_dates_from_month(month_query):
 
     return start_date, end_date
 
-def get_personal_monthly_calendar_data(user, month_query):
-    ## 내가 생성한 일정과 내가 포함된 레슨을 전부 반환한다.
-    data = defaultdict(list)
+def get_personal_monthly_calendar_data(user, month_query, uuid=None):
+    if not check_personal_calendar_permissions(user, uuid):
+        return Response(status=status.HTTP_403_FORBIDDEN)
 
-    start_date, end_date = get_dates_from_month(month_query)
+    try:
+        data = defaultdict(list)
 
-    data = get_monthly_sessions(data, user, start_date, end_date, 'personal') ## 레슨 세션
-    data = get_monthly_events(data, user, start_date, end_date) ## 개인 일정
+        start_date, end_date = get_dates_from_month(month_query)
 
-    return data
+        data = get_monthly_sessions(data, user, start_date, end_date, 'personal') ## 레슨 세션
+        data = get_monthly_events(data, user, start_date, end_date) ## 개인 일정
+
+        return Response(data, status=status.HTTP_200_OK)
+    except ValidationError as e:
+        return Response(data={"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 
 def get_personal_daily_calendar_data(user, date_query):
     ## 개인 일간 조회는 개인 일정, 레슨, 할일, 다이어리 모두 반환해야 한다.
@@ -92,16 +100,24 @@ def get_personal_daily_calendar_data(user, date_query):
 
     return data
 
-def get_academy_monthly_calendar_data(academy_uuid, user, month_query, role):
-    data = defaultdict(list)
+def get_academy_monthly_calendar_data(academy_uuid, user, month_query, uuid=None):
+    role = check_academy_calendar_permissions(user, uuid)
+    if role is None:
+        return Response(status=status.HTTP_403_FORBIDDEN)
 
-    academy = Academy.objects.get(uuid=academy_uuid)
-    start_date, end_date = get_dates_from_month(month_query)
+    try:
+        data = defaultdict(list)
 
-    data = get_monthly_sessions(data, user, start_date, end_date, role, academy) ## 레슨 세션
-    data = get_monthly_events(data, user, start_date, end_date, academy) ## 아카데미 일정
+        academy = Academy.objects.get(uuid=academy_uuid)
+        start_date, end_date = get_dates_from_month(month_query)
 
-    return data
+        data = get_monthly_sessions(data, user, start_date, end_date, role, academy) ## 레슨 세션
+        data = get_monthly_events(data, user, start_date, end_date, academy) ## 아카데미 일정
+
+        return Response(data, status=status.HTTP_200_OK)
+    except ValidationError as e:
+        return Response(data={"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 
 def get_academy_daily_calendar_data(academy_uuid, user, date_query, role):
     try:
@@ -193,4 +209,3 @@ def toggle_personal_daily_notifications(user, time=None):
         return True
 
     return False
-

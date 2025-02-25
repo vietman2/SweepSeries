@@ -52,27 +52,10 @@ class PersonalCalendarViewSet(ModelViewSet):
             return Response(data={"message": "월을 지정해주세요."}, status=status.HTTP_400_BAD_REQUEST)
 
         if calendar_type == "personal":
-            if not check_personal_calendar_permissions(user, uuid):
-                return Response(status=status.HTTP_403_FORBIDDEN)
-
-            try:
-                data = get_personal_monthly_calendar_data(user, month)
-            except ValidationError as e:
-                return Response(data={"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-            return Response(data, status=status.HTTP_200_OK)
+            return get_personal_monthly_calendar_data(user, month, uuid)
 
         if calendar_type == "academy":
-            role = check_academy_calendar_permissions(user, uuid)
-            if role is None:
-                return Response(status=status.HTTP_403_FORBIDDEN)
-
-            try:
-                data = get_academy_monthly_calendar_data(uuid, user, month, role)
-            except ValidationError as e:
-                return Response(data={"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-            return Response(data, status=status.HTTP_200_OK)
+            return get_academy_monthly_calendar_data(uuid, user, month, uuid)
 
         return Response(data={"message": "잘못된 요청입니다."}, status=status.HTTP_400_BAD_REQUEST)
 
