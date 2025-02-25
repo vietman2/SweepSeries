@@ -7,7 +7,7 @@ from rest_framework.viewsets import ModelViewSet
 from drf_spectacular.utils import extend_schema
 
 from core.utils import is_admin_page
-from product.academy.models import Academy
+from product.academy.models import Academy, AcademyStudent
 from .models import Person
 from .serializers import PersonSerializer, StudentSimpleSerializer, StudentDetailSerializer
 
@@ -57,13 +57,19 @@ class AcademyStudentViewSet(ModelViewSet):
 
         q = Q()
 
-        if query:
+        if not query:
+            students = academy.students.all()
+        else:
             ## name or phone number
             q &= Q(name__icontains=query) | Q(phone_number__icontains=query)
+            people = Person.objects.filter(q)
+            students = AcademyStudent.objects.filter(
+                academy=academy, person__in=people
+            )
 
-        students = academy.students.filter(q)
+        student_person_objects = [student.person for student in students]
 
-        serializer = StudentSimpleSerializer(students, many=True)
+        serializer = StudentSimpleSerializer(student_person_objects, many=True)
 
         return Response(
             status=status.HTTP_200_OK,
