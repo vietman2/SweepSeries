@@ -11,6 +11,11 @@ jest.mock("expo-router", () => ({
     back: jest.fn(),
   },
 }));
+jest.mock("@gorhom/bottom-sheet", () => ({
+  __esModule: true,
+  default: "BottomSheet",
+  BottomSheetView: ({ children }: { children: React.ReactNode }) => children,
+}));
 jest.mock("@fragments/Calendar", () => ({
   ColorModal: () => <div>ColorModal</div>,
   NameModal: () => <div>NameModal</div>,
