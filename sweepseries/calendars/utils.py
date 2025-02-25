@@ -175,3 +175,22 @@ def toggle_academy_calendar_daily_notifications(academy_uuid, user, role, time=N
             else:
                 raise ValidationError("시간을 지정해주세요.")
         coach.save()
+
+def toggle_personal_daily_notifications(user, time=None):
+    ## toggle daily notifications
+    if user.notifications_today:
+        user.notifications_today = False
+        user.daily_time = None
+        user.save()
+
+        return True
+
+    if time:
+        user.notifications_today = True
+        user.daily_time = time
+        user.save()
+
+        return True
+
+    return False
+

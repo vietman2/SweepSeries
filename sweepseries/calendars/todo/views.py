@@ -38,7 +38,7 @@ class TodoViewSet(ModelViewSet):
         todo = self.get_object()
         user = request.user
 
-        if not todo.user == user:
+        if todo.user != user:
             return Response(
                 data={"detail": "권한이 없습니다."},
                 status=status.HTTP_403_FORBIDDEN,

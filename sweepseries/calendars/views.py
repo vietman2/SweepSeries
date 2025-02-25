@@ -13,7 +13,8 @@ from .utils import (
     check_personal_calendar_permissions, check_academy_calendar_permissions,
     get_personal_monthly_calendar_data, get_academy_monthly_calendar_data,
     get_personal_daily_calendar_data, get_academy_daily_calendar_data,
-    toggle_academy_calendar_notifications, toggle_academy_calendar_daily_notifications
+    toggle_academy_calendar_notifications, toggle_academy_calendar_daily_notifications,
+    toggle_personal_daily_notifications
 )
 
 class PersonalCalendarViewSet(ModelViewSet):
@@ -166,22 +167,9 @@ class PersonalCalendarViewSet(ModelViewSet):
         time = request.data.get('time', None)
 
         if calendar_type == "personal":
-            ## toggle daily notifications
-            if user.notifications_today:
-                user.notifications_today = False
-                user.daily_time = None
-                user.save()
-
+            if toggle_personal_daily_notifications(user, time):
                 return Response(data={"message": "SUCCESS"}, status=status.HTTP_200_OK)
-            else:
-                if time:
-                    user.notifications_today = True
-                    user.daily_time = time
-                    user.save()
-
-                    return Response(data={"message": "SUCCESS"}, status=status.HTTP_200_OK)
-                else:
-                    return Response(data={"message": "시간을 지정해주세요."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={"message": "시간을 지정해주세요."}, status=status.HTTP_400_BAD_REQUEST)
 
         if calendar_type == "academy":
             uuid = request.data.get('uuid', None)

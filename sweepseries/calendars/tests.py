@@ -371,7 +371,7 @@ class CalendarsAPITestCase(APITestCase):
         ## switch on fail: no time
         response = self.client.patch(f"{self.url}dailynoti/", no_time_data, format="json")
         self.assertEqual(response.status_code, 400)
-        
+
         ## switch on success
         response = self.client.patch(f"{self.url}dailynoti/", data, format="json")
         self.assertEqual(response.status_code, 200)

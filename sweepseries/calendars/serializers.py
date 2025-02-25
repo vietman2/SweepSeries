@@ -1,6 +1,5 @@
 from django.db.models import Q
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 
 from auth.user.models import User
 from core.utils import get_presigned_url

@@ -194,7 +194,6 @@ class AcademyScheduleSerializer(BaseScheduleSerializer):
 
     def create(self, validated_data):
         with atomic():
-            request = self.context['request']
             alarm = validated_data.pop('alarm')
             repeat = validated_data.pop('repeat')
 
