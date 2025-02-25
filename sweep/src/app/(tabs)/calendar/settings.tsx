@@ -1,3 +1,3 @@
-import { Settings } from "@pages/calendar";
+import { CalendarSettings } from "@pages/calendar";
 
-export default Settings;
+export default CalendarSettings;
