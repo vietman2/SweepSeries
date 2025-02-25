@@ -39,6 +39,11 @@ class Coach(models.Model):
         choices=CoachApplicationStatus.choices, default=CoachApplicationStatus.PENDING
     )
 
+    ## 캘린더 설정
+    notifications       = models.BooleanField(default=True)
+    notifications_today = models.BooleanField(default=True)
+    daily_time          = models.TimeField(null=True, blank=True, default="09:00:00")
+
     objects         = models.Manager()
 
     class Meta:
