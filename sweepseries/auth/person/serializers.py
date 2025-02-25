@@ -1,8 +1,8 @@
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 
-from calendars.schedule.models import Session
-from calendars.schedule.serializers import SessionSerializer
+from product.lesson.models import Session
+from product.lesson.serializers import SessionSerializer
 from core.utils import get_presigned_url
 from .models import Person
 
