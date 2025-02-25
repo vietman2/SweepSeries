@@ -75,13 +75,15 @@ def get_personal_monthly_calendar_data(user, month_query, uuid=None):
     except ValidationError as e:
         return Response(data={"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-
-def get_personal_daily_calendar_data(user, date_query):
+def get_personal_daily_calendar_data(user, date_query, uuid=None):
     ## 개인 일간 조회는 개인 일정, 레슨, 할일, 다이어리 모두 반환해야 한다.
+    if not check_personal_calendar_permissions(user, uuid):
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
     try:
         date_obj = datetime.fromisoformat(date_query)
     except ValueError as e:
-        raise ValidationError("올바른 형식이 아닙니다.") from e
+        return Response(data={"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     tz = timezone.get_current_timezone()
     date_obj = timezone.make_aware(date_obj, tz)
@@ -98,7 +100,7 @@ def get_personal_daily_calendar_data(user, date_query):
         "diary": diary.diary if diary else "",
     }
 
-    return data
+    return Response(data, status=status.HTTP_200_OK)
 
 def get_academy_monthly_calendar_data(academy_uuid, user, month_query, uuid=None):
     role = check_academy_calendar_permissions(user, uuid)
@@ -118,12 +120,15 @@ def get_academy_monthly_calendar_data(academy_uuid, user, month_query, uuid=None
     except ValidationError as e:
         return Response(data={"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+def get_academy_daily_calendar_data(academy_uuid, user, date_query, uuid=None):
+    role = check_academy_calendar_permissions(user, uuid)
+    if role is None:
+        return Response(status=status.HTTP_403_FORBIDDEN)
 
-def get_academy_daily_calendar_data(academy_uuid, user, date_query, role):
     try:
         date_obj = datetime.fromisoformat(date_query)
     except ValueError as e:
-        raise ValidationError("올바른 형식이 아닙니다.") from e
+        return Response(data={"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     tz = timezone.get_current_timezone()
     date_obj = timezone.make_aware(date_obj, tz)
@@ -138,7 +143,7 @@ def get_academy_daily_calendar_data(academy_uuid, user, date_query, role):
         "lessons": lessons,
     }
 
-    return data
+    return Response(data, status=status.HTTP_200_OK)
 
 def toggle_academy_calendar_notifications(academy_uuid, user, role):
     if role == "OWNER":
