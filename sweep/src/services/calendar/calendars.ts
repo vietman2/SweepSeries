@@ -9,29 +9,18 @@ export async function getCalendars() {
   }
 }
 
-export async function getCalendar(id: string) {
+export async function getMonthlyData(
+  uuid: string,
+  month: string,
+  type: string
+) {
   try {
-    const response = await axios.get(`/v1/calendars/${id}/`);
-    return response.data;
-  } catch {
-    return null;
-  }
-}
-
-export async function getCalendarData(id: number | undefined, query: string, type: string) {
-  // type == "month" 이면, paramdms {month: "2021-09"} 형태로 
-  // type == "day" 이면, params {day: "2021-09-01"} 형태로
-  if (!id) {
-    return null;
-  }
-
-  const params = {
-    [type]: query,
-  };
-
-  try {
-    const response = await axios.get(`/v1/calendars/${id}/schedules/`, {
-      params,
+    const response = await axios.get("/v1/calendars/monthly/", {
+      params: {
+        month: month,
+        type: type,
+        uuid: uuid,
+      },
     });
 
     return response.data;
@@ -40,46 +29,22 @@ export async function getCalendarData(id: number | undefined, query: string, typ
   }
 }
 
-export async function createCalendar() {
-  try {
-    const response = await axios.post("/v1/calendars/");
-    return response.data;
-  } catch {
-    return null;
-  }
-}
-
-export async function deleteCalendar(id: number | undefined) {
-  if (!id) {
-    return null;
-  }
-  
-  try {
-    await axios.delete(`/v1/calendars/${id}/`);
-    return true;
-  } catch {
-    return null;
-  }
-}
-
-export async function leaveCalendar(id: number | undefined) {
-  if (!id) {
+export async function getDailyData(
+  uuid: string | undefined,
+  date: string,
+  type: string | undefined
+) {
+  if (!uuid || !type) {
     return null;
   }
 
   try {
-    await axios.delete(`/v1/calendars/${id}/leave/`);
-    return true;
-  } catch {
-    return null;
-  }
-}
-
-export async function updateCalendarInfo(id: number, name: string, color: string) {
-  try {
-    const response = await axios.patch(`/v1/calendars/${id}/`, {
-      name,
-      color,
+    const response = await axios.get("/v1/calendars/daily/", {
+      params: {
+        date: date,
+        type: type,
+        uuid: uuid,
+      },
     });
 
     return response.data;
@@ -88,28 +53,60 @@ export async function updateCalendarInfo(id: number, name: string, color: string
   }
 }
 
-export async function toggleCalendarNotification(id: number | undefined) {
-  if (!id) {
-    return null;
-  }
-
+export async function updateCalendarInfo(data: {
+  title?: string;
+  color?: string;
+}) {
   try {
-    const response = await axios.patch(`/v1/calendars/${id}/notification/`);
+    const response = await axios.patch(`/v1/calendars/info/`, data);
+
     return response.data;
   } catch {
     return null;
   }
 }
 
-export async function toggleCalendarDaily(id: number | undefined, time: string) {
-  if (!id) {
+export async function toggleCalendarNotification(data: {
+  type: string;
+  uuid?: string;
+}) {
+  if (data.type === "academy" && !data.uuid) {
     return null;
   }
 
   try {
-    const response = await axios.patch(`/v1/calendars/${id}/daily/`, {
-      time,
+    const response = await axios.patch(`/v1/calendars/notifications/`, data);
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
+export async function toggleCalendarDaily(data: {
+  type: string;
+  uuid?: string;
+  time?: string;
+}) {
+  if (data.type === "academy" && !data.uuid) {
+    return null;
+  }
+
+  try {
+    const response = await axios.patch(`/v1/calendars/dailynoti/`, data);
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
+export async function switchCalendarScope(uuid: string, scope: number) {
+  try {
+    const response = await axios.patch(`/v1/calendars/scope/`, {
+      uuid: uuid,
+      scope: scope,
     });
+
     return response.data;
   } catch {
     return null;
