@@ -371,11 +371,13 @@ jest.mock("@contexts/calendar", () => ({
   CalendarProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
   ),
-  useCalendar: () => ({
+  useCalendar: jest.fn().mockReturnValue({
     calendars: [],
+    isReady: false,
+    reloadData: jest.fn(),
     selectedCalendar: null,
     setSelectedCalendar: jest.fn(),
-  }),
+  })
 }));
 jest.mock("@contexts/front", () => ({
   FrontProvider: ({ children }: { children: React.ReactNode }) => (
