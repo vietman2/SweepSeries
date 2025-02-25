@@ -67,9 +67,10 @@ def get_personal_monthly_calendar_data(user, month_query, uuid=None):
         data = defaultdict(list)
 
         start_date, end_date = get_dates_from_month(month_query)
+        date_range = (start_date, end_date)
 
-        data = get_monthly_sessions(data, user, start_date, end_date, 'personal') ## 레슨 세션
-        data = get_monthly_events(data, user, start_date, end_date) ## 개인 일정
+        data = get_monthly_sessions(data, user, date_range, 'personal') ## 레슨 세션
+        data = get_monthly_events(data, user, date_range) ## 개인 일정
 
         return Response(data, status=status.HTTP_200_OK)
     except ValidationError as e:
@@ -112,9 +113,10 @@ def get_academy_monthly_calendar_data(academy_uuid, user, month_query, uuid=None
 
         academy = Academy.objects.get(uuid=academy_uuid)
         start_date, end_date = get_dates_from_month(month_query)
+        date_range = (start_date, end_date)
 
-        data = get_monthly_sessions(data, user, start_date, end_date, role, academy) ## 레슨 세션
-        data = get_monthly_events(data, user, start_date, end_date, role, academy) ## 아카데미 일정
+        data = get_monthly_sessions(data, user, date_range, role, academy) ## 레슨 세션
+        data = get_monthly_events(data, user, date_range, role, academy) ## 아카데미 일정
 
         return Response(data, status=status.HTTP_200_OK)
     except ValidationError as e:

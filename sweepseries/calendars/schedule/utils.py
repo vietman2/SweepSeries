@@ -4,8 +4,9 @@ from django.utils import timezone
 from .models import PersonalEvent, AcademyEvent
 from .serializers import PersonalEventSerializer, AcademyEventSerializer
 
-def get_monthly_events(data, user, start_date, end_date, role="personal", academy=None):
+def get_monthly_events(data, user, date_range, role="personal", academy=None):
     tz = timezone.get_current_timezone()
+    start_date, end_date = date_range
 
     if academy:
         ## academy가 None이 아니면, 아카데미 일정을 가져온다

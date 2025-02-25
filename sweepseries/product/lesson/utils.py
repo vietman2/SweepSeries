@@ -26,8 +26,9 @@ def get_simple_sessions_from_query(data, q, user, do_encoding=False):
 
     return data
 
-def get_monthly_sessions(data, user, start_date, end_date, role='personal', academy=None):
+def get_monthly_sessions(data, user, date_range, role='personal', academy=None):
     ## Base queries
+    start_date, end_date = date_range
     q = Q(start_datetime__range=[start_date, end_date])
     do_encoding = False
 
