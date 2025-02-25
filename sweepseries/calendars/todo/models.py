@@ -1,11 +1,11 @@
 from django.db import models
 
-from calendars.calendarapp.models import Calendar
+from auth.user.models import User
 from core.models import TimeStampedModel
 
 class Todo(TimeStampedModel):
-    calendar    = models.ForeignKey(
-        Calendar, on_delete=models.CASCADE, related_name='todos'
+    user    = models.ForeignKey(
+        User, related_name='todos', on_delete=models.CASCADE
     )
     title       = models.CharField(max_length=100)
     deadline    = models.DateField()
