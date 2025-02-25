@@ -185,7 +185,7 @@ def toggle_student_notifications(academy_uuid, user, time):
             raise ValidationError("시간을 지정해주세요.")
     student.save()
 
-def toggle_coach_notifications(academy_uuid, user, time):
+def toggle_coach_notifications(user, time):
     coach = Coach.objects.get(person__user=user)
     if coach.notifications_today:
         coach.daily_time = None
