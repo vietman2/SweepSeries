@@ -159,43 +159,52 @@ def toggle_academy_calendar_notifications(academy_uuid, user, role):
         coach.notifications = not coach.notifications
         coach.save()
 
+def toggle_owner_notifications(academy_uuid, time):
+    academy = Academy.objects.get(uuid=academy_uuid)
+    if academy.notifications_today:
+        academy.daily_time = None
+        academy.notifications_today = False
+    else:
+        if time:
+            academy.notifications_today = True
+            academy.daily_time = time
+        else:
+            raise ValidationError("시간을 지정해주세요.")
+    academy.save()
+
+def toggle_student_notifications(academy_uuid, user, time):
+    student = AcademyStudent.objects.get(academy__uuid=academy_uuid, person__user=user)
+    if student.notifications_today:
+        student.daily_time = None
+        student.notifications_today = False
+    else:
+        if time:
+            student.notifications_today = True
+            student.daily_time = time
+        else:
+            raise ValidationError("시간을 지정해주세요.")
+    student.save()
+
+def toggle_coach_notifications(academy_uuid, user, time):
+    coach = Coach.objects.get(person__user=user)
+    if coach.notifications_today:
+        coach.daily_time = None
+        coach.notifications_today = False
+    else:
+        if time:
+            coach.notifications_today = True
+            coach.daily_time = time
+        else:
+            raise ValidationError("시간을 지정해주세요.")
+    coach.save()
+
 def toggle_academy_calendar_daily_notifications(academy_uuid, user, role, time=None):
     if role == "OWNER":
-        academy = Academy.objects.get(uuid=academy_uuid)
-        if academy.notifications_today:
-            academy.daily_time = None
-            academy.notifications_today = False
-        else:
-            if time:
-                academy.notifications_today = True
-                academy.daily_time = time
-            else:
-                raise ValidationError("시간을 지정해주세요.")
-        academy.save()
+        toggle_owner_notifications(academy_uuid, time)
     elif role == "STUDENT":
-        student = AcademyStudent.objects.get(academy__uuid=academy_uuid, person__user=user)
-        if student.notifications_today:
-            student.daily_time = None
-            student.notifications_today = False
-        else:
-            if time:
-                student.notifications_today = True
-                student.daily_time = time
-            else:
-                raise ValidationError("시간을 지정해주세요.")
-        student.save()
+        toggle_student_notifications(academy_uuid, user, time)
     else:
-        coach = Coach.objects.get(person__user=user)
-        if coach.notifications_today:
-            coach.daily_time = None
-            coach.notifications_today = False
-        else:
-            if time:
-                coach.notifications_today = True
-                coach.daily_time = time
-            else:
-                raise ValidationError("시간을 지정해주세요.")
-        coach.save()
+        toggle_coach_notifications(academy_uuid, user, time)
 
 def toggle_personal_daily_notifications(user, time=None):
     ## toggle daily notifications
