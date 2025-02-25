@@ -56,7 +56,7 @@ class CalendarsAPITestCase(APITestCase):
         response = self.client.get(
             f"{self.url}monthly/",
             {
-                "month": "2025-01",
+                "month": "2025-02",
                 "type": "personal",
             }
         )
@@ -66,7 +66,7 @@ class CalendarsAPITestCase(APITestCase):
         response = self.client.get(
             f"{self.url}monthly/",
             {
-                "month": "2025-01",
+                "month": "2025-02",
                 "type": "personal",
                 "uuid": "123e4567-e89b-12d3-a456-426614174000"
             }
@@ -88,7 +88,7 @@ class CalendarsAPITestCase(APITestCase):
         response = self.client.get(
             f"{self.url}monthly/",
             {
-                "month": "2025-01",
+                "month": "2025-02",
                 "type": "academy",
                 "uuid": "123e4567-e89b-12d3-a456-426614174999"
             }
@@ -101,7 +101,7 @@ class CalendarsAPITestCase(APITestCase):
         response = self.client.get(
             f"{self.url}monthly/",
             {
-                "month": "2025-01",
+                "month": "2025-02",
                 "type": "personal",
                 "uuid": "123e4567-e89b-12d3-a456-426614174000"
             }
@@ -112,7 +112,7 @@ class CalendarsAPITestCase(APITestCase):
         response = self.client.get(
             f"{self.url}monthly/",
             {
-                "month": "2025-01",
+                "month": "2025-02",
                 "type": "academy",
                 "uuid": "123e4567-e89b-12d3-a456-426614174999"
             }
