@@ -5,7 +5,6 @@ import { Calendar } from "./Calendar";
 import * as AuthContext from "@contexts/auth";
 import * as CalendarContext from "@contexts/calendar";
 import * as CalendarsAPI from "@services/calendar/calendars";
-//import * as StorageAPI from "@services/storage/asyncstorage";
 import { sampleAuthor } from "@testdata/auth";
 import { sampleCalendars, sampleScheduleResponse } from "@testdata/calendar";
 import { renderWithProviders } from "@utils/test-utils";
