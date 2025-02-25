@@ -49,6 +49,35 @@ class BaseScheduleSerializer(serializers.ModelSerializer):
 
         raise serializers.ValidationError('반복 주기가 올바르지 않습니다.')
 
+class PersonalScheduleSerializer(BaseScheduleSerializer):
+    class Meta(BaseScheduleSerializer.Meta):
+        model = PersonalSchedule
+
+    def create_event(self, event_data):
+        start_datetime = event_data['start']
+        end_datetime = event_data['end']
+        alarm = event_data['alarm']
+
+        if event_data['is_allday']:
+            start_datetime = event_data['start'].replace(hour=0, minute=0, second=0)
+            end_datetime = event_data['end'].replace(hour=23, minute=59, second=59)
+
+        event = PersonalEvent.objects.create(
+            schedule=event_data['schedule'],
+            start_datetime=start_datetime,
+            end_datetime=end_datetime,
+            is_allday=event_data['is_allday'],
+        )
+
+        if alarm['use']:
+            alarm_time = self.get_alarm_time(event_data['start'], alarm['delta'], alarm['unit'])
+            event.notify = True
+            event.notify_time = alarm_time
+
+        event.save()
+
+        return event
+
     def create_events(self, events_data):
         repeat = events_data['repeat']
         alarm = events_data['alarm']
@@ -107,35 +136,6 @@ class BaseScheduleSerializer(serializers.ModelSerializer):
         else:
             raise serializers.ValidationError('잘못된 요청입니다.')
 
-class PersonalScheduleSerializer(BaseScheduleSerializer):
-    class Meta(BaseScheduleSerializer.Meta):
-        model = PersonalSchedule
-
-    def create_event(self, event_data):
-        start_datetime = event_data['start']
-        end_datetime = event_data['end']
-        alarm = event_data['alarm']
-
-        if event_data['is_allday']:
-            start_datetime = event_data['start'].replace(hour=0, minute=0, second=0)
-            end_datetime = event_data['end'].replace(hour=23, minute=59, second=59)
-
-        event = PersonalEvent.objects.create(
-            schedule=event_data['schedule'],
-            start_datetime=start_datetime,
-            end_datetime=end_datetime,
-            is_allday=event_data['is_allday'],
-        )
-
-        if alarm['use']:
-            alarm_time = self.get_alarm_time(event_data['start'], alarm['delta'], alarm['unit'])
-            event.notify = True
-            event.notify_time = alarm_time
-
-        event.save()
-
-        return event
-
     def create(self, validated_data):
         with atomic():
             request = self.context['request']
@@ -191,6 +191,64 @@ class AcademyScheduleSerializer(BaseScheduleSerializer):
         event.save()
 
         return event
+
+    def create_events(self, events_data):
+        repeat = events_data['repeat']
+        alarm = events_data['alarm']
+
+        use_repeat = repeat['use']
+        break_rule = repeat['break']
+        period = repeat['period']
+
+        if not use_repeat:
+            event_data = {
+                'schedule': events_data['schedule'],
+                'start': events_data['start'],
+                'end': events_data['end'],
+                'is_allday': events_data['is_allday'],
+                'alarm': alarm
+            }
+            self.create_event(event_data)
+        elif break_rule.endswith('회'):
+            ## input: 'n회'
+            try:
+                repeat_count = int(break_rule[:-1])
+                for i in range(repeat_count):
+                    start_time = self.get_time(events_data['start'], period, i)
+                    end_time = self.get_time(events_data['end'], period, i)
+                    event_data = {
+                        'schedule': events_data['schedule'],
+                        'start': start_time,
+                        'end': end_time,
+                        'is_allday': events_data['is_allday'],
+                        'alarm': alarm
+                    }
+                    self.create_event(event_data)
+            except ValueError as e:
+                raise serializers.ValidationError('반복 횟수가 올바르지 않습니다.') from e
+        elif break_rule.endswith('까지'):
+            ## input: 'yyyy.mm.dd까지'
+            try:
+                repeat_until = datetime.strptime(break_rule[:-2], '%Y.%m.%d')
+                i = 0
+                while True:
+                    start_time = self.get_time(events_data['start'], period, i)
+                    end_time = self.get_time(events_data['end'], period, i)
+                    if start_time > timezone.make_aware(repeat_until):
+                        break
+                    event_data = {
+                        'schedule': events_data['schedule'],
+                        'start': start_time,
+                        'end': end_time,
+                        'is_allday': events_data['is_allday'],
+                        'alarm': alarm
+                    }
+                    self.create_event(event_data)
+                    i += 1
+            except ValueError as e:
+                raise serializers.ValidationError('반복 종료일이 올바르지 않습니다.') from e
+        else:
+            raise serializers.ValidationError('잘못된 요청입니다.')
 
     def create(self, validated_data):
         with atomic():

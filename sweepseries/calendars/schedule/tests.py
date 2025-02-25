@@ -88,6 +88,12 @@ class ScheduleAPITestCase(APITestCase):
         self.assertEqual(PersonalSchedule.objects.count(), 1)
         self.assertEqual(PersonalEvent.objects.count(), 6)
 
+        academy_data = data.copy()
+        academy_data["type"] = "academy"
+        academy_data["uuid"] = "123e4567-e89b-12d3-a456-426614174999"
+        response = self.client.post(self.url, academy_data, format="json")
+        self.assertEqual(response.status_code, 201)
+
         ## 2. repeat: weekly + break: date
         data["title"] = "weekly repeat"
         data["description"] = "weekly repeat"
@@ -101,6 +107,12 @@ class ScheduleAPITestCase(APITestCase):
         self.assertEqual(PersonalSchedule.objects.count(), 2)
         self.assertEqual(PersonalEvent.objects.count(), 10)
 
+        academy_data = data.copy()
+        academy_data["type"] = "academy"
+        academy_data["uuid"] = "123e4567-e89b-12d3-a456-426614174999"
+        response = self.client.post(self.url, academy_data, format="json")
+        self.assertEqual(response.status_code, 201)
+
         ## 3. repeat: monthly + break: date
         data["title"] = "monthly repeat"
         data["description"] = "monthly repeat"
@@ -113,6 +125,12 @@ class ScheduleAPITestCase(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(PersonalSchedule.objects.count(), 3)
         self.assertEqual(PersonalEvent.objects.count(), 21)
+
+        academy_data = data.copy()
+        academy_data["type"] = "academy"
+        academy_data["uuid"] = "123e4567-e89b-12d3-a456-426614174999"
+        response = self.client.post(self.url, academy_data, format="json")
+        self.assertEqual(response.status_code, 201)
 
         ## 4. repeat: yearly + break: number
         data["title"] = "yearly repeat"
@@ -128,6 +146,12 @@ class ScheduleAPITestCase(APITestCase):
         self.assertEqual(PersonalEvent.objects.count(), 26)
         last = PersonalEvent.objects.last()
         self.assertEqual(last.start_datetime.isoformat(), '2029-02-01T00:00:00+00:00')
+
+        academy_data = data.copy()
+        academy_data["type"] = "academy"
+        academy_data["uuid"] = "123e4567-e89b-12d3-a456-426614174999"
+        response = self.client.post(self.url, academy_data, format="json")
+        self.assertEqual(response.status_code, 201)
 
     def test_create_schedule_alarm(self):
         self.client.force_authenticate(user=self.calendar_owner)
@@ -219,6 +243,12 @@ class ScheduleAPITestCase(APITestCase):
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 400)
 
+        academy_data = data.copy()
+        academy_data["type"] = "academy"
+        academy_data["uuid"] = "123e4567-e89b-12d3-a456-426614174999"
+        response = self.client.post(self.url, academy_data, format="json")
+        self.assertEqual(response.status_code, 400)
+
         ## 5. bad repeat break (number)
         data = self.personal_base_data.copy()
         data["repeat"] = {
@@ -227,6 +257,12 @@ class ScheduleAPITestCase(APITestCase):
             "break": "n회",
         }
         response = self.client.post(self.url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+
+        academy_data = data.copy()
+        academy_data["type"] = "academy"
+        academy_data["uuid"] = "123e4567-e89b-12d3-a456-426614174999"
+        response = self.client.post(self.url, academy_data, format="json")
         self.assertEqual(response.status_code, 400)
 
         ## 6. bad repeat break (date)
@@ -239,6 +275,12 @@ class ScheduleAPITestCase(APITestCase):
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 400)
 
+        academy_data = data.copy()
+        academy_data["type"] = "academy"
+        academy_data["uuid"] = "123e4567-e89b-12d3-a456-426614174999"
+        response = self.client.post(self.url, academy_data, format="json")
+        self.assertEqual(response.status_code, 400)
+
         ## 7. bad repeat type
         data = self.personal_base_data.copy()
         data["repeat"] = {
@@ -247,6 +289,12 @@ class ScheduleAPITestCase(APITestCase):
             "break": "2025.12.31",
         }
         response = self.client.post(self.url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+
+        academy_data = data.copy()
+        academy_data["type"] = "academy"
+        academy_data["uuid"] = "123e4567-e89b-12d3-a456-426614174999"
+        response = self.client.post(self.url, academy_data, format="json")
         self.assertEqual(response.status_code, 400)
 
         ## 8. bad alarm unit
