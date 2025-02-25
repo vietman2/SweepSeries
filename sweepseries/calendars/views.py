@@ -10,11 +10,10 @@ from auth.user.models import User
 from product.academy.models import Academy
 from .serializers import CalendarListSerializer
 from .utils import (
-    check_personal_calendar_permissions, check_academy_calendar_permissions,
-    get_personal_monthly_calendar_data, get_academy_monthly_calendar_data,
-    get_personal_daily_calendar_data, get_academy_daily_calendar_data,
-    toggle_academy_calendar_notifications, toggle_academy_calendar_daily_notifications,
-    toggle_personal_daily_notifications
+    check_academy_calendar_permissions, get_personal_monthly_calendar_data,
+    get_academy_monthly_calendar_data, get_personal_daily_calendar_data,
+    get_academy_daily_calendar_data, toggle_academy_calendar_notifications,
+    toggle_academy_calendar_daily_notifications, toggle_personal_daily_notifications
 )
 
 class PersonalCalendarViewSet(ModelViewSet):
