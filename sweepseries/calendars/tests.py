@@ -7,6 +7,7 @@ class CalendarsAPITestCase(APITestCase):
         "core/data/test/users.json", "core/data/test/calendar.json",
         "core/data/test/academies.json", "core/data/initial/regions.json",
         "core/data/test/coaches.json", "core/data/initial/professions.json",
+        "core/data/test/programs.json",
     ]
 
     def setUp(self):
@@ -83,7 +84,18 @@ class CalendarsAPITestCase(APITestCase):
         )
         self.assertEqual(response.status_code, 403)
 
-        ## success (academy)
+        ## success (academy student)
+        response = self.client.get(
+            f"{self.url}monthly/",
+            {
+                "month": "2025-02",
+                "type": "academy",
+                "uuid": "123e4567-e89b-12d3-a456-426614174999"
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+
+        ## success (academy owner)
         self.client.force_authenticate(user=self.academy_owner)
         response = self.client.get(
             f"{self.url}monthly/",
@@ -172,13 +184,24 @@ class CalendarsAPITestCase(APITestCase):
         )
         self.assertEqual(response.status_code, 200)
 
-        ## success (academy)
+        ## success (academy student)
+        response = self.client.get(
+            f"{self.url}daily/",
+            {
+                "type": "academy",
+                "date": "2025-02-01",
+                "uuid": "123e4567-e89b-12d3-a456-426614174999"
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+
+        ## success (academy owner)
         self.client.force_authenticate(user=self.academy_owner)
         response = self.client.get(
             f"{self.url}daily/",
             {
                 "type": "academy",
-                "date": "2025-01-01",
+                "date": "2025-02-01",
                 "uuid": "123e4567-e89b-12d3-a456-426614174999"
             }
         )
