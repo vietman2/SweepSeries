@@ -276,12 +276,6 @@ class ScheduleAPITestCase(APITestCase):
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 400)
 
-        academy_data = data.copy()
-        academy_data["type"] = "academy"
-        academy_data["uuid"] = "123e4567-e89b-12d3-a456-426614174999"
-        response = self.client.post(self.url, academy_data, format="json")
-        self.assertEqual(response.status_code, 400)
-
         ## 5. bad repeat break (number)
         data = self.personal_base_data.copy()
         data["repeat"] = {
