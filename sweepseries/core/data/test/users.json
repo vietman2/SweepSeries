@@ -34,8 +34,18 @@
     "pk": 4,
     "fields": {
       "name": "전우치",
-      "phone_number": "+821033333333",
+      "phone_number": "+8221111111",
       "birth_date": "2002-01-01",
+      "gender": "M"
+    }
+  },
+  {
+    "model": "person.person",
+    "pk": 5,
+    "fields": {
+      "name": "이순신",
+      "phone_number": "+821033333333",
+      "birth_date": "2003-01-01",
       "gender": "M"
     }
   },
@@ -54,7 +64,15 @@
       "is_staff": true,
       "is_blocked": false,
       "is_active": true,
-      "agreed_at": "2024-11-20T16:39:13.192Z"
+      "naver_linked": true,
+      "kakao_linked": false,
+      "noti_permitted": false,
+      "agreed_at": "2024-11-20T16:39:13.192Z",
+      "calendar_title": "나의 캘린더",
+      "calendar_color": "#B0E0E6",
+      "notifications": true,
+      "notifications_today": true,
+      "daily_time": "08:15:00"
     }
   },
   {
@@ -72,7 +90,15 @@
       "is_staff": false,
       "is_blocked": false,
       "is_active": true,
-      "agreed_at": "2024-11-20T16:39:13.192Z"
+      "naver_linked": false,
+      "kakao_linked": false,
+      "noti_permitted": false,
+      "agreed_at": "2024-11-20T16:39:13.192Z",
+      "calendar_title": "나의 캘린더",
+      "calendar_color": "#B0E0E6",
+      "notifications": true,
+      "notifications_today": true,
+      "daily_time": "08:15:00"
     }
   },
   {
@@ -90,7 +116,41 @@
       "is_staff": false,
       "is_blocked": false,
       "is_active": true,
-      "agreed_at": "2024-11-20T16:39:13.192Z"
+      "naver_linked": false,
+      "kakao_linked": false,
+      "noti_permitted": false,
+      "agreed_at": "2024-11-20T16:39:13.192Z",
+      "calendar_title": "나의 캘린더",
+      "calendar_color": "#B0E0E6",
+      "notifications": true,
+      "notifications_today": true,
+      "daily_time": "08:15:00"
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": "423e4567-e89b-12d3-a456-426614174000",
+    "fields": {
+      "password": "",
+      "last_login": "2024-11-25T13:01:15.740Z",
+      "username": "user4",
+      "email": "user@four.com",
+      "person": 5,
+      "joined_at": "2024-11-20T16:39:13.192Z",
+      "updated_at": "2024-11-20T16:39:13.206Z",
+      "is_superuser": false,
+      "is_staff": false,
+      "is_blocked": false,
+      "is_active": true,
+      "naver_linked": false,
+      "kakao_linked": false,
+      "noti_permitted": false,
+      "agreed_at": "2024-11-20T16:39:13.192Z",
+      "calendar_title": "나의 캘린더",
+      "calendar_color": "#B0E0E6",
+      "notifications": true,
+      "notifications_today": true,
+      "daily_time": "08:15:00"
     }
   },
   {
