@@ -1,4 +1,3 @@
-from django.test import TestCase
 from rest_framework.test import APITestCase
 
 from auth.user.models import User
@@ -28,7 +27,7 @@ class TodosAPITestCase(APITestCase):
         self.client.force_authenticate(user=self.user)
         response = self.client.patch(self.url + "1/")
         self.assertEqual(response.status_code, 405)
- 
+
     def test_create_todo(self):
         self.client.force_authenticate(user=self.user)
         response = self.client.post(self.url, self.create_data)

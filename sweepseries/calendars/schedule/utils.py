@@ -35,10 +35,10 @@ def get_daily_events(user, date, role="personal", academy=None):
         q = Q(start_datetime__date=date, schedule__user=user)
         events = PersonalEvent.objects.filter(q).distinct()
         return PersonalEventSerializer(events, many=True).data
-    else:
-        if role == 'STUDENT':
-            return []
 
-        q = Q(start_datetime__date=date, schedule__academy=academy)
-        events = AcademyEvent.objects.filter(q).distinct()
-        return AcademyEventSerializer(events, many=True).data
+    if role == 'STUDENT':
+        return []
+
+    q = Q(start_datetime__date=date, schedule__academy=academy)
+    events = AcademyEvent.objects.filter(q).distinct()
+    return AcademyEventSerializer(events, many=True).data

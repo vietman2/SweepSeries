@@ -41,7 +41,7 @@ class PersonalCalendarViewSet(ModelViewSet):
 
     @extend_schema(summary="월간 일정 조회", tags=["캘린더"])
     @action(detail=False, methods=['get'])
-    def monthly(self, request, *args, **kwargs):
+    def monthly(self, request, *args, **kwargs):    ## pylint: disable=unused-argument
         calendar_type = request.query_params.get('type', 'personal')
         uuid = request.query_params.get('uuid', None)
         month = request.query_params.get('month', None)
@@ -60,7 +60,7 @@ class PersonalCalendarViewSet(ModelViewSet):
 
     @extend_schema(summary="일간 일정 조회", tags=["캘린더"])
     @action(detail=False, methods=['get'])
-    def daily(self, request, *args, **kwargs):
+    def daily(self, request, *args, **kwargs):      ## pylint: disable=unused-argument
         calendar_type = request.query_params.get('type', 'personal')
         uuid = request.query_params.get('uuid', None)
         date = request.query_params.get('date', None)
@@ -79,7 +79,7 @@ class PersonalCalendarViewSet(ModelViewSet):
 
     @extend_schema(summary="개인 캘린더 설정 변경", tags=["캘린더"])
     @action(detail=False, methods=['patch'])
-    def info(self, request, *args, **kwargs):
+    def info(self, request, *args, **kwargs):       ## pylint: disable=unused-argument
         user = request.user
         updated_title = request.data.get('title', None)
         updated_color = request.data.get('color', None)
@@ -100,7 +100,7 @@ class PersonalCalendarViewSet(ModelViewSet):
 
     @extend_schema(summary="캘린더 알림 설정 변경", tags=["캘린더"])
     @action(detail=False, methods=['patch'])
-    def notifications(self, request, *args, **kwargs):
+    def notifications(self, request, *args, **kwargs):  ## pylint: disable=unused-argument
         user = request.user
         calendar_type = request.data.pop('type', None)
 
@@ -126,7 +126,7 @@ class PersonalCalendarViewSet(ModelViewSet):
 
     @extend_schema(summary="캘린더 매일 알림 설정 변경", tags=["캘린더"])
     @action(detail=False, methods=['patch'])
-    def dailynoti(self, request, *args, **kwargs):
+    def dailynoti(self, request, *args, **kwargs):      ## pylint: disable=unused-argument
         user = request.user
         calendar_type = request.data.pop('type', None)
         time = request.data.get('time', None)
@@ -153,7 +153,7 @@ class PersonalCalendarViewSet(ModelViewSet):
 
     @extend_schema(summary="캘린더 공개 범위 변경", tags=["캘린더"])
     @action(detail=False, methods=['patch'])
-    def scope(self, request, *args, **kwargs):
+    def scope(self, request, *args, **kwargs):      ## pylint: disable=unused-argument
         user = request.user
         uuid = request.data.get('uuid', None)
         scope = request.data.get('scope', None)
