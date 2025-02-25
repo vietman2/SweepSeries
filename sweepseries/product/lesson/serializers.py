@@ -152,11 +152,27 @@ class SessionSerializer(serializers.ModelSerializer):
     def get_description(self, obj):
         coaches = ', '.join([coach.person.name for coach in obj.coaches.all()])
         student = obj.lesson.student.name
+        do_encoding = self.context.get('do_encoding', False)
+        user = self.context.get('user', None)
+
+        if user is None:
+            return f'코치: {coaches}\t수강생: {student}'
+
+        if do_encoding and user.person.name != student:
+            return f'코치: {coaches}'
 
         return f'코치: {coaches}\t수강생: {student}'
 
-    def get_color(self, obj):  ## pylint: disable=unused-argument
-        return "#14863E"
+    def get_color(self, obj):
+        user = self.context.get('user', None)
+
+        if user is None:
+            return "#14863E80"
+
+        if user.person.name == obj.lesson.student.name:
+            return "#14863E"
+
+        return "#14863E80"
 
     def get_type(self, obj):  ## pylint: disable=unused-argument
         return '레슨'

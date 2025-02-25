@@ -114,7 +114,7 @@ def get_academy_monthly_calendar_data(academy_uuid, user, month_query, uuid=None
         start_date, end_date = get_dates_from_month(month_query)
 
         data = get_monthly_sessions(data, user, start_date, end_date, role, academy) ## 레슨 세션
-        data = get_monthly_events(data, user, start_date, end_date, academy) ## 아카데미 일정
+        data = get_monthly_events(data, user, start_date, end_date, role, academy) ## 아카데미 일정
 
         return Response(data, status=status.HTTP_200_OK)
     except ValidationError as e:
@@ -136,7 +136,7 @@ def get_academy_daily_calendar_data(academy_uuid, user, date_query, uuid=None):
     academy = Academy.objects.get(uuid=academy_uuid)
 
     lessons = get_daily_sessions(user, date_obj, role, academy)
-    events = get_daily_events(user, date_obj, academy)
+    events = get_daily_events(user, date_obj, role, academy)
 
     data = {
         "events": events,
@@ -204,7 +204,7 @@ def toggle_academy_calendar_daily_notifications(academy_uuid, user, role, time=N
     elif role == "STUDENT":
         toggle_student_notifications(academy_uuid, user, time)
     else:
-        toggle_coach_notifications(academy_uuid, user, time)
+        toggle_coach_notifications(user, time)
 
 def toggle_personal_daily_notifications(user, time=None):
     ## toggle daily notifications

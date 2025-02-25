@@ -1,6 +1,7 @@
 from rest_framework.test import APITestCase
 
 from auth.user.models import User
+from product.academy.models import Academy
 
 class CalendarsAPITestCase(APITestCase):
     fixtures = [
@@ -16,6 +17,7 @@ class CalendarsAPITestCase(APITestCase):
         self.academy_owner = User.objects.get(username="normaluser")
         self.coach = User.objects.get(username="coachuser")
         self.not_allowed_user = User.objects.get(username="user4")
+        self.academy = Academy.objects.get(uuid="123e4567-e89b-12d3-a456-426614174999")
 
     def test_unallowed_methods(self):
         ## retrieve
@@ -84,7 +86,33 @@ class CalendarsAPITestCase(APITestCase):
         )
         self.assertEqual(response.status_code, 403)
 
-        ## success (academy student)
+        ## success (academy student, scope 1)
+        response = self.client.get(
+            f"{self.url}monthly/",
+            {
+                "month": "2025-02",
+                "type": "academy",
+                "uuid": "123e4567-e89b-12d3-a456-426614174999"
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+
+        ## success (academy student, scope 2)
+        self.academy.calendar_scope = 2
+        self.academy.save()
+        response = self.client.get(
+            f"{self.url}monthly/",
+            {
+                "month": "2025-02",
+                "type": "academy",
+                "uuid": "123e4567-e89b-12d3-a456-426614174999"
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+
+        ## success (academy student, scope 3)
+        self.academy.calendar_scope = 3
+        self.academy.save()
         response = self.client.get(
             f"{self.url}monthly/",
             {
@@ -184,7 +212,33 @@ class CalendarsAPITestCase(APITestCase):
         )
         self.assertEqual(response.status_code, 200)
 
-        ## success (academy student)
+        ## success (academy student, scope 1)
+        response = self.client.get(
+            f"{self.url}daily/",
+            {
+                "type": "academy",
+                "date": "2025-02-01",
+                "uuid": "123e4567-e89b-12d3-a456-426614174999"
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+
+        ## success (academy student, scope 2)
+        self.academy.calendar_scope = 2
+        self.academy.save()
+        response = self.client.get(
+            f"{self.url}daily/",
+            {
+                "type": "academy",
+                "date": "2025-02-01",
+                "uuid": "123e4567-e89b-12d3-a456-426614174999"
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+
+        ## success (academy student, scope 3)
+        self.academy.calendar_scope = 3
+        self.academy.save()
         response = self.client.get(
             f"{self.url}daily/",
             {
