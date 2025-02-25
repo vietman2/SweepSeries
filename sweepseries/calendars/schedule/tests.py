@@ -1,18 +1,19 @@
 from rest_framework.test import APITestCase
 
 from auth.user.models import User
-from product.contract.models import Contract
-from .models import Schedule, Event
+from .models import PersonalSchedule, PersonalEvent, AcademySchedule, AcademyEvent
 
 class ScheduleAPITestCase(APITestCase):
-    fixtures = ["core/data/test/users.json", "core/data/test/calendars.json"]
+    fixtures = [
+        "core/data/test/users.json", "core/data/test/academies.json",
+        "core/data/initial/regions.json"
+    ]
 
     def setUp(self):
         self.url = "/v1/schedules/"
         self.calendar_owner = User.objects.get(username="normaluser")
-        self.calendar_viewer = User.objects.get(username="admin")
-        self.base_data = {
-            "calendar_id": 1,
+        self.personal_base_data = {
+            "type": "personal",
             "title": "no alarm, no repeat",
             "description": "no alarm, no repeat",
             "start_datetime": "2025-02-01T00:00:00Z",
@@ -35,13 +36,21 @@ class ScheduleAPITestCase(APITestCase):
         self.client.force_authenticate(user=self.calendar_owner)
 
         ## 1. no repeat, no alarm, not all day
-        response = self.client.post(self.url, self.base_data, format="json")
+        academy_data = self.personal_base_data.copy()
+        academy_data["type"] = "academy"
+        academy_data["uuid"] = "123e4567-e89b-12d3-a456-426614174999"
+        response = self.client.post(self.url, self.personal_base_data, format="json")
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(Schedule.objects.count(), 1)
-        self.assertEqual(Event.objects.count(), 1)
+        self.assertEqual(PersonalSchedule.objects.count(), 1)
+        self.assertEqual(PersonalEvent.objects.count(), 1)
+
+        response = self.client.post(self.url, academy_data, format="json")
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(AcademySchedule.objects.count(), 1)
+        self.assertEqual(AcademyEvent.objects.count(), 1)
 
         ## 2. no repeat, alarm, all day
-        data = self.base_data.copy()
+        data = self.personal_base_data.copy()
         data["title"] = "alarm, all day"
         data["description"] = "alarm, all day"
         data["start_datetime"] = "2025-02-01T19:30:00Z"
@@ -49,18 +58,24 @@ class ScheduleAPITestCase(APITestCase):
         data["is_allday"] = True
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(Schedule.objects.count(), 2)
-        self.assertEqual(Event.objects.count(), 2)
-        event = Event.objects.get(schedule__title="alarm, all day")
+        self.assertEqual(PersonalSchedule.objects.count(), 2)
+        self.assertEqual(PersonalEvent.objects.count(), 2)
+        event = PersonalEvent.objects.get(schedule__title="alarm, all day")
         self.assertEqual(event.start_datetime.isoformat(), '2025-02-01T15:00:00+00:00')
         self.assertEqual(event.end_datetime.isoformat(), '2025-02-02T14:59:59+00:00')
         self.assertEqual(event.is_allday, True)
+
+        academy_data = data.copy()
+        academy_data["type"] = "academy"
+        academy_data["uuid"] = "123e4567-e89b-12d3-a456-426614174999"
+        response = self.client.post(self.url, academy_data, format="json")
+        self.assertEqual(response.status_code, 201)
 
     def test_create_schedule_repeat(self):
         self.client.force_authenticate(user=self.calendar_owner)
 
         ## 1. repeat: daily + break: date
-        data = self.base_data.copy()
+        data = self.personal_base_data.copy()
         data["title"] = "daily repeat"
         data["description"] = "daily repeat"
         data["repeat"] = {
@@ -70,8 +85,8 @@ class ScheduleAPITestCase(APITestCase):
         }
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(Schedule.objects.count(), 1)
-        self.assertEqual(Event.objects.count(), 6)
+        self.assertEqual(PersonalSchedule.objects.count(), 1)
+        self.assertEqual(PersonalEvent.objects.count(), 6)
 
         ## 2. repeat: weekly + break: date
         data["title"] = "weekly repeat"
@@ -83,8 +98,8 @@ class ScheduleAPITestCase(APITestCase):
         }
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(Schedule.objects.count(), 2)
-        self.assertEqual(Event.objects.count(), 10)
+        self.assertEqual(PersonalSchedule.objects.count(), 2)
+        self.assertEqual(PersonalEvent.objects.count(), 10)
 
         ## 3. repeat: monthly + break: date
         data["title"] = "monthly repeat"
@@ -96,8 +111,8 @@ class ScheduleAPITestCase(APITestCase):
         }
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(Schedule.objects.count(), 3)
-        self.assertEqual(Event.objects.count(), 21)
+        self.assertEqual(PersonalSchedule.objects.count(), 3)
+        self.assertEqual(PersonalEvent.objects.count(), 21)
 
         ## 4. repeat: yearly + break: number
         data["title"] = "yearly repeat"
@@ -109,16 +124,16 @@ class ScheduleAPITestCase(APITestCase):
         }
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(Schedule.objects.count(), 4)
-        self.assertEqual(Event.objects.count(), 26)
-        last = Event.objects.last()
+        self.assertEqual(PersonalSchedule.objects.count(), 4)
+        self.assertEqual(PersonalEvent.objects.count(), 26)
+        last = PersonalEvent.objects.last()
         self.assertEqual(last.start_datetime.isoformat(), '2029-02-01T00:00:00+00:00')
 
     def test_create_schedule_alarm(self):
         self.client.force_authenticate(user=self.calendar_owner)
 
         ## 1. alarm: minutes
-        data = self.base_data.copy()
+        data = self.personal_base_data.copy()
         data["title"] = "alarm minutes"
         data["description"] = "alarm minutes"
         data["alarm"] = {
@@ -128,9 +143,15 @@ class ScheduleAPITestCase(APITestCase):
         }
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 201)
-        event = Event.objects.get(schedule__title="alarm minutes")
+        event = PersonalEvent.objects.get(schedule__title="alarm minutes")
         self.assertEqual(event.notify, True)
         self.assertEqual(event.notify_time.isoformat(), '2025-01-31T23:50:00+00:00')
+
+        academy_data = data.copy()
+        academy_data["type"] = "academy"
+        academy_data["uuid"] = "123e4567-e89b-12d3-a456-426614174999"
+        response = self.client.post(self.url, academy_data, format="json")
+        self.assertEqual(response.status_code, 201)
 
         ## 2. alarm: hours
         data["title"] = "alarm hours"
@@ -142,7 +163,7 @@ class ScheduleAPITestCase(APITestCase):
         }
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 201)
-        event = Event.objects.get(schedule__title="alarm hours")
+        event = PersonalEvent.objects.get(schedule__title="alarm hours")
         self.assertEqual(event.notify_time.isoformat(), '2025-01-31T23:00:00+00:00')
 
         ## 3. alarm: days
@@ -155,7 +176,7 @@ class ScheduleAPITestCase(APITestCase):
         }
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 201)
-        event = Event.objects.get(schedule__title="alarm days")
+        event = PersonalEvent.objects.get(schedule__title="alarm days")
         self.assertEqual(event.notify_time.isoformat(), '2025-01-29T00:00:00+00:00')
 
         ## 4. alarm: weeks
@@ -168,12 +189,12 @@ class ScheduleAPITestCase(APITestCase):
         }
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 201)
-        event = Event.objects.get(schedule__title="alarm weeks")
+        event = PersonalEvent.objects.get(schedule__title="alarm weeks")
         self.assertEqual(event.notify_time.isoformat(), '2025-01-18T00:00:00+00:00')
 
     def test_create_schedule_fail(self):
         ## 1. not authenticated
-        response = self.client.post(self.url, self.base_data, format="json")
+        response = self.client.post(self.url, self.personal_base_data, format="json")
         self.assertEqual(response.status_code, 403)
 
         ## 2. no data
@@ -182,14 +203,14 @@ class ScheduleAPITestCase(APITestCase):
         self.assertEqual(response.status_code, 400)
 
         ## 3. start > end
-        data = self.base_data.copy()
+        data = self.personal_base_data.copy()
         data["start_datetime"] = "2025-02-01T01:00:00Z"
         data["end_datetime"] = "2025-02-01T00:00:00Z"
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 400)
 
         ## 4. bad repeat period
-        data = self.base_data.copy()
+        data = self.personal_base_data.copy()
         data["repeat"] = {
             "use": True,
             "period": 4,
@@ -199,7 +220,7 @@ class ScheduleAPITestCase(APITestCase):
         self.assertEqual(response.status_code, 400)
 
         ## 5. bad repeat break (number)
-        data = self.base_data.copy()
+        data = self.personal_base_data.copy()
         data["repeat"] = {
             "use": True,
             "period": 0,
@@ -209,7 +230,7 @@ class ScheduleAPITestCase(APITestCase):
         self.assertEqual(response.status_code, 400)
 
         ## 6. bad repeat break (date)
-        data = self.base_data.copy()
+        data = self.personal_base_data.copy()
         data["repeat"] = {
             "use": True,
             "period": 0,
@@ -219,7 +240,7 @@ class ScheduleAPITestCase(APITestCase):
         self.assertEqual(response.status_code, 400)
 
         ## 7. bad repeat type
-        data = self.base_data.copy()
+        data = self.personal_base_data.copy()
         data["repeat"] = {
             "use": True,
             "period": 0,
@@ -229,157 +250,11 @@ class ScheduleAPITestCase(APITestCase):
         self.assertEqual(response.status_code, 400)
 
         ## 8. bad alarm unit
-        data = self.base_data.copy()
+        data = self.personal_base_data.copy()
         data["alarm"] = {
             "use": True,
             "delta": 10,
             "unit": 4,
         }
         response = self.client.post(self.url, data, format="json")
-        self.assertEqual(response.status_code, 400)
-
-        ## 9. no auth
-        self.client.force_authenticate(user=self.calendar_viewer)
-        response = self.client.post(self.url, self.base_data, format="json")
-        self.assertEqual(response.status_code, 400)
-
-class LessonAPITestCase(APITestCase):
-    fixtures = [
-        "core/data/test/users.json", "core/data/initial/professions.json",
-        "core/data/test/coaches.json", "core/data/initial/regions.json",
-        "core/data/test/academies.json", "core/data/initial/facilities.json",
-        "core/data/test/programs.json", "core/data/initial/programs.json",
-        "core/data/test/schedules.json", "core/data/test/calendars.json",
-    ]
-
-    def setUp(self):
-        self.url = "/v1/lessons/"
-        self.user = User.objects.get(username="normaluser")
-        self.create_data = {
-            "program": 1,
-            "coaches": ["923e4567-e89b-12d3-a456-426614174999"],
-            "start_datetime": "2025-02-01T00:00:00Z",
-            "person": {
-                "name": "lesson",
-                "phone": "lesson",
-            },
-            "curriculum_id": 1,
-        }
-        self.create_data2 = {
-            "program": 1,
-            "coaches": ["923e4567-e89b-12d3-a456-426614174999"],
-            "start_datetime": "2025-02-01T00:00:00Z",
-            "person": {
-                "name": "lesson",
-                "phone": "+821000000000",
-            },
-            "curriculum_id": 1,
-        }
-        self.create_data3 = {
-            "program": 1,
-            "coaches": ["923e4567-e89b-12d3-a456-426614174999"],
-            "start_datetime": "2025-02-01T00:00:00Z",
-            "person": {
-                "id": 1,
-                "name": "lesson",
-                "phone": "+821000000000",
-            },
-            "curriculum_id": 1,
-        }
-
-    def test_unallowed_methods(self):
-        self.client.force_authenticate(user=self.user)
-        response = self.client.get(f"{self.url}{1}/")
-        self.assertEqual(response.status_code, 405)
-
-    def test_list_lesson_normal(self):
-        self.client.force_authenticate(user=self.user)
-        response = self.client.get(self.url, {"program": 1, "student": 2})
-        self.assertEqual(response.status_code, 200)
-
-    def test_list_lesson_fail(self):
-        self.client.force_authenticate(user=self.user)
-        response = self.client.get(self.url, {"program": 1, "student": 1})
-        self.assertEqual(response.status_code, 200)
-
-    def test_list_lesson_cornercase(self):
-        ## ONLY TO INCREASE COVERAGE
-        Contract.objects.all().delete()
-        self.client.force_authenticate(user=self.user)
-        response = self.client.get(self.url, {"program": 1, "student": 2})
-        self.assertEqual(response.status_code, 400)
-
-    def test_create_lesson_normal(self):
-        self.client.force_authenticate(user=self.user)
-        ## 1. new person
-        response = self.client.post(self.url, self.create_data, format="json")
-        self.assertEqual(response.status_code, 201)
-
-        ## 2. existing person
-        response = self.client.post(self.url, self.create_data2, format="json")
-        self.assertEqual(response.status_code, 201)
-
-        ## 3. existing person (2)
-        response = self.client.post(self.url, self.create_data3, format="json")
-        self.assertEqual(response.status_code, 201)
-
-    def test_create_lesson_fail(self):
-        self.client.force_authenticate(user=self.user)
-
-        ## 1. no data
-        response = self.client.post(self.url, {}, format="json")
-        self.assertEqual(response.status_code, 400)
-
-        ## 2. bad data: no curriculum
-        data = self.create_data.copy()
-        data["curriculum_id"] = 0
-        response = self.client.post(self.url, data, format="json")
-        self.assertEqual(response.status_code, 400)
-
-class SessionAPITestCase(APITestCase):
-    fixtures = [
-        "core/data/test/users.json", "core/data/test/calendars.json",
-        "core/data/test/schedules.json", 'core/data/test/coaches.json',
-        'core/data/test/programs.json', 'core/data/test/academies.json',
-        'core/data/initial/regions.json', 'core/data/initial/professions.json',
-    ]
-
-    def setUp(self):
-        self.url = "/v1/sessions/"
-        self.user = User.objects.get(username="normaluser")
-
-    def test_list_session_normal(self):
-        self.client.force_authenticate(user=self.user)
-        response = self.client.get(self.url, {"month": "2025-02"})
-        self.assertEqual(response.status_code, 200)
-
-    def test_list_session_fail(self):
-        self.client.force_authenticate(user=self.user)
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 400)
-
-        response = self.client.get(self.url, {"month": "asdf-as"})
-        self.assertEqual(response.status_code, 400)
-
-    def test_retrieve_session_normal(self):
-        self.client.force_authenticate(user=self.user)
-        response = self.client.get(f"{self.url}1/")
-        self.assertEqual(response.status_code, 200)
-
-    def test_update_session_notes(self):
-        self.client.force_authenticate(user=self.user)
-        response = self.client.patch(f"{self.url}1/", {"notes": "test"}, format="json")
-        self.assertEqual(response.status_code, 200)
-
-    def test_update_session_feedback(self):
-        self.client.force_authenticate(user=self.user)
-        response = self.client.patch(f"{self.url}1/", {"feedback": "test"}, format="json")
-        self.assertEqual(response.status_code, 200)
-
-    def test_update_session_fail(self):
-        self.client.force_authenticate(user=self.user)
-        response = self.client.patch(f"{self.url}1/", {"feedback": ""}, format="json")
-        self.assertEqual(response.status_code, 400)
-
-        response = self.client.patch(f"{self.url}1/", {"notes": ""}, format="json")
         self.assertEqual(response.status_code, 400)

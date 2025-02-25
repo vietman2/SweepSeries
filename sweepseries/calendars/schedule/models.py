@@ -1,17 +1,11 @@
 from django.db import models
 
-from auth.person.models import Person
-from calendars.calendarapp.models import Calendar
+from auth.user.models import User
 from core.models import TimeStampedModel
-from product.coach.models import Coach
-from product.contract.models import Contract
-from product.program.models import Program
+from product.academy.models import Academy
 from .enums import RepeatTypeChoices
 
-class Schedule(TimeStampedModel):
-    calendar        = models.ForeignKey(
-        Calendar, on_delete=models.CASCADE, related_name='schedules'
-    )
+class BaseSchedule(TimeStampedModel):
     title           = models.CharField(max_length=100)
     description     = models.TextField()
     color           = models.CharField(max_length=7)
@@ -25,13 +19,27 @@ class Schedule(TimeStampedModel):
     objects         = models.Manager()
 
     class Meta:
-        db_table = 'schedules'
+        abstract = True
+
+class PersonalSchedule(BaseSchedule):
+    user            = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='personal_schedules'
+    )
+
+    class Meta:
+        db_table = 'personal_schedules'
         ordering = ['-created_at']
 
-class Event(models.Model):
-    schedule        = models.ForeignKey(
-        Schedule, on_delete=models.CASCADE, related_name='events'
+class AcademySchedule(BaseSchedule):
+    academy         = models.ForeignKey(
+        Academy, on_delete=models.CASCADE, related_name='academy_schedules'
     )
+
+    class Meta:
+        db_table = 'academy_schedules'
+        ordering = ['-created_at']
+
+class BaseEvent(models.Model):
     start_datetime  = models.DateTimeField()
     end_datetime    = models.DateTimeField()
     is_allday       = models.BooleanField(default=False)
@@ -42,34 +50,22 @@ class Event(models.Model):
     objects         = models.Manager()
 
     class Meta:
-        db_table = 'events'
+        abstract = True
+
+class PersonalEvent(BaseEvent):
+    schedule        = models.ForeignKey(
+        PersonalSchedule, on_delete=models.CASCADE, related_name='personal_events'
+    )
+
+    class Meta:
+        db_table = 'personal_events'
         ordering = ['start_datetime']
 
-class Lesson(TimeStampedModel):
-    program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='lessons')
-    student = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='lessons')
-    coaches = models.ManyToManyField(Coach, related_name='lessons')
-
-    objects = models.Manager()
+class AcademyEvent(BaseEvent):
+    schedule        = models.ForeignKey(
+        AcademySchedule, on_delete=models.CASCADE, related_name='academy_events'
+    )
 
     class Meta:
-        db_table = 'lessons'
-        unique_together = ('program', 'student')
-
-class Session(models.Model):
-    lesson          = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='sessions')
-    coaches         = models.ManyToManyField(Coach, related_name='sessions')
-    contract        = models.ForeignKey(Contract, on_delete=models.CASCADE, related_name='sessions')
-    start_datetime  = models.DateTimeField()
-    end_datetime    = models.DateTimeField()
-
-    notify          = models.BooleanField(default=False)
-    notify_time     = models.DateTimeField(null=True, blank=True)
-
-    notes           = models.TextField(blank=True)
-    feedback        = models.TextField(blank=True)
-
-    objects         = models.Manager()
-
-    class Meta:
-        db_table = 'sessions'
+        db_table = 'academy_events'
+        ordering = ['start_datetime']
