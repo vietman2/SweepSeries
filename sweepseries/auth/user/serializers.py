@@ -9,7 +9,6 @@ from auth.person.models import Person
 from auth.person.serializers import PersonSerializer
 from auth.userprofile.models import UserProfile
 from auth.userprofile.serializers import UserProfileSerializer
-from calendars.calendarapp.utils import create_new_calendar
 from product.academy.models import Academy
 from product.coach.models import Coach
 from .models import User
@@ -239,7 +238,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             )
             user = self.set_notifications(user, validated_data.pop('notifications'))
             user.save()
-            create_new_calendar(user=user)
 
             self.create_profile(user, profile_data)
 
