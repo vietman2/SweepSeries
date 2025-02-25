@@ -12,6 +12,9 @@ jest.mock("expo-router", () => ({
   },
   useLocalSearchParams: jest.fn(() => ({ id: "1" })),
 }));
+jest.mock("@fragments/Lesson", () => ({
+  LessonSimple: () => null,
+}));
 
 describe("<CustomerDetail />", () => {
   beforeEach(() => {
