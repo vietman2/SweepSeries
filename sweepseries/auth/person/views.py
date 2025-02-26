@@ -81,7 +81,7 @@ class AcademyStudentViewSet(ModelViewSet):
         academy = Academy.objects.get(uuid=kwargs['academy_id'])
         student = self.get_object()
 
-        if not academy.students.filter(id=student.id).exists():
+        if not academy.students.filter(person__id=student.id).exists():
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         serializer = StudentDetailSerializer(student)
