@@ -44,7 +44,6 @@ export function CoachModal({
 
   const handleConfirm = () => {
     addCoachTeam(selectedCoaches);
-    closeModal();
   };
 
   return (
@@ -77,7 +76,7 @@ export function CoachModal({
           <View style={styles.footer}>
             <CalloutSmall
               text={
-                "- 코치는 한 명 또는 다수의 코치를 선택할 수 있습니다.\n- \n- "
+                "\u2022 코치는 한 명 또는 다수의 코치를 선택할 수 있습니다.\n\n\u2022 다수의 코치를 선택하면, 1개의 프로그램에 선택된 코치 모두가 참여하게 됩니다."
               }
               color={theme.primary}
             />
