@@ -11,6 +11,9 @@ import {
   ProgramSimpleType,
   PositionTargetType,
   CurriculumType,
+  OptionType,
+  TeamType,
+  TeamInputType,
 } from "./program";
 import { ReviewType, ReplyType } from "./review";
 import {
@@ -32,6 +35,9 @@ export {
   ProgramSimpleType,
   PositionTargetType,
   CurriculumType,
+  OptionType,
+  TeamType,
+  TeamInputType,
   ReviewType,
   ReplyType,
   StudentSimpleType,

@@ -1,4 +1,8 @@
-import { ProgramSimpleType, PositionTargetType } from "@models/products";
+import {
+  ProgramSimpleType,
+  PositionTargetType,
+  OptionType,
+} from "@models/products";
 
 export const sampleProgramPositions: PositionTargetType[] = [
   {
@@ -41,11 +45,13 @@ export const sampleAcademyPrograms: ProgramSimpleType[] = [
     name: "엘리트선수(중학생) 1:1 개인레슨 (60분)",
     rating: 4.89,
     target: sampleProgramTargets[0],
-    positions: sampleProgramPositions,
+    positions: [sampleProgramPositions[0]],
     lowest_price: 150000,
     duration: 60,
     academy_uuid: "1",
     curriculums: sampleCurriculums,
+    random_assignment: true,
+    teams: [],
   },
   {
     id: 2,
@@ -57,6 +63,8 @@ export const sampleAcademyPrograms: ProgramSimpleType[] = [
     duration: 60,
     academy_uuid: "1",
     curriculums: sampleCurriculums,
+    random_assignment: true,
+    teams: [],
   },
   {
     id: 3,
@@ -68,6 +76,8 @@ export const sampleAcademyPrograms: ProgramSimpleType[] = [
     duration: 60,
     academy_uuid: "1",
     curriculums: sampleCurriculums,
+    random_assignment: true,
+    teams: [],
   },
   {
     id: 4,
@@ -79,5 +89,16 @@ export const sampleAcademyPrograms: ProgramSimpleType[] = [
     duration: 60,
     academy_uuid: "1",
     curriculums: sampleCurriculums,
+    random_assignment: true,
+    teams: [],
   },
+];
+
+export const timeOptions: OptionType[] = [
+  { id: 30, name: "30분" },
+  { id: 60, name: "60분" },
+  { id: 90, name: "90분" },
+  { id: 120, name: "120분" },
+  { id: 150, name: "150분" },
+  { id: 180, name: "180분" },
 ];

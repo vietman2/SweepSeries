@@ -6,6 +6,7 @@ import {
   sampleProgramPositions,
   sampleProgramTargets,
   sampleCurriculums,
+  timeOptions,
 } from "./programs";
 import { sampleReviews } from "./review";
 import { sampleStudents, sampleStudentLesson } from "./students";
@@ -20,6 +21,7 @@ export {
   sampleProgramPositions,
   sampleProgramTargets,
   sampleCurriculums,
+  timeOptions,
   sampleReviews,
   sampleStudents,
   sampleStudentLesson,
