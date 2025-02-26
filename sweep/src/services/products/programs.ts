@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { CurriculumType } from "@models/products";
+import { CurriculumType, TeamInputType } from "@models/products";
 
 export async function getTargets() {
   try {
@@ -29,7 +29,11 @@ export async function createProgram(
   curriculums: {
     num_lessons: number;
     price: number;
-  }[]
+  }[],
+  coach_team: {
+    select_disabled: boolean;
+    teams: TeamInputType[];
+  }
 ) {
   try {
     const response = await axios.post("/v1/programs/", {
@@ -38,7 +42,8 @@ export async function createProgram(
       duration,
       target_id,
       positions_id,
-      curriculums,
+      curriculum_data: curriculums,
+      coach_team,
     });
     return response.data;
   } catch {

@@ -67,7 +67,8 @@ describe("createProgram", () => {
       1,
       1,
       [1],
-      [{ num_lessons: 1, price: 1 }]
+      [{ num_lessons: 1, price: 1 }],
+      { select_disabled: false, teams: [] }
     );
     expect(result).toEqual({});
   });
@@ -80,7 +81,8 @@ describe("createProgram", () => {
       1,
       1,
       [1],
-      [{ num_lessons: 1, price: 1 }]
+      [{ num_lessons: 1, price: 1 }],
+      { select_disabled: false, teams: [] }
     );
     expect(result).toBeNull();
   });
