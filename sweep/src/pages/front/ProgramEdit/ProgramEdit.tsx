@@ -184,41 +184,41 @@ export function ProgramEdit() {
       <Scroll style={styles.container}>
         <View>
           <View style={styles.content}>
-            <View style={styles.wrapper}>
-              <Text style={styles.subtitle}>프로그램 이름</Text>
+            <View style={styles.box}>
+              <Text style={styles.title}>프로그램 이름</Text>
               <TextInput
                 value={title}
                 onChangeText={setTitle}
                 placeholder="상품명을 입력하세요."
               />
             </View>
-            <View style={styles.wrapper}>
-              <Text style={styles.subtitle}>이용시간</Text>
+            <View style={styles.box}>
+              <Text style={styles.title}>이용시간</Text>
               <SingleSelect
                 options={timeOptions}
                 selected={selectedTime}
                 setSelected={setSelectedTime}
               />
             </View>
-            <View style={styles.wrapper}>
-              <Text style={styles.subtitle}>대상</Text>
+            <View style={styles.box}>
+              <Text style={styles.title}>대상</Text>
               <SingleSelect
                 options={targetOptions}
                 selected={selectedTarget}
                 setSelected={setSelectedTarget}
               />
             </View>
-            <View style={styles.wrapper}>
-              <Text style={styles.subtitle}>포지션</Text>
+            <View style={styles.box}>
+              <Text style={styles.title}>포지션</Text>
               <MultiSelect
                 options={positionOptions}
                 selected={selectedPositions}
                 setSelected={(value) => selectPosition(value)}
               />
             </View>
-            <View style={styles.wrapper}>
+            <View style={styles.box}>
               <View style={styles.headerRow}>
-                <Text style={styles.subtitle}>가격 정보</Text>
+                <Text style={styles.title}>가격 정보</Text>
                 <TouchableOpacity
                   style={styles.headerRow}
                   onPress={toggleCurriculumModal}
@@ -232,8 +232,8 @@ export function ProgramEdit() {
                 <EditCurriculum curriculums={program.curriculums} />
               </View>
             </View>
-            <View style={styles.wrapper}>
-              <Text style={styles.subtitle}>코치 설정</Text>
+            <View style={styles.box}>
+              <Text style={styles.title}>코치 설정</Text>
               <CalloutSmall
                 text={
                   "- 코치를 미리 설정하면, 수강생이 코치를 직접 선택할 수 있어요!\n- 미리 설정하지 않으려면, '임의 배정'을 선택하고 등록해주세요!"
@@ -257,7 +257,7 @@ export function ProgramEdit() {
               </TouchableOpacity>
               {!program.random_assignment && (
                 <>
-                  <View style={styles.wrapper}>
+                  <View style={styles.box}>
                     {program.teams.map((team) => (
                       <CoachTeam
                         key={team.id}
@@ -317,42 +317,18 @@ const createStyles = (theme: ThemeColorType) =>
       flex: 1,
       gap: 16,
     },
-    wrapper: {
+    box: {
       gap: 8,
     },
-    subtitle: {
+    title: {
       fontSize: 16,
       fontWeight: "bold",
       color: theme.highEmphasis,
-    },
-    selector: {
-      flexDirection: "row",
-      flexWrap: "wrap",
-      gap: 8,
-    },
-    chip: {
-      paddingHorizontal: 8,
-      paddingVertical: 4,
-      borderRadius: 4,
-      borderWidth: 1,
-      borderColor: theme.border,
     },
     toggle: {
       flexDirection: "row",
       alignItems: "center",
       gap: 4,
-    },
-    list: {
-      flex: 1,
-      flexDirection: "row",
-      flexWrap: "wrap",
-      marginTop: 4,
-      paddingBottom: 8,
-    },
-    remove: {
-      position: "absolute",
-      right: 16,
-      top: 16,
     },
     buttonWrapper: {
       paddingTop: 16,
