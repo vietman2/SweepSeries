@@ -1,7 +1,9 @@
+import { sampleCoaches } from "./coaches";
 import {
   ProgramSimpleType,
   PositionTargetType,
   OptionType,
+  TeamType,
 } from "@models/products";
 
 export const sampleProgramPositions: PositionTargetType[] = [
@@ -93,6 +95,11 @@ export const sampleAcademyPrograms: ProgramSimpleType[] = [
     teams: [],
   },
 ];
+
+export const sampleCoachTeam: TeamType = {
+  id: 1,
+  coaches: sampleCoaches,
+};
 
 export const timeOptions: OptionType[] = [
   { id: 30, name: "30분" },
