@@ -103,8 +103,8 @@ class ProgramSerializer(serializers.ModelSerializer):
     def validate_academy(self, value):
         try:
             academy = Academy.objects.get(uuid=value)
-        except ObjectDoesNotExist:
-            raise serializers.ValidationError("존재하지 않는 아카데미입니다.")
+        except ObjectDoesNotExist as e:
+            raise serializers.ValidationError("존재하지 않는 아카데미입니다.") from e
 
         return academy
 

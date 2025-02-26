@@ -139,7 +139,7 @@ class ProgramViewSet(ModelViewSet):
 
     @extend_schema(summary="프로그램 커리큘럼 수정", tags=["프로그램"])
     @action(detail=True, methods=['patch'])
-    def curriculums(self, request, *args, **kwargs):
+    def curriculums(self, request, *args, **kwargs):    ## pylint: disable=unused-argument
         program = self.get_object()
         curriculums = request.data.get("curriculums")
 
@@ -152,7 +152,7 @@ class ProgramViewSet(ModelViewSet):
 
     @extend_schema(summary="프로그램 코치 임의 배정 토글", tags=["프로그램"])
     @action(detail=True, methods=['patch'])
-    def toggle(self, request, *args, **kwargs):
+    def toggle(self, request, *args, **kwargs):         ## pylint: disable=unused-argument
         program = self.get_object()
         program.select_disabled = not program.select_disabled
         program.save()
@@ -191,7 +191,10 @@ class CoachTeamViewSet(ModelViewSet):
         team = CoachTeam.objects.filter(id=team_id).first()
 
         if program is None or team is None:
-            return Response({"message": "프로그램 또는 코치팀이 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                data={"message": "프로그램 또는 코치팀이 존재하지 않습니다."},
+                status=status.HTTP_404_NOT_FOUND
+            )
 
         program.teams.remove(team)
 
