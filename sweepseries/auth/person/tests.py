@@ -59,7 +59,7 @@ class AcademyStudentAPITestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         ## 2. with query
-        response = self.client.get(f"{self.url}{self.academy.uuid}/students/?query=학생")
+        response = self.client.get(f"{self.url}{self.academy.uuid}/students/?query=홍길동")
         self.assertEqual(response.status_code, 200)
 
     def test_students_retrieve(self):

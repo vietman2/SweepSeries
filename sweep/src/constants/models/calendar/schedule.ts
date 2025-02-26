@@ -1,7 +1,6 @@
 export type ScheduleType = {
   id: string;
   time: string;
-  type: string;
   title: string;
   description: string;
   color: string;

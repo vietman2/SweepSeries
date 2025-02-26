@@ -2,11 +2,16 @@ import { fireEvent, waitFor } from "@testing-library/react-native";
 import * as Router from "expo-router";
 
 import { DailySchedule } from "./DailySchedule";
+import * as CalendarContext from "@contexts/calendar";
 import * as CalendarsAPI from "@services/calendar/calendars";
 import * as DiariesAPI from "@services/calendar/diaries";
 import * as TodosAPI from "@services/calendar/todos";
+import {
+  sampleCalendars,
+  sampleSchedules,
+  sampleTodos,
+} from "@testdata/calendar";
 import { renderWithProviders } from "@utils/test-utils";
-import { sampleSchedules, sampleTodos } from "@testdata/calendar";
 
 jest.mock("expo-router", () => ({
   useLocalSearchParams: jest.fn(),
@@ -33,14 +38,22 @@ jest.mock("@fragments/Todo", () => {
 
 describe("<DailySchedule />", () => {
   beforeEach(() => {
-    jest.spyOn(CalendarsAPI, "getCalendarData").mockResolvedValue({
-      events: sampleSchedules,
-      todos: sampleTodos,
-      diary: "test",
-    });
     jest
       .spyOn(Router, "useLocalSearchParams")
       .mockReturnValue({ date: "2025-01-01" });
+    jest.spyOn(CalendarContext, "useCalendar").mockReturnValue({
+      selectedCalendar: sampleCalendars[0],
+      calendars: sampleCalendars,
+      isReady: true,
+      setSelectedCalendar: jest.fn(),
+      reloadData: jest.fn(),
+    });
+    jest.spyOn(CalendarsAPI, "getDailyData").mockResolvedValue({
+      events: sampleSchedules,
+      lessons: sampleSchedules,
+      todos: sampleTodos,
+      diary: "test",
+    });
   });
 
   it("handles navigate and toggle todo correctly", async () => {
@@ -53,6 +66,7 @@ describe("<DailySchedule />", () => {
     await waitFor(() => {
       fireEvent.press(getByTestId("addschedule"));
       fireEvent.press(getByTestId("addtodo"));
+      fireEvent.press(getByTestId("addlesson"));
       fireEvent.press(getAllByTestId("todo")[0]);
     });
 
@@ -64,8 +78,9 @@ describe("<DailySchedule />", () => {
   });
 
   it("handles diary correctly", async () => {
-    jest.spyOn(CalendarsAPI, "getCalendarData").mockResolvedValue({
+    jest.spyOn(CalendarsAPI, "getDailyData").mockResolvedValue({
       events: sampleSchedules,
+      lessons: sampleSchedules,
       todos: sampleTodos,
       diary: "",
     });
@@ -88,8 +103,15 @@ describe("<DailySchedule />", () => {
     });
   });
 
-  it("handles api error", async () => {
-    jest.spyOn(CalendarsAPI, "getCalendarData").mockResolvedValue(null);
+  it("handles api error and no calendar", async () => {
+    jest.spyOn(CalendarContext, "useCalendar").mockReturnValue({
+      selectedCalendar: null,
+      calendars: [],
+      isReady: true,
+      setSelectedCalendar: jest.fn(),
+      reloadData: jest.fn(),
+    });
+    jest.spyOn(CalendarsAPI, "getDailyData").mockResolvedValue(null);
 
     renderWithProviders(<DailySchedule />);
   });

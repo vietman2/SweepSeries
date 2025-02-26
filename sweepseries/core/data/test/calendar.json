@@ -1,0 +1,184 @@
+[
+  {
+    "model": "todo.todo",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-02-01T16:44:36.231Z",
+      "updated_at": "2025-02-01T16:44:36.232Z",
+      "user": "123e4567-e89b-12d3-a456-426614174000",
+      "title": "할 일 1",
+      "deadline": "2025-02-01",
+      "color": "#FFD700",
+      "completed": false
+    }
+  },
+  {
+    "model": "diary.diary",
+    "pk": 1,
+    "fields": {
+      "user": "123e4567-e89b-12d3-a456-426614174000",
+      "diary": "테스트 다이어리 내용 1",
+      "date": "2025-02-24"
+    }
+  },
+  {
+    "model": "schedule.personalschedule",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-02-24T04:30:38.372Z",
+      "updated_at": "2025-02-24T04:30:38.372Z",
+      "title": "개인 테스트 일정 1",
+      "description": "개인 테스트 일정입니다.",
+      "color": "#FF6B6B",
+      "repeat_type": "N",
+      "repeat_until": null,
+      "repeat_count": 0,
+      "user": "123e4567-e89b-12d3-a456-426614174000"
+    }
+  },
+  {
+    "model": "schedule.personalschedule",
+    "pk": 2,
+    "fields": {
+      "created_at": "2025-02-24T04:30:38.372Z",
+      "updated_at": "2025-02-24T04:30:38.372Z",
+      "title": "개인 테스트 종일 일정 1",
+      "description": "개인 테스트 종일 일정입니다.",
+      "color": "#FF6B6B",
+      "repeat_type": "N",
+      "repeat_until": null,
+      "repeat_count": 0,
+      "user": "123e4567-e89b-12d3-a456-426614174000"
+    }
+  },
+  {
+    "model": "schedule.academyschedule",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-02-24T04:48:19.310Z",
+      "updated_at": "2025-02-24T04:48:19.310Z",
+      "title": "아카데미 테스트 일정 1",
+      "description": "아카데미 테스트 일정입니다",
+      "color": "#B0E0E6",
+      "repeat_type": "N",
+      "repeat_until": null,
+      "repeat_count": 0,
+      "academy": "123e4567-e89b-12d3-a456-426614174999"
+    }
+  },
+  {
+    "model": "schedule.academyschedule",
+    "pk": 2,
+    "fields": {
+      "created_at": "2025-02-24T04:48:19.310Z",
+      "updated_at": "2025-02-24T04:48:19.310Z",
+      "title": "아카데미 테스트 종일 일정 1",
+      "description": "아카데미 테스트 종일 일정입니다",
+      "color": "#B0E0E6",
+      "repeat_type": "N",
+      "repeat_until": null,
+      "repeat_count": 0,
+      "academy": "123e4567-e89b-12d3-a456-426614174999"
+    }
+  },
+  {
+    "model": "schedule.personalevent",
+    "pk": 1,
+    "fields": {
+      "start_datetime": "2025-02-24T03:00:18Z",
+      "end_datetime": "2025-02-25T04:00:18Z",
+      "is_allday": false,
+      "notify": false,
+      "notify_time": null,
+      "schedule": 1
+    }
+  },
+  {
+    "model": "schedule.personalevent",
+    "pk": 2,
+    "fields": {
+      "start_datetime": "2025-02-24T03:00:18Z",
+      "end_datetime": "2025-02-25T04:00:18Z",
+      "is_allday": true,
+      "notify": false,
+      "notify_time": null,
+      "schedule": 2
+    }
+  },
+  {
+    "model": "schedule.academyevent",
+    "pk": 1,
+    "fields": {
+      "start_datetime": "2025-02-28T10:30:10Z",
+      "end_datetime": "2025-02-28T12:00:10Z",
+      "is_allday": false,
+      "notify": true,
+      "notify_time": "2025-02-28T07:30:10Z",
+      "schedule": 1
+    }
+  },
+  {
+    "model": "schedule.academyevent",
+    "pk": 2,
+    "fields": {
+      "start_datetime": "2025-02-28T10:30:10Z",
+      "end_datetime": "2025-02-28T12:00:10Z",
+      "is_allday": true,
+      "notify": true,
+      "notify_time": "2025-02-28T07:30:10Z",
+      "schedule": 2
+    }
+  },
+  {
+    "model": "lesson.lesson",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-02-01T00:46:07Z",
+      "updated_at": "2025-02-24T02:36:31.636Z",
+      "program": 1,
+      "student": 1,
+      "coaches": ["923e4567-e89b-12d3-a456-426614174999"]
+    }
+  },
+  {
+    "model": "lesson.session",
+    "pk": 1,
+    "fields": {
+      "lesson": 1,
+      "contract": 1,
+      "start_datetime": "2025-02-01T06:30:18Z",
+      "end_datetime": "2025-02-01T08:00:18Z",
+      "notify": false,
+      "notify_time": null,
+      "notes": "",
+      "feedback": "레슨 내용: 상하체 분리 후 로테이션 수정\n\n레슨: \n- 레그 킥 이후 랜딩 동작 시 상하체 분리가 원활히 되지 않는 상태를 수정하고자 했음\n- 수정 전: 스윙 진행 시 팔꿈치가 오픈되며 배트의 중심점이 뒤에 남아있게 되고, 손목이 덮힘\n- 수정 후: 안전한 랜딩 동작 수행 후 상체 들림 현상이 줄어들고 히트 트랙 분석이 타구 속도 및 발사각이 조정됨",
+      "coaches": ["923e4567-e89b-12d3-a456-426614174999"]
+    }
+  },
+  {
+    "model": "lesson.lesson",
+    "pk": 2,
+    "fields": {
+      "created_at": "2025-02-01T00:46:07Z",
+      "updated_at": "2025-02-24T02:36:31.636Z",
+      "program": 1,
+      "student": 3,
+      "coaches": ["923e4567-e89b-12d3-a456-426614174999"]
+    }
+  },
+  {
+    "model": "lesson.session",
+    "pk": 2,
+    "fields": {
+      "lesson": 2,
+      "contract": 2,
+      "start_datetime": "2025-02-01T06:30:18Z",
+      "end_datetime": "2025-02-01T08:00:18Z",
+      "notify": false,
+      "notify_time": null,
+      "notes": "",
+      "feedback": "",
+      "coaches": ["923e4567-e89b-12d3-a456-426614174999"]
+    }
+  }
+]

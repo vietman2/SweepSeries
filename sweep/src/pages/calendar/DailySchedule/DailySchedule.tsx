@@ -4,6 +4,7 @@ import { useLocalSearchParams, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 import { Divider } from "@components/Dividers";
+import { ErrorPage } from "@components/Fallbacks";
 import { AppIcon } from "@components/Icons";
 import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
@@ -15,13 +16,14 @@ import { ScheduleType, TodoType } from "@models/calendar";
 import { alert } from "@services/alert";
 import {
   createDiary,
-  getCalendarData,
+  getDailyData,
   toggleTodoStatus,
 } from "@services/calendar";
 import { ThemeColorType } from "@themes/colors";
 
 export function DailySchedule() {
   const [schedules, setSchedules] = useState<ScheduleType[]>([]);
+  const [lessons, setLessons] = useState<ScheduleType[]>([]);
   const [todos, setTodos] = useState<TodoType[]>([]);
   const [diary, setDiary] = useState<string>("");
   const [dateObj, setDateObj] = useState<Date>();
@@ -45,6 +47,13 @@ export function DailySchedule() {
   const handleScheduleAddPress = () => {
     router.push({
       pathname: "/calendar/addschedule/[date]",
+      params: { date },
+    });
+  };
+
+  const handleLessonAddPress = () => {
+    router.push({
+      pathname: "/calendar/addlesson/[date]",
       params: { date },
     });
   };
@@ -82,10 +91,15 @@ export function DailySchedule() {
     setDateObj(new Date(date));
 
     const fetchData = async () => {
-      const response = await getCalendarData(selectedCalendar?.id, date, "day");
+      const response = await getDailyData(
+        selectedCalendar?.uuid,
+        date,
+        selectedCalendar?.type
+      );
 
       if (response) {
         setSchedules(response.events);
+        setLessons(response.lessons);
         setTodos(response.todos);
         setDiary(response.diary);
         setDiaryContent(response.diary);
@@ -102,6 +116,16 @@ export function DailySchedule() {
 
     return false;
   };
+
+  const isNoLesson = () => {
+    if (lessons.length === 0) return true;
+
+    return false;
+  };
+
+  if (!selectedCalendar) {
+    return <ErrorPage />;
+  }
 
   return (
     <Scroll style={styles.container} extraScrollHeight={16}>
@@ -127,81 +151,107 @@ export function DailySchedule() {
           )}
           {schedules.map((schedule) => (
             <View key={schedule.id}>
-              <ScheduleSimple schedule={schedule} />
+              <ScheduleSimple schedule={schedule} type="일정" />
             </View>
           ))}
           <Divider />
         </View>
         <View style={styles.content}>
           <View style={styles.header}>
-            <Text style={styles.subtitle}>할 일</Text>
-            <TouchableOpacity onPress={handleTodoAddPress} testID="addtodo">
+            <Text style={styles.subtitle}>레슨</Text>
+            <TouchableOpacity onPress={handleLessonAddPress} testID="addlesson">
               <AppIcon icon="plus-circle" size={20} color={theme.primary} />
             </TouchableOpacity>
           </View>
-          {todos.length === 0 && (
-            <Text style={styles.emptyText}>할 일이 없습니다.</Text>
+          {isNoLesson() && (
+            <Text style={styles.emptyText}>레슨이 없습니다.</Text>
           )}
-          {todos.map((todo) => (
-            <TodoSimple
-              key={todo.id}
-              todo={todo}
-              onPress={() => handleTodoPress(todo.id)}
-            />
+          {lessons.map((schedule) => (
+            <View key={schedule.id}>
+              <ScheduleSimple schedule={schedule} type="레슨" />
+            </View>
           ))}
           <Divider />
         </View>
-        <View style={styles.content}>
-          <View style={styles.header}>
-            <Text style={styles.subtitle}>다이어리</Text>
-            <TouchableOpacity onPress={handleModeToggle} testID="toggle-mode">
-              <AppIcon
-                icon={diary ? "pencil" : "plus-circle"}
-                size={20}
-                color={theme.primary}
-              />
-            </TouchableOpacity>
-          </View>
-          {diaryEditMode ? (
-            <View style={styles.diaryEdit}>
-              <TextInput
-                value={diaryContent}
-                onChangeText={setDiaryContent}
-                placeholder="내용을 입력해주세요."
-                style={styles.textinput}
-                numberOfLines={10}
-                multiline
-              />
-              <View style={styles.buttons}>
-                <TouchableOpacity
-                  onPress={handleModeToggle}
-                  style={[
-                    styles.button,
-                    { backgroundColor: theme.lowEmphasis },
-                  ]}
-                >
-                  <Text style={styles.buttonText}>취소</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={handleWriteDiary}
-                  style={styles.button}
-                >
-                  <Text style={styles.buttonText}>저장</Text>
+        {selectedCalendar.type === "personal" && (
+          <>
+            <View style={styles.content}>
+              <View style={styles.header}>
+                <Text style={styles.subtitle}>할 일</Text>
+                <TouchableOpacity onPress={handleTodoAddPress} testID="addtodo">
+                  <AppIcon icon="plus-circle" size={20} color={theme.primary} />
                 </TouchableOpacity>
               </View>
+              {todos.length === 0 && (
+                <Text style={styles.emptyText}>할 일이 없습니다.</Text>
+              )}
+              {todos.map((todo) => (
+                <TodoSimple
+                  key={todo.id}
+                  todo={todo}
+                  onPress={() => handleTodoPress(todo.id)}
+                />
+              ))}
+              <Divider />
             </View>
-          ) : (
-            <>
-              {diary ? (
-                <View style={styles.diary}>
-                  <Text style={styles.diaryText}>{diary}</Text>
+            <View style={styles.content}>
+              <View style={styles.header}>
+                <Text style={styles.subtitle}>다이어리</Text>
+                <TouchableOpacity
+                  onPress={handleModeToggle}
+                  testID="toggle-mode"
+                >
+                  <AppIcon
+                    icon={diary ? "pencil" : "plus-circle"}
+                    size={20}
+                    color={theme.primary}
+                  />
+                </TouchableOpacity>
+              </View>
+              {diaryEditMode ? (
+                <View style={styles.diaryEdit}>
+                  <TextInput
+                    value={diaryContent}
+                    onChangeText={setDiaryContent}
+                    placeholder="내용을 입력해주세요."
+                    style={styles.textinput}
+                    numberOfLines={10}
+                    multiline
+                  />
+                  <View style={styles.buttons}>
+                    <TouchableOpacity
+                      onPress={handleModeToggle}
+                      style={[
+                        styles.button,
+                        { backgroundColor: theme.lowEmphasis },
+                      ]}
+                    >
+                      <Text style={styles.buttonText}>취소</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={handleWriteDiary}
+                      style={styles.button}
+                    >
+                      <Text style={styles.buttonText}>저장</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               ) : (
-                <Text style={styles.emptyText}>다이어리를 추가해주세요.</Text>
+                <>
+                  {diary ? (
+                    <View style={styles.diary}>
+                      <Text style={styles.diaryText}>{diary}</Text>
+                    </View>
+                  ) : (
+                    <Text style={styles.emptyText}>
+                      다이어리를 추가해주세요.
+                    </Text>
+                  )}
+                </>
               )}
-            </>
-          )}
-        </View>
+            </View>
+          </>
+        )}
       </View>
       <StatusBar style="inverted" />
     </Scroll>

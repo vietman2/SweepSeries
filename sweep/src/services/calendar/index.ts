@@ -1,13 +1,11 @@
 import {
   getCalendars,
-  getCalendar,
-  getCalendarData,
-  createCalendar,
-  deleteCalendar,
-  leaveCalendar,
+  getMonthlyData,
+  getDailyData,
   updateCalendarInfo,
   toggleCalendarDaily,
   toggleCalendarNotification,
+  switchCalendarScope,
 } from "./calendars";
 import { createDiary } from "./diaries";
 import { createLesson, getCurriculum } from "./lessons";
@@ -22,14 +20,12 @@ import { createTodo, toggleTodoStatus } from "./todos";
 
 export {
   getCalendars,
-  getCalendar,
-  getCalendarData,
-  createCalendar,
-  deleteCalendar,
-  leaveCalendar,
+  getMonthlyData,
+  getDailyData,
   updateCalendarInfo,
   toggleCalendarDaily,
   toggleCalendarNotification,
+  switchCalendarScope,
   createDiary,
   createLesson,
   getCurriculum,

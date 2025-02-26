@@ -6,7 +6,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from calendars.calendarapp.enums import AuthChoices
 from .models import Todo
 from .serializers import TodoSerializer
 
@@ -37,13 +36,13 @@ class TodoViewSet(ModelViewSet):
     @action(detail=True, methods=['patch'])
     def toggle(self, request, pk=None):  ## pylint: disable=unused-argument
         todo = self.get_object()
-
-        allowed_auth = [AuthChoices.OWNER, AuthChoices.EDITOR]
         user = request.user
-        calendar = todo.calendar
 
-        if not calendar.calendar_users.filter(user=user, auth__in=allowed_auth).exists():
-            return Response({"detail": "권한이 없습니다."}, status=status.HTTP_403_FORBIDDEN)
+        if todo.user != user:
+            return Response(
+                data={"detail": "권한이 없습니다."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
 
         todo.completed = not todo.completed
         todo.save()

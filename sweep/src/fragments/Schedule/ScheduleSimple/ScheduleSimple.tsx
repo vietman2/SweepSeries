@@ -8,9 +8,10 @@ import { ThemeColorType } from "@themes/colors";
 
 interface Props {
   schedule: ScheduleType;
+  type: string;
 }
 
-export function ScheduleSimple({ schedule }: Readonly<Props>) {
+export function ScheduleSimple({ schedule, type }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -19,7 +20,7 @@ export function ScheduleSimple({ schedule }: Readonly<Props>) {
       <Text style={styles.time}>{schedule.time}</Text>
       <View style={styles.horizontal}>
         <View style={[styles.chip, { backgroundColor: schedule.color }]}>
-          <Text style={styles.chipText}>{schedule.type}</Text>
+          <Text style={styles.chipText}>{type}</Text>
         </View>
         <VerticalDivider color={schedule.color} width={2} />
         <View style={styles.content}>

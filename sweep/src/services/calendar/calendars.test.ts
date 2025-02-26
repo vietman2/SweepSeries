@@ -2,14 +2,12 @@ import axios from "axios";
 
 import {
   getCalendars,
-  getCalendar,
-  getCalendarData,
-  createCalendar,
-  deleteCalendar,
-  leaveCalendar,
+  getMonthlyData,
+  getDailyData,
   updateCalendarInfo,
   toggleCalendarDaily,
   toggleCalendarNotification,
+  switchCalendarScope
 } from "./calendars";
 
 describe("getCalendars", () => {
@@ -31,37 +29,43 @@ describe("getCalendars", () => {
   });
 });
 
-describe("getCalendar", () => {
-  it("should return the calendar", async () => {
-    const calendar = { id: 1, name: "Calendar 1" };
-    axios.get = jest.fn().mockResolvedValue({ data: calendar });
+describe("getMonthlyData", () => {
+  it("should return the monthly data", async () => {
+    const data = [{ id: 1, name: "Calendar 1" }];
+    axios.get = jest.fn().mockResolvedValue({ data });
 
-    const result = await getCalendar("1");
+    const result = await getMonthlyData("uuid", "month", "type");
 
-    expect(result).toEqual(calendar);
+    expect(result).toEqual(data);
   });
 
   it("should return null if the request fails", async () => {
     axios.get = jest.fn().mockRejectedValue(null);
 
-    const result = await getCalendar("1");
+    const result = await getMonthlyData("uuid", "month", "type");
 
     expect(result).toBeNull();
   });
 });
 
-describe("getCalendarData", () => {
-  it("should return the calendar data", async () => {
-    const data = { id: 1, name: "Calendar 1" };
+describe("getDailyData", () => {
+  it("should return the daily data", async () => {
+    const data = [{ id: 1, name: "Calendar 1" }];
     axios.get = jest.fn().mockResolvedValue({ data });
 
-    const result = await getCalendarData(1, "2021-01", "month");
+    const result = await getDailyData("uuid", "date", "type");
 
     expect(result).toEqual(data);
   });
 
   it("should return null if the id is not provided", async () => {
-    const result = await getCalendarData(undefined, "2021-01", "month");
+    const result = await getDailyData(undefined, "date", "type");
+
+    expect(result).toBeNull();
+  });
+
+  it("should return null if the type is not provided", async () => {
+    const result = await getDailyData("uuid", "date", undefined);
 
     expect(result).toBeNull();
   });
@@ -69,74 +73,7 @@ describe("getCalendarData", () => {
   it("should return null if the request fails", async () => {
     axios.get = jest.fn().mockRejectedValue(null);
 
-    const result = await getCalendarData(1, "2021-01-01", "day");
-
-    expect(result).toBeNull();
-  });
-});
-
-describe("createCalendar", () => {
-  it("should return the created calendar", async () => {
-    const calendar = { id: 1, name: "Calendar 1" };
-    axios.post = jest.fn().mockResolvedValue({ data: calendar });
-
-    const result = await createCalendar();
-
-    expect(result).toEqual(calendar);
-  });
-
-  it("should return null if the request fails", async () => {
-    axios.post = jest.fn().mockRejectedValue(null);
-
-    const result = await createCalendar();
-
-    expect(result).toBeNull();
-  });
-});
-
-describe("deleteCalendar", () => {
-  it("should return true if the calendar is deleted", async () => {
-    axios.delete = jest.fn().mockResolvedValue(null);
-
-    const result = await deleteCalendar(1);
-
-    expect(result).toBe(true);
-  });
-
-  it("should return null if the id is not provided", async () => {
-    const result = await deleteCalendar(undefined);
-
-    expect(result).toBeNull();
-  });
-
-  it("should return null if the request fails", async () => {
-    axios.delete = jest.fn().mockRejectedValue(null);
-
-    const result = await deleteCalendar(1);
-
-    expect(result).toBeNull();
-  });
-});
-
-describe("leaveCalendar", () => {
-  it("should return true if the user leaves the calendar", async () => {
-    axios.delete = jest.fn().mockResolvedValue(null);
-
-    const result = await leaveCalendar(1);
-
-    expect(result).toBe(true);
-  });
-
-  it("should return null if the id is not provided", async () => {
-    const result = await leaveCalendar(undefined);
-
-    expect(result).toBeNull();
-  });
-
-  it("should return null if the request fails", async () => {
-    axios.delete = jest.fn().mockRejectedValue(null);
-
-    const result = await leaveCalendar(1);
+    const result = await getDailyData("uuid", "date", "type");
 
     expect(result).toBeNull();
   });
@@ -147,7 +84,10 @@ describe("updateCalendarInfo", () => {
     const calendar = { id: 1, name: "Calendar 1", color: "red" };
     axios.patch = jest.fn().mockResolvedValue({ data: calendar });
 
-    const result = await updateCalendarInfo(1, "Calendar 1", "red");
+    const result = await updateCalendarInfo({
+      title: "Calendar 1",
+      color: "red",
+    });
 
     expect(result).toEqual(calendar);
   });
@@ -155,7 +95,10 @@ describe("updateCalendarInfo", () => {
   it("should return null if the request fails", async () => {
     axios.patch = jest.fn().mockRejectedValue(null);
 
-    const result = await updateCalendarInfo(1, "Calendar 1", "red");
+    const result = await updateCalendarInfo({
+      title: "Calendar 1",
+      color: "red",
+    });
 
     expect(result).toBeNull();
   });
@@ -166,13 +109,18 @@ describe("toggleCalendarNotification", () => {
     const calendar = { id: 1, name: "Calendar 1", notifications: true };
     axios.patch = jest.fn().mockResolvedValue({ data: calendar });
 
-    const result = await toggleCalendarNotification(1);
+    const result = await toggleCalendarNotification({
+      type: "type",
+      uuid: "uuid",
+    });
 
     expect(result).toEqual(calendar);
   });
 
   it("should return null if the id is not provided", async () => {
-    const result = await toggleCalendarNotification(undefined);
+    const result = await toggleCalendarNotification({
+      type: "academy",
+    });
 
     expect(result).toBeNull();
   });
@@ -180,7 +128,10 @@ describe("toggleCalendarNotification", () => {
   it("should return null if the request fails", async () => {
     axios.patch = jest.fn().mockRejectedValue(null);
 
-    const result = await toggleCalendarNotification(1);
+    const result = await toggleCalendarNotification({
+      type: "type",
+      uuid: "uuid",
+    });
 
     expect(result).toBeNull();
   });
@@ -191,13 +142,17 @@ describe("toggleCalendarDaily", () => {
     const calendar = { id: 1, name: "Calendar 1", daily: "12:00" };
     axios.patch = jest.fn().mockResolvedValue({ data: calendar });
 
-    const result = await toggleCalendarDaily(1, "12:00");
+    const result = await toggleCalendarDaily({
+      type: "type",
+      uuid: "uuid",
+      time: "09:00",
+    });
 
     expect(result).toEqual(calendar);
   });
 
   it("should return null if the id is not provided", async () => {
-    const result = await toggleCalendarDaily(undefined, "12:00");
+    const result = await toggleCalendarDaily({ type: "academy" });
 
     expect(result).toBeNull();
   });
@@ -205,7 +160,30 @@ describe("toggleCalendarDaily", () => {
   it("should return null if the request fails", async () => {
     axios.patch = jest.fn().mockRejectedValue(null);
 
-    const result = await toggleCalendarDaily(1, "12:00");
+    const result = await toggleCalendarDaily({
+      type: "type",
+      uuid: "uuid",
+      time: "09:00",
+    });
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("switchCalendarScope", () => {
+  it("should return the updated calendar", async () => {
+    const calendar = { id: 1, name: "Calendar 1", scope: "public" };
+    axios.patch = jest.fn().mockResolvedValue({ data: calendar });
+
+    const result = await switchCalendarScope("uuid", 1);
+
+    expect(result).toEqual(calendar);
+  });
+
+  it("should return null if the request fails", async () => {
+    axios.patch = jest.fn().mockRejectedValue(null);
+
+    const result = await switchCalendarScope("uuid", 1);
 
     expect(result).toBeNull();
   });

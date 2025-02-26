@@ -8,7 +8,10 @@ import {
 } from "react-native";
 
 import { AppIcon } from "@components/Icons";
+import { useCalendar } from "@contexts/calendar";
 import { useTheme } from "@contexts/theme";
+import { alert } from "@services/alert";
+import { updateCalendarInfo } from "@services/calendar";
 import { ThemeColorType } from "@themes/colors";
 
 const colorOptions = [
@@ -26,17 +29,27 @@ interface Props {
   colorModalOpen: boolean;
   setColorModalOpen: (open: boolean) => void;
   selectedColor: string;
-  handleUpdateColor: (color: string) => void;
 }
 
 export function ColorModal({
   colorModalOpen,
   setColorModalOpen,
   selectedColor,
-  handleUpdateColor,
 }: Readonly<Props>) {
+  const { reloadData } = useCalendar();
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  const handleUpdateColor = async (color: string) => {
+    const response = await updateCalendarInfo({ color });
+
+    if (response) {
+      setColorModalOpen(false);
+      reloadData();
+    } else {
+      alert("오류 발생", "캘린더 색상을 업데이트하는 중 오류가 발생했습니다.");
+    }
+  };
 
   return (
     <Modal visible={colorModalOpen} animationType="slide" transparent>

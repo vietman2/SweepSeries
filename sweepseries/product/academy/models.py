@@ -5,7 +5,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from auth.person.models import Person
 from auth.user.models import User
-from .enums import FacilityTypeChoices, DayChoices, NoticeTypeChoices
+from .enums import FacilityTypeChoices, DayChoices, NoticeTypeChoices, CalendarScopeChoices
 
 class AcademyFacility(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -53,14 +53,37 @@ class Academy(models.Model):
     is_rejected             = models.BooleanField(default=False)
     reject_reason           = models.TextField(blank=True)
 
-    students                = models.ManyToManyField(
-        Person, related_name='academies', blank=True
+    ## 캘린더 설정 (오너의 알림 설정)
+    notifications       = models.BooleanField(default=True)
+    notifications_today = models.BooleanField(default=True)
+    daily_time          = models.TimeField(null=True, blank=True, default="09:00:00")
+    calendar_scope      = models.PositiveSmallIntegerField(
+        choices=CalendarScopeChoices.choices, default=CalendarScopeChoices.ALL
     )
 
     objects                 = models.Manager()
 
     class Meta:
         db_table = 'academy'
+
+class AcademyStudent(models.Model):
+    academy     = models.ForeignKey(Academy, on_delete=models.CASCADE, related_name='students')
+    person      = models.ForeignKey(
+        Person, on_delete=models.CASCADE, related_name='academies'
+    )
+
+    joined_at   = models.DateTimeField(auto_now_add=True)
+
+    ## 캘린더 설정
+    notifications       = models.BooleanField(default=True)
+    notifications_today = models.BooleanField(default=True)
+    daily_time          = models.TimeField(null=True, blank=True, default="09:00:00")
+
+    objects     = models.Manager()
+
+    class Meta:
+        db_table = 'academy_student'
+        unique_together = ('academy', 'person')
 
 class AcademyImage(models.Model):
     academy     = models.ForeignKey(Academy, on_delete=models.CASCADE, related_name='images')

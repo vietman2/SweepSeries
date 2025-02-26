@@ -4,7 +4,6 @@ export const sampleSchedules: ScheduleType[] = [
   {
     id: "1",
     time: "오전 9시 ~ 오전 11시 (2시간)",
-    type: "레슨",
     title: "엘리트 (고등학생) 1:1 타격레슨",
     description: "코치: 홍길동",
     color: "#14863E",
@@ -12,7 +11,6 @@ export const sampleSchedules: ScheduleType[] = [
   {
     id: "2",
     time: "오후 3시 ~ 오후 5시 (2시간)",
-    type: "레슨",
     title: "엘리트 (고등학생) 1:1 타격레슨",
     description: "코치: 홍길동",
     color: "#14863E",
@@ -20,7 +18,6 @@ export const sampleSchedules: ScheduleType[] = [
   {
     id: "3",
     time: "오후 5시 ~ 오후 7시 (2시간)",
-    type: "일반",
     title: "대관",
     description: "",
     color: "#FF5833",

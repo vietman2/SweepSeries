@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export async function createSchedule(
-  calendarId: number | undefined,
+  scheduleType: string | undefined,
   title: string,
   description: string,
   schedule: {
@@ -19,13 +19,14 @@ export async function createSchedule(
     use: boolean;
     period: number;
     break: string;
-  }
+  },
+  uuid: string | undefined
 ) {
-  if (!calendarId) return null;
+  if (!scheduleType || !uuid) return null;
 
   try {
     await axios.post("/v1/schedules/", {
-      calendar_id: calendarId,
+      type: scheduleType,
       title,
       description,
       start_datetime: schedule.start.toISOString(),
@@ -42,6 +43,7 @@ export async function createSchedule(
         period: repeat.period,
         break: repeat.break,
       },
+      uuid: uuid,
     });
 
     return true;

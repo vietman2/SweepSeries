@@ -4,7 +4,6 @@ export const sampleLessonSimple: LessonType = {
   id: "1",
   date: "11월 01일. 화",
   time: "오전 9시 ~ 오전 11시 (2시간)",
-  type: "레슨",
   color: "#14863E",
   title: "엘리트 (고등학생) 1:1 타격레슨",
   description: "코치: 홍길동\t수강생: 김철수",

@@ -1,0 +1,36 @@
+from django.db import models
+
+from auth.person.models import Person
+from core.models import TimeStampedModel
+from product.coach.models import Coach
+from product.contract.models import Contract
+from product.program.models import Program
+
+class Lesson(TimeStampedModel):
+    program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='lessons')
+    student = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='lessons')
+    coaches = models.ManyToManyField(Coach, related_name='lessons')
+
+    objects = models.Manager()
+
+    class Meta:
+        db_table = 'lessons'
+        unique_together = ('program', 'student')
+
+class Session(models.Model):
+    lesson          = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='sessions')
+    coaches         = models.ManyToManyField(Coach, related_name='sessions')
+    contract        = models.ForeignKey(Contract, on_delete=models.CASCADE, related_name='sessions')
+    start_datetime  = models.DateTimeField()
+    end_datetime    = models.DateTimeField()
+
+    notify          = models.BooleanField(default=False)
+    notify_time     = models.DateTimeField(null=True, blank=True)
+
+    notes           = models.TextField(blank=True)
+    feedback        = models.TextField(blank=True)
+
+    objects         = models.Manager()
+
+    class Meta:
+        db_table = 'sessions'

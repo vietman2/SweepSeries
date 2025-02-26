@@ -25,6 +25,13 @@ class User(AbstractBaseUser):
     noti_permitted  = models.BooleanField(default=False)
     agreed_at       = models.DateTimeField(null=True, blank=True)
 
+    ## 캘린더 설정 (개인 캘린더)
+    calendar_title      = models.CharField(max_length=50, default="나만의 캘린더")
+    calendar_color      = models.CharField(max_length=7, default="#FF6B6B")
+    notifications       = models.BooleanField(default=True)
+    notifications_today = models.BooleanField(default=True)
+    daily_time          = models.TimeField(null=True, blank=True, default="09:00:00")
+
     USERNAME_FIELD  = 'username'
 
     def has_perm(self, perm, obj=None): # pylint: disable=unused-argument

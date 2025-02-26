@@ -27,7 +27,8 @@ describe("createSchedule", () => {
       sampleSchedule,
       sampleAlarm,
       "#000000",
-      sampleRepeat
+      sampleRepeat,
+      "uuid"
     );
 
     expect(result).toBeNull();
@@ -37,13 +38,14 @@ describe("createSchedule", () => {
     jest.spyOn(axios, "post").mockResolvedValueOnce({ data: {} });
 
     const result = await createSchedule(
-      1,
+      "type",
       "Test Schedule",
       "This is a test schedule.",
       sampleSchedule,
       sampleAlarm,
       "#000000",
-      sampleRepeat
+      sampleRepeat,
+      "uuid"
     );
 
     expect(result).toBe(true);
@@ -53,13 +55,14 @@ describe("createSchedule", () => {
     jest.spyOn(axios, "post").mockRejectedValueOnce(new Error());
 
     const result = await createSchedule(
-      1,
+      "type",
       "Test Schedule",
       "This is a test schedule.",
       sampleSchedule,
       sampleAlarm,
       "#000000",
-      sampleRepeat
+      sampleRepeat,
+      "uuid"
     );
 
     expect(result).toBeNull();

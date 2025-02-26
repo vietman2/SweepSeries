@@ -1,21 +1,14 @@
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.transaction import atomic
 from django.utils import timezone
 from rest_framework import serializers
 
-from auth.person.models import Person
-from calendars.calendarapp.enums import AuthChoices
-from calendars.calendarapp.models import Calendar
-from product.coach.models import Coach
-from product.contract.models import Contract
-from product.program.models import Program, Curriculum
-from .models import Schedule, Event, Lesson, Session
-from .utils import get_time_text, get_duration_text
+from core.utils import get_time_text, get_duration_text
+from product.academy.models import Academy
+from .models import BaseSchedule, PersonalSchedule, AcademySchedule, PersonalEvent, AcademyEvent
 
-class ScheduleSerializer(serializers.ModelSerializer):
-    calendar_id     = serializers.IntegerField(write_only=True)
+class BaseScheduleSerializer(serializers.ModelSerializer):
     start_datetime  = serializers.DateTimeField(write_only=True)
     end_datetime    = serializers.DateTimeField(write_only=True)
     is_allday       = serializers.BooleanField(write_only=True)
@@ -23,9 +16,9 @@ class ScheduleSerializer(serializers.ModelSerializer):
     repeat          = serializers.JSONField(write_only=True)
 
     class Meta:
-        model = Schedule
+        model = BaseSchedule
         fields = [
-            'id', 'calendar_id', 'title', 'description', 'color', 'is_allday', 
+            'id', 'title', 'description', 'color', 'is_allday',
             'start_datetime', 'end_datetime', 'alarm', 'repeat'
         ]
 
@@ -56,6 +49,10 @@ class ScheduleSerializer(serializers.ModelSerializer):
 
         raise serializers.ValidationError('반복 주기가 올바르지 않습니다.')
 
+class PersonalScheduleSerializer(BaseScheduleSerializer):
+    class Meta(BaseScheduleSerializer.Meta):
+        model = PersonalSchedule
+
     def create_event(self, event_data):
         start_datetime = event_data['start']
         end_datetime = event_data['end']
@@ -65,7 +62,7 @@ class ScheduleSerializer(serializers.ModelSerializer):
             start_datetime = event_data['start'].replace(hour=0, minute=0, second=0)
             end_datetime = event_data['end'].replace(hour=23, minute=59, second=59)
 
-        event = Event.objects.create(
+        event = PersonalEvent.objects.create(
             schedule=event_data['schedule'],
             start_datetime=start_datetime,
             end_datetime=end_datetime,
@@ -140,15 +137,8 @@ class ScheduleSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('잘못된 요청입니다.')
 
     def create(self, validated_data):
-        allowed_auth = [AuthChoices.OWNER, AuthChoices.EDITOR]
-        calendar_id = validated_data.pop('calendar_id')
-        calendar = Calendar.objects.get(pk=calendar_id)
-        user = self.context['request'].user
-
-        if not calendar.calendar_users.filter(user=user, auth__in=allowed_auth).exists():
-            raise serializers.ValidationError('권한이 없습니다.')
-
         with atomic():
+            request = self.context['request']
             alarm = validated_data.pop('alarm')
             repeat = validated_data.pop('repeat')
 
@@ -156,7 +146,7 @@ class ScheduleSerializer(serializers.ModelSerializer):
             end = validated_data.pop('end_datetime')
             is_allday = validated_data.pop('is_allday')
 
-            schedule = Schedule.objects.create(calendar=calendar, **validated_data)
+            schedule = PersonalSchedule.objects.create(user=request.user, **validated_data)
 
             events_data = {
                 'schedule': schedule,
@@ -170,16 +160,130 @@ class ScheduleSerializer(serializers.ModelSerializer):
 
             return schedule
 
-class EventSerializer(serializers.ModelSerializer):
+class AcademyScheduleSerializer(BaseScheduleSerializer):
+    uuid = serializers.UUIDField(write_only=True)
+
+    class Meta(BaseScheduleSerializer.Meta):
+        model = AcademySchedule
+        fields = BaseScheduleSerializer.Meta.fields + ['uuid']
+
+    def create_event(self, event_data):
+        start_datetime = event_data['start']
+        end_datetime = event_data['end']
+        alarm = event_data['alarm']
+
+        if event_data['is_allday']:
+            start_datetime = event_data['start'].replace(hour=0, minute=0, second=0)
+            end_datetime = event_data['end'].replace(hour=23, minute=59, second=59)
+
+        event = AcademyEvent.objects.create(
+            schedule=event_data['schedule'],
+            start_datetime=start_datetime,
+            end_datetime=end_datetime,
+            is_allday=event_data['is_allday'],
+        )
+
+        if alarm['use']:
+            alarm_time = self.get_alarm_time(event_data['start'], alarm['delta'], alarm['unit'])
+            event.notify = True
+            event.notify_time = alarm_time
+
+        event.save()
+
+        return event
+
+    def create_events(self, events_data):
+        repeat = events_data['repeat']
+        alarm = events_data['alarm']
+
+        use_repeat = repeat['use']
+        break_rule = repeat['break']
+        period = repeat['period']
+
+        if not use_repeat:
+            event_data = {
+                'schedule': events_data['schedule'],
+                'start': events_data['start'],
+                'end': events_data['end'],
+                'is_allday': events_data['is_allday'],
+                'alarm': alarm
+            }
+            self.create_event(event_data)
+        elif break_rule.endswith('회'):
+            ## input: 'n회'
+            try:
+                repeat_count = int(break_rule[:-1])
+                for i in range(repeat_count):
+                    start_time = self.get_time(events_data['start'], period, i)
+                    end_time = self.get_time(events_data['end'], period, i)
+                    event_data = {
+                        'schedule': events_data['schedule'],
+                        'start': start_time,
+                        'end': end_time,
+                        'is_allday': events_data['is_allday'],
+                        'alarm': alarm
+                    }
+                    self.create_event(event_data)
+            except ValueError as e:
+                raise serializers.ValidationError('반복 횟수가 올바르지 않습니다.') from e
+        elif break_rule.endswith('까지'):
+            ## input: 'yyyy.mm.dd까지'
+            try:
+                repeat_until = datetime.strptime(break_rule[:-2], '%Y.%m.%d')
+                i = 0
+                while True:
+                    start_time = self.get_time(events_data['start'], period, i)
+                    end_time = self.get_time(events_data['end'], period, i)
+                    if start_time > timezone.make_aware(repeat_until):
+                        break
+                    event_data = {
+                        'schedule': events_data['schedule'],
+                        'start': start_time,
+                        'end': end_time,
+                        'is_allday': events_data['is_allday'],
+                        'alarm': alarm
+                    }
+                    self.create_event(event_data)
+                    i += 1
+            except ValueError as e:
+                raise serializers.ValidationError('반복 종료일이 올바르지 않습니다.') from e
+        else:
+            raise serializers.ValidationError('잘못된 요청입니다.')
+
+    def create(self, validated_data):
+        with atomic():
+            alarm = validated_data.pop('alarm')
+            repeat = validated_data.pop('repeat')
+
+            start = validated_data.pop('start_datetime')
+            end = validated_data.pop('end_datetime')
+            is_allday = validated_data.pop('is_allday')
+
+            academy = Academy.objects.get(uuid=validated_data.pop('uuid'))
+
+            schedule = AcademySchedule.objects.create(academy=academy, **validated_data)
+
+            events_data = {
+                'schedule': schedule,
+                'start': start,
+                'end': end,
+                'is_allday': is_allday,
+                'alarm': alarm,
+                'repeat': repeat
+            }
+            self.create_events(events_data)
+
+            return schedule
+
+class PersonalEventSerializer(serializers.ModelSerializer):
     title       = serializers.SerializerMethodField()
     description = serializers.SerializerMethodField()
     color       = serializers.SerializerMethodField()
     time        = serializers.SerializerMethodField()
-    type        = serializers.SerializerMethodField()
 
     class Meta:
-        model = Event
-        fields = ['id', 'type', 'title', 'description', 'color', 'time']
+        model = PersonalEvent
+        fields = ['id', 'title', 'description', 'color', 'time']
 
     def get_title(self, obj):
         return obj.schedule.title
@@ -189,9 +293,6 @@ class EventSerializer(serializers.ModelSerializer):
 
     def get_color(self, obj):
         return obj.schedule.color
-
-    def get_type(self, obj):  ## pylint: disable=unused-argument
-        return '일정'
 
     def get_time(self, obj):
         if obj.is_allday:
@@ -205,157 +306,29 @@ class EventSerializer(serializers.ModelSerializer):
 
         return f'{start_time} ~ {end_time} ({duration_text})'
 
-class LessonSerializer(serializers.ModelSerializer):
-    program         = serializers.IntegerField(write_only=True)
-    coaches         = serializers.ListField(child=serializers.CharField(), write_only=True)
-    start_datetime  = serializers.DateTimeField(write_only=True)
-    person          = serializers.JSONField(write_only=True)
-    curriculum_id   = serializers.IntegerField(write_only=True)
-
-    class Meta:
-        model = Lesson
-        fields = ['program', 'coaches', 'start_datetime', 'person', 'curriculum_id']
-
-    def validate_curriculum_id(self, value):
-        ## 양수가 아니면 안됨
-        if value <= 0:
-            raise serializers.ValidationError('커리큘럼을 선택해주세요.')
-
-        return value
-
-    def get_or_create_new_student(self, person_id, name, phone_number):
-        if person_id is not None and person_id > 0:
-            return Person.objects.get(id=person_id)
-
-        try:
-            person = Person.objects.get(phone_number=phone_number)
-        except ObjectDoesNotExist:
-            person = Person.objects.create(name=name, phone_number=phone_number)
-
-        return person
-
-    def get_or_create_contract(self, person, curriculum_id):
-        ## Case 1. 계약이 없는 경우: 새로 생성
-        ##  Case 1-1. DB에 없는 Person
-        ##  Case 1-2. DB에 있지만, 아카데미에 새로 등록하는 Person
-        ##  Case 1-3. 아카데미에 등록되어 있지만, 해당 프로그램/커리큘럼은 처음 수강하는 경우
-        ## Case 2. 계약이 만료된 경우: 새로 생성
-        ## Case 3. 잔여 레슨이 있는 계약이 있는 경우: 해당 계약 반환하고, num_scheduled_lessons + 1
-
-        curriculum = Curriculum.objects.get(id=curriculum_id)
-
-        contract = Contract.objects.filter(customer=person, curriculum=curriculum).first()
-
-        if contract is None:
-            ## Case 1.
-            contract = Contract.objects.create(customer=person, curriculum=curriculum)
-
-        ## 잔여 레슨이 있는지 확인
-        if contract.curriculum.num_lessons > contract.scheduled_lessons:
-            ## Case 3.
-            contract.scheduled_lessons += 1
-            contract.save()
-        else:
-            ## Case 2.
-            contract = Contract.objects.create(
-                customer=person,
-                curriculum=curriculum,
-                scheduled_lessons=1
-            )
-
-        return contract
-
-    def create_lesson(self, program, coaches, student):
-        if Lesson.objects.filter(program=program, student=student).exists():
-            lesson = Lesson.objects.get(program=program, student=student)
-        else:
-            lesson = Lesson.objects.create(program=program, student=student)
-
-        for coach in coaches:
-            lesson.coaches.add(coach)
-            lesson.save()
-
-        return lesson
-
-    def create_session(self, data):
-        duration = data['program'].duration
-        end_datetime = data['start_datetime'] + timedelta(minutes=duration)
-
-        session = Session.objects.create(
-            lesson=data['lesson'],
-            start_datetime=data['start_datetime'],
-            end_datetime=end_datetime,
-            contract=data['contract']
-        )
-        session.coaches.set(data['coaches'])
-
-        return session
-
-    def add_student_to_academy(self, student, academy):
-        ## add student to academy if not exists
-        if not academy.students.filter(pk=student.pk).exists():
-            academy.students.add(student)
-            academy.save()
-
-    def create(self, validated_data):
-        program_id = validated_data.pop('program')
-        coach_uuids = validated_data.pop('coaches')
-        person_data = validated_data.pop('person')
-        name = person_data.get('name', '')
-        person_id = person_data.get('id', None)
-
-        program = Program.objects.get(pk=program_id)
-        coaches = [Coach.objects.get(uuid=uuid) for uuid in coach_uuids]
-
-        with atomic():
-            student = self.get_or_create_new_student(person_id, name, person_data['phone'])
-
-            self.add_student_to_academy(student, program.academy)
-            contract = self.get_or_create_contract(student, validated_data['curriculum_id'])
-
-            lesson = self.create_lesson(program, coaches, student)
-            self.create_session(
-                data={
-                    'lesson': lesson, 'start_datetime': validated_data['start_datetime'],
-                    'coaches': coaches, 'contract': contract, 'program': program
-                }
-            )
-
-            return lesson
-
-class SessionSerializer(serializers.ModelSerializer):
-    id          = serializers.SerializerMethodField()
+class AcademyEventSerializer(serializers.ModelSerializer):
     title       = serializers.SerializerMethodField()
     description = serializers.SerializerMethodField()
     color       = serializers.SerializerMethodField()
     time        = serializers.SerializerMethodField()
-    type        = serializers.SerializerMethodField()
-    done        = serializers.SerializerMethodField(read_only=True)
-    date        = serializers.SerializerMethodField()
 
     class Meta:
-        model = Session
-        fields = ['id', 'type', 'title', 'description', 'color', 'time', 'done', 'date']
-
-    def get_id(self, obj):
-        return f"s{obj.id}"
+        model = AcademyEvent
+        fields = ['id', 'title', 'description', 'color', 'time']
 
     def get_title(self, obj):
-        return obj.lesson.program.name
+        return obj.schedule.title
 
     def get_description(self, obj):
-        coaches = ', '.join([coach.person.name for coach in obj.coaches.all()])
-        student = obj.lesson.student.name
+        return obj.schedule.description
 
-        return f'코치: {coaches}\t수강생: {student}'
-
-    def get_color(self, obj):  ## pylint: disable=unused-argument
-        return "#14863E"
-
-    def get_type(self, obj):  ## pylint: disable=unused-argument
-        return '레슨'
+    def get_color(self, obj):
+        return obj.schedule.color
 
     def get_time(self, obj):
+        if obj.is_allday:
+            return '종일'
+
         start_time = get_time_text(obj.start_datetime)
         end_time = get_time_text(obj.end_datetime)
 
@@ -363,56 +336,3 @@ class SessionSerializer(serializers.ModelSerializer):
         duration_text = get_duration_text(duration)
 
         return f'{start_time} ~ {end_time} ({duration_text})'
-
-    def get_done(self, obj):
-        ## True if end_datetime is past
-        ## timezone aware
-        current_time = timezone.now()
-        return obj.end_datetime < current_time
-
-    def get_date(self, obj):
-        ## return timezone aware {day}일. {dayofweek}
-        dow = ['월', '화', '수', '목', '금', '토', '일']
-        tz = timezone.get_current_timezone()
-        day = obj.start_datetime.astimezone(tz).day
-        dayofweek = obj.start_datetime.astimezone(tz).weekday()
-
-        return f'{day}일. {dow[dayofweek]}'
-
-class SessionDetailSerializer(SessionSerializer):
-    coaches     = serializers.SerializerMethodField()
-    student     = serializers.SerializerMethodField()
-    #can_review  = serializers.SerializerMethodField()
-
-    class Meta(SessionSerializer.Meta):
-        fields = SessionSerializer.Meta.fields + [
-            'notes', 'feedback', 'coaches', 'student'#, 'can_review'
-        ]
-
-    def get_date(self, obj):
-        ## return timezone aware {day}일. {dayofweek}
-        dow = ['월', '화', '수', '목', '금', '토', '일']
-        tz = timezone.get_current_timezone()
-        month = obj.start_datetime.astimezone(tz).month
-        day = obj.start_datetime.astimezone(tz).day
-        dayofweek = obj.start_datetime.astimezone(tz).weekday()
-
-        return f'{month}월 {day}일. {dow[dayofweek]}'
-
-    def get_coaches(self, obj):
-        return [coach.person.id for coach in obj.lesson.coaches.all()]
-
-    def get_student(self, obj):
-        return obj.lesson.student.id
-
-    def validate_feedback(self, value):
-        if value == '':
-            raise serializers.ValidationError('피드백을 입력해주세요.')
-
-        return value
-
-    def validate_notes(self, value):
-        if value == '':
-            raise serializers.ValidationError('노트를 입력해주세요.')
-
-        return value

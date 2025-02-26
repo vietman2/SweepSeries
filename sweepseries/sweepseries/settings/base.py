@@ -60,7 +60,6 @@ INSTALLED_APPS = [
     'auth.user.apps.UserConfig',
     'auth.userprofile.apps.UserprofileConfig',
 
-    'calendars.calendarapp.apps.CalendarappConfig',
     'calendars.diary.apps.DiaryConfig',
     'calendars.schedule.apps.ScheduleConfig',
     'calendars.todo.apps.TodoConfig',
@@ -73,6 +72,7 @@ INSTALLED_APPS = [
     'product.address.apps.AddressConfig',
     'product.coach.apps.CoachConfig',
     'product.contract.apps.ContractConfig',
+    'product.lesson.apps.LessonConfig',
     'product.program.apps.ProgramConfig',
 ]
 
