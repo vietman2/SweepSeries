@@ -1,6 +1,7 @@
+import { fireEvent } from "@testing-library/react-native";
+
 import { CoachTeam } from "./CoachTeam";
 import { sampleCoachTeam } from "@testdata/products";
-import { fireEvent } from "@testing-library/react-native";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("@fragments/Coach", () => ({

@@ -1,7 +1,8 @@
-import { sampleCoaches } from "@testdata/products";
-import { CoachModal } from "./CoachModal";
-import { renderWithProviders } from "@utils/test-utils";
 import { fireEvent } from "@testing-library/react-native";
+
+import { CoachModal } from "./CoachModal";
+import { sampleCoaches } from "@testdata/products";
+import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("../CoachSelect/CoachSelect", () => ({
   CoachSelect: () => <></>,
