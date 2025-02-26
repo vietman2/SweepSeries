@@ -167,7 +167,7 @@ class SessionSerializer(serializers.ModelSerializer):
         user = self.context.get('user', None)
 
         if user is None:
-            return "#14863E80"
+            return "#14863E"
 
         if user.person.name == obj.lesson.student.name:
             return "#14863E"
