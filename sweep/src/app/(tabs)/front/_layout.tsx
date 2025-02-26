@@ -91,6 +91,14 @@ function FrontStack() {
           }}
         />
         <Stack.Screen
+          name="program/[id]"
+          options={{
+            headerLeft: () => <BackButton />,
+            headerTitle: "아카데미 프로그램",
+            headerShown: true,
+          }}
+        />
+        <Stack.Screen
           name="notice/[id]"
           options={{
             headerLeft: () => <BackButton />,
