@@ -20,9 +20,12 @@ describe("<ProgramManagement />", () => {
     jest
       .spyOn(ProgramsAPI, "getPrograms")
       .mockResolvedValue(sampleAcademyPrograms);
-    renderWithProviders(<ProgramManagement />);
+    const { getByTestId } = renderWithProviders(<ProgramManagement />);
 
-    await waitFor(() => expect("ProgramSimple").toBeTruthy());
+    await waitFor(() => {
+      fireEvent.press(getByTestId("refresh"));
+      fireEvent.press(getByTestId("program-1"));
+    });
   });
 
   it("handles bad response and navigate correctly", async () => {
