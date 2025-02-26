@@ -115,21 +115,6 @@ describe("<ProgramEdit />", () => {
     });
   });
 
-  it("handles curriculum edit correctly", async () => {
-    const { getByTestId } = renderWithProviders(<ProgramEdit />);
-
-    jest.spyOn(ProgramsAPI, "saveCurriculums").mockResolvedValueOnce(null);
-    await waitFor(() => {
-      fireEvent.press(getByTestId("open-curriculum-modal")); // Open curriculum modal
-      fireEvent.press(getByTestId("save-curriculum")); // Save curriculum
-    });
-
-    jest.spyOn(ProgramsAPI, "saveCurriculums").mockResolvedValueOnce(true);
-    await waitFor(() => {
-      fireEvent.press(getByTestId("save-curriculum")); // Save curriculum
-    });
-  });
-
   it("handles coach teams edit correctly", async () => {
     jest.spyOn(ProgramsAPI, "getProgramDetail").mockResolvedValue({
       program: {
@@ -164,6 +149,21 @@ describe("<ProgramEdit />", () => {
     jest.spyOn(ProgramsAPI, "addCoachTeam").mockResolvedValueOnce(true);
     await waitFor(() => {
       fireEvent.press(getByTestId("save-coaches")); // Save coaches
+    });
+  });
+
+  it("handles curriculum edit correctly", async () => {
+    const { getByTestId } = renderWithProviders(<ProgramEdit />);
+
+    jest.spyOn(ProgramsAPI, "saveCurriculums").mockResolvedValueOnce(null);
+    await waitFor(() => {
+      fireEvent.press(getByTestId("open-curriculum-modal")); // Open curriculum modal
+      fireEvent.press(getByTestId("save-curriculum")); // Save curriculum
+    });
+
+    jest.spyOn(ProgramsAPI, "saveCurriculums").mockResolvedValueOnce(true);
+    await waitFor(() => {
+      fireEvent.press(getByTestId("save-curriculum")); // Save curriculum
     });
   });
 
