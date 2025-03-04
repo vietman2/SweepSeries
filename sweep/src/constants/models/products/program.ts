@@ -1,3 +1,5 @@
+import { CoachSimpleType } from "./coach";
+
 export type ProgramSimpleType = {
   id: number;
   name: string;
@@ -8,6 +10,8 @@ export type ProgramSimpleType = {
   duration: number;
   academy_uuid: string;
   curriculums: CurriculumType[];
+  random_assignment: boolean;
+  teams: TeamType[];
 };
 
 export type PositionTargetType = {
@@ -19,4 +23,18 @@ export type CurriculumType = {
   id: number;
   num_lessons: number;
   price: number;
+};
+
+export type OptionType = {
+  id: number;
+  name: string;
+};
+
+export type TeamType = {
+  id: number;
+  coaches: CoachSimpleType[];
+};
+
+export type TeamInputType = {
+  coaches: CoachSimpleType[];
 };

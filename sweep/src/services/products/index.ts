@@ -38,8 +38,15 @@ import {
   getTargets,
   getPositions,
   createProgram,
+  deleteProgram,
+  editProgram,
   getPrograms,
   getProgramsByProfile,
+  getProgramDetail,
+  addCoachTeam,
+  deleteCoachTeam,
+  saveCurriculums,
+  toggleCoachSelect,
 } from "./programs";
 import { getStudents, getAcademyStudentDetail } from "./students";
 
@@ -78,7 +85,14 @@ export {
   getPositions,
   getPrograms,
   createProgram,
+  deleteProgram,
+  editProgram,
   getProgramsByProfile,
+  getProgramDetail,
+  addCoachTeam,
+  deleteCoachTeam,
+  saveCurriculums,
+  toggleCoachSelect,
   getStudents,
   getAcademyStudentDetail,
 };

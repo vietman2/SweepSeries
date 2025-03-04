@@ -67,6 +67,7 @@ export function NewCurriculum({ rows, setRows }: Readonly<PriceProps>) {
                 }
                 placeholder="수업 수"
                 type="number-pad"
+                compact
               />
             </View>
             <Text>회</Text>
@@ -78,6 +79,7 @@ export function NewCurriculum({ rows, setRows }: Readonly<PriceProps>) {
                 onChangeText={(text) => handleInputChange(index, "price", text)}
                 placeholder="가격"
                 type="number-pad"
+                compact
               />
             </View>
             <Text>원</Text>
@@ -98,6 +100,29 @@ export function NewCurriculum({ rows, setRows }: Readonly<PriceProps>) {
         onPress={handleAdd}
         small
       />
+    </View>
+  );
+}
+
+interface Props {
+  curriculums: CurriculumType[];
+}
+
+export function EditCurriculum({ curriculums }: Readonly<Props>) {
+  const styles = createStyles();
+
+  return (
+    <View style={styles.list}>
+      {curriculums.map((curriculum, index) => (
+        <View key={index} style={styles.horizontal}>
+          <View style={styles.disabledTextBox}>
+            <Text>{curriculum.num_lessons.toString()} 회</Text>
+          </View>
+          <View style={styles.disabledTextBox}>
+            <Text>{formatPrice(curriculum.price)} 원</Text>
+          </View>
+        </View>
+      ))}
     </View>
   );
 }
@@ -127,5 +152,16 @@ const createStyles = () =>
     },
     deleteText: {
       color: "red",
+    },
+    list: {
+      gap: 8,
+    },
+    disabledTextBox: {
+      width: "40%",
+      alignItems: "flex-end",
+      padding: 5,
+      borderRadius: 5,
+      borderWidth: 1,
+      borderColor: "#D9D9D9",
     },
   });

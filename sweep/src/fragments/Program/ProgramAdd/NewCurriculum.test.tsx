@@ -1,6 +1,6 @@
 import { fireEvent } from "@testing-library/react-native";
 
-import { NewCurriculum } from "./NewCurriculum";
+import { EditCurriculum, NewCurriculum } from "./NewCurriculum";
 import { sampleCurriculums } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
@@ -23,5 +23,13 @@ describe("<NewCurriculum />", () => {
 
     fireEvent.changeText(getAllByTestId("수업 수")[0], "");
     fireEvent.press(getByTestId("delete-button0"));
+  });
+});
+
+describe("<EditCurriculum />", () => {
+  it("should render", () => {
+    renderWithProviders(
+      <EditCurriculum curriculums={[sampleCurriculums[0]]} />
+    );
   });
 });

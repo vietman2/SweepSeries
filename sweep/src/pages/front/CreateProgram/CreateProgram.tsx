@@ -11,8 +11,13 @@ import { CalloutSmall, Text } from "@components/Texts";
 import { useFront } from "@contexts/front";
 import { useTheme } from "@contexts/theme";
 import { CoachModal, CoachSelect } from "@fragments/Coach";
-import { NewCurriculum } from "@fragments/Program";
-import { CoachSimpleType, CurriculumType } from "@models/products";
+import { MultiSelect, NewCurriculum, SingleSelect } from "@fragments/Program";
+import {
+  CoachSimpleType,
+  CurriculumType,
+  OptionType,
+  TeamInputType,
+} from "@models/products";
 import { alert } from "@services/alert";
 import {
   getTargets,
@@ -20,25 +25,15 @@ import {
   createProgram,
   getCoaches,
 } from "@services/products";
+import { timeOptions } from "@testdata/products";
 import { ThemeColorType } from "@themes/colors";
-
-const timeOptions = ["30분", "60분", "90분", "120분", "150분", "180분"];
-
-type OptionType = {
-  id: number;
-  name: string;
-};
-
-type TeamType = {
-  coaches: CoachSimpleType[];
-};
 
 export function CreateProgram() {
   const [title, setTitle] = useState<string>("");
-  const [selectedTime, setSelectedTime] = useState<string>("30분");
+  const [selectedTime, setSelectedTime] = useState<number>(30);
   const [selectedTarget, setSelectedTarget] = useState<number>(-1);
-  const [selectedPosition, setSelectedPosition] = useState<number>(-1);
-  const [selectedCoaches, setSelectedCoaches] = useState<TeamType[]>([]);
+  const [selectedPositions, setSelectedPositions] = useState<number[]>([]);
+  const [selectedCoaches, setSelectedCoaches] = useState<TeamInputType[]>([]);
   const [rows, setRows] = useState<CurriculumType[]>([
     { id: 1, num_lessons: 0, price: 0 },
   ]);
@@ -54,15 +49,11 @@ export function CreateProgram() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  const selectTarget = (value: string) => {
-    setSelectedTarget(
-      targetOptions.findIndex((option) => option.name === value)
-    );
-  };
-
-  const selectPosition = (value: string) => {
-    setSelectedPosition(
-      positionOptions.findIndex((option) => option.name === value)
+  const selectPosition = (value: number) => {
+    setSelectedPositions(
+      selectedPositions.includes(value)
+        ? selectedPositions.filter((pos) => pos !== value)
+        : [...selectedPositions, value]
     );
   };
 
@@ -76,6 +67,7 @@ export function CreateProgram() {
 
   const addCoachTeam = (coaches: CoachSimpleType[]) => {
     setSelectedCoaches([...selectedCoaches, { coaches }]);
+    toggleCoachModal();
   };
 
   const removeCoachTeam = (index: number) => {
@@ -83,15 +75,17 @@ export function CreateProgram() {
   };
 
   const handleCreate = async () => {
-    const minutes = parseInt(selectedTime.split("분")[0]);
-
     const response = await createProgram(
       uuid,
       title,
-      minutes,
-      targetOptions[selectedTarget].id,
-      [positionOptions[selectedPosition].id],
-      rows
+      selectedTime,
+      selectedTarget,
+      selectedPositions,
+      rows,
+      {
+        select_disabled: coachSelectDisabled,
+        teams: selectedCoaches,
+      }
     );
 
     if (response) {
@@ -111,8 +105,8 @@ export function CreateProgram() {
         setTargetOptions(response1);
         setPositionOptions(response2);
         setCoachOptions(response3);
-        setSelectedTarget(0);
-        setSelectedPosition(0);
+        setSelectedTarget(1);
+        setSelectedPositions([1]);
       } else {
         alert(
           "오류 발생",
@@ -140,7 +134,7 @@ export function CreateProgram() {
             </View>
             <View style={styles.wrapper}>
               <Text style={styles.subtitle}>이용시간</Text>
-              <SelectOption
+              <SingleSelect
                 options={timeOptions}
                 selected={selectedTime}
                 setSelected={setSelectedTime}
@@ -148,17 +142,17 @@ export function CreateProgram() {
             </View>
             <View style={styles.wrapper}>
               <Text style={styles.subtitle}>대상</Text>
-              <SelectOption
-                options={targetOptions.map((option) => option.name)}
-                selected={targetOptions[selectedTarget]?.name || ""}
-                setSelected={(value) => selectTarget(value)}
+              <SingleSelect
+                options={targetOptions}
+                selected={selectedTarget}
+                setSelected={setSelectedTarget}
               />
             </View>
             <View style={styles.wrapper}>
               <Text style={styles.subtitle}>포지션</Text>
-              <SelectOption
-                options={positionOptions.map((option) => option.name)}
-                selected={positionOptions[selectedPosition]?.name || ""}
+              <MultiSelect
+                options={positionOptions}
+                selected={selectedPositions}
                 setSelected={(value) => selectPosition(value)}
               />
             </View>
@@ -218,7 +212,7 @@ export function CreateProgram() {
             </View>
           </View>
           <View style={styles.buttonWrapper}>
-            <TextButton text="저장" onPress={handleCreate} />
+            <TextButton text="등록" onPress={handleCreate} />
           </View>
         </View>
       </Scroll>
@@ -230,45 +224,6 @@ export function CreateProgram() {
         />
       )}
     </>
-  );
-}
-
-interface Props {
-  options: string[];
-  selected: string;
-  setSelected: (value: string) => void;
-}
-
-function SelectOption({ options, selected, setSelected }: Readonly<Props>) {
-  const { theme } = useTheme();
-  const styles = createStyles(theme);
-
-  return (
-    <View style={styles.selector}>
-      {options.map((option) => (
-        <TouchableOpacity
-          key={option}
-          onPress={() => setSelected(option)}
-          style={[
-            styles.chip,
-            {
-              backgroundColor:
-                selected === option ? theme.primary : theme.background,
-            },
-          ]}
-          testID={`${option}`}
-        >
-          <Text
-            style={{
-              color:
-                selected === option ? theme.background : theme.highEmphasis,
-            }}
-          >
-            {option}
-          </Text>
-        </TouchableOpacity>
-      ))}
-    </View>
   );
 }
 
@@ -290,18 +245,6 @@ const createStyles = (theme: ThemeColorType) =>
       fontSize: 16,
       fontWeight: "bold",
       color: theme.highEmphasis,
-    },
-    selector: {
-      flexDirection: "row",
-      flexWrap: "wrap",
-      gap: 8,
-    },
-    chip: {
-      paddingHorizontal: 8,
-      paddingVertical: 4,
-      borderRadius: 4,
-      borderWidth: 1,
-      borderColor: theme.border,
     },
     toggle: {
       flexDirection: "row",

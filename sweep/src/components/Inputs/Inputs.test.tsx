@@ -5,6 +5,11 @@ jest.unmock("@components/Inputs");
 
 describe("<TextInput>", () => {
   it("renders correctly", () => {
-    renderWithProviders(<TextInput value="email" onChangeText={jest.fn()} />);
+    renderWithProviders(
+      <>
+        <TextInput value="email" onChangeText={jest.fn()} />
+        <TextInput value="email" onChangeText={jest.fn()} compact />
+      </>
+    );
   });
 });

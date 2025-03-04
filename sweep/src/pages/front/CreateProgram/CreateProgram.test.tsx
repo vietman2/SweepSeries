@@ -40,9 +40,24 @@ jest.mock("@fragments/Coach", () => {
     CoachSelect: () => null,
   };
 });
-jest.mock("@fragments/Program", () => ({
-  NewCurriculum: () => null,
-}));
+jest.mock("@fragments/Program", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
+
+  return {
+    NewCurriculum: () => null,
+    MultiSelect: ({
+      setSelected,
+    }: {
+      setSelected: (value: number) => void;
+    }) => (
+        <TouchableOpacity
+          onPress={() => setSelected(1)}
+          testID="multi-select"
+        />
+    ),
+    SingleSelect: () => null,
+  };
+});
 
 describe("<CreateProgram />", () => {
   beforeEach(() => {
@@ -56,31 +71,22 @@ describe("<CreateProgram />", () => {
   });
 
   it("handles create correctly", async () => {
-    jest.spyOn(ProgramsAPI, "createProgram").mockResolvedValue({});
     const { getByTestId } = renderWithProviders(<CreateProgram />);
 
+    jest.spyOn(ProgramsAPI, "createProgram").mockResolvedValueOnce(null);
     await waitFor(() => {
-      fireEvent.press(getByTestId("60분")); // Select duration
-      fireEvent.press(getByTestId("투수레슨")); // Select position
-      fireEvent.press(getByTestId("선수반")); // Select target
+      fireEvent.press(getByTestId("multi-select")); // Select position
+      fireEvent.press(getByTestId("multi-select")); // Unselect position
       fireEvent.press(getByTestId("plus")); // Open coach modal
-      fireEvent.press(getByTestId("add-coach-team")); // Select coaches
-      fireEvent.press(getByTestId("close-coach-modal")); // Close coach modal
-      fireEvent.press(getByTestId("remove-coach-0")); // Close coach modal
-      fireEvent.press(getByTestId("저장")); // Submit
+      fireEvent.press(getByTestId("add-coach-team")); // Add coach team
+      fireEvent.press(getByTestId("toggle-coach-select")); // Disable select
+      fireEvent.press(getByTestId("remove-coach-0")); // Disable select
+      fireEvent.press(getByTestId("등록")); // Submit
     });
-  });
 
-  it("handles create fail and coach select toggle", async () => {
-    jest.spyOn(ProgramsAPI, "createProgram").mockResolvedValue(null);
-    const { getByTestId } = renderWithProviders(<CreateProgram />);
-
+    jest.spyOn(ProgramsAPI, "createProgram").mockResolvedValue({});
     await waitFor(() => {
-      fireEvent.press(getByTestId("60분")); // Select duration
-      fireEvent.press(getByTestId("투수레슨")); // Select position
-      fireEvent.press(getByTestId("선수반")); // Select target
-      fireEvent.press(getByTestId("toggle-coach-select")); // Close coach modal
-      fireEvent.press(getByTestId("저장"));
+      fireEvent.press(getByTestId("등록")); // Submit
     });
   });
 

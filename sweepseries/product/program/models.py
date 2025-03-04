@@ -19,13 +19,22 @@ class Position(models.Model):
     class Meta:
         db_table = 'program_position'
 
+class CoachTeam(models.Model):
+    coaches = models.ManyToManyField(Coach, related_name='coach_teams')
+
+    objects = models.Manager()
+
+    class Meta:
+        db_table = 'program_coach_team'
+
 class Program(models.Model):
-    academy     = models.ForeignKey(Academy, on_delete=models.CASCADE, related_name='programs')
-    name        = models.CharField(max_length=255)
-    duration    = models.PositiveIntegerField()
-    target      = models.ForeignKey(Target, on_delete=models.CASCADE, related_name='programs')
-    positions   = models.ManyToManyField(Position, related_name='programs')
-    coaches     = models.ManyToManyField(Coach, related_name='programs')
+    academy         = models.ForeignKey(Academy, on_delete=models.CASCADE, related_name='programs')
+    name            = models.CharField(max_length=255)
+    duration        = models.PositiveIntegerField()
+    target          = models.ForeignKey(Target, on_delete=models.CASCADE, related_name='programs')
+    positions       = models.ManyToManyField(Position, related_name='programs')
+    teams           = models.ManyToManyField(CoachTeam, related_name='programs')
+    select_disabled = models.BooleanField(default=True)
 
     objects     = models.Manager()
 
@@ -37,6 +46,8 @@ class Curriculum(models.Model):
     program     = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='curriculums')
     num_lessons = models.PositiveSmallIntegerField()
     price       = models.IntegerField()
+
+    is_deleted  = models.BooleanField(default=False)
 
     objects     = models.Manager()
 

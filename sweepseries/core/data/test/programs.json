@@ -15,7 +15,9 @@
       "name": "레슨 1",
       "duration": 90,
       "target": 1,
-      "positions": [1]
+      "positions": [1],
+      "select_disabled": true,
+      "teams": []
     }
   },
   {
@@ -26,7 +28,9 @@
       "name": "레슨 2",
       "duration": 90,
       "target": 1,
-      "positions": [1]
+      "positions": [1],
+      "select_disabled": false,
+      "teams": [1]
     }
   },
   {
@@ -37,7 +41,9 @@
       "name": "레슨 3",
       "duration": 60,
       "target": 3,
-      "positions": [2]
+      "positions": [2],
+      "select_disabled": true,
+      "teams": []
     }
   },
   {
@@ -48,7 +54,9 @@
       "name": "레슨 4",
       "duration": 60,
       "target": 3,
-      "positions": [1]
+      "positions": [1],
+      "select_disabled": true,
+      "teams": []
     }
   },
   {
@@ -72,6 +80,11 @@
     "fields": { "program": 4, "num_lessons": 8, "price": 800000 }
   },
   {
+    "model": "program.curriculum",
+    "pk": 5,
+    "fields": { "program": 1, "num_lessons": 2, "price": 250000 }
+  },
+  {
     "model": "contract.contract",
     "pk": 1,
     "fields": {
@@ -93,6 +106,13 @@
       "curriculum": 1,
       "completed_lessons": 0,
       "scheduled_lessons": 1
+    }
+  },
+  {
+    "model": "program.coachteam",
+    "pk": 1,
+    "fields": {
+      "coaches": ["923e4567-e89b-12d3-a456-426614174999"]
     }
   }
 ]

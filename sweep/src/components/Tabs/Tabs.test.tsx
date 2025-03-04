@@ -1,8 +1,11 @@
 import { configureReanimatedLogger } from "react-native-reanimated";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import {
+  createMaterialTopTabNavigator,
+  MaterialTopTabBarProps,
+} from "@react-navigation/material-top-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-import { fireEvent, waitFor } from "@testing-library/react-native";
 import { Tabs } from "react-native-collapsible-tab-view";
+import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { CollapsibleTab } from "./CollapsibleTab";
 import { FAQTabs } from "./FAQTabs";
@@ -32,19 +35,19 @@ describe("<CollapsibleTab />", () => {
       </Tabs.Container>
     );
 
-    fireEvent.press(getByText("Tab2"));
+    waitFor(() => fireEvent.press(getByText("Tab2")));
   });
 });
 
 describe("<FAQTabs />", () => {
   const tabs = ["tab1", "tab2", "tab3"];
 
-  it("renders correctly", () => {
+  it("renders correctly", async () => {
     const { getByText } = renderWithProviders(
       <FAQTabs tabs={tabs} selectedTab="tab1" setSelectedTab={jest.fn()} />
     );
 
-    fireEvent.press(getByText("tab2"));
+    await waitFor(() => fireEvent.press(getByText("tab2")));
   });
 });
 
@@ -54,7 +57,7 @@ describe("<TabBar />", () => {
       <NavigationContainer>
         <Tab.Navigator
           initialRouteName="example"
-          tabBar={(props) => <TabBar {...props} />}
+          tabBar={(props: MaterialTopTabBarProps) => <TabBar {...props} />}
         >
           <Tab.Screen
             name="example"
@@ -70,17 +73,21 @@ describe("<TabBar />", () => {
       </NavigationContainer>
     );
 
-    waitFor(() => fireEvent.press(getByTestId("example")));
-    waitFor(() => fireEvent.press(getByTestId("example2")));
-    fireEvent(getByTestId("example"), "onLongPress");
+    waitFor(() => {
+      fireEvent.press(getByTestId("example"));
+      fireEvent.press(getByTestId("example2"));
+      fireEvent(getByTestId("example"), "onLongPress");
+    });
   });
-  
-  it("renders scrollable correctly", () => {
+
+  it("renders scrollable correctly", async () => {
     const { getByTestId } = renderWithProviders(
       <NavigationContainer>
         <Tab.Navigator
           initialRouteName="example"
-          tabBar={(props) => <TabBar {...props} scrollable />}
+          tabBar={(props: MaterialTopTabBarProps) => (
+            <TabBar {...props} scrollable />
+          )}
         >
           <Tab.Screen
             name="example"

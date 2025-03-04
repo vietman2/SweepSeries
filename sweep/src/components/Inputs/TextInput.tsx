@@ -11,6 +11,7 @@ interface Props {
   type?: "default" | "email-address" | "number-pad" | "phone-pad";
   multiline?: boolean;
   returnKeyType?: "done" | "next";
+  compact?: boolean;
 }
 
 export function TextInput({
@@ -21,13 +22,14 @@ export function TextInput({
   type = "default",
   multiline = false,
   returnKeyType = "done",
+  compact = false,
 }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   return (
     <View style={styles.container}>
-      <View style={styles.input}>
+      <View style={[styles.input, compact && { paddingVertical: 8 }]}>
         <Input
           value={value}
           onChangeText={onChangeText}
