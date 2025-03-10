@@ -1,0 +1,40 @@
+[
+  {
+    "model": "lesson.lesson",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-02-07T00:46:07Z",
+      "updated_at": "2025-03-10T02:24:13.485Z",
+      "program": 1,
+      "student": 1,
+      "coaches": ["923e4567-e89b-12d3-a456-426614174999"]
+    }
+  },
+  {
+    "model": "lesson.session",
+    "pk": 1,
+    "fields": {
+      "lesson": 1,
+      "contract": 1,
+      "start_datetime": "2025-03-05T06:30:18Z",
+      "end_datetime": "2025-03-05T08:00:18Z",
+      "notify": false,
+      "notify_time": null,
+      "notes": "",
+      "feedback": "",
+      "coaches": ["923e4567-e89b-12d3-a456-426614174999"]
+    }
+  },
+  {
+    "model": "contract.contract",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-02-14T15:10:05.793Z",
+      "updated_at": "2025-03-10T02:24:13.483Z",
+      "customer": 1,
+      "curriculum": 1,
+      "completed_lessons": 0,
+      "scheduled_lessons": 8
+    }
+  }
+]
