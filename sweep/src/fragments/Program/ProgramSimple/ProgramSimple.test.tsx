@@ -3,17 +3,18 @@ import { sampleAcademyPrograms } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
 describe("<ProgramSimple />", () => {
-  it("renders correctly", () => {
-    renderWithProviders(<ProgramSimple program={sampleAcademyPrograms[0]} />);
-  });
-
-  it("renders correctly with props", () => {
+  it("renders all types correctly", () => {
     renderWithProviders(
-      <ProgramSimple
-        program={sampleAcademyPrograms[0]}
-        type="check"
-        color="black"
-      />
+      <>
+        <ProgramSimple program={sampleAcademyPrograms[0]} />
+        <ProgramSimple program={sampleAcademyPrograms[0]} type="check" />
+        <ProgramSimple
+          program={sampleAcademyPrograms[0]}
+          type="check"
+          color="black"
+          selected
+        />
+      </>
     );
   });
 });

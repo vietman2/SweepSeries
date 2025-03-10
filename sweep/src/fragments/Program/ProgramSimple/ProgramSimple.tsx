@@ -8,37 +8,63 @@ import { ThemeColorType } from "@themes/colors";
 
 interface Props {
   program: ProgramSimpleType;
+  selected?: boolean;
   type?: "price" | "check";
   color?: string;
 }
 
-export function ProgramSimple({ program, type = "price", color = "#000000" }: Readonly<Props>) {
+export function ProgramSimple({
+  program,
+  selected = false,
+  type = "price",
+  color = "#000000",
+}: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: selected ? theme.primary : theme.background },
+      ]}
+    >
       <View style={styles.info}>
-        <Text style={styles.bold}>{program.name}</Text>
+        <Text style={selected ? styles.normal : styles.bold}>
+          {program.name}
+        </Text>
         <View style={styles.footer}>
-          <View style={styles.rating}>
-            <AppIcon icon="star" size={14} color="#F2B517" />
-            <Text style={styles.ratingText}>4.89</Text>
-          </View>
+          {!selected && (
+            <View style={styles.rating}>
+              <AppIcon icon="star" size={14} color="#F2B517" />
+              <Text style={styles.ratingText}>{program.rating}</Text>
+            </View>
+          )}
           <View style={styles.chips}>
-            <Chip text={program.target.name} />
+            <Chip
+              text={program.target.name}
+              color={selected ? theme.background : theme.lowEmphasis}
+            />
             {program.positions.map((position) => (
-              <Chip key={position.id} text={position.name} />
+              <Chip
+                key={position.id}
+                text={position.name}
+                color={selected ? theme.background : theme.lowEmphasis}
+              />
             ))}
           </View>
         </View>
       </View>
-      {type === "price" ? (
-        <Text style={styles.bold}>
-          {program.lowest_price.toLocaleString()}~
-        </Text>
-      ) : (
-        <AppIcon icon="check-circle" size={24} color={color} />
+      {selected ? null : (
+        <>
+          {type === "price" ? (
+            <Text style={styles.bold}>
+              {program.lowest_price.toLocaleString()}~
+            </Text>
+          ) : (
+            <AppIcon icon="check-circle" size={24} color={color} />
+          )}
+        </>
       )}
     </View>
   );
@@ -46,15 +72,16 @@ export function ProgramSimple({ program, type = "price", color = "#000000" }: Re
 
 interface ChipProp {
   text: string;
+  color: string;
 }
 
-function Chip({ text }: Readonly<ChipProp>) {
+function Chip({ text, color }: Readonly<ChipProp>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   return (
-    <View style={styles.chip}>
-      <Text style={styles.chipText}>{text}</Text>
+    <View style={[styles.chip, { borderColor: color }]}>
+      <Text style={[styles.chipText, { color }]}>{text}</Text>
     </View>
   );
 }
@@ -77,9 +104,15 @@ const createStyles = (theme: ThemeColorType) =>
       justifyContent: "center",
       gap: 8,
     },
+    normal: {
+      fontSize: 16,
+      fontWeight: "bold",
+      color: theme.background,
+    },
     bold: {
       fontSize: 16,
       fontWeight: "bold",
+      color: theme.highEmphasis,
     },
     footer: {
       flexDirection: "row",
@@ -105,10 +138,8 @@ const createStyles = (theme: ThemeColorType) =>
       paddingVertical: 2,
       borderRadius: 4,
       borderWidth: 1,
-      borderColor: theme.border,
     },
     chipText: {
       fontSize: 12,
-      color: theme.lowEmphasis,
     },
   });
