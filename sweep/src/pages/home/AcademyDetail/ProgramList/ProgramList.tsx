@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { router, useLocalSearchParams } from "expo-router";
 
 import { useTheme } from "@contexts/theme";
 import { ProgramSimple } from "@fragments/Program";
@@ -14,6 +14,13 @@ export function ProgramList() {
 
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  const handleReserve = (program: ProgramSimpleType) => {
+    router.push({
+      pathname: "/home/reserve/[id]",
+      params: { id: program.id },
+    });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,9 +38,23 @@ export function ProgramList() {
 
   return (
     <View style={styles.container}>
-      {programs.map((program, index) => (
-        <ProgramSimple key={index} program={program} />
-      ))}
+      {programs.length === 0 ? (
+        <View style={styles.emptyWrapper}>
+          <Text style={styles.emptyText}>등록된 프로그램이 없습니다.</Text>
+        </View>
+      ) : (
+        <>
+          {programs.map((program) => (
+            <TouchableOpacity
+              key={program.id}
+              onPress={() => handleReserve(program)}
+              testID={`program-${program.id}`}
+            >
+              <ProgramSimple program={program} />
+            </TouchableOpacity>
+          ))}
+        </>
+      )}
     </View>
   );
 }
@@ -45,5 +66,15 @@ const createStyles = (theme: ThemeColorType) =>
       backgroundColor: theme.background,
       padding: 16,
       gap: 16,
+    },
+    emptyWrapper: {
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 100,
+    },
+    emptyText: {
+      fontSize: 18,
+      fontWeight: "bold",
+      color: theme.highEmphasis,
     },
   });
