@@ -13,6 +13,8 @@ import {
   deleteCoachTeam,
   saveCurriculums,
   toggleCoachSelect,
+  getAvailableTimes,
+  createLessonRequest,
 } from "./programs";
 import { sampleCurriculums } from "@testdata/products";
 
@@ -235,6 +237,46 @@ describe("toggleCoachSelect", () => {
   it("should return null if the request fails", async () => {
     jest.spyOn(axios, "patch").mockRejectedValue(new Error());
     const result = await toggleCoachSelect(1);
+    expect(result).toBeNull();
+  });
+});
+
+describe("getAvailableTimes", () => {
+  it("should return the available times", async () => {
+    jest.spyOn(axios, "get").mockResolvedValue({ data: {} });
+    const result = await getAvailableTimes(1, 1, "date");
+    expect(result).toEqual({});
+  });
+
+  it("should return null if programid is undefined", async () => {
+    jest.spyOn(axios, "get").mockRejectedValue(new Error());
+    const result = await getAvailableTimes(undefined, 1, "date");
+    expect(result).toBeNull();
+  });
+
+  it("should return null if the request fails", async () => {
+    jest.spyOn(axios, "get").mockRejectedValue(new Error());
+    const result = await getAvailableTimes(1, 1, "date");
+    expect(result).toBeNull();
+  });
+});
+
+describe("createLessonRequest", () => {
+  it("should create a lesson request", async () => {
+    jest.spyOn(axios, "post").mockResolvedValue({ data: {} });
+    const result = await createLessonRequest(1, 1, new Date(), 1);
+    expect(result).toEqual({});
+  });
+
+  it("should return null if programid is undefined", async () => {
+    jest.spyOn(axios, "post").mockResolvedValue({ data: {} });
+    const result = await createLessonRequest(undefined, 1, new Date(), 1);
+    expect(result).toBeNull();
+  });
+
+  it("should return null if the request fails", async () => {
+    jest.spyOn(axios, "post").mockRejectedValue(new Error());
+    const result = await createLessonRequest(1, 1, new Date(), 1);
     expect(result).toBeNull();
   });
 });

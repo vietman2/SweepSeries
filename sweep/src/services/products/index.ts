@@ -47,6 +47,8 @@ import {
   deleteCoachTeam,
   saveCurriculums,
   toggleCoachSelect,
+  getAvailableTimes,
+  createLessonRequest,
 } from "./programs";
 import { getStudents, getAcademyStudentDetail } from "./students";
 
@@ -93,6 +95,8 @@ export {
   deleteCoachTeam,
   saveCurriculums,
   toggleCoachSelect,
+  getAvailableTimes,
+  createLessonRequest,
   getStudents,
   getAcademyStudentDetail,
 };
