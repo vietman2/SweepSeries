@@ -8,7 +8,7 @@ from auth.person.models import Person
 from core.utils import get_presigned_url
 from product.academy.models import Academy
 from .enums import CareerChoices
-from .models import Coach, CoachProfession
+from .models import Coach, CoachProfession, CoachWorkingHours
 
 class CoachProfessionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -156,5 +156,7 @@ class CoachRegisterSerializer(serializers.ModelSerializer):
             career=self.validated_data['career'],
         )
         coach.professions.set(self.validated_data['professions'])
+
+        CoachWorkingHours.objects.create_working_hours(coach)
 
         return coach
