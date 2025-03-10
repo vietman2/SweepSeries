@@ -126,7 +126,7 @@ export function Reservation() {
               setSelectedTeam={setSelectedTeam}
             />
           )}
-          {selectedTeam && (
+          {selectedTeam !== 0 && (
             <SelectDateTime
               curriculums={program.curriculums}
               selectedCurriculum={selectedCurriculum}

@@ -68,110 +68,106 @@ export function SelectDateTime({
   };
 
   return (
-    <>
-      <View style={styles.container}>
-        <View style={styles.wrapper}>
-          <Text style={styles.subtitle}>커리큘럼 선택</Text>
-          <View style={styles.curriculums}>
-            {curriculums.map((curriculum) => (
-              <TouchableOpacity
-                key={curriculum.id}
+    <View style={styles.container}>
+      <View style={styles.wrapper}>
+        <Text style={styles.subtitle}>커리큘럼 선택</Text>
+        <View style={styles.curriculums}>
+          {curriculums.map((curriculum) => (
+            <TouchableOpacity
+              key={curriculum.id}
+              style={[
+                styles.curriculum,
+                selectedCurriculum === curriculum.id && {
+                  borderColor: theme.primary,
+                },
+              ]}
+              onPress={() => setSelectedCurriculum(curriculum.id)}
+              testID={`curriculum-${curriculum.id}`}
+            >
+              <Text
                 style={[
-                  styles.curriculum,
+                  styles.lessonsText,
                   selectedCurriculum === curriculum.id && {
-                    borderColor: theme.primary,
+                    color: theme.primary,
                   },
                 ]}
-                onPress={() => setSelectedCurriculum(curriculum.id)}
-                testID={`curriculum-${curriculum.id}`}
               >
-                <Text
-                  style={[
-                    styles.lessonsText,
-                    selectedCurriculum === curriculum.id && {
-                      color: theme.primary,
-                    },
-                  ]}
-                >
-                  {curriculum.num_lessons}회권
-                </Text>
-                <Text
-                  style={[
-                    styles.priceText,
-                    selectedCurriculum === curriculum.id && {
-                      color: theme.primary,
-                    },
-                  ]}
-                >
-                  {curriculum.price.toLocaleString()}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-        <Divider color={theme.lowEmphasis} bold />
-        <View style={styles.wrapper}>
-          <Text style={styles.subtitle}>예약 날짜 선택</Text>
-          {selectedCurriculum ? (
-            <Calendar
-              initialDate={new Date().toISOString().split("T")[0]}
-              customHeader={CustomHeader}
-              dayComponent={dayComponent}
-              hideExtraDays
-            />
-          ) : (
-            <CalloutSmall
-              text="원하시는 레슨 횟수를 먼저 선택해주세요."
-              align="center"
-            />
-          )}
-        </View>
-        <Divider color={theme.lowEmphasis} bold />
-        <View style={styles.wrapper}>
-          <Text style={styles.subtitle}>예약 시간 선택</Text>
-          {selectedCurriculum ? (
-            <View style={styles.availableTimes}>
-              <Text>{availableTimes.length}</Text>
-              {availableTimes.map((time) => (
-                <View key={time.time}>
-                  <Text>{selectedCurriculum}</Text>
-                  {time.is_available ? (
-                    <TouchableOpacity
-                      style={[
-                        styles.timeChip,
-                        selectedTime === time.time && {
-                          backgroundColor: theme.primary,
-                          borderColor: theme.primary,
-                        },
-                      ]}
-                      onPress={() => setSelectedTime(time.time)}
-                      testID={`time-${time.time}`}
-                    >
-                      <Text
-                        style={
-                          selectedTime === time.time && {
-                            color: theme.background,
-                          }
-                        }
-                      >
-                        {time.time}
-                      </Text>
-                    </TouchableOpacity>
-                  ) : (
-                    <View style={styles.disabledChip}>
-                      <Text style={styles.disabledText}>{time.time}</Text>
-                    </View>
-                  )}
-                </View>
-              ))}
-            </View>
-          ) : null}
-        </View>
-        <View style={styles.buttonWrapper}>
-          <TextButton text="예약하기" onPress={toggleModal} />
+                {curriculum.num_lessons}회권
+              </Text>
+              <Text
+                style={[
+                  styles.priceText,
+                  selectedCurriculum === curriculum.id && {
+                    color: theme.primary,
+                  },
+                ]}
+              >
+                {curriculum.price.toLocaleString()}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
       </View>
-    </>
+      <Divider color={theme.lowEmphasis} bold />
+      <View style={styles.wrapper}>
+        <Text style={styles.subtitle}>예약 날짜 선택</Text>
+        {selectedCurriculum ? (
+          <Calendar
+            initialDate={new Date().toISOString().split("T")[0]}
+            customHeader={CustomHeader}
+            dayComponent={dayComponent}
+            hideExtraDays
+          />
+        ) : (
+          <CalloutSmall
+            text="원하시는 레슨 횟수를 먼저 선택해주세요."
+            align="center"
+          />
+        )}
+      </View>
+      <Divider color={theme.lowEmphasis} bold />
+      <View style={styles.wrapper}>
+        <Text style={styles.subtitle}>예약 시간 선택</Text>
+        {selectedCurriculum > 0 && (
+          <View style={styles.availableTimes}>
+            {availableTimes.map((time) => (
+              <View key={time.time}>
+                {time.is_available ? (
+                  <TouchableOpacity
+                    style={[
+                      styles.timeChip,
+                      selectedTime === time.time && {
+                        backgroundColor: theme.primary,
+                        borderColor: theme.primary,
+                      },
+                    ]}
+                    onPress={() => setSelectedTime(time.time)}
+                    testID={`time-${time.time}`}
+                  >
+                    <Text
+                      style={
+                        selectedTime === time.time && {
+                          color: theme.background,
+                        }
+                      }
+                    >
+                      {time.time}
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <View style={styles.disabledChip}>
+                    <Text style={styles.disabledText}>{time.time}</Text>
+                  </View>
+                )}
+              </View>
+            ))}
+          </View>
+        )}
+      </View>
+      <View style={styles.buttonWrapper}>
+        <TextButton text="예약하기" onPress={toggleModal} />
+      </View>
+    </View>
   );
 }
 
