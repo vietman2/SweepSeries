@@ -38,3 +38,8 @@ export type TeamType = {
 export type TeamInputType = {
   coaches: CoachSimpleType[];
 };
+
+export type AvailableTimesType = {
+  time: string;
+  is_available: boolean;
+};
