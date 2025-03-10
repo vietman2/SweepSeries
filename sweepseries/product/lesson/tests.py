@@ -100,6 +100,37 @@ class LessonAPITestCase(APITestCase):
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, 400)
 
+    def test_create_lesson_request(self):
+        self.client.force_authenticate(user=self.user)
+
+        ## 1. select team
+        response = self.client.post(f"{self.url}create_request/", {
+            "program": 1,
+            "team": 1,
+            "start_datetime": "2025-02-01T00:00:00Z",
+            "curriculum": 1,
+        }, format="json")
+        self.assertEqual(response.status_code, 201)
+
+        ## 2. team select disabled
+        response = self.client.post(f"{self.url}create_request/", {
+            "program": 1,
+            "team": -1,
+            "start_datetime": "2025-02-01T00:00:00Z",
+            "curriculum": 1,
+        }, format="json")
+        self.assertEqual(response.status_code, 201)
+
+    def test_create_lesson_request_fail(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post(f"{self.url}create_request/", {
+            "program": 0,
+            "team": 1,
+            "start_datetime": "2025-02-01T00:00:00Z",
+            "curriculum": 0,
+        }, format="json")
+        self.assertEqual(response.status_code, 400)
+
 class SessionAPITestCase(APITestCase):
     fixtures = [
         "core/data/test/users.json", "core/data/test/calendar.json",

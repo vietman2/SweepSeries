@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.utils import timezone
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -13,7 +14,7 @@ from rest_framework.viewsets import ModelViewSet
 from product.contract.models import Contract
 from product.contract.serializers import ContractSerializer
 from .models import Lesson, Session
-from .serializers import LessonSerializer, SessionDetailSerializer
+from .serializers import LessonSerializer, SessionDetailSerializer, SessionRequestSerializer
 
 class LessonViewSet(ModelViewSet):
     queryset = Lesson.objects.all()
@@ -72,6 +73,23 @@ class LessonViewSet(ModelViewSet):
     @extend_schema(exclude=True)
     def retrieve(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    @extend_schema(summary="레슨 요청", tags=["레슨"])
+    @action(detail=False, methods=['post'])
+    def create_request(self, request):
+        serializer = SessionRequestSerializer(data=request.data)
+        serializer.context['user'] = request.user
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        except ValidationError as e:
+            return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(
+            data={"message": "레슨 요청이 성공적으로 생성되었습니다."},
+            status=status.HTTP_201_CREATED
+        )
 
 class SessionViewSet(ModelViewSet):
     queryset = Session.objects.all()
