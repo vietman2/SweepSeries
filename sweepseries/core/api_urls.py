@@ -36,7 +36,7 @@ from product.academy.views import (
     AcademyViewSet, FacilityViewSet, AcademyNoticeViewSet, AcademyImageViewSet
 )
 from product.coach.views import CoachViewSet
-from product.lesson.views import LessonViewSet, SessionViewSet
+from product.lesson.views import LessonViewSet, SessionViewSet, SessionRequestViewSet
 from product.program.views import ProgramViewSet, CoachTeamViewSet
 
 router = DefaultRouter()
@@ -76,6 +76,7 @@ router.register(r'academies', AcademyViewSet, basename='academies')
 router.register(r'facilities', FacilityViewSet, basename='facilities')
 router.register(r'coaches', CoachViewSet, basename='coaches')
 router.register(r'lessons', LessonViewSet, basename='lessons')
+router.register(r'lesson_requests', SessionRequestViewSet, basename='lesson-requests')
 router.register(r'programs/(?P<program_id>[^/.]+)/coaches', CoachTeamViewSet, basename='teams')
 router.register(r'programs', ProgramViewSet, basename='programs')
 router.register(r'sessions', SessionViewSet, basename='sessions')
