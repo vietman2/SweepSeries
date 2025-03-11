@@ -1,7 +1,6 @@
 import re
-from datetime import time
-from django.core.exceptions import ValidationError as DjangoValidationError
 from urllib.parse import urlparse, urlunparse
+from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework.exceptions import ValidationError
 
 def validate_instagram_url(value):
