@@ -122,8 +122,8 @@ def accept_requests(request_ids):
     ## 세션을 생성해야 한다.
     try:
         with atomic():
-            for id in request_ids:
-                request = SessionRequest.objects.get(id=id)
+            for request_id in request_ids:
+                request = SessionRequest.objects.get(id=request_id)
                 request.accepted = True
                 request.save()
 
