@@ -1,4 +1,6 @@
 import re
+from datetime import time
+from django.core.exceptions import ValidationError as DjangoValidationError
 from urllib.parse import urlparse, urlunparse
 from rest_framework.exceptions import ValidationError
 
@@ -29,3 +31,7 @@ def normalize_instagram_url(value):
     normalized_url = urlunparse((scheme, netloc, path, '', '', ''))
 
     return normalized_url
+
+def validate_30_minutes_interval(value):
+    if value.minute % 30 != 0:
+        raise DjangoValidationError("영업 시간은 30분 단위로 입력해주세요.")
