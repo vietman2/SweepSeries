@@ -107,10 +107,9 @@ def filter_session_times(team, date, slots, aggregated_start, aggregated_end):
         slot_end_dt = slot_start_dt + timedelta(minutes=30)
 
         # Check if within working hours and has no conflicts
-        if aggregated_start <= slot_start <= aggregated_end and not is_time_conflicting(slot_start_dt, slot_end_dt, session_times, date):
-            available = True
-        else:
-            available = False
+        available = aggregated_start <= slot_start <= aggregated_end and not is_time_conflicting(
+            slot_start_dt, slot_end_dt, session_times, date
+        )
 
         available_times.append({"time": slot, "is_available": available})
 
