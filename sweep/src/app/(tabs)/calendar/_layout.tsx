@@ -66,7 +66,15 @@ export default function CalendarLayout() {
           }}
         />
         <Stack.Screen name="search" />
-        <Stack.Screen name="requests" />
+        <Stack.Screen
+          name="requests"
+          options={{
+            presentation: "containedModal",
+            headerShown: true,
+            headerLeft: () => <BackButton />,
+            headerTitle: "예약 승인",
+          }}
+        />
         <Stack.Screen
           name="daily/[date]"
           options={{
