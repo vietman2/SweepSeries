@@ -81,7 +81,7 @@ class ProgramSerializer(serializers.ModelSerializer):
     def get_academy_uuid(self, obj):
         return obj.academy.uuid
 
-    def get_rating(self, obj):
+    def get_rating(self, obj):      ## pylint: disable=unused-argument
         ## TODO: Implement rating calculation
         return 0.0
 

@@ -164,7 +164,10 @@ class WorkingHoursTestCase(TestCase):
 
         ## 2. special day
         special_day = SpecialWorkingDay.objects.create(
-            coach=self.coach, date=self.date, start_time=datetime.time(10, 0), end_time=datetime.time(17, 0)
+            coach=self.coach,
+            date=self.date,
+            start_time=datetime.time(10, 0),
+            end_time=datetime.time(17, 0)
         )
         working_hours = get_working_hours(self.coach, self.date)
         self.assertEqual(working_hours, (datetime.time(10, 0), datetime.time(17, 0)))

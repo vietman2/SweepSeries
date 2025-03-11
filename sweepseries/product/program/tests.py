@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 from django.test import TestCase
-from rest_framework.exceptions import ValidationError
 from rest_framework.test import APITestCase
 
 from auth.user.models import User

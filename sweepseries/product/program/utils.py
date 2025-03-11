@@ -70,6 +70,37 @@ def generate_time_slots_from_academy(program, date):
 
     return (slots, academy_open_time, academy_close_time)
 
+def filter_session_times(team, date, slots, aggregated_start, aggregated_end):
+    session_times = get_unavailable_session_times(team.coaches, date)
+
+    available_times = []
+
+    for slot in slots:
+        slot_start = datetime.strptime(slot, "%H:%M").time()
+        slot_start_dt = datetime.combine(date, slot_start)
+        slot_end_dt = slot_start_dt + timedelta(minutes=30)
+        slot_end = slot_end_dt.time()
+
+        if slot_start >= aggregated_start and slot_end <= aggregated_end:
+            ## 근무 시간 내에 있는 슬롯. 예약된 시간이 없는지 확인
+            conflict = False
+            for res_start, res_end in session_times:
+                res_start_dt = datetime.combine(date, res_start)
+                res_end_dt = datetime.combine(date, res_end)
+                if slot_start_dt < res_end_dt and slot_end_dt > res_start_dt:
+                    conflict = True
+                    break
+            available = not conflict
+        else:
+            available = False
+
+        available_times.append({
+            "time": slot,
+            "is_available": available
+        })
+
+    return available_times
+
 def get_available_times(program, team, date):
     # 주어진 날에 대하여
     # 무조건 30분 단위
@@ -110,38 +141,8 @@ def get_available_times(program, team, date):
 
         coach_open_time, coach_close_time = coach_work_hours
 
-        if coach_open_time > aggregated_start:
-            aggregated_start = coach_open_time
-        if coach_close_time < aggregated_end:
-            aggregated_end = coach_close_time
+        aggregated_start = max(aggregated_start, coach_open_time)
+        aggregated_end = min(aggregated_end, coach_close_time)
 
-    # 3. 코치들의 예약된 시간
-    session_times = get_unavailable_session_times(team.coaches, date)
-
-    available_times = []
-
-    for slot in slots:
-        slot_start = datetime.strptime(slot, "%H:%M").time()
-        slot_start_dt = datetime.combine(date, slot_start)
-        slot_end_dt = slot_start_dt + timedelta(minutes=30)
-        slot_end = slot_end_dt.time()
-
-        if slot_start >= aggregated_start and slot_end <= aggregated_end:
-            ## 근무 시간 내에 있는 슬롯. 예약된 시간이 없는지 확인
-            conflict = False
-            for res_start, res_end in session_times:
-                res_start_dt = datetime.combine(date, res_start)
-                res_end_dt = datetime.combine(date, res_end)
-                if slot_start_dt < res_end_dt and slot_end_dt > res_start_dt:
-                    conflict = True
-                    break
-            available = not conflict
-        else:
-            available = False
-
-        available_times.append({
-            "time": slot,
-            "is_available": available
-        })
-
-    return available_times
+    # 5. 코치들의 예약된 시간 필터
+    return filter_session_times(team, date, slots, aggregated_start, aggregated_end)

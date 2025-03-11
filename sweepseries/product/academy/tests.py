@@ -1,10 +1,10 @@
 import json
 from io import BytesIO
 from unittest.mock import patch
+import datetime
 from botocore.exceptions import ClientError
 import requests_mock
 from PIL import Image
-import datetime
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
