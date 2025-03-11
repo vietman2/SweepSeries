@@ -37,3 +37,45 @@ export async function getCurriculum(programId: number, studentId: number) {
     return null;
   }
 }
+
+export async function getLessonRequests(academyId: string | undefined) {
+  if (!academyId) {
+    return null;
+  }
+
+  try {
+    const response = await axios.get(`/v1/lesson_requests/`, {
+      params: {
+        academy: academyId,
+      },
+    });
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
+export async function acceptRequests(requestIds: number[]) {
+  try {
+    const response = await axios.patch(`/v1/lesson_requests/accept/`, {
+      requests: requestIds,
+    });
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
+export async function rejectRequests(requestIds: number[]) {
+  try {
+    const response = await axios.patch(`/v1/lesson_requests/reject/`, {
+      requests: requestIds,
+    });
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}

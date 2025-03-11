@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { createLesson, getCurriculum } from "./lessons";
+import { createLesson, getCurriculum, getLessonRequests, acceptRequests, rejectRequests } from "./lessons";
 
 describe("createLesson", () => {
   const mockStudent = {
@@ -57,6 +57,66 @@ describe("getCurriculum", () => {
     jest.spyOn(axios, "get").mockRejectedValue(new Error());
 
     const response = await getCurriculum(1, 1);
+
+    expect(response).toBeNull();
+  });
+});
+
+describe("getLessonRequests", () => {
+  it("should call the API with the correct data", async () => {
+    jest.spyOn(axios, "get").mockResolvedValue({ data: {} });
+
+    const response = await getLessonRequests("1");
+
+    expect(response).toEqual({});
+  });
+
+  it("should return null if the API call fails", async () => {
+    jest.spyOn(axios, "get").mockRejectedValue(new Error());
+
+    const response = await getLessonRequests("1");
+
+    expect(response).toBeNull();
+  });
+
+  it("should return null if academyId is undefined", async () => {
+    const response = await getLessonRequests(undefined);
+
+    expect(response).toBeNull();
+  });
+});
+
+describe("acceptRequests", () => {
+  it("should call the API with the correct data", async () => {
+    jest.spyOn(axios, "patch").mockResolvedValue({ data: {} });
+
+    const response = await acceptRequests([1, 2]);
+
+    expect(response).toEqual({});
+  });
+
+  it("should return null if the API call fails", async () => {
+    jest.spyOn(axios, "patch").mockRejectedValue(new Error());
+
+    const response = await acceptRequests([1, 2]);
+
+    expect(response).toBeNull();
+  });
+});
+
+describe("rejectRequests", () => {
+  it("should call the API with the correct data", async () => {
+    jest.spyOn(axios, "patch").mockResolvedValue({ data: {} });
+
+    const response = await rejectRequests([1, 2]);
+
+    expect(response).toEqual({});
+  });
+
+  it("should return null if the API call fails", async () => {
+    jest.spyOn(axios, "patch").mockRejectedValue(new Error());
+
+    const response = await rejectRequests([1, 2]);
 
     expect(response).toBeNull();
   });
