@@ -39,7 +39,7 @@ export function ReservationRequests() {
       return;
     }
 
-    const response = await acceptRequests(checkedRequests);
+    const response = await acceptRequests(checkedRequests, selectedCalendar?.uuid);
 
     if (response) {
       setRequests(
@@ -57,7 +57,10 @@ export function ReservationRequests() {
       return;
     }
 
-    const response = await rejectRequests(checkedRequests);
+    const response = await rejectRequests(
+      checkedRequests,
+      selectedCalendar?.uuid
+    );
 
     if (response) {
       setRequests(

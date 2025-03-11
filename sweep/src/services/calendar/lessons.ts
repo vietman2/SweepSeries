@@ -56,10 +56,18 @@ export async function getLessonRequests(academyId: string | undefined) {
   }
 }
 
-export async function acceptRequests(requestIds: number[]) {
+export async function acceptRequests(
+  requestIds: number[],
+  academyId: string | undefined
+) {
+  if (!academyId) {
+    return null;
+  }
+
   try {
     const response = await axios.patch(`/v1/lesson_requests/accept/`, {
       requests: requestIds,
+      academy: academyId,
     });
 
     return response.data;
@@ -68,10 +76,18 @@ export async function acceptRequests(requestIds: number[]) {
   }
 }
 
-export async function rejectRequests(requestIds: number[]) {
+export async function rejectRequests(
+  requestIds: number[],
+  academyId: string | undefined
+) {
+  if (!academyId) {
+    return null;
+  }
+
   try {
     const response = await axios.patch(`/v1/lesson_requests/reject/`, {
       requests: requestIds,
+      academy: academyId,
     });
 
     return response.data;

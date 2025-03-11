@@ -90,15 +90,23 @@ describe("acceptRequests", () => {
   it("should call the API with the correct data", async () => {
     jest.spyOn(axios, "patch").mockResolvedValue({ data: {} });
 
-    const response = await acceptRequests([1, 2]);
+    const response = await acceptRequests([1, 2], "1");
 
     expect(response).toEqual({});
+  });
+
+  it("should return null if academy is undefined", async () => {
+    jest.spyOn(axios, "patch").mockResolvedValue({ data: {} });
+
+    const response = await acceptRequests([1, 2], undefined);
+
+    expect(response).toEqual(null);
   });
 
   it("should return null if the API call fails", async () => {
     jest.spyOn(axios, "patch").mockRejectedValue(new Error());
 
-    const response = await acceptRequests([1, 2]);
+    const response = await acceptRequests([1, 2], "1");
 
     expect(response).toBeNull();
   });
@@ -108,15 +116,23 @@ describe("rejectRequests", () => {
   it("should call the API with the correct data", async () => {
     jest.spyOn(axios, "patch").mockResolvedValue({ data: {} });
 
-    const response = await rejectRequests([1, 2]);
+    const response = await rejectRequests([1, 2], "1");
 
     expect(response).toEqual({});
+  });
+
+  it("should return null if academy is undefined", async () => {
+    jest.spyOn(axios, "patch").mockResolvedValue({ data: {} });
+
+    const response = await rejectRequests([1, 2], undefined);
+
+    expect(response).toEqual(null);
   });
 
   it("should return null if the API call fails", async () => {
     jest.spyOn(axios, "patch").mockRejectedValue(new Error());
 
-    const response = await rejectRequests([1, 2]);
+    const response = await rejectRequests([1, 2], "1");
 
     expect(response).toBeNull();
   });
