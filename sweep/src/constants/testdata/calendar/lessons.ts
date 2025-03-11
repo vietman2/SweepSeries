@@ -1,4 +1,8 @@
-import { LessonDetailType, LessonType } from "@models/calendar";
+import {
+  LessonDetailType,
+  LessonType,
+  LessonRequestType,
+} from "@models/calendar";
 
 export const sampleLessonSimple: LessonType = {
   id: "1",
@@ -19,3 +23,26 @@ export const sampleLesson: LessonDetailType = {
   coaches: [1],
   student: "1",
 };
+
+export const sampleLessonRequests: LessonRequestType[] = [
+  {
+    id: 1,
+    time: "오전 9시 ~ 오전 11시 (2시간)",
+    title: "엘리트 (고등학생) 1:1 타격레슨",
+    description: "코치: 홍길동\t수강생: 김철수",
+    details:
+      "손목이 덮히는 현상을 고치려고 노력함\n단순히 손목이 덮히는 현상을 스윙 궤도의 변화로 수정하기보다 상하체 분리 후 진행되는 로테이션을 통해 전반적으로 수정함\n\n코치님 강조점:\n1. 랜딩 동작 시 상하체 분리\n2. 오른쪽 상체(팔꿈치) 오픈 수정",
+    color: "#14863E",
+    date: "11월 01일. 화",
+  },
+  {
+    id: 2,
+    time: "오후 2시 ~ 오후 4시 (2시간)",
+    title: "엘리트 (고등학생) 1:1 투수레슨",
+    description: "코치: 홍길동\t수강생: 김철수",
+    details:
+      "손목이 덮히는 현상을 고치려고 노력함\n단순히 손목이 덮히는 현상을 스윙 궤도의 변화로 수정하기보다 상하체 분리 후 진행되는 로테이션을 통해 전반적으로 수정함\n\n코치님 강조점:\n1. 랜딩 동작 시 상하체 분리\n2. 오른쪽 상체(팔꿈치) 오픈 수정",
+    color: "#14863E",
+    date: "11월 01일. 화",
+  },
+];
