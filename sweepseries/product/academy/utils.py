@@ -1,7 +1,9 @@
+from datetime import time
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.storage import default_storage
 
 from .enums import DayChoices
-from .models import BusinessHours
+from .models import BusinessHours, SpecialDay
 
 def get_schedule_details(academy):
     schedules = []
@@ -129,3 +131,24 @@ def upload_logo(uuid, file):
     default_storage.save(path, file)
 
     return path
+
+def get_operating_hours(academy, date):
+    try:
+        special_day = SpecialDay.objects.get(date=date)
+        if special_day.is_closed:
+            return None
+        return (special_day.start_time, special_day.end_time)
+    except ObjectDoesNotExist:
+        pass
+
+    day_of_week = date.weekday()
+
+    try:
+        business_hours = academy.business_hours.get(day_of_week=day_of_week)
+        if business_hours.is_closed:
+            return None
+        if business_hours.is_allday:
+            return (time(0, 0), time(23, 59))
+        return (business_hours.open_time, business_hours.close_time)
+    except ObjectDoesNotExist:
+        return None
