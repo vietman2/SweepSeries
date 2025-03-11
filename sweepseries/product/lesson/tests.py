@@ -265,7 +265,6 @@ class SessionRequestAPITestCase(APITestCase):
         self.assertEqual(response.status_code, 400)
 
         ## 2. success
-        ids = [1, 2]
         response = self.client.patch(f"{self.url}reject/", self.data, format="json")
         self.assertEqual(response.status_code, 200)
 

@@ -15,8 +15,6 @@ from core.permissions import AdminOnly
 from core.utils import is_admin_page
 from product.coach.enums import CoachApplicationStatus
 from product.coach.serializers import CoachSimpleSerializer
-from product.lesson.models import SessionRequest
-from product.lesson.serializers import SessionRequestSerializer
 from .enums import DayChoices
 from .models import (
     Academy, AcademyFacility, AcademyNotice, BusinessHours, AcademyImage, AcademyLike

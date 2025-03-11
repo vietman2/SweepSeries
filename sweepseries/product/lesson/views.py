@@ -232,7 +232,7 @@ class SessionRequestViewSet(ModelViewSet):
             accept_requests(request_ids)
         except ValidationError as e:
             return Response(
-                data={"message": "오류가 발생했습니다."},
+                data={"message": str(e)},
                 status=status.HTTP_400_BAD_REQUEST
             )
 

@@ -197,7 +197,7 @@ class SessionRequestSerializer(serializers.ModelSerializer):
 
     def get_title(self, obj):
         return obj.program.name
-    
+
     def get_description(self, obj):
         ## return coaches names:
         coaches = ', '.join([coach.person.name for coach in obj.coaches.all()])

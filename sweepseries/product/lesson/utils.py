@@ -142,7 +142,7 @@ def accept_requests(request_ids):
                     }
                 )
 
-    except ObjectDoesNotExist:
-        raise ValidationError("해당 레슨 요청이 존재하지 않습니다.")
+    except ObjectDoesNotExist as e:
+        raise ValidationError("해당 레슨 요청이 존재하지 않습니다.") from e
 
     return True
