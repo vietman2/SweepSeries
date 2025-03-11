@@ -1,5 +1,7 @@
-import { LessonSimple } from "./LessonSimple";
-import { sampleLesson } from "@testdata/calendar";
+import { fireEvent } from "@testing-library/react-native";
+
+import { LessonSimple, LessonRequestSimple } from "./LessonSimple";
+import { sampleLesson, sampleLessonRequests } from "@testdata/calendar";
 import { renderWithProviders } from "@utils/test-utils";
 
 describe("LessonSimple", () => {
@@ -11,5 +13,26 @@ describe("LessonSimple", () => {
     renderWithProviders(
       <LessonSimple lesson={{ ...sampleLesson, done: false }} />
     );
+  });
+});
+
+describe("LessonRequestSimple", () => {
+  it("renders correctly", () => {
+    const { getAllByTestId } = renderWithProviders(
+      <>
+        <LessonRequestSimple
+          lessonRequest={sampleLessonRequests[0]}
+          checked={false}
+          onCheck={jest.fn()}
+        />
+        <LessonRequestSimple
+          lessonRequest={sampleLessonRequests[1]}
+          checked={true}
+          onCheck={jest.fn()}
+        />
+      </>
+    );
+
+    fireEvent.press(getAllByTestId("expand-button")[0]);
   });
 });
