@@ -38,7 +38,7 @@ describe("<Reservation />", () => {
       .mockResolvedValue({ program: sampleAcademyPrograms[0] });
     jest
       .spyOn(ProgramsAPI, "getAvailableTimes")
-      .mockResolvedValue(sampleAvailableTimes);
+      .mockResolvedValue({ times: sampleAvailableTimes });
   });
 
   it("handles api error", async () => {
@@ -86,6 +86,19 @@ describe("<Reservation />", () => {
       fireEvent.press(getByTestId("select-1")); // Select team
       fireEvent.press(getByTestId("unselect-team")); // Unselect team
       fireEvent.press(getByTestId("select-1")); // Reselect team
+    });
+  });
+
+  it("handles no available time", async () => {
+    const { getByTestId } = renderWithProviders(<Reservation />);
+
+    jest
+      .spyOn(ProgramsAPI, "getAvailableTimes")
+      .mockResolvedValue({ times: null });
+
+    await waitFor(() => {
+      fireEvent.press(getByTestId("curriculum-1")); // Select team
+      fireEvent.press(getByTestId("day-2024-10-20")); // Select day
     });
   });
 });

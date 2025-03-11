@@ -30,7 +30,7 @@ export function Reservation() {
   const [selectedCurriculum, setSelectedCurriculum] = useState<number>(0);
   const [selectedDay, setSelectedDay] = useState<string>("");
   const [selectedTime, setSelectedTime] = useState<string>("");
-  const [availableTimes, setAvailableTimes] = useState<AvailableTimesType[]>(
+  const [availableTimes, setAvailableTimes] = useState<AvailableTimesType[] | null>(
     []
   );
 
@@ -100,8 +100,8 @@ export function Reservation() {
       );
 
       if (response) {
-        setAvailableTimes(response);
-        setSelectedTime(response[0].time);
+        setAvailableTimes(response.times);
+        if (response.times) setSelectedTime(response.times[0].time);
       }
     };
 

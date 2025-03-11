@@ -17,7 +17,7 @@ interface Props {
   setSelectedDay: (day: string) => void;
   selectedTime: string;
   setSelectedTime: (time: string) => void;
-  availableTimes: AvailableTimesType[];
+  availableTimes: AvailableTimesType[] | null;
   toggleModal: () => void;
 }
 
@@ -130,37 +130,43 @@ export function SelectDateTime({
         <Text style={styles.subtitle}>예약 시간 선택</Text>
         {selectedCurriculum > 0 && (
           <View style={styles.availableTimes}>
-            {availableTimes.map((time) => (
-              <View key={time.time}>
-                {time.is_available ? (
-                  <TouchableOpacity
-                    style={[
-                      styles.timeChip,
-                      selectedTime === time.time && {
-                        backgroundColor: theme.primary,
-                        borderColor: theme.primary,
-                      },
-                    ]}
-                    onPress={() => setSelectedTime(time.time)}
-                    testID={`time-${time.time}`}
-                  >
-                    <Text
-                      style={
-                        selectedTime === time.time && {
-                          color: theme.background,
-                        }
-                      }
-                    >
-                      {time.time}
-                    </Text>
-                  </TouchableOpacity>
-                ) : (
-                  <View style={styles.disabledChip}>
-                    <Text style={styles.disabledText}>{time.time}</Text>
+            {availableTimes === null ? (
+              <Text style={styles.closedText}>아카데미 휴무일입니다.</Text>
+            ) : (
+              <>
+                {availableTimes.map((time) => (
+                  <View key={time.time}>
+                    {time.is_available ? (
+                      <TouchableOpacity
+                        style={[
+                          styles.timeChip,
+                          selectedTime === time.time && {
+                            backgroundColor: theme.primary,
+                            borderColor: theme.primary,
+                          },
+                        ]}
+                        onPress={() => setSelectedTime(time.time)}
+                        testID={`time-${time.time}`}
+                      >
+                        <Text
+                          style={
+                            selectedTime === time.time && {
+                              color: theme.background,
+                            }
+                          }
+                        >
+                          {time.time}
+                        </Text>
+                      </TouchableOpacity>
+                    ) : (
+                      <View style={styles.disabledChip}>
+                        <Text style={styles.disabledText}>{time.time}</Text>
+                      </View>
+                    )}
                   </View>
-                )}
-              </View>
-            ))}
+                ))}
+              </>
+            )}
           </View>
         )}
       </View>
@@ -231,6 +237,12 @@ const createStyles = (theme: ThemeColorType) =>
       borderRadius: 4,
       borderWidth: 1,
       borderColor: theme.border,
+    },
+    closedText: {
+      paddingVertical: 36,
+      fontSize: 14,
+      fontWeight: "bold",
+      color: theme.mediumEmphasis,
     },
     disabledChip: {
       alignItems: "center",
