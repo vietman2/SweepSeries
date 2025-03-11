@@ -12,20 +12,27 @@ interface Props {
   setSelectedTeam: (teamId: number) => void;
 }
 
-export function SelectTeam({ program, selectedTeam, setSelectedTeam }: Readonly<Props>) {
+export function SelectTeam({
+  program,
+  selectedTeam,
+  setSelectedTeam,
+}: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  useEffect(() => {
+    if (program.random_assignment) setSelectedTeam(-1);
+  }, [program]);
+
   if (program.random_assignment) {
     // 아카데미에서 코치 임의 배정
-    useEffect(() => {
-      setSelectedTeam(-1);
-    }, [program.random_assignment]);
 
     return (
       <View style={styles.wrapper}>
         <Text style={styles.subtitle}>레슨 팀</Text>
-        <Text style={styles.subtitle}>해당 레슨은 아카데미에서 코치를 배정합니다.</Text>
+        <Text style={styles.subtitle}>
+          해당 레슨은 아카데미에서 코치를 배정합니다.
+        </Text>
       </View>
     );
   }
@@ -36,7 +43,10 @@ export function SelectTeam({ program, selectedTeam, setSelectedTeam }: Readonly<
       <View style={styles.wrapper}>
         <Text style={styles.subtitle}>레슨 팀</Text>
         <View style={styles.selectedCoachTeam}>
-          <TouchableOpacity onPress={() => setSelectedTeam(0)} testID="unselect-team">
+          <TouchableOpacity
+            onPress={() => setSelectedTeam(0)}
+            testID="unselect-team"
+          >
             <Text style={{ color: theme.primary }}>다시 선택하기</Text>
           </TouchableOpacity>
         </View>
