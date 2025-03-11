@@ -1,4 +1,5 @@
 import uuid
+from datetime import time
 from django.db import models
 
 from auth.person.models import Person
@@ -43,7 +44,7 @@ class Coach(models.Model):
     ## 캘린더 설정
     notifications       = models.BooleanField(default=True)
     notifications_today = models.BooleanField(default=True)
-    daily_time          = models.TimeField(null=True, blank=True, default="09:00:00")
+    daily_time          = models.TimeField(null=True, blank=True, default=time(9, 0))
 
     objects         = models.Manager()
 
@@ -94,8 +95,8 @@ class CoachWorkingHours(models.Model):
     day_of_week = models.PositiveSmallIntegerField(
         choices=DayChoices.choices
     )
-    start_time  = models.TimeField(default="09:00:00", validators=[validate_30_minutes_interval])
-    end_time    = models.TimeField(default="21:00:00", validators=[validate_30_minutes_interval])
+    start_time  = models.TimeField(default=time(9, 0), validators=[validate_30_minutes_interval])
+    end_time    = models.TimeField(default=time(9, 0), validators=[validate_30_minutes_interval])
     is_off      = models.BooleanField(default=False)
 
     objects     = WorkingHoursManager()
@@ -109,8 +110,8 @@ class SpecialWorkingDay(models.Model):
 
     date        = models.DateField()
     reason      = models.CharField(max_length=50)
-    start_time  = models.TimeField(default="09:00:00", validators=[validate_30_minutes_interval])
-    end_time    = models.TimeField(default="21:00:00", validators=[validate_30_minutes_interval])
+    start_time  = models.TimeField(default=time(9, 0), validators=[validate_30_minutes_interval])
+    end_time    = models.TimeField(default=time(9, 0), validators=[validate_30_minutes_interval])
     is_off      = models.BooleanField(default=False)
 
     objects     = models.Manager()
