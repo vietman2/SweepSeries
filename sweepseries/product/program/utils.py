@@ -70,6 +70,24 @@ def generate_time_slots_from_academy(program, date):
 
     return (slots, academy_open_time, academy_close_time)
 
+def filter_coach_working_hours(team, date, open_time, close_time):
+    aggregated_start = open_time
+    aggregated_end = close_time
+
+    for coach in team.coaches.all():
+        coach_work_hours = get_working_hours(coach, date)
+
+        if coach_work_hours is None:
+            ## 한명의 코치라도 불가능하다면, 모든 슬롯이 불가능
+            return None
+
+        coach_open_time, coach_close_time = coach_work_hours
+
+        aggregated_start = max(aggregated_start, coach_open_time)
+        aggregated_end = min(aggregated_end, coach_close_time)
+
+    return (aggregated_start, aggregated_end)
+
 def filter_session_times(team, date, slots, aggregated_start, aggregated_end):
     session_times = get_unavailable_session_times(team.coaches, date)
 
@@ -129,20 +147,13 @@ def get_available_times(program, team, date):
         raise serializers.ValidationError("팀을 선택해야 합니다.")
 
     # 4. 코치들의 근무 시간을 필터. 유저가 선택한 코치 중, 한명이라도 불가능한 시간대는, 불가능하다.
-    aggregated_start = academy_open_time
-    aggregated_end = academy_close_time
+    result = filter_coach_working_hours(team, date, academy_open_time, academy_close_time)
 
-    for coach in team.coaches.all():
-        coach_work_hours = get_working_hours(coach, date)
+    if result is None:
+        return [{"time": slot, "is_available": False} for slot in slots]
 
-        if coach_work_hours is None:
-            ## 한명의 코치라도 불가능하다면, 모든 슬롯이 불가능
-            return [{"time": slot, "is_available": False} for slot in slots]
-
-        coach_open_time, coach_close_time = coach_work_hours
-
-        aggregated_start = max(aggregated_start, coach_open_time)
-        aggregated_end = min(aggregated_end, coach_close_time)
+    aggregated_start = result[0]
+    aggregated_end = result[1]
 
     # 5. 코치들의 예약된 시간 필터
     return filter_session_times(team, date, slots, aggregated_start, aggregated_end)
