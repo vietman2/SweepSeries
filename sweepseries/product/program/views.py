@@ -184,7 +184,7 @@ class ProgramViewSet(ModelViewSet):
 
         times = get_available_times(program, team, date)
 
-        return Response(times, status=status.HTTP_200_OK)
+        return Response(data={"times": times}, status=status.HTTP_200_OK)
 
 class CoachTeamViewSet(ModelViewSet):
     queryset = CoachTeam.objects.all()
