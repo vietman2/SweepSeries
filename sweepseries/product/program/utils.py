@@ -88,6 +88,14 @@ def filter_coach_working_hours(team, date, open_time, close_time):
 
     return (aggregated_start, aggregated_end)
 
+def is_time_conflicting(slot_start_dt, slot_end_dt, session_times, date):
+    for res_start, res_end in session_times:
+        res_start_dt = datetime.combine(date, res_start)
+        res_end_dt = datetime.combine(date, res_end)
+        if slot_start_dt < res_end_dt and slot_end_dt > res_start_dt:
+            return True
+    return False
+
 def filter_session_times(team, date, slots, aggregated_start, aggregated_end):
     session_times = get_unavailable_session_times(team.coaches, date)
 
@@ -97,25 +105,14 @@ def filter_session_times(team, date, slots, aggregated_start, aggregated_end):
         slot_start = datetime.strptime(slot, "%H:%M").time()
         slot_start_dt = datetime.combine(date, slot_start)
         slot_end_dt = slot_start_dt + timedelta(minutes=30)
-        slot_end = slot_end_dt.time()
 
-        if slot_start >= aggregated_start and slot_end <= aggregated_end:
-            ## 근무 시간 내에 있는 슬롯. 예약된 시간이 없는지 확인
-            conflict = False
-            for res_start, res_end in session_times:
-                res_start_dt = datetime.combine(date, res_start)
-                res_end_dt = datetime.combine(date, res_end)
-                if slot_start_dt < res_end_dt and slot_end_dt > res_start_dt:
-                    conflict = True
-                    break
-            available = not conflict
+        # Check if within working hours and has no conflicts
+        if aggregated_start <= slot_start <= aggregated_end and not is_time_conflicting(slot_start_dt, slot_end_dt, session_times, date):
+            available = True
         else:
             available = False
 
-        available_times.append({
-            "time": slot,
-            "is_available": available
-        })
+        available_times.append({"time": slot, "is_available": available})
 
     return available_times
 
