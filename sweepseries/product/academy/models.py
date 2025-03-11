@@ -1,10 +1,12 @@
 import uuid
+from datetime import time
 from django.core.validators import MinValueValidator as Min, MaxValueValidator as Max
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 from auth.person.models import Person
 from auth.user.models import User
+from product.validators import validate_30_minutes_interval
 from .enums import FacilityTypeChoices, DayChoices, NoticeTypeChoices, CalendarScopeChoices
 
 class AcademyFacility(models.Model):
@@ -56,7 +58,7 @@ class Academy(models.Model):
     ## 캘린더 설정 (오너의 알림 설정)
     notifications       = models.BooleanField(default=True)
     notifications_today = models.BooleanField(default=True)
-    daily_time          = models.TimeField(null=True, blank=True, default="09:00:00")
+    daily_time          = models.TimeField(null=True, blank=True, default=time(9, 0))
     calendar_scope      = models.PositiveSmallIntegerField(
         choices=CalendarScopeChoices.choices, default=CalendarScopeChoices.ALL
     )
@@ -77,7 +79,7 @@ class AcademyStudent(models.Model):
     ## 캘린더 설정
     notifications       = models.BooleanField(default=True)
     notifications_today = models.BooleanField(default=True)
-    daily_time          = models.TimeField(null=True, blank=True, default="09:00:00")
+    daily_time          = models.TimeField(null=True, blank=True, default=time(9, 0))
 
     objects     = models.Manager()
 
@@ -136,8 +138,8 @@ class BusinessHours(models.Model):
     academy     = models.ForeignKey(
         Academy, on_delete=models.CASCADE, related_name='business_hours'
     )
-    open_time   = models.TimeField(default="09:00:00")
-    close_time  = models.TimeField(default="21:00:00")
+    open_time   = models.TimeField(default=time(9, 0), validators=[validate_30_minutes_interval])
+    close_time  = models.TimeField(default=time(21, 0), validators=[validate_30_minutes_interval])
     day_of_week = models.PositiveSmallIntegerField(
         choices=DayChoices.choices
     )
@@ -149,6 +151,21 @@ class BusinessHours(models.Model):
     class Meta:
         db_table = 'business_hours'
         unique_together = ('academy', 'day_of_week')
+
+class SpecialDay(models.Model):
+    academy     = models.ForeignKey(Academy, on_delete=models.CASCADE, related_name='special_days')
+
+    date        = models.DateField()
+    reason      = models.CharField(max_length=50)
+    start_time  = models.TimeField(default=time(9, 0), validators=[validate_30_minutes_interval])
+    end_time    = models.TimeField(default=time(21, 0), validators=[validate_30_minutes_interval])
+    is_closed   = models.BooleanField(default=True)
+
+    objects     = models.Manager()
+
+    class Meta:
+        db_table = 'special_day'
+        unique_together = ('academy', 'date')
 
 class AcademyNotice(models.Model):
     academy     = models.ForeignKey(Academy, on_delete=models.CASCADE, related_name='notices')

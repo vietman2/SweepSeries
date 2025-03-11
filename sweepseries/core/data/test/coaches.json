@@ -34,5 +34,159 @@
       "status": 1,
       "professions": [1, 2, 3]
     }
+  },
+  {
+    "model": "coach.coachworkinghours",
+    "pk": 1,
+    "fields": {
+      "coach": "923e4567-e89b-12d3-a456-426614174999",
+      "day_of_week": 0,
+      "start_time": "09:00:00",
+      "end_time": "21:00:00",
+      "is_off": false
+    }
+  },
+  {
+    "model": "coach.coachworkinghours",
+    "pk": 2,
+    "fields": {
+      "coach": "923e4567-e89b-12d3-a456-426614174999",
+      "day_of_week": 1,
+      "start_time": "09:00:00",
+      "end_time": "21:00:00",
+      "is_off": false
+    }
+  },
+  {
+    "model": "coach.coachworkinghours",
+    "pk": 3,
+    "fields": {
+      "coach": "923e4567-e89b-12d3-a456-426614174999",
+      "day_of_week": 2,
+      "start_time": "09:00:00",
+      "end_time": "22:00:00",
+      "is_off": false
+    }
+  },
+  {
+    "model": "coach.coachworkinghours",
+    "pk": 4,
+    "fields": {
+      "coach": "923e4567-e89b-12d3-a456-426614174999",
+      "day_of_week": 3,
+      "start_time": "09:00:00",
+      "end_time": "16:00:00",
+      "is_off": false
+    }
+  },
+  {
+    "model": "coach.coachworkinghours",
+    "pk": 5,
+    "fields": {
+      "coach": "923e4567-e89b-12d3-a456-426614174999",
+      "day_of_week": 4,
+      "start_time": "14:00:00",
+      "end_time": "21:00:00",
+      "is_off": false
+    }
+  },
+  {
+    "model": "coach.coachworkinghours",
+    "pk": 6,
+    "fields": {
+      "coach": "923e4567-e89b-12d3-a456-426614174999",
+      "day_of_week": 5,
+      "start_time": "09:00:00",
+      "end_time": "21:00:00",
+      "is_off": true
+    }
+  },
+  {
+    "model": "coach.coachworkinghours",
+    "pk": 7,
+    "fields": {
+      "coach": "923e4567-e89b-12d3-a456-426614174999",
+      "day_of_week": 6,
+      "start_time": "09:00:00",
+      "end_time": "21:00:00",
+      "is_off": true
+    }
+  },
+  {
+    "model": "coach.coachworkinghours",
+    "pk": 8,
+    "fields": {
+      "coach": "823e4567-e89b-12d3-a456-426614174999",
+      "day_of_week": 0,
+      "start_time": "09:00:00",
+      "end_time": "21:00:00",
+      "is_off": false
+    }
+  },
+  {
+    "model": "coach.coachworkinghours",
+    "pk": 9,
+    "fields": {
+      "coach": "823e4567-e89b-12d3-a456-426614174999",
+      "day_of_week": 1,
+      "start_time": "09:00:00",
+      "end_time": "21:00:00",
+      "is_off": false
+    }
+  },
+  {
+    "model": "coach.coachworkinghours",
+    "pk": 10,
+    "fields": {
+      "coach": "823e4567-e89b-12d3-a456-426614174999",
+      "day_of_week": 2,
+      "start_time": "09:00:00",
+      "end_time": "21:00:00",
+      "is_off": false
+    }
+  },
+  {
+    "model": "coach.coachworkinghours",
+    "pk": 11,
+    "fields": {
+      "coach": "823e4567-e89b-12d3-a456-426614174999",
+      "day_of_week": 3,
+      "start_time": "09:00:00",
+      "end_time": "21:00:00",
+      "is_off": false
+    }
+  },
+  {
+    "model": "coach.coachworkinghours",
+    "pk": 12,
+    "fields": {
+      "coach": "823e4567-e89b-12d3-a456-426614174999",
+      "day_of_week": 4,
+      "start_time": "09:00:00",
+      "end_time": "21:00:00",
+      "is_off": false
+    }
+  },
+  {
+    "model": "coach.coachworkinghours",
+    "pk": 13,
+    "fields": {
+      "coach": "823e4567-e89b-12d3-a456-426614174999",
+      "day_of_week": 5,
+      "start_time": "09:00:00",
+      "end_time": "21:00:00",
+      "is_off": false
+    }
+  },
+  {
+    "model": "coach.coachworkinghours",
+    "pk": 14,
+    "fields": {
+      "coach": "823e4567-e89b-12d3-a456-426614174999",
+      "day_of_week": 6,
+      "start_time": "09:00:00",
+      "end_time": "21:00:00",
+      "is_off": true
+    }
   }
 ]

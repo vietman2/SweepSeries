@@ -8,6 +8,7 @@ import {
   sampleCurriculums,
   timeOptions,
   sampleCoachTeam,
+  sampleAvailableTimes,
 } from "./programs";
 import { sampleReviews } from "./review";
 import { sampleStudents, sampleStudentLesson } from "./students";
@@ -24,6 +25,7 @@ export {
   sampleCurriculums,
   timeOptions,
   sampleCoachTeam,
+  sampleAvailableTimes,
   sampleReviews,
   sampleStudents,
   sampleStudentLesson,

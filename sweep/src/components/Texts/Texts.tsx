@@ -26,14 +26,19 @@ export function InputTitle({ title, subtitle }: Readonly<Props>) {
 interface CalloutProps {
   text: string;
   color?: string;
+  align?: "flex-start" | "center";
 }
 
-export function CalloutSmall({ text, color }: Readonly<CalloutProps>) {
+export function CalloutSmall({
+  text,
+  color,
+  align = "flex-start",
+}: Readonly<CalloutProps>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   return (
-    <View style={styles.calloutSmall}>
+    <View style={[styles.calloutSmall, { alignItems: align }]}>
       <Text style={[styles.calloutText, color && { color }]}>{text}</Text>
     </View>
   );

@@ -159,7 +159,11 @@ export function ProgramEdit() {
         setPositionOptions(response.positions);
         setCoachOptions(response.coaches);
       } else {
-        alert("프로그램 불러오기 실패", "프로그램 정보를 불러오는데 실패했습니다.", router.back);
+        alert(
+          "프로그램 불러오기 실패",
+          "프로그램 정보를 불러오는데 실패했습니다.",
+          router.back
+        );
       }
     };
 
@@ -262,7 +266,7 @@ export function ProgramEdit() {
                       <CoachTeam
                         key={team.id}
                         team={team}
-                        removeTeam={() => removeTeam(team.id)}
+                        onPress={() => removeTeam(team.id)}
                       />
                     ))}
                   </View>

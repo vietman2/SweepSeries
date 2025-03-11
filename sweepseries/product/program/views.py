@@ -1,3 +1,5 @@
+from datetime import datetime
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from rest_framework import status
 from rest_framework.decorators import action
@@ -15,7 +17,7 @@ from .models import Program, Target, Position, CoachTeam
 from .serializers import (
     ProgramSerializer, TargetSerializer, PositionSerializer, CoachTeamSerializer
 )
-from .utils import update_curriculums
+from .utils import update_curriculums, get_available_times
 
 class ProgramViewSet(ModelViewSet):
     queryset = Program.objects.all()
@@ -158,6 +160,31 @@ class ProgramViewSet(ModelViewSet):
         program.save()
 
         return Response({"message": "프로그램 코치 임의 배정이 수정되었습니다."}, status=status.HTTP_200_OK)
+
+    @extend_schema(summary="프로그램 레슨 가능 시간 조회", tags=["프로그램"])
+    @action(detail=True, methods=['get'])
+    def available_times(self, request, *args, **kwargs):    ## pylint: disable=unused-argument
+        program = self.get_object()
+        date = request.query_params.get("date")
+        team_id = request.query_params.get("team", None)
+
+        if date is None:
+            return Response({"message": "잘못된 요청입니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            date = datetime.strptime(date, "%Y-%m-%d").date()
+            if team_id is not None:
+                team = CoachTeam.objects.get(id=team_id)
+            else:
+                team = None
+        except ValueError:
+            return Response({"message": "날짜 형식이 올바르지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
+        except ObjectDoesNotExist:
+            return Response({"message": "코치팀이 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
+
+        times = get_available_times(program, team, date)
+
+        return Response(data={"times": times}, status=status.HTTP_200_OK)
 
 class CoachTeamViewSet(ModelViewSet):
     queryset = CoachTeam.objects.all()

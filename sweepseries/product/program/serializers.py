@@ -56,6 +56,7 @@ class ProgramSerializer(serializers.ModelSerializer):
     curriculums         = serializers.SerializerMethodField()
     lowest_price        = serializers.SerializerMethodField()
     academy_uuid        = serializers.SerializerMethodField()
+    rating              = serializers.SerializerMethodField()
     random_assignment   = serializers.SerializerMethodField()
     teams               = serializers.SerializerMethodField()
     academy             = serializers.UUIDField(write_only=True)
@@ -68,7 +69,7 @@ class ProgramSerializer(serializers.ModelSerializer):
         model = Program
         fields = [
             "id", "name", "duration", "target", "positions",
-            "curriculums", "lowest_price", "academy_uuid",
+            "curriculums", "lowest_price", "academy_uuid", "rating",
             "random_assignment", "teams",
             "academy", "target_id", "positions_id",
             "curriculum_data", "coach_team"
@@ -79,6 +80,10 @@ class ProgramSerializer(serializers.ModelSerializer):
 
     def get_academy_uuid(self, obj):
         return obj.academy.uuid
+
+    def get_rating(self, obj):      ## pylint: disable=unused-argument
+        ## TODO: Implement rating calculation
+        return 0.0
 
     def get_curriculums(self, obj):
         curriculums = obj.curriculums.filter(is_deleted=False)

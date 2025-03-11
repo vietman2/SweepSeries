@@ -38,8 +38,8 @@ jest.mock("@fragments/Program", () => {
   const { TouchableOpacity } = jest.requireActual("react-native");
 
   return {
-    CoachTeam: ({ removeTeam }: { removeTeam: (index: number) => void }) => (
-      <TouchableOpacity onPress={() => removeTeam(1)} testID="remove-team" />
+    CoachTeam: ({ removeTeam }: { removeTeam: () => void }) => (
+      <TouchableOpacity onPress={removeTeam} testID="remove-team" />
     ),
     CurriculumModal: ({ submit }: { submit: () => void }) => (
       <TouchableOpacity onPress={submit} testID="save-curriculum" />

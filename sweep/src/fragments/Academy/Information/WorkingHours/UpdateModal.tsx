@@ -93,6 +93,23 @@ export function UpdateModal({
   };
 
   const editWorkingHours = async () => {
+    // 분 단위가 반드시 00 또는 30이어야 함
+    const isValid = scheduleInputs.every((schedule) => {
+      const openTime = schedule.open_time.split(":");
+      const closeTime = schedule.close_time.split(":");
+      return (
+        parseInt(openTime[1]) === 0 ||
+        parseInt(openTime[1]) === 30 ||
+        parseInt(closeTime[1]) === 0 ||
+        parseInt(closeTime[1]) === 30
+      );
+    });
+
+    if (!isValid) {
+      alert("수정 실패", "분 단위는 00 또는 30이어야 합니다.");
+      return;
+    }
+
     const response = await updateBusinessHours(
       id,
       scheduleInputs,

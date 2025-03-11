@@ -4,6 +4,7 @@ import {
   PositionTargetType,
   OptionType,
   TeamType,
+  AvailableTimesType,
 } from "@models/products";
 
 export const sampleProgramPositions: PositionTargetType[] = [
@@ -41,6 +42,11 @@ export const sampleCurriculums = [
   },
 ];
 
+export const sampleCoachTeam: TeamType = {
+  id: 1,
+  coaches: sampleCoaches,
+};
+
 export const sampleAcademyPrograms: ProgramSimpleType[] = [
   {
     id: 1,
@@ -65,8 +71,8 @@ export const sampleAcademyPrograms: ProgramSimpleType[] = [
     duration: 60,
     academy_uuid: "1",
     curriculums: sampleCurriculums,
-    random_assignment: true,
-    teams: [],
+    random_assignment: false,
+    teams: [sampleCoachTeam],
   },
   {
     id: 3,
@@ -96,11 +102,6 @@ export const sampleAcademyPrograms: ProgramSimpleType[] = [
   },
 ];
 
-export const sampleCoachTeam: TeamType = {
-  id: 1,
-  coaches: sampleCoaches,
-};
-
 export const timeOptions: OptionType[] = [
   { id: 30, name: "30분" },
   { id: 60, name: "60분" },
@@ -108,4 +109,23 @@ export const timeOptions: OptionType[] = [
   { id: 120, name: "120분" },
   { id: 150, name: "150분" },
   { id: 180, name: "180분" },
+];
+
+export const sampleAvailableTimes: AvailableTimesType[] = [
+  {
+    time: "09:00",
+    is_available: true,
+  },
+  {
+    time: "09:30",
+    is_available: true,
+  },
+  {
+    time: "10:00",
+    is_available: false,
+  },
+  {
+    time: "10:30",
+    is_available: false,
+  },
 ];

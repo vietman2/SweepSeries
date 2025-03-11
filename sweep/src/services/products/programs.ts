@@ -191,3 +191,53 @@ export async function toggleCoachSelect(programId: number | undefined) {
     return null;
   }
 }
+
+export async function getAvailableTimes(
+  programId: number | undefined,
+  teamId: number,
+  date: string
+) {
+  if (!programId) {
+    return null;
+  }
+
+  const params = {
+    date,
+    team: teamId,
+  };
+
+  try {
+    const response = await axios.get(
+      `/v1/programs/${programId}/available_times/`,
+      { params }
+    );
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
+export async function createLessonRequest(
+  programId: number | undefined,
+  teamId: number,
+  startDateTime: Date,
+  curriculum: number
+) {
+  if (!programId) {
+    return null;
+  }
+
+  try {
+    const response = await axios.post("/v1/lessons/create_request/", {
+      program: programId,
+      team: teamId,
+      start_datetime: startDateTime,
+      curriculum,
+    });
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}

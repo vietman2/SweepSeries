@@ -1,3 +1,4 @@
+from datetime import datetime, time
 from django.db.models import Q
 from django.utils import timezone
 
@@ -91,3 +92,22 @@ def get_daily_sessions(user, date, role='personal', academy=None):
     serializer.context['user'] = user
 
     return serializer.data
+
+def get_unavailable_session_times(coaches, date):
+    session_times = []
+
+    tz = timezone.get_current_timezone()
+    start_dt = timezone.make_aware(datetime.combine(date, time.min), tz)
+    end_dt = timezone.make_aware(datetime.combine(date, time.max), tz)
+
+    q = Q(start_datetime__range=[start_dt, end_dt])
+    q &= Q(coaches__in=coaches.all())
+
+    sessions = Session.objects.filter(q).distinct()
+
+    for session in sessions:
+        local_start = session.start_datetime.astimezone(tz)
+        local_end = session.end_datetime.astimezone(tz)
+        session_times.append((local_start.time(), local_end.time()))
+
+    return session_times

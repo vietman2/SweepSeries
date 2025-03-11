@@ -14,6 +14,7 @@ import {
   OptionType,
   TeamType,
   TeamInputType,
+  AvailableTimesType,
 } from "./program";
 import { ReviewType, ReplyType } from "./review";
 import {
@@ -38,6 +39,7 @@ export {
   OptionType,
   TeamType,
   TeamInputType,
+  AvailableTimesType,
   ReviewType,
   ReplyType,
   StudentSimpleType,

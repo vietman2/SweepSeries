@@ -10,14 +10,18 @@ jest.mock("@fragments/Coach", () => ({
 
 describe("<CoachTeam />", () => {
   it("renders the coaches", () => {
-    renderWithProviders(<CoachTeam team={sampleCoachTeam} />);
+    const { getByTestId } = renderWithProviders(
+      <CoachTeam team={sampleCoachTeam} onPress={jest.fn()} />
+    );
+
+    fireEvent.press(getByTestId("remove"));
   });
 
   it("handles remove", () => {
     const { getByTestId } = renderWithProviders(
-      <CoachTeam team={sampleCoachTeam} removeTeam={jest.fn()} />
+      <CoachTeam team={sampleCoachTeam} type={2} onPress={jest.fn()} />
     );
 
-    fireEvent.press(getByTestId("remove"));
+    fireEvent.press(getByTestId("button"));
   });
 });

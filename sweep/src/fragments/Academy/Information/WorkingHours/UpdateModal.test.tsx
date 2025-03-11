@@ -30,6 +30,32 @@ describe("<UpdateModal />", () => {
     });
   });
 
+  it("handles incorrect input", async () => {
+    jest.spyOn(AcademiesAPI, "updateBusinessHours").mockResolvedValue({});
+    const badData = {
+      open_time: "09:15",
+      close_time: "18:00",
+      is_closed: false,
+      is_allday: false,
+    };
+
+    const { getByTestId } = renderWithProviders(
+      <UpdateModal
+        schedule={sampleAcademyDetail.schedules}
+        initialSchedule={[badData, badData, badData, badData, badData, badData, badData]}
+        modalVisible
+        hideModal={jest.fn()}
+        onRefresh={jest.fn()}
+      />
+    );
+
+    await waitFor(() => {
+      fireEvent.changeText(getByTestId("openTime"), "09:10");
+      fireEvent.changeText(getByTestId("closeTime"), "18:10");
+      fireEvent.press(getByTestId("저장"));
+    });
+  });
+
   it("should update without refresh", async () => {
     jest.spyOn(AcademiesAPI, "updateBusinessHours").mockResolvedValue({});
     const { getByTestId } = renderWithProviders(

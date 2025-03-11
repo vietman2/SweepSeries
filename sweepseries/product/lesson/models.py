@@ -4,7 +4,8 @@ from auth.person.models import Person
 from core.models import TimeStampedModel
 from product.coach.models import Coach
 from product.contract.models import Contract
-from product.program.models import Program
+from product.program.models import Program, Curriculum
+from product.validators import validate_30_minutes_interval
 
 class Lesson(TimeStampedModel):
     program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='lessons')
@@ -21,8 +22,8 @@ class Session(models.Model):
     lesson          = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='sessions')
     coaches         = models.ManyToManyField(Coach, related_name='sessions')
     contract        = models.ForeignKey(Contract, on_delete=models.CASCADE, related_name='sessions')
-    start_datetime  = models.DateTimeField()
-    end_datetime    = models.DateTimeField()
+    start_datetime  = models.DateTimeField(validators=[validate_30_minutes_interval])
+    end_datetime    = models.DateTimeField(validators=[validate_30_minutes_interval])
 
     notify          = models.BooleanField(default=False)
     notify_time     = models.DateTimeField(null=True, blank=True)
@@ -34,3 +35,17 @@ class Session(models.Model):
 
     class Meta:
         db_table = 'sessions'
+
+class SessionRequest(TimeStampedModel):
+    program         = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='requests')
+    student         = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='requests')
+    coaches         = models.ManyToManyField(Coach, blank=True, related_name='requests')
+    curriculum      = models.ForeignKey(
+        Curriculum, on_delete=models.CASCADE, related_name='requests'
+    )
+    start_datetime  = models.DateTimeField(validators=[validate_30_minutes_interval])
+
+    objects         = models.Manager()
+
+    class Meta:
+        db_table = 'session_requests'
