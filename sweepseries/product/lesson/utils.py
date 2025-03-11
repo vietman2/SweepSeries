@@ -1,8 +1,13 @@
 from datetime import datetime, time
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+from django.db.transaction import atomic
 from django.utils import timezone
+from rest_framework.exceptions import ValidationError
 
-from .models import Session
+from product.lesson.models import Session
+from .managers import add_student_to_academy, get_contract, create_or_get_lesson, create_session
+from .models import Session, SessionRequest
 from .serializers import SessionSerializer
 
 def get_simple_sessions_from_query(data, q, user, do_encoding=False):
@@ -68,7 +73,7 @@ def get_daily_sessions(user, date, role='personal', academy=None):
         )
         sessions = Session.objects.filter(q).distinct()
 
-        return SessionSerializer(sessions, many=True).data
+        return sessions
 
     do_encoding = False
 
@@ -111,3 +116,33 @@ def get_unavailable_session_times(coaches, date):
         session_times.append((local_start.time(), local_end.time()))
 
     return session_times
+
+def accept_requests(request_ids):
+    ## 세션 요청을 수락한다.
+    ## 세션을 생성해야 한다.
+    try:
+        with atomic():
+            for id in request_ids:
+                request = SessionRequest.objects.get(id=id)
+                request.accepted = True
+                request.save()
+
+                student = request.student
+
+                add_student_to_academy(student, request.program.academy)
+
+                contract = get_contract(student, request.curriculum)
+
+                lesson = create_or_get_lesson(request.program, request.coaches.all(), student)
+                create_session(
+                    data={
+                        'lesson': lesson, 'start_datetime': request.start_datetime,
+                        'coaches': request.coaches.all(), 'contract': contract,
+                        'program': request.program
+                    }
+                )
+
+    except ObjectDoesNotExist:
+        raise ValidationError("해당 레슨 요청이 존재하지 않습니다.")
+
+    return True

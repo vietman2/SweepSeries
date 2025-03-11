@@ -1,15 +1,15 @@
 from datetime import timedelta
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.transaction import atomic
 from django.utils import timezone
 from rest_framework import serializers
 
-from auth.person.models import Person
 from core.utils import get_duration_text, get_time_text
-from product.academy.models import AcademyStudent
 from product.coach.models import Coach
-from product.contract.models import Contract
 from product.program.models import Program, Curriculum, CoachTeam
+from .managers import (
+    create_or_get_lesson, get_contract, get_or_create_new_student,
+    add_student_to_academy, create_session
+)
 from .models import Lesson, Session, SessionRequest
 
 class LessonSerializer(serializers.ModelSerializer):
@@ -30,79 +30,6 @@ class LessonSerializer(serializers.ModelSerializer):
 
         return value
 
-    def get_or_create_new_student(self, person_id, name, phone_number):
-        if person_id is not None and person_id > 0:
-            return Person.objects.get(id=person_id)
-
-        try:
-            person = Person.objects.get(phone_number=phone_number)
-        except ObjectDoesNotExist:
-            person = Person.objects.create(name=name, phone_number=phone_number)
-
-        return person
-
-    def get_or_create_contract(self, person, curriculum_id):
-        ## Case 1. 계약이 없는 경우: 새로 생성
-        ##  Case 1-1. DB에 없는 Person
-        ##  Case 1-2. DB에 있지만, 아카데미에 새로 등록하는 Person
-        ##  Case 1-3. 아카데미에 등록되어 있지만, 해당 프로그램/커리큘럼은 처음 수강하는 경우
-        ## Case 2. 계약이 만료된 경우: 새로 생성
-        ## Case 3. 잔여 레슨이 있는 계약이 있는 경우: 해당 계약 반환하고, num_scheduled_lessons + 1
-
-        curriculum = Curriculum.objects.get(id=curriculum_id)
-
-        contract = Contract.objects.filter(customer=person, curriculum=curriculum).first()
-
-        if contract is None:
-            ## Case 1.
-            contract = Contract.objects.create(customer=person, curriculum=curriculum)
-
-        ## 잔여 레슨이 있는지 확인
-        if contract.curriculum.num_lessons > contract.scheduled_lessons:
-            ## Case 3.
-            contract.scheduled_lessons += 1
-            contract.save()
-        else:
-            ## Case 2.
-            contract = Contract.objects.create(
-                customer=person,
-                curriculum=curriculum,
-                scheduled_lessons=1
-            )
-
-        return contract
-
-    def create_lesson(self, program, coaches, student):
-        if Lesson.objects.filter(program=program, student=student).exists():
-            lesson = Lesson.objects.get(program=program, student=student)
-        else:
-            lesson = Lesson.objects.create(program=program, student=student)
-
-        for coach in coaches:
-            lesson.coaches.add(coach)
-            lesson.save()
-
-        return lesson
-
-    def create_session(self, data):
-        duration = data['program'].duration
-        end_datetime = data['start_datetime'] + timedelta(minutes=duration)
-
-        session = Session.objects.create(
-            lesson=data['lesson'],
-            start_datetime=data['start_datetime'],
-            end_datetime=end_datetime,
-            contract=data['contract']
-        )
-        session.coaches.set(data['coaches'])
-
-        return session
-
-    def add_student_to_academy(self, student, academy):
-        ## add student to academy if not exists
-        if not academy.students.filter(person__pk=student.pk).exists():
-            AcademyStudent.objects.create(academy=academy, person=student)
-
     def create(self, validated_data):
         program_id = validated_data.pop('program')
         coach_uuids = validated_data.pop('coaches')
@@ -114,13 +41,14 @@ class LessonSerializer(serializers.ModelSerializer):
         coaches = [Coach.objects.get(uuid=uuid) for uuid in coach_uuids]
 
         with atomic():
-            student = self.get_or_create_new_student(person_id, name, person_data['phone'])
+            student = get_or_create_new_student(person_id, name, person_data['phone'])
 
-            self.add_student_to_academy(student, program.academy)
-            contract = self.get_or_create_contract(student, validated_data['curriculum_id'])
+            add_student_to_academy(student, program.academy)
+            curriculum = Curriculum.objects.get(id=validated_data['curriculum_id'])
+            contract = get_contract(student, curriculum)
 
-            lesson = self.create_lesson(program, coaches, student)
-            self.create_session(
+            lesson = create_or_get_lesson(program, coaches, student)
+            create_session(
                 data={
                     'lesson': lesson, 'start_datetime': validated_data['start_datetime'],
                     'coaches': coaches, 'contract': contract, 'program': program
@@ -240,6 +168,13 @@ class SessionDetailSerializer(SessionSerializer):
         return value
 
 class SessionRequestSerializer(serializers.ModelSerializer):
+    id              = serializers.IntegerField(read_only=True)
+    time            = serializers.SerializerMethodField()
+    title           = serializers.SerializerMethodField()
+    description     = serializers.SerializerMethodField()
+    details         = serializers.SerializerMethodField()
+    color           = serializers.SerializerMethodField()
+    date            = serializers.SerializerMethodField()
     program         = serializers.IntegerField(write_only=True)
     team            = serializers.IntegerField(write_only=True)
     start_datetime  = serializers.DateTimeField(write_only=True)
@@ -247,7 +182,42 @@ class SessionRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SessionRequest
-        fields = ['program', 'team', 'start_datetime', 'curriculum']
+        fields = [
+            'id', 'time', 'title', 'description', 'color', 'date', 'details',
+            'program', 'team', 'start_datetime', 'curriculum'
+        ]
+
+    def get_time(self, obj):
+        start_time = get_time_text(obj.start_datetime)
+        duration = obj.program.duration
+        end_datetime = obj.start_datetime + timedelta(minutes=duration)
+        end_time = get_time_text(end_datetime)
+
+        return f'{start_time} ~ {end_time} ({get_duration_text(timedelta(minutes=duration))})'
+
+    def get_title(self, obj):
+        return obj.program.name
+    
+    def get_description(self, obj):
+        ## return coaches names:
+        coaches = ', '.join([coach.person.name for coach in obj.coaches.all()])
+
+        return f'코치: {coaches}'
+
+    def get_details(self, obj):
+        ## TODO: 안심번호 개발하고, 예약자 연락처 추가!
+        return f"예약자 성명: {obj.student.name}\n* 예약 승인/거절에 대한 책임 여부는 당사자에게 있음을 알립니다."
+
+    def get_color(self, obj):   ## pylint: disable=unused-argument
+        return '#14863E'
+
+    def get_date(self, obj):
+        dow = ['월', '화', '수', '목', '금', '토', '일']
+        tz = timezone.get_current_timezone()
+        day = obj.start_datetime.astimezone(tz).day
+        dayofweek = obj.start_datetime.astimezone(tz).weekday()
+
+        return f'{day}일. {dow[dayofweek]}'
 
     def validate_program(self, value):
         if value <= 0:
