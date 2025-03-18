@@ -12,7 +12,7 @@ from auth.userprofile.models import UserProfile
 from core.permissions import AdminOnly
 from core.utils import is_admin_page
 from product.academy.models import Academy
-from product.validators import validate_instagram_url, normalize_instagram_url
+from product.validators import get_instagram_url
 from .enums import CoachApplicationStatus
 from .models import Coach, CoachLike
 from .permissions import IsSelf
@@ -317,14 +317,13 @@ class CoachViewSet(ModelViewSet):
             )
 
         try:
-            validate_instagram_url(instagram)
+            coach.instagram = get_instagram_url(instagram)
         except ValidationError as e:
             return Response(
                 status=status.HTTP_400_BAD_REQUEST,
                 data={"error": e.detail}
             )
 
-        coach.instagram = normalize_instagram_url(instagram)
         coach.blog = blog
         coach.save()
 
