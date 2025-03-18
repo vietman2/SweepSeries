@@ -72,8 +72,9 @@ def get_daily_sessions(user, date, role='personal', academy=None):
             Q(coaches__person=user.person)
         )
         sessions = Session.objects.filter(q).distinct()
+        serializer = SessionSerializer(sessions, many=True)
 
-        return sessions
+        return serializer.data
 
     do_encoding = False
 
