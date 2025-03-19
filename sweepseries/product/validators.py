@@ -1,5 +1,5 @@
 import re
-from urllib.parse import urlparse, urlunparse
+from urllib.parse import urlparse
 from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework.exceptions import ValidationError
 
