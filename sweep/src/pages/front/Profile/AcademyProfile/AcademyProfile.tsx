@@ -17,7 +17,7 @@ import { AcademyDetailType, FacilityType } from "@models/products";
 import { getFacilityOptions, getAcademyDetail } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
-export function ProfileManagement() {
+export function AcademyProfileManagement() {
   const [academy, setAcademy] = useState<AcademyDetailType>();
   const [facilityOptions, setFacilityOptions] = useState<FacilityType[]>([]);
   const [refreshCount, setRefreshCount] = useState<number>(0);

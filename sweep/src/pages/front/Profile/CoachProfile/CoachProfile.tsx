@@ -25,7 +25,7 @@ import {
 } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
-export function CoachProfile() {
+export function CoachProfileManagement() {
   const [coach, setCoach] = useState<CoachDetailType>();
   const [introInput, setIntroInput] = useState<string>("");
   const [introModalVisible, setIntroModalVisible] = useState<boolean>(false);
