@@ -23,7 +23,7 @@ class CoachSimpleSerializer(serializers.ModelSerializer):
     rating          = serializers.SerializerMethodField(read_only=True)
     num_reviews     = serializers.SerializerMethodField(read_only=True)
     is_liked        = serializers.SerializerMethodField(read_only=True)
-    instagram       = serializers.CharField(read_only=True)
+    instagram       = serializers.SerializerMethodField()
     blog            = serializers.CharField(read_only=True)
 
     class Meta:
@@ -57,6 +57,9 @@ class CoachSimpleSerializer(serializers.ModelSerializer):
             return False
 
         return obj.likes.filter(user=user).exists()
+
+    def get_instagram(self, obj):
+        return f"https://www.instagram.com/{obj.instagram}"
 
 class CoachStatusSerializer(serializers.ModelSerializer):
     name            = serializers.SerializerMethodField(read_only=True)

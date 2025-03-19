@@ -1,15 +1,15 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
-import { CoachProfile } from "./CoachProfile";
+import { CoachProfileManagement } from "./CoachProfile";
 import * as CoachesAPI from "@services/products/coach";
 import { sampleCoachDetail } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
-describe("<CoachProfile />", () => {
+describe("<CoachProfileManagement />", () => {
   it("handles data fetch fail", async () => {
     jest.spyOn(CoachesAPI, "getCoachDetails").mockResolvedValue(null);
 
-    renderWithProviders(<CoachProfile />);
+    renderWithProviders(<CoachProfileManagement />);
 
     await waitFor(() => {
       expect("LoadingComponent").toBeTruthy();
@@ -24,7 +24,7 @@ describe("<CoachProfile />", () => {
     jest.spyOn(CoachesAPI, "updateCoachSNS").mockResolvedValue(true);
 
     const { getByTestId, getAllByTestId } = renderWithProviders(
-      <CoachProfile />
+      <CoachProfileManagement />
     );
 
     await waitFor(() => {
@@ -46,17 +46,15 @@ describe("<CoachProfile />", () => {
   });
 
   it("handles intro and sns open and update fail", async () => {
-    jest
-      .spyOn(CoachesAPI, "getCoachDetails")
-      .mockResolvedValue({
-        ...sampleCoachDetail,
-        instagram: "instagram.com/instagramid",
-      });
+    jest.spyOn(CoachesAPI, "getCoachDetails").mockResolvedValue({
+      ...sampleCoachDetail,
+      instagram: "",
+    });
     jest.spyOn(CoachesAPI, "updateCoachIntro").mockResolvedValue(false);
     jest.spyOn(CoachesAPI, "updateCoachSNS").mockResolvedValue(false);
 
     const { getByTestId, getAllByTestId } = renderWithProviders(
-      <CoachProfile />
+      <CoachProfileManagement />
     );
 
     await waitFor(() => {

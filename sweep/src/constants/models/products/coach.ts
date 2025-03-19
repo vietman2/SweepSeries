@@ -13,6 +13,7 @@ export type CoachSimpleType = {
   is_liked: boolean;
   rating: number;
   num_reviews: number;
+  academy_uuid: string;
 };
 
 export type CoachDetailType = {

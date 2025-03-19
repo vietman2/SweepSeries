@@ -1,6 +1,6 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
-import { ProfileManagement } from "./Profile";
+import { AcademyProfileManagement } from "./AcademyProfile";
 import * as AcademiesAPI from "@services/products/academy";
 import { sampleAcademyDetail } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
@@ -18,13 +18,13 @@ jest.mock("@fragments/Academy", () => {
   };
 });
 
-describe("<ProfileManagement />", () => {
+describe("<AcademyProfileManagement />", () => {
   it("renders correctly", async () => {
     jest.spyOn(AcademiesAPI, "getFacilityOptions").mockResolvedValue([]);
     jest
       .spyOn(AcademiesAPI, "getAcademyDetail")
       .mockResolvedValue(sampleAcademyDetail);
-    const { getByTestId } = renderWithProviders(<ProfileManagement />);
+    const { getByTestId } = renderWithProviders(<AcademyProfileManagement />);
 
     await waitFor(() => fireEvent.press(getByTestId("intro")));
   });
@@ -33,6 +33,6 @@ describe("<ProfileManagement />", () => {
     jest.spyOn(AcademiesAPI, "getFacilityOptions").mockResolvedValue(null);
     jest.spyOn(AcademiesAPI, "getAcademyDetail").mockResolvedValue(null);
 
-    renderWithProviders(<ProfileManagement />);
+    renderWithProviders(<AcademyProfileManagement />);
   });
 });

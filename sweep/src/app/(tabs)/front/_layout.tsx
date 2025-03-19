@@ -156,7 +156,7 @@ function FrontStack() {
             >
               <CustomLogo
                 image={coach.profile_image}
-                text={coach.name}
+                text={`${coach.name} 코치`}
                 color={coach.uuid === uuid ? theme.logo : theme.lowEmphasis}
               />
               {coach.uuid === uuid && (
@@ -186,7 +186,7 @@ const createStyles = (theme: ThemeColorType) =>
       justifyContent: "center",
       paddingHorizontal: 16,
       paddingTop: 24,
-      paddingBottom: 56,
+      paddingBottom: 64,
       gap: 24,
     },
     academySelect: {

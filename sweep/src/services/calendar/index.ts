@@ -8,7 +8,14 @@ import {
   switchCalendarScope,
 } from "./calendars";
 import { createDiary } from "./diaries";
-import { createLesson, getCurriculum } from "./lessons";
+import {
+  createLesson,
+  getCurriculum,
+  getLessonRequests,
+  getDailyLessons,
+  acceptRequests,
+  rejectRequests,
+} from "./lessons";
 import { createSchedule } from "./schedules";
 import {
   getSessions,
@@ -29,6 +36,10 @@ export {
   createDiary,
   createLesson,
   getCurriculum,
+  getLessonRequests,
+  getDailyLessons,
+  acceptRequests,
+  rejectRequests,
   createSchedule,
   getSessions,
   getSessionDetails,

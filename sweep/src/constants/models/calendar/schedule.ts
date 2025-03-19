@@ -27,3 +27,13 @@ export type LessonDetailType = {
   coaches: number[];
   student: string;
 } & LessonType;
+
+export type LessonRequestType = {
+  id: number;
+  time: string;
+  title: string;
+  description: string;
+  details: string;
+  color: string;
+  date: string;
+}

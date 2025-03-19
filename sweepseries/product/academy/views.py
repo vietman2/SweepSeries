@@ -19,7 +19,7 @@ from .enums import DayChoices
 from .models import (
     Academy, AcademyFacility, AcademyNotice, BusinessHours, AcademyImage, AcademyLike
 )
-from .permissions import IsAcademyOwner
+from .permissions import IsAcademyOwner, IsAcademyStaff
 from .serializers import (
     AcademySimpleSerializer, AcademyRegisterSerializer, AcademyStatusSerializer,
     AcademyDetailSerializer, AcademyNoticeSerializer, ConvenienceSerializer,
@@ -34,8 +34,9 @@ class AcademyViewSet(ModelViewSet):
 
     def get_permissions(self):
         login_needed = ['create', 'my']
-        must_be_admin = ['approve', 'reject']
+        must_be_admin = ['approve', 'reject']   ## 캐치비 관리자
         must_be_owner = ['introduction', 'facilities', 'hours', 'employees']
+        must_be_academy_staff = ['logo']
         permissions = []
 
         if self.action in login_needed:
@@ -44,6 +45,8 @@ class AcademyViewSet(ModelViewSet):
             permissions.append(AdminOnly())
         if self.action in must_be_owner:
             permissions.append(IsAcademyOwner())
+        if self.action in must_be_academy_staff:
+            permissions.append(IsAcademyStaff())
 
         return permissions
 

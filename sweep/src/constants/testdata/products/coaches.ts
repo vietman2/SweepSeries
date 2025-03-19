@@ -39,6 +39,7 @@ export const sampleCoaches: CoachSimpleType[] = [
     is_liked: true,
     rating: 4.5,
     num_reviews: 10,
+    academy_uuid: "1",
   },
   {
     uuid: "2",
@@ -51,6 +52,7 @@ export const sampleCoaches: CoachSimpleType[] = [
     is_liked: false,
     rating: 4.91,
     num_reviews: 19,
+    academy_uuid: "1",
   },
   {
     uuid: "3",
@@ -63,6 +65,7 @@ export const sampleCoaches: CoachSimpleType[] = [
     is_liked: true,
     rating: 3.1,
     num_reviews: 10,
+    academy_uuid: "1",
   },
 ];
 

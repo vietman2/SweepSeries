@@ -29,7 +29,6 @@ import {
   CalendarSimple,
 } from "@fragments/Calendar";
 import { CalendarType, ScheduleResponseType } from "@models/calendar";
-import { alert } from "@services/alert";
 import { getMonthlyData } from "@services/calendar";
 import { saveStorage } from "@services/storage";
 import { ThemeColorType } from "@themes/colors";
@@ -101,8 +100,6 @@ export function Calendar() {
 
       if (response) {
         setSchedules(response);
-      } else {
-        alert("오류 발생", "데이터를 불러오는 데 실패했습니다.");
       }
     };
 

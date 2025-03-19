@@ -2,11 +2,23 @@ import { Front } from "./FrontMain";
 import * as FrontContext from "@contexts/front";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("../AcademyFront/AcademyFront", () => ({
-  AcademyFront: () => <div data-testid="AcademyFront" />,
+jest.mock("../Profile/Profile", () => ({
+  ProfileManagement: () => <div data-testid="ProfileManagement" />,
 }));
-jest.mock("../CoachFront/CoachFront", () => ({
-  CoachFront: () => <div data-testid="CoachFront" />,
+jest.mock("../Programs/Programs", () => ({
+  ProgramManagement: () => <div data-testid="ProgramManagement" />,
+}));
+jest.mock("../Customers/Customers", () => ({
+  CustomerManagement: () => <div data-testid="CustomerManagement" />,
+}));
+jest.mock("../Reviews/Reviews", () => ({
+  ReviewManagement: () => <div data-testid="ReviewManagement" />,
+}));
+jest.mock("../Employees/Employees", () => ({
+  EmployeeManagement: () => <div data-testid="EmployeeManagement" />,
+}));
+jest.mock("../Notices/Notices", () => ({
+  NoticeManagement: () => <div data-testid="NoticeManagement" />,
 }));
 
 describe("<FrontMain />", () => {
@@ -18,6 +30,7 @@ describe("<FrontMain />", () => {
     headerText: "",
     selectAcademy: jest.fn(),
     selectCoach: jest.fn(),
+    refresh: jest.fn(),
   };
 
   it("renders null correctly", async () => {

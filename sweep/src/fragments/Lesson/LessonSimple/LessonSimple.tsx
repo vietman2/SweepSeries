@@ -1,9 +1,11 @@
-import { StyleSheet, View } from "react-native";
+import { useState } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { VerticalDivider } from "@components/Dividers";
+import { Divider, VerticalDivider } from "@components/Dividers";
+import { AppIcon } from "@components/Icons";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
-import { LessonType } from "@models/calendar";
+import { LessonRequestType, LessonType } from "@models/calendar";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
@@ -46,13 +48,83 @@ export function LessonSimple({ lesson }: Readonly<Props>) {
   );
 }
 
+interface RequestProps {
+  lessonRequest: LessonRequestType;
+  checked: boolean;
+  onCheck: () => void;
+}
+
+export function LessonRequestSimple({ lessonRequest, checked, onCheck }: Readonly<RequestProps>) {
+  const [expanded, setExpanded] = useState<boolean>(false);
+
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+
+  const toggleExpand = () => {
+    setExpanded(!expanded);
+  };
+
+  return (
+    <View style={styles.wrapper}>
+      <View style={styles.requestWrapper}>
+        <View style={[styles.container, { flex: 1 }]}>
+          <View style={styles.horizontal}>
+            <Text style={styles.date}>{lessonRequest.date}</Text>
+            <Text style={styles.time}>{lessonRequest.time}</Text>
+          </View>
+          <View style={styles.horizontal}>
+            <View
+              style={[styles.chip, { backgroundColor: lessonRequest.color }]}
+            >
+              <Text style={styles.whiteText}>예약</Text>
+            </View>
+            <VerticalDivider color={lessonRequest.color} width={2} />
+            <View style={styles.content}>
+              <Text style={styles.title}>{lessonRequest.title}</Text>
+              <Text style={styles.detail}>{lessonRequest.description}</Text>
+            </View>
+          </View>
+        </View>
+        <View>
+          <View style={styles.buttons}>
+            <TouchableOpacity
+              onPress={toggleExpand}
+              style={styles.expandButton}
+              testID="expand-button"
+            >
+              <AppIcon
+                icon={expanded ? "chevron-up" : "chevron-down"}
+                size={18}
+                color={theme.lowEmphasis}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onCheck} style={styles.checkBox}>
+              <AppIcon
+                icon="check-circle"
+                size={32}
+                color={checked ? theme.primary : theme.lowEmphasis}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+      {expanded && (
+        <View style={styles.details}>
+          <Text style={styles.detailText}>{lessonRequest.details}</Text>
+        </View>
+      )}
+      <Divider />
+    </View>
+  );
+}
+
 const createStyles = (theme: ThemeColorType) =>
   StyleSheet.create({
     container: {
-      gap: 12,
+      gap: 8,
     },
     date: {
-      fontSize: 20,
+      fontSize: 18,
       color: theme.highEmphasis,
     },
     time: {
@@ -96,5 +168,41 @@ const createStyles = (theme: ThemeColorType) =>
       fontSize: 14,
       lineHeight: 20,
       color: theme.lowEmphasis,
+    },
+    wrapper: {
+      gap: 12,
+    },
+    requestWrapper: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 8,
+    },
+    whiteText: {
+      fontWeight: "bold",
+      color: theme.background,
+    },
+    details: {
+      paddingHorizontal: 12,
+      paddingVertical: 4,
+      borderRadius: 4,
+      borderWidth: 1,
+      borderColor: theme.lowEmphasis,
+    },
+    detailText: {
+      fontSize: 14,
+      lineHeight: 24,
+      color: theme.mediumEmphasis,
+    },
+    buttons: {
+      flex: 1,
+      flexDirection: "row",
+      justifyContent: "flex-end",
+      gap: 12,
+    },
+    expandButton: {
+      justifyContent: "flex-start",
+    },
+    checkBox: {
+      justifyContent: "center",
     },
   });

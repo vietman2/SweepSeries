@@ -45,6 +45,9 @@ class SessionRequest(TimeStampedModel):
     )
     start_datetime  = models.DateTimeField(validators=[validate_30_minutes_interval])
 
+    accepted        = models.BooleanField(default=False)
+    rejected        = models.BooleanField(default=False)
+
     objects         = models.Manager()
 
     class Meta:

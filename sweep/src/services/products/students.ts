@@ -1,8 +1,16 @@
 import axios from "axios";
 
-export async function getStudents(academyId: string, query?: string) {
+export async function getStudents(
+  uuid: string | undefined,
+  mode: "academy" | "coach" | null,
+  query?: string
+) {
+  if (!mode || !uuid) {
+    return null;
+  }
+
   try {
-    const response = await axios.get(`/v1/academies/${academyId}/students/`, {
+    const response = await axios.get(`/v1/academies/${uuid}/students/`, {
       params: {
         query,
       },

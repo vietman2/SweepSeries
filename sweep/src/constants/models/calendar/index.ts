@@ -5,6 +5,7 @@ import {
   ScheduleResponseType,
   LessonDetailType,
   LessonType,
+  LessonRequestType,
 } from "./schedule";
 import { TodoType } from "./todo";
 
@@ -15,5 +16,6 @@ export {
   ScheduleResponseType,
   LessonDetailType,
   LessonType,
+  LessonRequestType,
   TodoType,
 };

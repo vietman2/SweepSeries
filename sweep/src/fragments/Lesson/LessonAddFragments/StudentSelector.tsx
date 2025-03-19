@@ -65,6 +65,7 @@ export function StudentSelector() {
 
       const response = await getStudents(
         selectedProgram.academy_uuid,
+        "academy",
         searchQuery
       );
 
