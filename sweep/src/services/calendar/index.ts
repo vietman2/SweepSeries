@@ -12,6 +12,7 @@ import {
   createLesson,
   getCurriculum,
   getLessonRequests,
+  getDailyLessons,
   acceptRequests,
   rejectRequests,
 } from "./lessons";
@@ -36,6 +37,7 @@ export {
   createLesson,
   getCurriculum,
   getLessonRequests,
+  getDailyLessons,
   acceptRequests,
   rejectRequests,
   createSchedule,

@@ -1,6 +1,13 @@
 import axios from "axios";
 
-import { createLesson, getCurriculum, getLessonRequests, acceptRequests, rejectRequests } from "./lessons";
+import {
+  createLesson,
+  getCurriculum,
+  getLessonRequests,
+  acceptRequests,
+  rejectRequests,
+  getDailyLessons,
+} from "./lessons";
 
 describe("createLesson", () => {
   const mockStudent = {
@@ -133,6 +140,30 @@ describe("rejectRequests", () => {
     jest.spyOn(axios, "patch").mockRejectedValue(new Error());
 
     const response = await rejectRequests([1, 2], "1");
+
+    expect(response).toBeNull();
+  });
+});
+
+describe("getDailyLessons", () => {
+  it("should call the API with the correct data", async () => {
+    jest.spyOn(axios, "get").mockResolvedValue({ data: {} });
+
+    const response = await getDailyLessons("1", "2025-01-01", "academy");
+
+    expect(response).toEqual({});
+  });
+
+  it("should return null if mode is null", async () => {
+    jest.spyOn(axios, "get").mockRejectedValue(new Error());
+
+    const response = await getDailyLessons("1", "2025-01-01", "academy");
+
+    expect(response).toBeNull();
+  });
+
+  it("should return null if the API call fails", async () => {
+    const response = await getDailyLessons("1", "2025-01-01", null);
 
     expect(response).toBeNull();
   });

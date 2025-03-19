@@ -95,3 +95,27 @@ export async function rejectRequests(
     return null;
   }
 }
+
+export async function getDailyLessons(
+  uuid: string,
+  date: string,
+  mode: "academy" | "coach" | null
+) {
+  if (mode === null) {
+    return null;
+  }
+
+  try {
+    const response = await axios.get(`/v1/sessions/daily/`, {
+      params: {
+        uuid,
+        date,
+        mode,
+      },
+    });
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
