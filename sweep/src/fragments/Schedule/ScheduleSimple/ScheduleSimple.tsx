@@ -35,7 +35,6 @@ export function ScheduleSimple({ schedule, type }: Readonly<Props>) {
 const createStyles = (theme: ThemeColorType) =>
   StyleSheet.create({
     container: {
-      marginBottom: 12,
       paddingHorizontal: 8,
       paddingVertical: 4,
       gap: 8,
