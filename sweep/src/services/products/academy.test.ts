@@ -3,6 +3,7 @@ import axios from "axios";
 import {
   createAcademy,
   getAcademies,
+  getRecommendations,
   getLikedAcademies,
   likeAcademy,
   getAcademyDetail,
@@ -79,6 +80,24 @@ describe("getAcademies", () => {
   });
 });
 
+describe("getRecommendations", () => {
+  it("should get recommendations", async () => {
+    jest.spyOn(axios, "get").mockResolvedValue({ data: {} });
+
+    const result = await getRecommendations();
+
+    expect(result).toEqual({});
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "get").mockRejectedValue(null);
+
+    const result = await getRecommendations();
+
+    expect(result).toBeNull();
+  });
+});
+
 describe("getLikedAcademies", () => {
   it("should get liked academies", async () => {
     jest.spyOn(axios, "get").mockResolvedValue({ data: {} });
@@ -137,7 +156,7 @@ describe("getMyAcademies", () => {
   it("should get my academies", async () => {
     jest.spyOn(axios, "get").mockResolvedValue({ data: {} });
 
-    const result = await getMyAcademies();
+    const result = await getMyAcademies("student");
 
     expect(result).toEqual({});
   });
@@ -145,7 +164,7 @@ describe("getMyAcademies", () => {
   it("should return null on error", async () => {
     jest.spyOn(axios, "get").mockRejectedValue(null);
 
-    const result = await getMyAcademies();
+    const result = await getMyAcademies("student");
 
     expect(result).toBeNull();
   });
