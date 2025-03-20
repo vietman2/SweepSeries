@@ -5,6 +5,7 @@ import { AddLessonProvider } from "@contexts/addlesson";
 import { AuthProvider } from "@contexts/auth";
 import { CalendarProvider } from "@contexts/calendar";
 import { FrontProvider } from "@contexts/front";
+import { HomeProvider } from "@contexts/home";
 import { SignupProvider } from "@contexts/signup";
 import { ThemeProvider } from "@contexts/theme";
 
@@ -19,11 +20,13 @@ export const renderWithProviders = (
       <AuthProvider>
         <CalendarProvider>
           <FrontProvider>
-            <SignupProvider>
-              <AddLessonProvider>
-                <ThemeProvider>{children}</ThemeProvider>
-              </AddLessonProvider>
-            </SignupProvider>
+            <HomeProvider>
+              <SignupProvider>
+                <AddLessonProvider>
+                  <ThemeProvider>{children}</ThemeProvider>
+                </AddLessonProvider>
+              </SignupProvider>
+            </HomeProvider>
           </FrontProvider>
         </CalendarProvider>
       </AuthProvider>
