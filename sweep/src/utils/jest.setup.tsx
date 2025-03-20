@@ -156,17 +156,6 @@ jest.mock("@components/Fallbacks", () => {
     LoginNeeded: () => null,
   };
 });
-jest.mock("@components/Filters", () => {
-  const { TouchableOpacity } = jest.requireActual("react-native");
-
-  return {
-    Filters: ({ onSelect }: { onSelect: (filter: string) => void }) => {
-      return (
-        <TouchableOpacity onPress={() => onSelect("asdf")} testID="filter" />
-      );
-    },
-  };
-});
 jest.mock("@components/Icons", () => ({
   AppIcon: () => null,
   AuthLogo: () => null,
@@ -377,7 +366,7 @@ jest.mock("@contexts/calendar", () => ({
     reloadData: jest.fn(),
     selectedCalendar: null,
     setSelectedCalendar: jest.fn(),
-  })
+  }),
 }));
 jest.mock("@contexts/front", () => ({
   FrontProvider: ({ children }: { children: React.ReactNode }) => (
@@ -393,6 +382,15 @@ jest.mock("@contexts/front", () => ({
     selectAcademy: jest.fn(),
     selectCoach: jest.fn(),
     refresh: jest.fn(),
+  }),
+}));
+jest.mock("@contexts/home", () => ({
+  HomeProvider: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  useHome: jest.fn().mockReturnValue({
+    academy: null,
+    selectAcademy: jest.fn(),
   }),
 }));
 jest.mock("@contexts/signup", () => ({
