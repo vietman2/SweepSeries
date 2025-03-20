@@ -8,8 +8,9 @@ import { LoadingComponent } from "@components/Fallbacks";
 import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
 import { useAuth } from "@contexts/auth";
+import { useHome } from "@contexts/home";
 import { useTheme } from "@contexts/theme";
-import { AcademyCard } from "@fragments/Academy";
+import { NormalCard } from "@fragments/Academy";
 import { LessonSimple } from "@fragments/Lesson";
 import { LessonDetailType } from "@models/calendar";
 import { getSessions } from "@services/calendar";
@@ -21,6 +22,7 @@ export function MyAcademy() {
 
   const [loading, setLoading] = useState<boolean>(true);
   const { mode } = useAuth();
+  const { academy } = useHome();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -57,11 +59,12 @@ export function MyAcademy() {
     fetchData();
   }, [selectedMonth]);
 
+  if (!academy) return null;
   if (loading) return <LoadingComponent />;
 
   return (
     <Scroll style={styles.container}>
-      <AcademyCard mode="normal" type={2} />
+      <NormalCard academy={academy} />
       <View style={styles.content}>
         <Text style={styles.subtitle}>레슨 일정 및 피드백 목록</Text>
         <CalendarHeader
