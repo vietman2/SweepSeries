@@ -27,9 +27,7 @@ jest.mock("@components/Search", () => {
 
 describe("<RegisterCoach />", () => {
   beforeEach(() => {
-    jest
-      .spyOn(AcademyAPI, "getAcademies")
-      .mockResolvedValue({ academies: sampleAcademies });
+    jest.spyOn(AcademyAPI, "getAcademies").mockResolvedValue(sampleAcademies);
   });
 
   it("handles bad responses", async () => {
@@ -44,9 +42,7 @@ describe("<RegisterCoach />", () => {
       fireEvent.press(getByTestId("search"));
     });
 
-    jest
-      .spyOn(AcademyAPI, "getAcademies")
-      .mockResolvedValue({ academies: sampleAcademies });
+    jest.spyOn(AcademyAPI, "getAcademies").mockResolvedValue(sampleAcademies);
 
     await waitFor(() => {
       fireEvent.press(getByTestId("search2"));

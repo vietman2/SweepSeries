@@ -87,7 +87,7 @@ export function RegisterCoach() {
     if (response) {
       alert("등록 성공", "코치 등록 신청이 완료되었습니다");
       router.dismissAll();
-      router.push("/mypage/");
+      router.push("/mypage");
     } else {
       alert("코치 등록 실패", "코치 등록에 실패했습니다");
     }
@@ -103,7 +103,7 @@ export function RegisterCoach() {
     const response = await getAcademies(query);
 
     if (response) {
-      setOptions(response.academies);
+      setOptions(response);
     }
   };
 
