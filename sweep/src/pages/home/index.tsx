@@ -1,4 +1,4 @@
-import { HomeLayout } from "./_layout/HomeLayout";
+import { HomeLayout } from "./_layouts/HomeLayout";
 import { AcademyDetail } from "./AcademyDetail/AcademyDetail";
 import { CoachDetail } from "./AcademyDetail/CoachDetail/CoachDetail";
 import { Home } from "./Home";
