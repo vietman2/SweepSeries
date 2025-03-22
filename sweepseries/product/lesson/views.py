@@ -14,6 +14,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from product.academy.models import Academy
 from product.academy.permissions import IsAcademyStaff
+from product.coach.models import Coach
 from product.contract.models import Contract
 from product.contract.serializers import ContractSerializer
 from .models import Lesson, Session, SessionRequest
@@ -143,6 +144,57 @@ class SessionViewSet(ModelViewSet):
             data={"message": "레슨이 성공적으로 수정되었습니다."},
             status=status.HTTP_200_OK
         )
+
+    @extend_schema(summary="일일 레슨 조회", tags=["레슨"])
+    @action(detail=False, methods=['get'])
+    def daily(self, request):
+        ## UUID와 날짜를 받아서 해당 날짜의 레슨을 조회한다.
+        mode = request.query_params.get('mode', None)
+        uuid = request.query_params.get('uuid', None)
+        date = request.query_params.get('date', "")
+
+        ## 날짜는 한국시간 날짜가 들어오고, DB에는 UTC로 저장되어 있으므로 변환해준다.
+        try:
+            tz = timezone.get_current_timezone()
+            date = timezone.make_aware(datetime.strptime(date, "%Y-%m-%d"), tz)
+        except ValueError as e:
+            return Response(
+                data={"message": "올바른 날짜 형식이 아닙니다."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if mode == 'coach':
+            try:
+                coach = Coach.objects.get(uuid=uuid)
+            except ObjectDoesNotExist:
+                return Response(
+                    data={"message": "코치가 존재하지 않습니다."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            ## get all sessions that the coach is in
+            q = Q(coaches=coach)
+        else:
+            try:
+                academy = Academy.objects.get(uuid=uuid)
+            except ObjectDoesNotExist:
+                return Response(
+                    data={"message": "아카데미가 존재하지 않습니다."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            ## get all sessions that the academy is in
+            q = Q(lesson__program__academy=academy)
+
+        q &= Q(start_datetime__date=date)
+        sessions = Session.objects.filter(q)
+
+        data = []
+
+        for session in sessions:
+            data.append(SessionDetailSerializer(session).data)
+
+        return Response(data, status=status.HTTP_200_OK)
 
 class SessionRequestViewSet(ModelViewSet):
     queryset = SessionRequest.objects.all()
