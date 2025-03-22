@@ -14,10 +14,12 @@ from drf_spectacular.utils import extend_schema
 from core.permissions import AdminOnly
 from core.utils import is_admin_page
 from product.coach.enums import CoachApplicationStatus
+from product.coach.models import Coach
 from product.coach.serializers import CoachSimpleSerializer
 from .enums import DayChoices
 from .models import (
-    Academy, AcademyFacility, AcademyNotice, BusinessHours, AcademyImage, AcademyLike
+    Academy, AcademyFacility, AcademyNotice,
+    BusinessHours, AcademyImage, AcademyLike, AcademyStudent
 )
 from .permissions import IsAcademyOwner, IsAcademyStaff
 from .serializers import (
@@ -104,10 +106,7 @@ class AcademyViewSet(ModelViewSet):
         serializer = AcademySimpleSerializer(self.queryset, many=True)
         serializer.context['request'] = request
 
-        return Response(
-            {"academies": serializer.data, "suggestions": serializer.data},
-            status=status.HTTP_200_OK
-        )
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema(summary="아카데미 상세 조회", tags=["아카데미"])
     def retrieve(self, request, *args, **kwargs):
@@ -120,18 +119,30 @@ class AcademyViewSet(ModelViewSet):
     @action(detail=False, methods=['get'])
     def my(self, request):
         user = request.user
-        academies = Academy.objects.filter(owner=user)
+        mode = request.query_params.get('mode', 'owner')
 
-        if not academies.exists():
-            return Response(
-                status=status.HTTP_404_NOT_FOUND,
-                data={"error": "아카데미 정보가 없습니다."}
-            )
+        if mode == 'student':
+            student_profiles = AcademyStudent.objects.filter(person=user.person)
+            academies = [student.academy for student in student_profiles]
+        elif mode == 'coach':
+            coach_profiles = Coach.objects.filter(person=user.person)
+            academies = [coach.academy for coach in coach_profiles]
+        else:
+            academies = Academy.objects.filter(owner=user)
 
-        academies = AcademySimpleSerializer(academies, many=True)
+            if not academies.exists():
+                return Response(
+                    status=status.HTTP_404_NOT_FOUND,
+                    data={"error": "아카데미 정보가 없습니다."}
+                )
+
+        serializer = AcademySimpleSerializer(academies, many=True)
+        serializer.context['user'] = user
+        serializer.context['mode'] = mode
+
         return Response(
             status=status.HTTP_200_OK,
-            data=academies.data
+            data=serializer.data
         )
 
     @extend_schema(summary="좋아요 한 아카데미 조회", tags=["아카데미"])
@@ -295,7 +306,6 @@ class AcademyViewSet(ModelViewSet):
     @action(detail=True, methods=['get'])
     def employees(self, request, pk=None): # pylint: disable=unused-argument
         academy = self.get_object()
-        print(academy.uuid)
         accepted_coaches = academy.coaches.filter(status=CoachApplicationStatus.APPROVED)
         pending_coaches = academy.coaches.filter(status=CoachApplicationStatus.PENDING)
 
@@ -336,6 +346,15 @@ class AcademyViewSet(ModelViewSet):
             status=status.HTTP_200_OK,
             data={"message": "로고가 변경되었습니다."}
         )
+
+    @extend_schema(summary="아카데미 추천", tags=["아카데미"])
+    @action(detail=False, methods=['get'])
+    def recommendations(self, request, pk=None): # pylint: disable=unused-argument
+        self.queryset = Academy.objects.filter(is_verified=True)
+        self.queryset = self.queryset.order_by('-likes')[:3]
+        serializer = AcademySimpleSerializer(self.queryset, many=True)
+        serializer.context['request'] = request
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class FacilityViewSet(ModelViewSet):
     queryset = AcademyFacility.objects.all()
