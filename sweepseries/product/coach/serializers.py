@@ -25,12 +25,13 @@ class CoachSimpleSerializer(serializers.ModelSerializer):
     is_liked        = serializers.SerializerMethodField(read_only=True)
     instagram       = serializers.SerializerMethodField()
     blog            = serializers.CharField(read_only=True)
+    academy_uuid    = serializers.UUIDField(read_only=True, source="academy.uuid")
 
     class Meta:
         model = Coach
         fields = [
             "uuid", "name", "career", "profile_image", "introduction", "professions",
-            "rating", "num_reviews", "is_liked", "instagram", "blog"
+            "rating", "num_reviews", "is_liked", "instagram", "blog", "academy_uuid"
         ]
 
     def get_name(self, obj):
