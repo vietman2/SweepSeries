@@ -12,7 +12,7 @@ jest.mock("expo-router", () => ({
   },
 }));
 jest.mock("@gorhom/bottom-sheet", () => {
-  const { forwardRef } = jest.requireActual("react");
+  const { forwardRef, View } = jest.requireActual("react");
 
   return {
     __esModule: true,
@@ -27,7 +27,7 @@ jest.mock("@gorhom/bottom-sheet", () => {
         },
         ref
       ) => (
-        <>
+        <View ref={ref}>
           {backdropComponent &&
             backdropComponent({
               animatedIndex: {
@@ -48,7 +48,7 @@ jest.mock("@gorhom/bottom-sheet", () => {
               },
             })}
           {children}
-        </>
+        </View>
       )
     ),
     BottomSheetBackdrop: () => "BottomSheetBackdrop",
