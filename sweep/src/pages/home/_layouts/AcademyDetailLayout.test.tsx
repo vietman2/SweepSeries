@@ -27,6 +27,9 @@ describe("<AcademyDetailLayout />", () => {
   it("handles navigation", () => {
     jest.spyOn(AcademyDetailContext, "useAcademyDetail").mockReturnValue({
       academy: sampleAcademyDetail,
+      showDetailPage: false,
+      selectCoach: jest.fn(),
+      selectNotice: jest.fn(),
     });
 
     const { getByTestId } = renderWithProviders(<AcademyDetailLayout />);
@@ -34,9 +37,23 @@ describe("<AcademyDetailLayout />", () => {
     fireEvent.press(getByTestId("tab-programs"));
   });
 
+  it("handles detail page", () => {
+    jest.spyOn(AcademyDetailContext, "useAcademyDetail").mockReturnValue({
+      academy: sampleAcademyDetail,
+      showDetailPage: true,
+      selectCoach: jest.fn(),
+      selectNotice: jest.fn(),
+    });
+
+    renderWithProviders(<AcademyDetailLayout />);
+  });
+
   it("handles no academy", () => {
     jest.spyOn(AcademyDetailContext, "useAcademyDetail").mockReturnValue({
       academy: null,
+      showDetailPage: false,
+      selectCoach: jest.fn(),
+      selectNotice: jest.fn(),
     });
 
     renderWithProviders(<AcademyDetailLayout />);

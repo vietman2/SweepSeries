@@ -45,8 +45,6 @@ export function HomeLayout() {
             headerTitle: "내 아카데미",
           }}
         />
-        <Stack.Screen name="academy/coach/[id]" />
-        <Stack.Screen name="academy/notice/[id]" />
         <Stack.Screen name="academy/[id]" />
         <Stack.Screen name="lesson/[id]" />
         <Stack.Screen

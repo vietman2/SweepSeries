@@ -55,7 +55,7 @@ const tabs: AcademyDetailTabType[] = [
 ];
 
 function AcademyDetail() {
-  const { academy } = useAcademyDetail();
+  const { academy, showDetailPage } = useAcademyDetail();
   const pathname = usePathname();
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -66,6 +66,10 @@ function AcademyDetail() {
 
   if (!academy) {
     return null;
+  }
+
+  if (showDetailPage) {
+    return <Slot />;
   }
 
   const handleTabPress = (tab: AcademyDetailTabType) => {
