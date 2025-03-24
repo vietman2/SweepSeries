@@ -12,16 +12,16 @@ import { ThemeColorType } from "@themes/colors";
 export function NoticeDetail() {
   const [notice, setNotice] = useState<NoticeSimpleType>();
 
-  const { id, academyId } = useLocalSearchParams<{
+  const { id, noticeid } = useLocalSearchParams<{
     id: string;
-    academyId: string;
+    noticeid: string;
   }>();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getNotice(academyId, id);
+      const response = await getNotice(id, noticeid);
 
       if (response) {
         setNotice(response);

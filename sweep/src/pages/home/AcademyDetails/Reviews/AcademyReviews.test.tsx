@@ -1,4 +1,4 @@
-import { ReviewList } from "./ReviewList";
+import { AcademyReviews } from "./AcademyReviews";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("@fragments/Review", () => ({
@@ -6,8 +6,8 @@ jest.mock("@fragments/Review", () => ({
   ReviewSimple: () => "ReviewSimple",
 }));
 
-describe("<ReviewList />", () => {
+describe("<AcademyReviews />", () => {
   it("renders correctly", () => {
-    renderWithProviders(<ReviewList />);
+    renderWithProviders(<AcademyReviews />);
   });
 });

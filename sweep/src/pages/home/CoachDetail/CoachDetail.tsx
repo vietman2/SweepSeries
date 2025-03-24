@@ -15,7 +15,7 @@ export function CoachDetail() {
   const [coach, setCoach] = useState<CoachDetailType>();
 
   const [refreshCount, setRefreshCount] = useState<number>(0);
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { coachid } = useLocalSearchParams<{ coachid: string }>();
 
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -34,7 +34,7 @@ export function CoachDetail() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getCoachDetails(id);
+      const response = await getCoachDetails(coachid);
 
       if (response) {
         setCoach(response);

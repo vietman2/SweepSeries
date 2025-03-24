@@ -8,7 +8,7 @@ import { ReviewType } from "@models/products";
 import { sampleReviews } from "@testdata/products";
 import { ThemeColorType } from "@themes/colors";
 
-export function ReviewList() {
+export function AcademyReviews() {
   const [reviews, setReviews] = useState<ReviewType[]>([]);
 
   const { theme } = useTheme();
