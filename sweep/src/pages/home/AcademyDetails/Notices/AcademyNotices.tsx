@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { router } from "expo-router";
 
 import { Divider } from "@components/Dividers";
 import { Text } from "@components/Texts";
@@ -14,7 +13,7 @@ import { ThemeColorType } from "@themes/colors";
 export function AcademyNotices() {
   const [notices, setNotices] = useState<NoticeSimpleType[]>([]);
 
-  const { academy } = useAcademyDetail();
+  const { academy, selectNotice } = useAcademyDetail();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -36,11 +35,8 @@ export function AcademyNotices() {
 
   if (!academy) return null;
 
-  const handleNoticePress = (noticeId: number) => {
-    router.push({
-      pathname: "/home/academy/notice/[id]",
-      params: { id: noticeId, academyId: academy.uuid },
-    });
+  const handleNoticePress = (notice: NoticeSimpleType) => {
+    selectNotice(notice);
   };
 
   return (
@@ -51,7 +47,7 @@ export function AcademyNotices() {
             <TouchableOpacity
               key={notice.id}
               style={styles.notice}
-              onPress={() => handleNoticePress(notice.id)}
+              onPress={() => handleNoticePress(notice)}
               testID={`notice-${notice.id}`}
             >
               <NoticeSimple key={notice.id} notice={notice} />
