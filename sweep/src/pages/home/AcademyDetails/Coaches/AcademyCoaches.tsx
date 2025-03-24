@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 
 import { Text } from "@components/Texts";
+import { useAcademyDetail } from "@contexts/academy";
 import { useTheme } from "@contexts/theme";
 import { CoachSimple } from "@fragments/Coach";
 import { CoachSimpleType } from "@models/products";
 import { getCoaches } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
-export function CoachList() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+export function AcademyCoaches() {
   const [coaches, setCoaches] = useState<CoachSimpleType[]>([]);
 
+  const { academy } = useAcademyDetail();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -25,7 +26,9 @@ export function CoachList() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getCoaches(id);
+      if (!academy) return;
+
+      const response = await getCoaches(academy.uuid);
 
       if (response) {
         setCoaches(response);
@@ -36,6 +39,8 @@ export function CoachList() {
 
     fetchData();
   }, []);
+
+  if (!academy) return null;
 
   return (
     <View style={styles.container}>

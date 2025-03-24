@@ -1,32 +1,28 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 
 import { Divider } from "@components/Dividers";
 import { Text } from "@components/Texts";
+import { useAcademyDetail } from "@contexts/academy";
 import { useTheme } from "@contexts/theme";
 import { NoticeSimple } from "@fragments/Notice";
 import { NoticeSimpleType } from "@models/products";
 import { getNotices } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
-export function NoticeList() {
+export function AcademyNotices() {
   const [notices, setNotices] = useState<NoticeSimpleType[]>([]);
-  const { id } = useLocalSearchParams<{ id: string }>();
 
+  const { academy } = useAcademyDetail();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  const handleNoticePress = (noticeId: number) => {
-    router.push({
-      pathname: "/home/academy/notice/[id]",
-      params: { id: noticeId, academyId: id },
-    });
-  };
-
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getNotices(id);
+      if (!academy) return;
+
+      const response = await getNotices(academy.uuid);
 
       if (response) {
         setNotices(response);
@@ -37,6 +33,15 @@ export function NoticeList() {
 
     fetchData();
   }, []);
+
+  if (!academy) return null;
+
+  const handleNoticePress = (noticeId: number) => {
+    router.push({
+      pathname: "/home/academy/notice/[id]",
+      params: { id: noticeId, academyId: academy.uuid },
+    });
+  };
 
   return (
     <View style={styles.container}>

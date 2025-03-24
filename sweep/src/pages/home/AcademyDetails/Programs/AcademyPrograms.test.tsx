@@ -1,32 +1,33 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
-import * as Router from "expo-router";
 
-import { ProgramList } from "./ProgramList";
+import { AcademyPrograms } from "./AcademyPrograms";
+import * as AcademyDetailContext from "@contexts/academy";
 import * as ProgramsAPI from "@services/products/programs";
-import { sampleAcademyPrograms } from "@testdata/products";
+import { sampleAcademyPrograms, sampleAcademyDetail } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("expo-router", () => ({
   router: {
     push: jest.fn(),
   },
-  useLocalSearchParams: jest.fn(),
 }));
 jest.mock("@fragments/Program", () => ({
   ProgramSimple: () => "ProgramSimple",
 }));
 
-describe("<ProgramList />", () => {
+describe("<AcademyPrograms />", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.spyOn(Router, "useLocalSearchParams").mockReturnValue({ id: "1" });
+    jest.spyOn(AcademyDetailContext, "useAcademyDetail").mockReturnValue({
+      academy: sampleAcademyDetail,
+    });
   });
 
   it("renders correctly", async () => {
     jest
       .spyOn(ProgramsAPI, "getPrograms")
       .mockResolvedValueOnce(sampleAcademyPrograms);
-    const { getByTestId } = renderWithProviders(<ProgramList />);
+    const { getByTestId } = renderWithProviders(<AcademyPrograms />);
 
     await waitFor(() => {
       fireEvent.press(getByTestId("program-1"));
@@ -35,7 +36,16 @@ describe("<ProgramList />", () => {
 
   it("handles api error", async () => {
     jest.spyOn(ProgramsAPI, "getPrograms").mockResolvedValueOnce(null);
-    renderWithProviders(<ProgramList />);
+    renderWithProviders(<AcademyPrograms />);
+
+    await waitFor(() => expect("ProgramSimple").toBeTruthy());
+  });
+
+  it("handles context fail", async () => {
+    jest.spyOn(AcademyDetailContext, "useAcademyDetail").mockReturnValue({
+      academy: null,
+    });
+    renderWithProviders(<AcademyPrograms />);
 
     await waitFor(() => expect("ProgramSimple").toBeTruthy());
   });

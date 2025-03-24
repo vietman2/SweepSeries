@@ -3,24 +3,26 @@ import { Image, StyleSheet, View } from "react-native";
 import { Divider } from "@components/Dividers";
 import { AppIcon } from "@components/Icons";
 import { Text } from "@components/Texts";
+import { useAcademyDetail } from "@contexts/academy";
 import { useTheme } from "@contexts/theme";
 import { Facilities, Introduction, WorkingHours } from "@fragments/Academy";
-import { AcademyDetailType } from "@models/products";
 import { ThemeColorType } from "@themes/colors";
 
-interface Props {
-  academy: AcademyDetailType;
-}
-
-export function Information({ academy }: Readonly<Props>) {
+export function AcademyInformation() {
+  const { academy } = useAcademyDetail();
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  if (!academy) return null;
 
   return (
     <View style={styles.container}>
       <Introduction introduction={academy.introduction} />
       <Divider />
-      <WorkingHours workingHours={academy.schedules} scheduleDetails={academy.schedule_details} />
+      <WorkingHours
+        workingHours={academy.schedules}
+        scheduleDetails={academy.schedule_details}
+      />
       <Divider />
       <Facilities
         facilities={academy.convenience}
