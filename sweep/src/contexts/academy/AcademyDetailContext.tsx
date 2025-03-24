@@ -1,11 +1,18 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams, usePathname } from "expo-router";
 
-import { AcademyDetailType } from "@models/products";
+import {
+  AcademyDetailType,
+  CoachSimpleType,
+  NoticeSimpleType,
+} from "@models/products";
 import { getAcademyDetail } from "@services/products";
 
 interface AcademyDetailContextType {
   academy: AcademyDetailType | null;
+  showDetailPage: boolean;
+  selectCoach: (coach: CoachSimpleType) => void;
+  selectNotice: (id: string, notice: NoticeSimpleType) => void;
 }
 
 const AcademyDetailContext = createContext<
@@ -16,8 +23,28 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [academy, setAcademy] = useState<AcademyDetailType | null>(null);
+  const [showDetailPage, setShowDetailPage] = useState<boolean>(false);
 
   const { id } = useLocalSearchParams<{ id: string }>();
+  const pathname = usePathname();
+
+  const selectCoach = (coach: CoachSimpleType) => {
+    router.push({
+      pathname: "/(tabs)/home/academy/[id]/coaches/[coachid]",
+      params: { id: coach.academy_uuid, coachid: coach.uuid },
+    });
+
+    setShowDetailPage(true);
+  };
+
+  const selectNotice = (id: string, notice: NoticeSimpleType) => {
+    router.push({
+      pathname: "/home/academy/[id]/notices/[noticeid]",
+      params: { id: id, noticeid: notice.id },
+    });
+
+    setShowDetailPage(true);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +58,16 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
     fetchData();
   }, []);
 
-  const value = useMemo(() => ({ academy }), [academy]);
+  useEffect(() => {
+    if (pathname.split("/").length < 6) {
+      setShowDetailPage(false);
+    }
+  }, [pathname]);
+
+  const value = useMemo(
+    () => ({ academy, showDetailPage, selectCoach, selectNotice }),
+    [academy, showDetailPage]
+  );
 
   return (
     <AcademyDetailContext.Provider value={value}>
