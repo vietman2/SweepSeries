@@ -11,6 +11,10 @@ export const sampleAcademies: AcademySimpleType[] = [
     is_liked: true,
     logo: "https://yaguin.com/lf_img/lfi15856190990.jpeg",
     top_review: "최고의 시설과 코치진! 추천합니다!",
+    last_session: "2024.10.20",
+    remaining_sessions: 15,
+    num_students: 20,
+    num_requests: 5,
   },
   {
     uuid: "2",
@@ -22,6 +26,10 @@ export const sampleAcademies: AcademySimpleType[] = [
     top_review: "좋은 시설과 친절한 코치들이 많아요!",
     num_likes: 0,
     is_liked: false,
+    last_session: "2024.10.20",
+    remaining_sessions: 15,
+    num_students: 20,
+    num_requests: 5,
   },
 ];
 

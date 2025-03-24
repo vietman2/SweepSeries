@@ -220,6 +220,14 @@ class AcademyTestCase(APITestCase):
         response = self.client.get(f"{self.url}my/")
         self.assertEqual(response.status_code, 200)
 
+        admin = User.objects.get(username="admin")
+        self.client.force_authenticate(user=admin)
+        response = self.client.get(f"{self.url}my/", {"mode": "student"})
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(f"{self.url}my/", {"mode": "coach"})
+        self.assertEqual(response.status_code, 200)
+
     def test_my_academy_fail(self):
         response = self.client.get(f"{self.url}my/")
         self.assertEqual(response.status_code, 403)
@@ -227,6 +235,11 @@ class AcademyTestCase(APITestCase):
         self.client.force_authenticate(user=User.objects.get(username="admin"))
         response = self.client.get(f"{self.url}my/")
         self.assertEqual(response.status_code, 404)
+
+    def test_academy_recommendations(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(f"{self.url}recommendations/")
+        self.assertEqual(response.status_code, 200)
 
     def test_academy_approve(self):
         self.client.force_authenticate(user=User.objects.get(username="admin"))

@@ -10,6 +10,10 @@ export type AcademySimpleType = {
   is_liked: boolean;
   top_review: string;
   logo: string;
+  last_session: string;
+  remaining_sessions: number;
+  num_students: number;
+  num_requests: number;
 };
 
 export type WorkingHoursType = {

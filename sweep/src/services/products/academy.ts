@@ -59,6 +59,16 @@ export async function getAcademies(query?: string) {
   }
 }
 
+export async function getRecommendations() {
+  try {
+    const response = await axios.get("/v1/academies/recommendations/");
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
 export async function getLikedAcademies() {
   try {
     const response = await axios.get("/v1/academies/liked/");
@@ -79,9 +89,13 @@ export async function getAcademyDetail(uuid: string) {
   }
 }
 
-export async function getMyAcademies() {
+export async function getMyAcademies(mode: "student" | "coach" | "owner") {
   try {
-    const response = await axios.get("/v1/academies/my/");
+    const response = await axios.get("/v1/academies/my/", {
+      params: {
+        mode,
+      },
+    });
 
     return response.data;
   } catch {

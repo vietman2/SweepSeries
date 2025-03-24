@@ -1,6 +1,7 @@
 import {
   createAcademy,
   getAcademies,
+  getRecommendations,
   getLikedAcademies,
   getAcademyDetail,
   getMyAcademies,
@@ -55,6 +56,7 @@ import { getStudents, getAcademyStudentDetail } from "./students";
 export {
   createAcademy,
   getAcademies,
+  getRecommendations,
   getLikedAcademies,
   getAcademyDetail,
   getMyAcademies,

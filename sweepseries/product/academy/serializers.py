@@ -2,6 +2,7 @@ import re
 import uuid
 from django.core.files.storage import default_storage
 from django.db import models, transaction
+from django.db.models import Q
 from rest_framework import serializers
 from phonenumber_field.validators import validate_international_phonenumber
 
@@ -9,6 +10,9 @@ from auth.user.serializers import UserRelatedSerializer
 from core.utils import get_presigned_url
 from product.address.models import Address, Sigungu
 from product.address.utils import get_coordinates, fetch_map_image
+from product.contract.models import Contract
+from product.lesson.models import Session, SessionRequest
+from product.program.models import Program
 from .enums import NoticeTypeChoices
 from .models import (
     Academy, AcademyFacility, AcademyNotice, BusinessHours,
@@ -38,12 +42,17 @@ class AcademySimpleSerializer(serializers.ModelSerializer):
     top_review  = serializers.SerializerMethodField()
     location    = serializers.SerializerMethodField()
     logo        = serializers.SerializerMethodField()
+    last_session        = serializers.SerializerMethodField()
+    remaining_sessions  = serializers.SerializerMethodField()
+    num_students        = serializers.SerializerMethodField()
+    num_requests        = serializers.SerializerMethodField()
 
     class Meta:
         model = Academy
         fields = [
             "uuid", "name", "rating", "num_reviews", "location",
-            "num_likes", "is_liked", "top_review", "logo"
+            "num_likes", "is_liked", "top_review", "logo",
+            "last_session", "remaining_sessions", "num_students", "num_requests"
         ]
 
     def get_rating(self, obj):
@@ -79,6 +88,60 @@ class AcademySimpleSerializer(serializers.ModelSerializer):
 
     def get_logo(self, obj):
         return get_presigned_url(obj.logo)
+
+    def get_last_session(self, obj):
+        ## 가장 최근에 진행된 세션
+        ## mode 는 student 아니면 coach
+        mode = self.context.get('mode', 'student')
+        user = self.context.get('user')
+
+        if user is None or not user.is_authenticated:
+            return None
+
+        if mode != 'student':
+            return None
+
+        q = Q(lesson__student=user.person)
+        q &= Q(lesson__program__academy=obj)
+        session = Session.objects.filter(q).order_by('-start_datetime').first()
+
+        if session:
+            return session.start_datetime.strftime("%Y.%m.%d.")
+
+        return None
+
+    def get_remaining_sessions(self, obj):
+        mode = self.context.get('mode', 'student')
+        user = self.context.get('user')
+
+        if user is None or not user.is_authenticated:
+            return None
+
+        if mode != 'student':
+            return None
+
+        ## 모든 계약에서 남은 세션 수의 합
+        user = self.context.get('user')
+        q = Q(customer=user.person)
+        q &= Q(curriculum__program__academy=obj)
+        contracts = Contract.objects.filter(q)
+
+        num_sessions = 0
+        for contract in contracts:
+            num_sessions += contract.scheduled_lessons - contract.completed_lessons
+
+        return num_sessions
+
+    def get_num_students(self, obj):
+        return obj.students.count()
+
+    def get_num_requests(self, obj):
+        programs = Program.objects.filter(academy=obj)
+
+        ## get requests that are neither accepted nor rejected
+        q = Q(accepted=False) & Q(rejected=False)
+        q &= Q(program__in=programs)
+        return SessionRequest.objects.filter(q).count()
 
 class AcademyDetailSerializer(serializers.ModelSerializer):
     address             = serializers.SerializerMethodField()

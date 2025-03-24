@@ -48,7 +48,7 @@ export const FrontProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      const response1 = await getMyAcademies();
+      const response1 = await getMyAcademies("owner");
       const response2 = await getMyCoachProfile();
 
       if (response2) {

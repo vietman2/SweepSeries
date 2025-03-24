@@ -155,6 +155,45 @@ class SessionAPITestCase(APITestCase):
         response = self.client.patch(f"{self.url}1/", {"notes": ""}, format="json")
         self.assertEqual(response.status_code, 400)
 
+    def test_daily_sessions(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(
+            f"{self.url}daily/",
+            {
+                "date": "2025-02-01",
+                "uuid": "123e4567-e89b-12d3-a456-426614174999",
+                "mode": "student"
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(
+            f"{self.url}daily/",
+            {"date": "2025-02-01", "uuid": "923e4567-e89b-12d3-a456-426614174999", "mode": "coach"}
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_daily_sessions_fail(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(f"{self.url}daily/")
+        self.assertEqual(response.status_code, 400)
+
+        response = self.client.get(
+            f"{self.url}daily/",
+            {"date": "2025-02-01", "uuid": "123e4567-e89b-12d3-a456-426614174999", "mode": "coach"}
+        )
+        self.assertEqual(response.status_code, 400)
+
+        response = self.client.get(
+            f"{self.url}daily/",
+            {
+                "date": "2025-02-01",
+                "uuid": "923e4567-e89b-12d3-a456-426614174999",
+                "mode": "student"
+            }
+        )
+        self.assertEqual(response.status_code, 400)
+
 class SessionRequestAPITestCase(APITestCase):
     fixtures = [
         "core/data/test/users.json", "core/data/initial/professions.json",
