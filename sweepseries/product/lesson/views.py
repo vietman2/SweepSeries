@@ -157,7 +157,7 @@ class SessionViewSet(ModelViewSet):
         try:
             tz = timezone.get_current_timezone()
             date = timezone.make_aware(datetime.strptime(date, "%Y-%m-%d"), tz)
-        except ValueError as e:
+        except ValueError:
             return Response(
                 data={"message": "올바른 날짜 형식이 아닙니다."},
                 status=status.HTTP_400_BAD_REQUEST
@@ -171,7 +171,7 @@ class SessionViewSet(ModelViewSet):
                     data={"message": "코치가 존재하지 않습니다."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-            
+
             ## get all sessions that the coach is in
             q = Q(coaches=coach)
         else:

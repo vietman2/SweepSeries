@@ -159,7 +159,11 @@ class SessionAPITestCase(APITestCase):
         self.client.force_authenticate(user=self.user)
         response = self.client.get(
             f"{self.url}daily/",
-            {"date": "2025-02-01", "uuid": "123e4567-e89b-12d3-a456-426614174999", "mode": "student"}
+            {
+                "date": "2025-02-01",
+                "uuid": "123e4567-e89b-12d3-a456-426614174999",
+                "mode": "student"
+            }
         )
         self.assertEqual(response.status_code, 200)
 
@@ -182,7 +186,11 @@ class SessionAPITestCase(APITestCase):
 
         response = self.client.get(
             f"{self.url}daily/",
-            {"date": "2025-02-01", "uuid": "923e4567-e89b-12d3-a456-426614174999", "mode": "student"}
+            {
+                "date": "2025-02-01",
+                "uuid": "923e4567-e89b-12d3-a456-426614174999",
+                "mode": "student"
+            }
         )
         self.assertEqual(response.status_code, 400)
 
