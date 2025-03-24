@@ -20,6 +20,9 @@ describe("<AcademyCoaches />", () => {
     jest.clearAllMocks();
     jest.spyOn(AcademyDetailContext, "useAcademyDetail").mockReturnValue({
       academy: sampleAcademyDetail,
+      showDetailPage: false,
+      selectCoach: jest.fn(),
+      selectNotice: jest.fn(),
     });
   });
 
@@ -42,6 +45,9 @@ describe("<AcademyCoaches />", () => {
   it("handles no academy", async () => {
     jest.spyOn(AcademyDetailContext, "useAcademyDetail").mockReturnValue({
       academy: null,
+      showDetailPage: false,
+      selectCoach: jest.fn(),
+      selectNotice: jest.fn(),
     });
     renderWithProviders(<AcademyCoaches />);
   });

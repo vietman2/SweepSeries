@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { router } from "expo-router";
 
 import { Text } from "@components/Texts";
 import { useAcademyDetail } from "@contexts/academy";
@@ -13,15 +12,12 @@ import { ThemeColorType } from "@themes/colors";
 export function AcademyCoaches() {
   const [coaches, setCoaches] = useState<CoachSimpleType[]>([]);
 
-  const { academy } = useAcademyDetail();
+  const { academy, selectCoach } = useAcademyDetail();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   const handleCoachPress = (coach: CoachSimpleType) => {
-    router.push({
-      pathname: "/home/academy/coach/[id]",
-      params: { id: coach.uuid },
-    });
+    selectCoach(coach);
   };
 
   useEffect(() => {

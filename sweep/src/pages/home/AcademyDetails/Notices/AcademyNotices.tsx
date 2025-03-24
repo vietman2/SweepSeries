@@ -36,7 +36,7 @@ export function AcademyNotices() {
   if (!academy) return null;
 
   const handleNoticePress = (notice: NoticeSimpleType) => {
-    selectNotice(notice);
+    selectNotice(academy.uuid, notice);
   };
 
   return (
