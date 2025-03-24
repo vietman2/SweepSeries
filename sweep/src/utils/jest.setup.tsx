@@ -326,6 +326,17 @@ jest.mock("@components/Texts", () => {
     Text,
   };
 });
+jest.mock("@contexts/academy", () => ({
+  AcademyDetailProvider: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  useAcademyDetail: jest.fn().mockReturnValue({
+    academy: null,
+    showDetailPage: false,
+    selectCoach: jest.fn(),
+    selectNotice: jest.fn(),
+  }),
+}));
 jest.mock("@contexts/addlesson", () => ({
   useAddLesson: jest.fn().mockReturnValue({
     selectedProgram: null,
