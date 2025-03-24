@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { fireEvent, waitFor } from "@testing-library/react-native";
 import { BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
 
@@ -12,7 +13,7 @@ jest.mock("expo-router", () => ({
   },
 }));
 jest.mock("@gorhom/bottom-sheet", () => {
-  const { forwardRef, View } = jest.requireActual("react");
+  const { forwardRef } = jest.requireActual("react");
 
   return {
     __esModule: true,
@@ -27,7 +28,7 @@ jest.mock("@gorhom/bottom-sheet", () => {
         },
         ref
       ) => (
-        <View ref={ref}>
+        <>
           {backdropComponent &&
             backdropComponent({
               animatedIndex: {
@@ -48,7 +49,7 @@ jest.mock("@gorhom/bottom-sheet", () => {
               },
             })}
           {children}
-        </View>
+        </>
       )
     ),
     BottomSheetBackdrop: () => "BottomSheetBackdrop",
