@@ -48,7 +48,7 @@ export function AcademySearch({
 
   const handleAcademySelect = (academy: AcademySimpleType) => {
     router.push({
-      pathname: "/home/academy/[id]",
+      pathname: "/home/academy/[id]/information",
       params: { id: academy.uuid },
     });
   };
@@ -87,7 +87,7 @@ export function AcademySearch({
           <Text style={styles.title}>아카데미 찾기</Text>
           <View style={styles.searchbar}>
             <Searchbar
-              placeholder="제목, 내용으로 검색하세요"
+              placeholder="아카데미 이름으로 검색하세요"
               value={query}
               onChange={setQuery}
               onSubmit={Keyboard.dismiss}
