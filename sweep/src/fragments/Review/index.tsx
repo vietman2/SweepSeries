@@ -1,4 +1,6 @@
+import { ReviewInputs } from "./ReviewInputs/ReviewInputs";
 import { ReviewsHeader } from "./ReviewsHeader/ReviewsHeader";
 import { ReviewSimple } from "./ReviewSimple/ReviewSimple";
+import { SessionsToReview } from "./SessionsToReview/SessionsToReview";
 
-export { ReviewsHeader, ReviewSimple };
+export { ReviewInputs, ReviewsHeader, ReviewSimple, SessionsToReview };
