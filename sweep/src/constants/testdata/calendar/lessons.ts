@@ -12,6 +12,9 @@ export const sampleLessonSimple: LessonType = {
   title: "엘리트 (고등학생) 1:1 타격레슨",
   description: "코치: 홍길동\t수강생: 김철수",
   done: true,
+  curriculum: "타격",
+  full_date: "2022-11-01T09:00:00",
+  academy_name: "엘리트 야구 아카데미",
 };
 
 export const sampleLesson: LessonDetailType = {
