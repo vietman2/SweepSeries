@@ -18,3 +18,23 @@ export type ReplyType = {
   date: string;
   content: string;
 };
+
+export type TagType = {
+  id: number;
+  tag: string;
+};
+
+export type TagOptionsType = {
+  lesson: {
+    positives: TagType[];
+    negatives: TagType[];
+  };
+  coach: {
+    positives: TagType[];
+    negatives: TagType[];
+  };
+  academy: {
+    positives: TagType[];
+    negatives: TagType[];
+  };
+};

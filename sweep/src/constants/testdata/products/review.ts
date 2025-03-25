@@ -1,4 +1,9 @@
-import { ReviewType, ReplyType } from "@models/products";
+import {
+  ReviewType,
+  ReplyType,
+  TagOptionsType,
+  ReviewTagType,
+} from "@models/products";
 
 const sampleReply: ReplyType = {
   id: 1,
@@ -24,3 +29,37 @@ export const sampleReviews: ReviewType[] = [
     reply: sampleReply,
   },
 ];
+
+const sampleReviewTags: ReviewTagType[] = [
+  {
+    id: 1,
+    tag: "피드백이 좋아요",
+  },
+  {
+    id: 2,
+    tag: "시설이 깔끔해요",
+  },
+  {
+    id: 3,
+    tag: "피드백이 부족해요",
+  },
+  {
+    id: 4,
+    tag: "시설이 불편해요",
+  },
+];
+
+export const sampleTagOptions: TagOptionsType = {
+  lesson: {
+    positives: [sampleReviewTags[0], sampleReviewTags[1]],
+    negatives: [sampleReviewTags[2], sampleReviewTags[3]],
+  },
+  coach: {
+    positives: [sampleReviewTags[0], sampleReviewTags[1]],
+    negatives: [sampleReviewTags[2], sampleReviewTags[3]],
+  },
+  academy: {
+    positives: [sampleReviewTags[0], sampleReviewTags[1]],
+    negatives: [sampleReviewTags[2], sampleReviewTags[3]],
+  },
+};

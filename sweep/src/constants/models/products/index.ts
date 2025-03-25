@@ -16,7 +16,7 @@ import {
   TeamInputType,
   AvailableTimesType,
 } from "./program";
-import { ReviewType, ReplyType } from "./review";
+import { ReviewType, ReplyType, TagOptionsType, TagType } from "./review";
 import {
   StudentSimpleType,
   StudentInputType,
@@ -42,6 +42,8 @@ export {
   AvailableTimesType,
   ReviewType,
   ReplyType,
+  TagOptionsType,
+  TagType as ReviewTagType,
   StudentSimpleType,
   StudentInputType,
   StudentLessonsType,
