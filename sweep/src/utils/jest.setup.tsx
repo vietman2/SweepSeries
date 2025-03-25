@@ -275,7 +275,9 @@ jest.mock("@components/ScrollView", () => {
 
   return {
     GSScroll: ({ children }: { children: React.ReactNode }) => children,
-    Scroll: ({ children }: { children: React.ReactNode }) => children,
+    Scroll: ({ children }: { children: React.ReactNode }) => (
+      <View testID="scroll">{children}</View>
+    ),
     ScrollView: ({
       children,
       onRefresh,
@@ -402,6 +404,16 @@ jest.mock("@contexts/home", () => ({
   useHome: jest.fn().mockReturnValue({
     academy: null,
     selectAcademy: jest.fn(),
+  }),
+}));
+jest.mock("@contexts/review", () => ({
+  ReviewProvider: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  useReview: jest.fn().mockReturnValue({
+    sessionToReview: null,
+    tagOptions: undefined,
+    setSession: jest.fn(),
   }),
 }));
 jest.mock("@contexts/signup", () => ({
