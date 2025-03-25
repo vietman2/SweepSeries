@@ -1,6 +1,5 @@
 import { Image, StyleSheet, View } from "react-native";
 
-import { RatingDiaplay } from "../Rating/RatingDisplay";
 import { AppIcon } from "@components/Icons";
 import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
@@ -26,7 +25,7 @@ export function ReviewSimple({ review }: Readonly<Props>) {
         </View>
         <AppIcon icon="dots" size={16} color={theme.lowEmphasis} />
       </View>
-      <RatingDiaplay rating={review.rating} />
+      <RatingDisplay rating={review.rating} />
       <View style={styles.information}>
         <Text style={styles.informationText}>{review.lesson}</Text>
         <Text style={styles.informationText}>{review.coach}</Text>
@@ -63,6 +62,41 @@ function Tag({ text }: Readonly<TagProps>) {
   return (
     <View style={styles.tag}>
       <Text style={styles.tagText}>{text}</Text>
+    </View>
+  );
+}
+
+interface RatingProps {
+  rating: number;
+}
+
+function RatingDisplay({ rating }: Readonly<RatingProps>) {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+
+  return (
+    <View style={styles.rating}>
+      <AppIcon icon="star" size={16} color="#F2B517" />
+      <AppIcon
+        icon={rating >= 2 ? "star" : "star-outline"}
+        size={16}
+        color="#F2B517"
+      />
+      <AppIcon
+        icon={rating >= 3 ? "star" : "star-outline"}
+        size={16}
+        color="#F2B517"
+      />
+      <AppIcon
+        icon={rating >= 4 ? "star" : "star-outline"}
+        size={16}
+        color="#F2B517"
+      />
+      <AppIcon
+        icon={rating == 5 ? "star" : "star-outline"}
+        size={16}
+        color="#F2B517"
+      />
     </View>
   );
 }
@@ -151,5 +185,10 @@ const createStyles = (theme: ThemeColorType) =>
       fontSize: 14,
       lineHeight: 20,
       color: theme.highEmphasis,
+    },
+    rating: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 4,
     },
   });
