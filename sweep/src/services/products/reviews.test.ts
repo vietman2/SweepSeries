@@ -1,6 +1,14 @@
 import axios from "axios";
 
-import { getReviews, getTagOptions } from "./reviews";
+import { getReviews, getTagOptions, createReview } from "./reviews";
+
+jest.mock("form-data", () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      append: jest.fn(),
+    };
+  });
+});
 
 describe("getReviews", () => {
   it("should return reviews", async () => {
@@ -37,5 +45,84 @@ describe("getTagOptions", () => {
     const result = await getTagOptions();
 
     expect(result).toBeNull();
+  });
+});
+
+describe("createReview", () => {
+  const defaultReviewInput = {
+    rating: 5,
+    tagIds: [1],
+    comment: "Great product!",
+    images: [
+      {
+        uri: "imageuri/1",
+        width: 100,
+        height: 100,
+      },
+    ],
+  };
+
+  it("handles missing ratings", async () => {
+    const response = await createReview(
+      "s1",
+      { ...defaultReviewInput, rating: 0 },
+      defaultReviewInput,
+      defaultReviewInput
+    );
+
+    expect(response.status).toBe(400);
+    expect(response.data.error).toBe("평점을 모두 선택해주세요.");
+  });
+
+  it("handles missing tags", async () => {
+    const response = await createReview(
+      "s1",
+      { ...defaultReviewInput, tagIds: [] },
+      defaultReviewInput,
+      defaultReviewInput
+    );
+
+    expect(response.status).toBe(400);
+    expect(response.data.error).toBe("리뷰 키워드를 최소 1개씩 선택해주세요.");
+  });
+
+  it("handles invalid comment length", async () => {
+    const response = await createReview(
+      "s1",
+      { ...defaultReviewInput, comment: "tooshort" },
+      defaultReviewInput,
+      defaultReviewInput
+    );
+
+    expect(response.status).toBe(400);
+    expect(response.data.error).toBe(
+      "후기는 10자 이상, 500자 이하로 작성해주세요."
+    );
+  });
+
+  it("handles success", async () => {
+    jest.spyOn(axios, "post").mockResolvedValue({ status: 201, data: {} });
+
+    const response = await createReview(
+      "s1",
+      defaultReviewInput,
+      defaultReviewInput,
+      defaultReviewInput
+    );
+
+    expect(response.status).toBe(201);
+  });
+
+  it("handles bad response", async () => {
+    jest.spyOn(axios, "post").mockRejectedValue({ status: 400, data: {} });
+
+    const response = await createReview(
+      "s1",
+      defaultReviewInput,
+      defaultReviewInput,
+      defaultReviewInput
+    );
+
+    expect(response.status).toBe(400);
   });
 });
