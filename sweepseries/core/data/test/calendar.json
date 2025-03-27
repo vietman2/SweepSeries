@@ -180,5 +180,20 @@
       "feedback": "",
       "coaches": ["923e4567-e89b-12d3-a456-426614174999"]
     }
+  },
+  {
+    "model": "lesson.session",
+    "pk": 3,
+    "fields": {
+      "lesson": 2,
+      "contract": 3,
+      "start_datetime": "2025-02-01T06:30:18Z",
+      "end_datetime": "2025-02-01T08:00:18Z",
+      "notify": false,
+      "notify_time": null,
+      "notes": "",
+      "feedback": "",
+      "coaches": ["923e4567-e89b-12d3-a456-426614174999"]
+    }
   }
 ]
