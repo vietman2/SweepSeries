@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { ImagePickerAsset } from "expo-image-picker";
+import { router } from "expo-router";
 
 import { ErrorPage } from "@components/Fallbacks";
 import { Scroll } from "@components/ScrollView";
@@ -9,15 +9,10 @@ import { useReview } from "@contexts/review";
 import { useTheme } from "@contexts/theme";
 import { LessonSimple } from "@fragments/Lesson";
 import { ReviewInputs } from "@fragments/Review";
+import { ReviewInputType } from "@models/products";
+import { alert } from "@services/alert";
+import { createReview } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
-
-type ReviewInputType = {
-  rating: number;
-  comment: string;
-  images: ImagePickerAsset[];
-  tagIds: number[];
-  secure?: boolean;
-};
 
 export function ReviewModal() {
   const [lessonReview, setLessonReview] = useState<ReviewInputType>({
@@ -45,13 +40,24 @@ export function ReviewModal() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  const handleSubmit = async () => {
-    // Submit the reviews.
-  };
-
   if (!sessionToReview || !tagOptions) {
     return <ErrorPage />;
   }
+
+  const handleSubmit = async () => {
+    const response = await createReview(
+      sessionToReview.id,
+      lessonReview,
+      coachReview,
+      academyReview
+    );
+
+    if (response.status === 201) {
+      router.back();
+    } else {
+      alert("오류 발생", response.data.error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -70,12 +76,14 @@ export function ReviewModal() {
             values={coachReview}
             setValues={setCoachReview}
             tagOptions={tagOptions.coach}
+            canSetSecure
           />
           <ReviewInputs
             type={3}
             values={academyReview}
             setValues={setAcademyReview}
             tagOptions={tagOptions.academy}
+            canSetSecure
           />
         </View>
       </Scroll>
@@ -97,9 +105,10 @@ const createStyles = (theme: ThemeColorType) =>
       backgroundColor: theme.background,
     },
     content: {
+      marginBottom: 48,
       paddingHorizontal: 16,
       paddingVertical: 8,
-      gap: 12,
+      gap: 16,
     },
     title: {
       marginVertical: 16,
