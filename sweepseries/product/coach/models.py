@@ -33,6 +33,8 @@ class Coach(models.Model):
     instagram       = models.URLField(max_length=200, blank=True)
     blog            = models.URLField(max_length=200, blank=True)
 
+    cached_rating   = models.FloatField(default=0)
+
     is_verified     = models.BooleanField(default=False)
     verified_at     = models.DateTimeField(null=True)
     is_rejected     = models.BooleanField(default=False)
@@ -61,21 +63,6 @@ class CoachLike(models.Model):
 
     class Meta:
         db_table = 'coach_like'
-
-class CoachReview(models.Model):
-    coach       = models.ForeignKey(Coach, on_delete=models.CASCADE, related_name='reviews')
-    user        = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
-
-    rating      = models.PositiveSmallIntegerField()
-    content     = models.TextField()
-
-    created_at  = models.DateTimeField(auto_now_add=True)
-    updated_at  = models.DateTimeField(auto_now=True)
-
-    objects     = models.Manager()
-
-    class Meta:
-        db_table = 'coach_review'
 
 class WorkingHoursManager(models.Manager):
     def create_working_hours(self, coach):
