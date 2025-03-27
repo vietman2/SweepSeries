@@ -49,6 +49,7 @@ class Academy(models.Model):
     num_plates              = models.PositiveSmallIntegerField(
         validators=[Min(0), Max(5)], default=0
     )
+    cached_rating           = models.FloatField(default=0)
 
     is_verified             = models.BooleanField(default=False)
     verified_at             = models.DateTimeField(null=True)
@@ -106,21 +107,6 @@ class AcademyLike(models.Model):
 
     class Meta:
         db_table = 'academy_like'
-
-class AcademyReview(models.Model):
-    academy     = models.ForeignKey(Academy, on_delete=models.CASCADE, related_name='reviews')
-    user        = models.ForeignKey(User, on_delete=models.CASCADE, related_name='academy_reviews')
-
-    content     = models.TextField()
-    rating      = models.PositiveSmallIntegerField(validators=[Min(1), Max(5)])
-
-    created_at  = models.DateTimeField(auto_now_add=True)
-    updated_at  = models.DateTimeField(auto_now=True)
-
-    objects     = models.Manager()
-
-    class Meta:
-        db_table = 'academy_review'
 
 class BusinessHoursManager(models.Manager):
     def create_business_hours(self, academy):
