@@ -51,7 +51,7 @@ import {
   getAvailableTimes,
   createLessonRequest,
 } from "./programs";
-import { getReviews, getTagOptions, createReview } from "./reviews";
+import { getReviews, getTagOptions, createReview, getAcademyReviews, getAcademyReviewSummary } from "./reviews";
 import { getStudents, getAcademyStudentDetail } from "./students";
 
 export {
@@ -103,6 +103,8 @@ export {
   getReviews,
   getTagOptions,
   createReview,
+  getAcademyReviews,
+  getAcademyReviewSummary,
   getStudents,
   getAcademyStudentDetail,
 };

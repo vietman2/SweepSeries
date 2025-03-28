@@ -1,6 +1,12 @@
 import axios from "axios";
 
-import { getReviews, getTagOptions, createReview } from "./reviews";
+import {
+  getReviews,
+  getTagOptions,
+  createReview,
+  getAcademyReviews,
+  getAcademyReviewSummary,
+} from "./reviews";
 
 jest.mock("form-data", () => {
   return jest.fn().mockImplementation(() => {
@@ -124,5 +130,43 @@ describe("createReview", () => {
     );
 
     expect(response.status).toBe(400);
+  });
+});
+
+describe("getAcademyReviews", () => {
+  it("should return academy reviews", async () => {
+    const reviews = [{ id: 1, content: "Great product!" }];
+    axios.get = jest.fn().mockResolvedValue({ data: reviews });
+
+    const result = await getAcademyReviews("1");
+
+    expect(result).toEqual(reviews);
+  });
+
+  it("should return null if request fails", async () => {
+    axios.get = jest.fn().mockRejectedValue(null);
+
+    const result = await getAcademyReviews("1");
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("getAcademyReviewSummary", () => {
+  it("should return academy review summary", async () => {
+    const summary = { rating: 5, count: 10 };
+    axios.get = jest.fn().mockResolvedValue({ data: summary });
+
+    const result = await getAcademyReviewSummary("1");
+
+    expect(result).toEqual(summary);
+  });
+
+  it("should return null if request fails", async () => {
+    axios.get = jest.fn().mockRejectedValue(null);
+
+    const result = await getAcademyReviewSummary("1");
+
+    expect(result).toBeNull();
   });
 });

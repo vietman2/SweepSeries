@@ -122,3 +122,23 @@ export async function createReview(
     };
   }
 }
+
+export async function getAcademyReviews(uuid: string) {
+  try {
+    const response = await axios.get(`/v1/academies/${uuid}/reviews/`);
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
+export async function getAcademyReviewSummary(uuid: string) {
+  try {
+    const response = await axios.get(`/v1/academies/${uuid}/reviews/summary/`);
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
