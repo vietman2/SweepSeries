@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Slot, router, usePathname } from "expo-router";
 
-import { Scroll } from "@components/ScrollView";
+import { ScrollView } from "@components/ScrollView";
 import { AcademyDetailProvider, useAcademyDetail } from "@contexts/academy";
 import { useTheme } from "@contexts/theme";
 import { AcademyProfile } from "@fragments/Academy";
@@ -55,7 +55,7 @@ const tabs: AcademyDetailTabType[] = [
 ];
 
 function AcademyDetail() {
-  const { academy, showDetailPage } = useAcademyDetail();
+  const { academy, showDetailPage, loading, refresh } = useAcademyDetail();
   const pathname = usePathname();
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -81,7 +81,7 @@ function AcademyDetail() {
 
   return (
     <View style={styles.container}>
-      <Scroll>
+      <ScrollView onRefresh={refresh} refreshing={loading}>
         <AcademyProfile academy={academy} />
         <View style={styles.tabs}>
           {tabs.map((tab) => (
@@ -103,7 +103,7 @@ function AcademyDetail() {
           ))}
         </View>
         <Slot />
-      </Scroll>
+      </ScrollView>
     </View>
   );
 }
