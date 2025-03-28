@@ -1,15 +1,39 @@
-export type ReviewType = {
+import { ImagePickerAsset } from "expo-image-picker";
+import { StudentSimpleType } from "./student";
+
+export type TagType = {
   id: number;
-  author_nickname: string;
-  author_profile: string;
-  date: string;
-  rating: number;
-  lesson: string;
-  coach: string;
-  tags: string[];
-  images: string[];
-  content: string;
+  tag: string;
+};
+
+export type AcademyReviewType = {
+  id: number;
+  reviewer: StudentSimpleType;
+  created_at: string; // 날짜만 반환됨
+  academy_rating: number;
+  academy_comment: string;
+  academy_images: string[];
+  academy_tags: TagType[];
   reply?: ReplyType;
+};
+
+export type AcademyReviewSummaryType = {
+  uuid: number;
+  average_rating: number;
+  summary: {
+    rating_5: number;
+    rating_4: number;
+    rating_3: number;
+    rating_2: number;
+    rating_1: number;
+    total: number;
+  };
+};
+
+export type ReviewResponseType = {
+  count: number;
+  next: string;
+  previous: string;
 };
 
 export type ReplyType = {
@@ -17,11 +41,6 @@ export type ReplyType = {
   author_name: string;
   date: string;
   content: string;
-};
-
-export type TagType = {
-  id: number;
-  tag: string;
 };
 
 export type TagOptionsType = {
@@ -37,4 +56,12 @@ export type TagOptionsType = {
     positives: TagType[];
     negatives: TagType[];
   };
+};
+
+export type ReviewInputType = {
+  rating: number;
+  comment: string;
+  images: ImagePickerAsset[];
+  tagIds: number[];
+  secure?: boolean;
 };

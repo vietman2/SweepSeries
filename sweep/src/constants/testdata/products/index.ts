@@ -10,7 +10,7 @@ import {
   sampleCoachTeam,
   sampleAvailableTimes,
 } from "./programs";
-import { sampleReviews, sampleTagOptions } from "./review";
+import { sampleReviews, sampleTagOptions, sampleReviewResponse, sampleReviewSummary } from "./review";
 import { sampleStudents, sampleStudentLesson } from "./students";
 
 export {
@@ -28,6 +28,8 @@ export {
   sampleAvailableTimes,
   sampleReviews,
   sampleTagOptions,
+  sampleReviewResponse,
+  sampleReviewSummary,
   sampleStudents,
   sampleStudentLesson,
 };
