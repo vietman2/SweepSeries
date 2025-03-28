@@ -5,14 +5,34 @@ import {
   AcademyDetailType,
   CoachSimpleType,
   NoticeSimpleType,
+  ProgramSimpleType,
+  AcademyReviewSummaryType,
+  ReviewResponseType,
+  AcademyReviewType,
 } from "@models/products";
-import { getAcademyDetail } from "@services/products";
+import {
+  getAcademyDetail,
+  getCoaches,
+  getPrograms,
+  getNotices,
+  getAcademyReviews,
+  getAcademyReviewSummary,
+} from "@services/products";
 
 interface AcademyDetailContextType {
   academy: AcademyDetailType | null;
+  programs: ProgramSimpleType[];
+  coaches: CoachSimpleType[];
+  notices: NoticeSimpleType[];
+  summary: AcademyReviewSummaryType | undefined;
+  reviews: AcademyReviewType[];
+  result: ReviewResponseType | undefined;
   showDetailPage: boolean;
+  loading: boolean;
+  error: boolean;
   selectCoach: (coach: CoachSimpleType) => void;
   selectNotice: (id: string, notice: NoticeSimpleType) => void;
+  refresh: () => void;
 }
 
 const AcademyDetailContext = createContext<
@@ -23,10 +43,30 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [academy, setAcademy] = useState<AcademyDetailType | null>(null);
+  const [programs, setPrograms] = useState<ProgramSimpleType[]>([]);
+  const [coaches, setCoaches] = useState<CoachSimpleType[]>([]);
+  const [notices, setNotices] = useState<NoticeSimpleType[]>([]);
+
+  const [result, setResult] = useState<ReviewResponseType>();
+  const [reviews, setReviews] = useState<AcademyReviewType[]>([]);
+  const [summary, setSummary] = useState<AcademyReviewSummaryType>();
+
   const [showDetailPage, setShowDetailPage] = useState<boolean>(false);
+  const [refreshCount, setRefreshCount] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
   const { id } = useLocalSearchParams<{ id: string }>();
   const pathname = usePathname();
+
+  const handleRefresh = () => {
+    setRefreshCount((prev) => prev + 1);
+
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  };
 
   const selectCoach = (coach: CoachSimpleType) => {
     router.push({
@@ -47,16 +87,86 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchAcademies = async () => {
       const response = await getAcademyDetail(id);
 
       if (response) {
         setAcademy(response);
+        setError(false);
+      } else {
+        setAcademy(null);
       }
     };
 
-    fetchData();
-  }, []);
+    const fetchCoaches = async () => {
+      const response = await getCoaches(id);
+
+      if (response) {
+        setCoaches(response);
+        setError(false);
+      } else {
+        setCoaches([]);
+        setError(true);
+      }
+    };
+
+    const fetchPrograms = async () => {
+      const response = await getPrograms(id);
+
+      if (response) {
+        setPrograms(response);
+        setError(false);
+      } else {
+        setPrograms([]);
+        setError(true);
+      }
+    };
+
+    const fetchNotices = async () => {
+      const response = await getNotices(id);
+
+      if (response) {
+        setNotices(response);
+        setError(false);
+      } else {
+        setNotices([]);
+        setError(true);
+      }
+    };
+
+    const fetchReviews = async () => {
+      const response1 = await getAcademyReviewSummary(id);
+      const response2 = await getAcademyReviews(id);
+
+      if (response1 && response2) {
+        setSummary(response1);
+        setReviews(response2.results);
+        setResult(response2);
+        setError(false);
+      } else {
+        setSummary(undefined);
+        setReviews([]);
+        setResult(undefined);
+        setError(true);
+      }
+    };
+
+    if (pathname.includes("information")) {
+      fetchAcademies();
+    }
+    if (pathname.includes("programs")) {
+      fetchPrograms();
+    }
+    if (pathname.includes("coaches")) {
+      fetchCoaches();
+    }
+    if (pathname.includes("notices")) {
+      fetchNotices();
+    }
+    if (pathname.includes("reviews")) {
+      fetchReviews();
+    }
+  }, [id, pathname, refreshCount]);
 
   useEffect(() => {
     if (pathname.split("/").length < 6) {
@@ -65,8 +175,33 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [pathname]);
 
   const value = useMemo(
-    () => ({ academy, showDetailPage, selectCoach, selectNotice }),
-    [academy, showDetailPage]
+    () => ({
+      academy,
+      programs,
+      coaches,
+      notices,
+      summary,
+      reviews,
+      result,
+      showDetailPage,
+      loading,
+      error,
+      selectCoach,
+      selectNotice,
+      refresh: handleRefresh,
+    }),
+    [
+      academy,
+      programs,
+      coaches,
+      notices,
+      summary,
+      reviews,
+      result,
+      showDetailPage,
+      loading,
+      error,
+    ]
   );
 
   return (
