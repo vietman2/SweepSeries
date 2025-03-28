@@ -76,14 +76,12 @@ export function ReviewModal() {
             values={coachReview}
             setValues={setCoachReview}
             tagOptions={tagOptions.coach}
-            canSetSecure
           />
           <ReviewInputs
             type={3}
             values={academyReview}
             setValues={setAcademyReview}
             tagOptions={tagOptions.academy}
-            canSetSecure
           />
         </View>
       </Scroll>
