@@ -71,11 +71,11 @@ export const sampleReviewSummary: AcademyReviewSummaryType = {
   uuid: 1,
   average_rating: 5,
   summary: {
-    rating_5: 1,
-    rating_4: 0,
-    rating_3: 0,
-    rating_2: 0,
+    rating_5: 4,
+    rating_4: 3,
+    rating_3: 2,
+    rating_2: 1,
     rating_1: 0,
-    total: 1,
+    total: 10,
   },
 };
