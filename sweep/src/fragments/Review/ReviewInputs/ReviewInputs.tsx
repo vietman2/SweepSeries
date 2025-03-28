@@ -11,25 +11,13 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import { AppIcon } from "@components/Icons";
 import { useTheme } from "@contexts/theme";
-import { ReviewTagType } from "@models/products";
+import { ReviewInputType, ReviewTagType } from "@models/products";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
   type: 1 | 2 | 3;
-  values: {
-    rating: number;
-    comment: string;
-    images: ImagePickerAsset[];
-    tagIds: number[];
-    secure?: boolean;
-  };
-  setValues: (values: {
-    rating: number;
-    comment: string;
-    images: ImagePickerAsset[];
-    tagIds: number[];
-    secure?: boolean;
-  }) => void;
+  values: ReviewInputType;
+  setValues: (values: ReviewInputType) => void;
   tagOptions: { positives: ReviewTagType[]; negatives: ReviewTagType[] };
 }
 
@@ -52,6 +40,8 @@ export function ReviewInputs({
     "코치님에 대한 솔직한 리뷰를 남겨주세요.",
     "아카데미에 대한 솔직한 리뷰를 남겨주세요.",
   ];
+  const secureText = ["", "코치님에게만 보이게", "아카데미에게만 보이게"];
+  const canSetSecure = type > 1;
 
   const setRating = (rating: number) => {
     if (rating < 3) {
@@ -94,6 +84,13 @@ export function ReviewInputs({
       images: values.images.filter((img) => img.uri !== image.uri),
     });
   };
+
+  const setSecure = () => {
+    setValues({ ...values, secure: !values.secure });
+  };
+
+  const isCommentValid =
+    values.comment.length >= 10 && values.comment.length <= 500;
 
   return (
     <View style={styles.wrapper}>
@@ -140,7 +137,7 @@ export function ReviewInputs({
         <Text style={styles.length}>
           <Text
             style={{
-              color: values.comment.length > 500 ? "red" : theme.lowEmphasis,
+              color: isCommentValid ? theme.lowEmphasis : "red",
             }}
           >
             {values.comment.length}
@@ -148,7 +145,23 @@ export function ReviewInputs({
           / 500
         </Text>
       </View>
-      <View style={styles.imagePicker}>
+      <View style={styles.horizontal}>
+        {canSetSecure ? (
+          <TouchableOpacity
+            style={styles.button}
+            onPress={setSecure}
+            testID="secure"
+          >
+            <AppIcon
+              icon="check-circle"
+              size={24}
+              color={values.secure ? theme.primary : theme.lowEmphasis}
+            />
+            <Text style={styles.chipText}>{secureText[type - 1]}</Text>
+          </TouchableOpacity>
+        ) : (
+          <View />
+        )}
         {values.images.length > 0 ? (
           <View style={styles.tags}>
             {values.images.map((image) => (
@@ -166,7 +179,7 @@ export function ReviewInputs({
           </View>
         ) : (
           <TouchableOpacity
-            style={styles.imageButton}
+            style={styles.button}
             onPress={selectImage}
             testID="select-image"
           >
@@ -319,9 +332,11 @@ const createStyles = (theme: ThemeColorType) =>
       backgroundColor: theme.background,
       borderRadius: 4,
     },
-    imagePicker: {
-      alignItems: "flex-end",
-      marginTop: -12,
+    horizontal: {
+      flexDirection: "row",
+      alignItems: "flex-start",
+      justifyContent: "space-between",
+      marginTop: -8,
     },
     image: {
       width: 80,
@@ -335,7 +350,7 @@ const createStyles = (theme: ThemeColorType) =>
       borderRadius: 12,
       backgroundColor: "rgba(255, 255, 255, 0.5)",
     },
-    imageButton: {
+    button: {
       flexDirection: "row",
       alignItems: "center",
       gap: 4,

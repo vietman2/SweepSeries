@@ -8,7 +8,7 @@ import { renderWithProviders } from "@utils/test-utils";
 describe("<ReviewInputs />", () => {
   const defaultValues = {
     rating: 5,
-    comment: "comment",
+    comment: "comment comment",
     images: [],
     tagIds: [1],
   };
@@ -57,6 +57,7 @@ describe("<ReviewInputs />", () => {
           rating: 0,
           comment: longComment,
           images: imageAssets,
+          secure: true,
         }}
         setValues={jest.fn()}
         tagOptions={sampleTagOptions.coach}
@@ -65,6 +66,7 @@ describe("<ReviewInputs />", () => {
 
     fireEvent.changeText(getByTestId("comment-input"), "new comment");
     fireEvent.press(getAllByTestId("remove-image")[0]);
+    fireEvent.press(getByTestId("secure"));
   });
 
   it("renders type 3, deselect tags, select image cancel and select low raing", () => {
