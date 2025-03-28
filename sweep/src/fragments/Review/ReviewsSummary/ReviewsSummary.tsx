@@ -3,13 +3,14 @@ import { StyleSheet, View } from "react-native";
 import { AppIcon } from "@components/Icons";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
+import { AcademyReviewSummaryType } from "@models/products";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
-  rating: number;
+  summary: AcademyReviewSummaryType;
 }
 
-export function ReviewsHeader({ rating }: Readonly<Props>) {
+export function ReviewsSummary({ summary }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -18,16 +19,36 @@ export function ReviewsHeader({ rating }: Readonly<Props>) {
       <View style={styles.summary}>
         <AppIcon icon="star" size={50} color="#F2B517" />
         <Text style={styles.rating}>
-          {rating.toFixed(2)}
+          {summary.average_rating}
           <Text style={styles.secondaryText}> / 5</Text>
         </Text>
       </View>
       <View style={styles.details}>
-        <ProgressBar rating={5} number={25} total={35} />
-        <ProgressBar rating={4} number={7} total={35} />
-        <ProgressBar rating={3} number={2} total={35} />
-        <ProgressBar rating={2} number={1} total={35} />
-        <ProgressBar rating={1} number={0} total={35} />
+        <ProgressBar
+          rating={5}
+          number={summary.summary.rating_5}
+          total={summary.summary.total}
+        />
+        <ProgressBar
+          rating={4}
+          number={summary.summary.rating_4}
+          total={summary.summary.total}
+        />
+        <ProgressBar
+          rating={3}
+          number={summary.summary.rating_3}
+          total={summary.summary.total}
+        />
+        <ProgressBar
+          rating={2}
+          number={summary.summary.rating_2}
+          total={summary.summary.total}
+        />
+        <ProgressBar
+          rating={1}
+          number={summary.summary.rating_1}
+          total={summary.summary.total}
+        />
       </View>
     </View>
   );
