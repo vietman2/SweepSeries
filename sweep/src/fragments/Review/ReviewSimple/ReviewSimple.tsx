@@ -4,11 +4,11 @@ import { AppIcon } from "@components/Icons";
 import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
-import { AcademyReviewType } from "@models/products";
+import { ReviewType } from "@models/products";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
-  review: AcademyReviewType;
+  review: ReviewType;
 }
 
 export function ReviewSimple({ review }: Readonly<Props>) {
@@ -27,18 +27,18 @@ export function ReviewSimple({ review }: Readonly<Props>) {
           <Text style={styles.date}>{review.created_at}</Text>
         </View>
       </View>
-      <RatingDisplay rating={review.academy_rating} />
+      <RatingDisplay rating={review.rating} />
       <View style={styles.tags}>
-        {review.academy_tags.map((tag) => (
+        {review.tags.map((tag) => (
           <Tag key={tag.id} text={tag.tag} />
         ))}
       </View>
       <Scroll horizontal>
-        {review.academy_images.map((image) => (
+        {review.images.map((image) => (
           <Image key={image} src={image} style={styles.image} />
         ))}
       </Scroll>
-      <Text style={styles.content}>{review.academy_comment}</Text>
+      <Text style={styles.content}>{review.comment}</Text>
       {review.reply && (
         <View style={styles.reply}>
           <Text style={styles.replyAuthor}>{review.reply.author_name}</Text>

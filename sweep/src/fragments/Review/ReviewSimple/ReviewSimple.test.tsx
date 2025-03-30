@@ -7,10 +7,10 @@ describe("<ReviewSimple />", () => {
     renderWithProviders(
       <>
         <ReviewSimple review={sampleReviews[0]} />
-        <ReviewSimple review={{ ...sampleReviews[0], academy_rating: 4 }} />
-        <ReviewSimple review={{ ...sampleReviews[0], academy_rating: 3 }} />
-        <ReviewSimple review={{ ...sampleReviews[0], academy_rating: 2 }} />
-        <ReviewSimple review={{ ...sampleReviews[0], academy_rating: 1 }} />
+        <ReviewSimple review={{ ...sampleReviews[0], rating: 4 }} />
+        <ReviewSimple review={{ ...sampleReviews[0], rating: 3 }} />
+        <ReviewSimple review={{ ...sampleReviews[0], rating: 2 }} />
+        <ReviewSimple review={{ ...sampleReviews[0], rating: 1 }} />
       </>
     );
   });
