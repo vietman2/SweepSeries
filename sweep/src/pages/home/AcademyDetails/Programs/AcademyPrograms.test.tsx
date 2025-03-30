@@ -2,8 +2,7 @@ import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { AcademyPrograms } from "./AcademyPrograms";
 import * as AcademyDetailContext from "@contexts/academy";
-import * as ProgramsAPI from "@services/products/programs";
-import { sampleAcademyPrograms, sampleAcademyDetail } from "@testdata/products";
+import { sampleAcademyPrograms } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("expo-router", () => ({
@@ -16,17 +15,31 @@ jest.mock("@fragments/Program", () => ({
 }));
 
 describe("<AcademyPrograms />", () => {
+  const defaultContext = {
+    academy: null,
+    programs: sampleAcademyPrograms,
+    coaches: [],
+    notices: [],
+    summary: undefined,
+    reviews: [],
+    result: undefined,
+    loading: false,
+    error: false,
+    showDetailPage: false,
+    selectCoach: jest.fn(),
+    selectNotice: jest.fn(),
+    refresh: jest.fn(),
+  };
+
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.spyOn(AcademyDetailContext, "useAcademyDetail").mockReturnValue({
-      academy: sampleAcademyDetail,
-    });
   });
 
   it("renders correctly", async () => {
     jest
-      .spyOn(ProgramsAPI, "getPrograms")
-      .mockResolvedValueOnce(sampleAcademyPrograms);
+      .spyOn(AcademyDetailContext, "useAcademyDetail")
+      .mockReturnValue(defaultContext);
+
     const { getByTestId } = renderWithProviders(<AcademyPrograms />);
 
     await waitFor(() => {
@@ -34,19 +47,11 @@ describe("<AcademyPrograms />", () => {
     });
   });
 
-  it("handles api error", async () => {
-    jest.spyOn(ProgramsAPI, "getPrograms").mockResolvedValueOnce(null);
+  it("renders empty list", async () => {
+    jest
+      .spyOn(AcademyDetailContext, "useAcademyDetail")
+      .mockReturnValue({ ...defaultContext, programs: [] });
+
     renderWithProviders(<AcademyPrograms />);
-
-    await waitFor(() => expect("ProgramSimple").toBeTruthy());
-  });
-
-  it("handles context fail", async () => {
-    jest.spyOn(AcademyDetailContext, "useAcademyDetail").mockReturnValue({
-      academy: null,
-    });
-    renderWithProviders(<AcademyPrograms />);
-
-    await waitFor(() => expect("ProgramSimple").toBeTruthy());
   });
 });

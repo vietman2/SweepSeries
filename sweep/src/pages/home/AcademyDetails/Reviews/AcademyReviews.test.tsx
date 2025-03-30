@@ -2,9 +2,7 @@ import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { AcademyReviews } from "./AcademyReviews";
 import * as AcademyContext from "@contexts/academy";
-import * as ReviewsAPI from "@services/products/reviews";
 import {
-  sampleAcademyDetail,
   sampleReviewResponse,
   sampleReviews,
   sampleReviewSummary,
@@ -18,25 +16,26 @@ jest.mock("@fragments/Review", () => ({
 
 describe("<AcademyReviews />", () => {
   const defaultContext = {
-    academy: sampleAcademyDetail,
+    academy: null,
+    programs: [],
+    coaches: [],
+    notices: [],
+    summary: sampleReviewSummary,
+    reviews: sampleReviews,
+    result: sampleReviewResponse,
+    loading: false,
+    error: false,
     showDetailPage: false,
     selectCoach: jest.fn(),
     selectNotice: jest.fn(),
+    refresh: jest.fn(),
   };
 
-  beforeEach(() => {
+  it("renders and handles load more correctly", async () => {
     jest
       .spyOn(AcademyContext, "useAcademyDetail")
       .mockReturnValue(defaultContext);
-    jest
-      .spyOn(ReviewsAPI, "getAcademyReviewSummary")
-      .mockResolvedValue(sampleReviewSummary);
-    jest
-      .spyOn(ReviewsAPI, "getAcademyReviews")
-      .mockResolvedValue({ ...sampleReviewResponse, results: sampleReviews });
-  });
 
-  it("renders and handles load more correctly", async () => {
     const { getByTestId } = renderWithProviders(<AcademyReviews />);
 
     await waitFor(() => {
@@ -44,19 +43,11 @@ describe("<AcademyReviews />", () => {
     });
   });
 
-  it("handles bad api response", async () => {
-    jest.spyOn(ReviewsAPI, "getAcademyReviews").mockResolvedValue(null);
-
-    waitFor(() => {
-      renderWithProviders(<AcademyReviews />);
-    });
-  });
-
-  it("handles bad config", async () => {
+  it("renders error", async () => {
     jest
       .spyOn(AcademyContext, "useAcademyDetail")
-      .mockReturnValue({ ...defaultContext, academy: null });
+      .mockReturnValue({...defaultContext, summary: undefined});
 
-    renderWithProviders(<AcademyReviews />);
+      renderWithProviders(<AcademyReviews />);
   });
 });

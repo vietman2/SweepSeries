@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { Divider } from "@components/Dividers";
@@ -7,31 +6,12 @@ import { useAcademyDetail } from "@contexts/academy";
 import { useTheme } from "@contexts/theme";
 import { NoticeSimple } from "@fragments/Notice";
 import { NoticeSimpleType } from "@models/products";
-import { getNotices } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
 export function AcademyNotices() {
-  const [notices, setNotices] = useState<NoticeSimpleType[]>([]);
-
-  const { academy, selectNotice } = useAcademyDetail();
+  const { academy, notices, selectNotice } = useAcademyDetail();
   const { theme } = useTheme();
   const styles = createStyles(theme);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!academy) return;
-
-      const response = await getNotices(academy.uuid);
-
-      if (response) {
-        setNotices(response);
-      } else {
-        setNotices([]);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   if (!academy) return null;
 
