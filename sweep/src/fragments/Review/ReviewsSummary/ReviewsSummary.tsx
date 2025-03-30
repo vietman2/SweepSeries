@@ -3,11 +3,11 @@ import { StyleSheet, View } from "react-native";
 import { AppIcon } from "@components/Icons";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
-import { AcademyReviewSummaryType } from "@models/products";
+import { ReviewSummaryType } from "@models/products";
 import { ThemeColorType } from "@themes/colors";
 
 interface Props {
-  summary: AcademyReviewSummaryType;
+  summary: ReviewSummaryType;
 }
 
 export function ReviewsSummary({ summary }: Readonly<Props>) {
@@ -19,7 +19,7 @@ export function ReviewsSummary({ summary }: Readonly<Props>) {
       <View style={styles.summary}>
         <AppIcon icon="star" size={50} color="#F2B517" />
         <Text style={styles.rating}>
-          {summary.average_rating}
+          {summary.average_rating.toFixed(2)}
           <Text style={styles.secondaryText}> / 5</Text>
         </Text>
       </View>

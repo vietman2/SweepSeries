@@ -1,7 +1,7 @@
 import {
   ReviewResponseType,
-  AcademyReviewType,
-  AcademyReviewSummaryType,
+  ReviewType,
+  ReviewSummaryType,
   TagOptionsType,
   ReviewTagType,
 } from "@models/products";
@@ -49,15 +49,16 @@ export const sampleTagOptions: TagOptionsType = {
   },
 };
 
-export const sampleReviews: AcademyReviewType[] = [
+export const sampleReviews: ReviewType[] = [
   {
     id: 1,
     reviewer: sampleStudents[0],
     created_at: "2024-10-01",
-    academy_rating: 5,
-    academy_comment: "코치님 너무 친절하시고, 시설도 너무 좋아요. 다음에 또 방문하겠습니다.",
-    academy_tags: [sampleReviewTags[0], sampleReviewTags[1]],
-    academy_images: ["https://picsum.photos/200", "https://picsum.photos/300"],
+    rating: 5,
+    comment:
+      "코치님 너무 친절하시고, 시설도 너무 좋아요. 다음에 또 방문하겠습니다.",
+    tags: [sampleReviewTags[0], sampleReviewTags[1]],
+    images: ["https://picsum.photos/200", "https://picsum.photos/300"],
   },
 ];
 
@@ -67,7 +68,7 @@ export const sampleReviewResponse: ReviewResponseType = {
   previous: "",
 };
 
-export const sampleReviewSummary: AcademyReviewSummaryType = {
+export const sampleReviewSummary: ReviewSummaryType = {
   uuid: 1,
   average_rating: 5,
   summary: {

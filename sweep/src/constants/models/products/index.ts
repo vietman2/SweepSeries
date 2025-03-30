@@ -18,12 +18,13 @@ import {
 } from "./program";
 import {
   ReviewResponseType,
-  AcademyReviewType,
+  ReviewType,
   ReplyType,
   TagOptionsType,
   TagType,
   ReviewInputType,
-  AcademyReviewSummaryType,
+  ReviewSummaryType,
+  CoachReviewResponseType,
 } from "./review";
 import {
   StudentSimpleType,
@@ -49,9 +50,10 @@ export {
   TeamInputType,
   AvailableTimesType,
   ReviewResponseType,
-  AcademyReviewType,
+  ReviewType,
   ReviewInputType,
-  AcademyReviewSummaryType,
+  ReviewSummaryType,
+  CoachReviewResponseType,
   ReplyType,
   TagOptionsType,
   TagType as ReviewTagType,

@@ -6,18 +6,18 @@ export type TagType = {
   tag: string;
 };
 
-export type AcademyReviewType = {
+export type ReviewType = {
   id: number;
   reviewer: StudentSimpleType;
   created_at: string; // 날짜만 반환됨
-  academy_rating: number;
-  academy_comment: string;
-  academy_images: string[];
-  academy_tags: TagType[];
+  rating: number;
+  comment: string;
+  images: string[];
+  tags: TagType[];
   reply?: ReplyType;
 };
 
-export type AcademyReviewSummaryType = {
+export type ReviewSummaryType = {
   uuid: number;
   average_rating: number;
   summary: {
@@ -34,6 +34,14 @@ export type ReviewResponseType = {
   count: number;
   next: string;
   previous: string;
+};
+
+export type CoachReviewResponseType = {
+  count: number;
+  next: string;
+  previous: string;
+  results: ReviewType[];
+  summary: ReviewSummaryType;
 };
 
 export type ReplyType = {
