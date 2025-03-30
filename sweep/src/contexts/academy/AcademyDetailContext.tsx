@@ -6,9 +6,9 @@ import {
   CoachSimpleType,
   NoticeSimpleType,
   ProgramSimpleType,
-  AcademyReviewSummaryType,
+  ReviewSummaryType,
   ReviewResponseType,
-  AcademyReviewType,
+  ReviewType,
 } from "@models/products";
 import {
   getAcademyDetail,
@@ -24,8 +24,8 @@ interface AcademyDetailContextType {
   programs: ProgramSimpleType[];
   coaches: CoachSimpleType[];
   notices: NoticeSimpleType[];
-  summary: AcademyReviewSummaryType | undefined;
-  reviews: AcademyReviewType[];
+  summary: ReviewSummaryType | undefined;
+  reviews: ReviewType[];
   result: ReviewResponseType | undefined;
   showDetailPage: boolean;
   loading: boolean;
@@ -48,8 +48,8 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
   const [notices, setNotices] = useState<NoticeSimpleType[]>([]);
 
   const [result, setResult] = useState<ReviewResponseType>();
-  const [reviews, setReviews] = useState<AcademyReviewType[]>([]);
-  const [summary, setSummary] = useState<AcademyReviewSummaryType>();
+  const [reviews, setReviews] = useState<ReviewType[]>([]);
+  const [summary, setSummary] = useState<ReviewSummaryType>();
 
   const [showDetailPage, setShowDetailPage] = useState<boolean>(false);
   const [refreshCount, setRefreshCount] = useState<number>(0);
