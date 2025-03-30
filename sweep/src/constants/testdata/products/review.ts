@@ -4,6 +4,7 @@ import {
   ReviewSummaryType,
   TagOptionsType,
   ReviewTagType,
+  CoachReviewResponseType,
 } from "@models/products";
 import { sampleStudents } from "./students";
 
@@ -79,4 +80,12 @@ export const sampleReviewSummary: ReviewSummaryType = {
     rating_1: 0,
     total: 10,
   },
+};
+
+export const sampleCoachReviewResponse: CoachReviewResponseType = {
+  count: 1,
+  next: "next-url",
+  previous: "",
+  results: sampleReviews,
+  summary: sampleReviewSummary,
 };
