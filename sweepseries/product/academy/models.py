@@ -50,6 +50,7 @@ class Academy(models.Model):
         validators=[Min(0), Max(5)], default=0
     )
     cached_rating           = models.FloatField(default=0)
+    num_reviews             = models.PositiveIntegerField(default=0)
 
     is_verified             = models.BooleanField(default=False)
     verified_at             = models.DateTimeField(null=True)
