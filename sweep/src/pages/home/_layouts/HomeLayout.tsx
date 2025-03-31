@@ -46,7 +46,12 @@ export function HomeLayout() {
           }}
         />
         <Stack.Screen name="academy/[id]" />
-        <Stack.Screen name="lesson/[id]" />
+        <Stack.Screen
+          name="lesson/[id]"
+          options={{
+            headerTitle: "레슨 상세",
+          }}
+        />
         <Stack.Screen
           name="reserve/[id]"
           options={{ presentation: "modal", headerShown: false }}
