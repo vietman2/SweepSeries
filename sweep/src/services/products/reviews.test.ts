@@ -6,6 +6,7 @@ import {
   createReview,
   getAcademyReviews,
   getAcademyReviewSummary,
+  getCoachReviews,
 } from "./reviews";
 
 jest.mock("form-data", () => {
@@ -166,6 +167,25 @@ describe("getAcademyReviewSummary", () => {
     axios.get = jest.fn().mockRejectedValue(null);
 
     const result = await getAcademyReviewSummary("1");
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("getCoachReviews", () => {
+  it("should return coach reviews", async () => {
+    const reviews = [{ id: 1, content: "Great product!" }];
+    axios.get = jest.fn().mockResolvedValue({ data: reviews });
+
+    const result = await getCoachReviews("1");
+
+    expect(result).toEqual(reviews);
+  });
+
+  it("should return null if request fails", async () => {
+    axios.get = jest.fn().mockRejectedValue(null);
+
+    const result = await getCoachReviews("1");
 
     expect(result).toBeNull();
   });

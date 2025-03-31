@@ -142,3 +142,13 @@ export async function getAcademyReviewSummary(uuid: string) {
     return null;
   }
 }
+
+export async function getCoachReviews(uuid: string) {
+  try {
+    const response = await axios.get(`/v1/coaches/${uuid}/reviews/`);
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
