@@ -1,5 +1,5 @@
 import { AcademyCards } from "./AcademyCards/AcademyCards";
-import { NormalCard } from "./AcademyCards/Cards";
+import { NormalCard, ProCard } from "./AcademyCards/Cards";
 import { AcademyProfile } from "./AcademyProfile/AcademyProfile";
 import { AcademySearch } from "./AcademySearch/AcademySearch";
 import { AcademySimple } from "./AcademySimple/AcademySimple";
@@ -14,6 +14,7 @@ export {
   AcademySearch,
   AcademySimple,
   NormalCard,
+  ProCard,
   Facilities,
   Introduction,
   WorkingHours,
