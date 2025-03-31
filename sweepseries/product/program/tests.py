@@ -237,7 +237,8 @@ class AvailableTimesTestCase(TestCase):
         "core/data/test/academies.json", "core/data/test/coaches.json",
         "core/data/test/programs.json", "core/data/initial/facilities.json",
         "core/data/initial/programs.json", "core/data/initial/professions.json",
-        "core/data/test/lessons.json"
+        "core/data/test/lessons.json", "core/data/test/contracts.json",
+        "core/data/initial/reviewtags.json",
     ]
 
     def test_get_academy_available_times(self):
