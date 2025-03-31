@@ -10,10 +10,12 @@ import { Stack, SplashScreen } from "expo-router";
 import axios from "axios";
 import { initializeKakaoSDK } from "@react-native-kakao/core";
 import NaverLogin from "@react-native-seoul/naver-login";
+import { ThemeProvider as StyledThemeProvider } from "styled-components";
 
 import { AuthProvider, useAuth } from "@contexts/auth";
 import { ThemeProvider } from "@contexts/theme";
 import { getProfile, refresh } from "@services/auth";
+import { lightColors } from "@themes/colors";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -61,13 +63,15 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    <AuthProvider>
-      <ThemeProvider>
-        <GestureHandlerRootView>
-          <AppRouter />
-        </GestureHandlerRootView>
-      </ThemeProvider>
-    </AuthProvider>
+    <StyledThemeProvider theme={{ colors: lightColors }}>
+      <AuthProvider>
+        <ThemeProvider>
+          <GestureHandlerRootView>
+            <AppRouter />
+          </GestureHandlerRootView>
+        </ThemeProvider>
+      </AuthProvider>
+    </StyledThemeProvider>
   );
 }
 
