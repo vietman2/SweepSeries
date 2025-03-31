@@ -61,15 +61,21 @@ class SessionSerializer(serializers.ModelSerializer):
     id          = serializers.SerializerMethodField()
     title       = serializers.SerializerMethodField()
     description = serializers.SerializerMethodField()
+    curriculum  = serializers.SerializerMethodField()
     color       = serializers.SerializerMethodField()
     time        = serializers.SerializerMethodField()
     type        = serializers.SerializerMethodField()
     done        = serializers.SerializerMethodField(read_only=True)
     date        = serializers.SerializerMethodField()
+    full_date   = serializers.SerializerMethodField()
+    academy_name= serializers.SerializerMethodField()
 
     class Meta:
         model = Session
-        fields = ['id', 'type', 'title', 'description', 'color', 'time', 'done', 'date']
+        fields = [
+            'id', 'type', 'title', 'description', 'color', 'curriculum',
+            'time', 'done', 'date', 'full_date', 'academy_name'
+        ]
 
     def get_id(self, obj):
         return f"s{obj.id}"
@@ -90,6 +96,11 @@ class SessionSerializer(serializers.ModelSerializer):
             return f'코치: {coaches}'
 
         return f'코치: {coaches}\t수강생: {student}'
+
+    def get_curriculum(self, obj):
+        coaches = ', '.join([coach.person.name for coach in obj.coaches.all()])
+
+        return f"코치: {coaches}\t{obj.contract.curriculum.num_lessons}회권"
 
     def get_color(self, obj):
         user = self.context.get('user', None)
@@ -128,6 +139,13 @@ class SessionSerializer(serializers.ModelSerializer):
         dayofweek = obj.start_datetime.astimezone(tz).weekday()
 
         return f'{day}일. {dow[dayofweek]}'
+
+    def get_full_date(self, obj):
+        tz = timezone.get_current_timezone()
+        return obj.start_datetime.astimezone(tz).strftime('%Y년 %m월 %d일')
+
+    def get_academy_name(self, obj):
+        return obj.lesson.program.academy.name
 
 class SessionDetailSerializer(SessionSerializer):
     coaches     = serializers.SerializerMethodField()
