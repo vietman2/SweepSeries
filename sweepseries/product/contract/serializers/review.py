@@ -3,23 +3,9 @@ from django.db.transaction import atomic
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from auth.person.serializers import StudentSimpleSerializer
 from product.lesson.models import Session
-from product.program.serializers import CurriculumSerializer
-from .models import (
-    Contract, Review, ReviewImage,
-    Tag, LessonReviewTags, CoachReviewTags, AcademyReviewTags
-)
-
-class ContractSerializer(serializers.ModelSerializer):
-    curriculum          = CurriculumSerializer(read_only=True)
-    remaining_lessons   = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Contract
-        fields = ["id", "curriculum", "remaining_lessons"]
-
-    def get_remaining_lessons(self, obj):
-        return obj.curriculum.num_lessons - obj.scheduled_lessons
+from ..models import Review, ReviewImage, LessonReviewTags, CoachReviewTags, AcademyReviewTags
 
 class ReviewSerializer(serializers.ModelSerializer):
     session_id     = serializers.IntegerField(write_only=True)
@@ -199,20 +185,21 @@ class ReviewSerializer(serializers.ModelSerializer):
 
         return new_review
 
-class TagSerializer(serializers.ModelSerializer):
+class BaseReviewSerializer(serializers.ModelSerializer):
+    reviewer    = serializers.SerializerMethodField()
+    created_at  = serializers.DateTimeField(format="%Y-%m-%d", read_only=True)
+    rating      = serializers.SerializerMethodField()
+    comment     = serializers.SerializerMethodField()
+    tags        = serializers.SerializerMethodField()
+    images      = serializers.SerializerMethodField()
+
     class Meta:
-        model = Tag
-        fields = ['id', 'tag', 'is_positive']
-        ## abstract = True
+        model = Review
+        fields = [
+            'id', 'reviewer', 'created_at', 'rating',
+            'comment', 'tags', 'images',
+        ]
 
-class LessonReviewTagSerializer(TagSerializer):
-    class Meta(TagSerializer.Meta):
-        model = LessonReviewTags
-
-class CoachReviewTagSerializer(TagSerializer):
-    class Meta(TagSerializer.Meta):
-        model = CoachReviewTags
-
-class AcademyReviewTagSerializer(TagSerializer):
-    class Meta(TagSerializer.Meta):
-        model = AcademyReviewTags
+    def get_reviewer(self, obj):
+        reviewer = obj.contract.customer
+        return StudentSimpleSerializer(reviewer).data

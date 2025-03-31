@@ -8,10 +8,10 @@ from rest_framework.viewsets import ModelViewSet
 from drf_spectacular.utils import extend_schema
 
 from product.lesson.serializers import SessionSerializer
-from .models import Contract, Review, LessonReviewTags, CoachReviewTags, AcademyReviewTags
-from .serializers import (
+from ..models import Contract, Review, LessonReviewTags, CoachReviewTags, AcademyReviewTags
+from ..serializers import (
     ReviewSerializer, LessonReviewTagSerializer,
-    CoachReviewTagSerializer, AcademyReviewTagSerializer
+    CoachReviewTagSerializer, AcademyReviewTagSerializer,
 )
 
 class ReviewViewSet(ModelViewSet):

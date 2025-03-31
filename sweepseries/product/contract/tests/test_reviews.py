@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 from auth.user.models import User
 from core.utils import generate_photo_file
-from .models import Contract
+from ..models import Contract
 
 class ReviewsAPITestCase(APITestCase):
     fixtures = [
