@@ -1,4 +1,4 @@
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APITestCase
 
@@ -35,11 +35,21 @@ class UserProfileAPITestCase(APITestCase):
         response = self.client.patch(f"{self.url}2/", data)
         self.assertEqual(response.status_code, 400)
 
-    @patch('django.core.files.storage.default_storage.save')
-    def test_upload_profile_image(self, mock_save):
+    @patch('auth.userprofile.serializers.default_storage')
+    def test_upload_profile_image(self, mock_default_storage):
         self.client.force_authenticate(user=self.user)
 
-        mock_save.return_value = "test1.png"
+        mock_s3_client = MagicMock()
+        mock_default_storage.connection.meta.client = mock_s3_client
+
+        fake_bucket = MagicMock()
+        fake_bucket.name = "test-bucket"
+        mock_default_storage.bucket = fake_bucket
+
+        expected_path = f"users/{self.user.uuid}/profiles/test1.jpg"
+        fake_url = f"https://test.com/{expected_path}"
+        mock_default_storage.url.return_value = fake_url
+
         test_image = SimpleUploadedFile(
             "test1.jpg", b"file_content", content_type="image/jpeg"
         )

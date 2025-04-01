@@ -49,7 +49,7 @@ class UserProfileImageSerializer(ModelSerializer):
 
     def upload_image(self, user, profile_image):
         path = f"users/{user.uuid}/profiles/{profile_image.name}"
-        
+
         s3_client = default_storage.connection.meta.client
         bucket_name = default_storage.bucket.name
 
