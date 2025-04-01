@@ -86,79 +86,39 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   useEffect(() => {
-    const fetchAcademies = async () => {
-      const response = await getAcademyDetail(id);
+    const fetchData = async () => {
+      const response1 = await getAcademyDetail(id);
+      const response2 = await getCoaches(id);
+      const response3 = await getPrograms(id);
+      const response4 = await getNotices(id);
+      const response5 = await getAcademyReviewSummary(id);
+      const response6 = await getAcademyReviews(id);
 
-      if (response) {
-        setAcademy(response);
+      if (response1 && response2 && response3 && response4 && response5 && response6) {
+        setAcademy(response1);
+        setCoaches(response2);
+        setPrograms(response3);
+        setNotices(response4);
+        setSummary(response5);
+        setReviews(response6.results);
+        setResult(response6);
       } else {
+        const handleError = () => {
+          if (refreshCount === 0) {
+            router.back();
+          }
+        };
+
         alert(
           "오류 발생",
-          "데이터를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+          "데이터를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+          handleError
         );
       }
     };
 
-    const fetchCoaches = async () => {
-      const response = await getCoaches(id);
 
-      if (response) {
-        setCoaches(response);
-      } else {
-        alert(
-          "오류 발생",
-          "데이터를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-        );
-      }
-    };
-
-    const fetchPrograms = async () => {
-      const response = await getPrograms(id);
-
-      if (response) {
-        setPrograms(response);
-      } else {
-        alert(
-          "오류 발생",
-          "데이터를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-        );
-      }
-    };
-
-    const fetchNotices = async () => {
-      const response = await getNotices(id);
-
-      if (response) {
-        setNotices(response);
-      } else {
-        alert(
-          "오류 발생",
-          "데이터를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-        );
-      }
-    };
-
-    const fetchReviews = async () => {
-      const response1 = await getAcademyReviewSummary(id);
-      const response2 = await getAcademyReviews(id);
-
-      if (response1 && response2) {
-        setSummary(response1);
-        setReviews(response2.results);
-        setResult(response2);
-      } else {
-        alert(
-          "오류 발생",
-          "데이터를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-        );
-      }
-    };
-
-    fetchAcademies();
-    fetchCoaches();
-    fetchPrograms();
-    fetchNotices();
-    fetchReviews();
+    fetchData();
   }, [id, refreshCount]);
 
   useEffect(() => {

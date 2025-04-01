@@ -24,6 +24,7 @@ import {
 jest.mock("expo-router", () => ({
   router: {
     push: jest.fn(),
+    back: jest.fn(),
   },
   useLocalSearchParams: jest.fn(),
   usePathname: jest.fn(),
@@ -79,15 +80,17 @@ describe("<AcademyDetailContext />", () => {
       .mockResolvedValue({ ...sampleReviewResponse, results: sampleReviews });
   });
 
-  it("should handle data fetches", async () => {
+  it("should handle initial data fetch fail", async () => {
     jest.spyOn(AcademiesAPI, "getAcademyDetail").mockResolvedValueOnce(null);
-    jest.spyOn(CoachesAPI, "getCoaches").mockResolvedValueOnce(null);
-    jest.spyOn(NoticesAPI, "getNotices").mockResolvedValueOnce(null);
-    jest.spyOn(ProgramsAPI, "getPrograms").mockResolvedValueOnce(null);
-    jest.spyOn(ReviewsAPI, "getAcademyReviews").mockResolvedValueOnce(null);
 
+    renderPage();
+  });
+
+  it("should handle data fetches and refresh (data fetch fail)", async () => {
     const { getByTestId } = renderPage();
 
+    jest.spyOn(AcademiesAPI, "getAcademyDetail").mockResolvedValueOnce(null);
+    
     await waitFor(() => {
       fireEvent.press(getByTestId("refresh"));
       jest.advanceTimersByTime(1000);
