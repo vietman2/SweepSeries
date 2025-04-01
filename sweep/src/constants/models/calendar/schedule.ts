@@ -19,6 +19,9 @@ export type ScheduleResponseType = {
 export type LessonType = {
   done: boolean;
   date: string;
+  curriculum: string;
+  full_date: string;
+  academy_name: string;
 } & ScheduleType;
 
 export type LessonDetailType = {

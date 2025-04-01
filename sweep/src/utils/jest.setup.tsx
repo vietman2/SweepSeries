@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import * as AlertAPI from "@services/alert/alert";
 
 jest
@@ -275,7 +276,17 @@ jest.mock("@components/ScrollView", () => {
 
   return {
     GSScroll: ({ children }: { children: React.ReactNode }) => children,
-    Scroll: ({ children }: { children: React.ReactNode }) => children,
+    Scroll: ({
+      children,
+      onScroll,
+    }: {
+      children: React.ReactNode;
+      onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+    }) => (
+      <TouchableOpacity onScroll={onScroll} testID="scroll">
+        {children}
+      </TouchableOpacity>
+    ),
     ScrollView: ({
       children,
       onRefresh,
@@ -332,9 +343,18 @@ jest.mock("@contexts/academy", () => ({
   ),
   useAcademyDetail: jest.fn().mockReturnValue({
     academy: null,
+    programs: [],
+    coaches: [],
+    notices: [],
+    summary: undefined,
+    reviews: [],
+    result: undefined,
+    loading: false,
+    error: false,
     showDetailPage: false,
     selectCoach: jest.fn(),
     selectNotice: jest.fn(),
+    refresh: jest.fn(),
   }),
 }));
 jest.mock("@contexts/addlesson", () => ({
@@ -402,6 +422,16 @@ jest.mock("@contexts/home", () => ({
   useHome: jest.fn().mockReturnValue({
     academy: null,
     selectAcademy: jest.fn(),
+  }),
+}));
+jest.mock("@contexts/review", () => ({
+  ReviewProvider: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  useReview: jest.fn().mockReturnValue({
+    sessionToReview: null,
+    tagOptions: undefined,
+    setSession: jest.fn(),
   }),
 }));
 jest.mock("@contexts/signup", () => ({

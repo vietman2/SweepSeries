@@ -33,19 +33,26 @@ export function EmptyCard() {
 
 interface Props {
   academy: AcademySimpleType;
+  type?: 1 | 2;
   onPress?: () => void;
 }
 
-export function NormalCard({ academy, onPress }: Readonly<Props>) {
+export function NormalCard({ academy, type = 1, onPress }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   return (
     <View style={styles.card}>
-      <View style={styles.header}>
-        <Text style={styles.title}>내 아카데미</Text>
-        <CalloutSmall text={` ${academy.name} `} />
-      </View>
+      {type === 1 ? (
+        <View style={styles.header}>
+          <Text style={styles.title}>내 아카데미</Text>
+          <CalloutSmall text={` ${academy.name} `} />
+        </View>
+      ) : (
+        <View style={styles.header}>
+          <Text style={styles.greenTitle}>{academy.name}</Text>
+        </View>
+      )}
       <View style={styles.horizontal}>
         <View style={styles.board}>
           <Text style={styles.subtitle}>마지막 레슨일</Text>
@@ -75,16 +82,22 @@ export function NormalCard({ academy, onPress }: Readonly<Props>) {
   );
 }
 
-export function ProCard({ academy, onPress }: Readonly<Props>) {
+export function ProCard({ academy, type = 1, onPress }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   return (
     <View style={styles.card}>
-      <View style={styles.header}>
-        <Text style={styles.title}>내 아카데미</Text>
-        <CalloutSmall text={` ${academy.name} `} />
-      </View>
+      {type === 1 ? (
+        <View style={styles.header}>
+          <Text style={styles.title}>내 아카데미</Text>
+          <CalloutSmall text={` ${academy.name} `} />
+        </View>
+      ) : (
+        <View style={styles.header}>
+          <Text style={styles.greenTitle}>{academy.name}</Text>
+        </View>
+      )}
       <View style={styles.horizontal}>
         <View style={styles.board}>
           <Text style={styles.subtitle}>총 수강생</Text>
@@ -141,6 +154,10 @@ const createStyles = (theme: ThemeColorType) =>
     title: {
       fontSize: 20,
       fontWeight: "bold",
+    },
+    greenTitle: {
+      fontSize: 18,
+      color: theme.primary,
     },
     horizontal: {
       flexDirection: "row",

@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 
@@ -6,13 +5,10 @@ import { useAcademyDetail } from "@contexts/academy";
 import { useTheme } from "@contexts/theme";
 import { ProgramSimple } from "@fragments/Program";
 import { ProgramSimpleType } from "@models/products";
-import { getPrograms } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
 export function AcademyPrograms() {
-  const [programs, setPrograms] = useState<ProgramSimpleType[]>([]);
-
-  const { academy } = useAcademyDetail();
+  const { programs } = useAcademyDetail();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -22,24 +18,6 @@ export function AcademyPrograms() {
       params: { id: program.id },
     });
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!academy) return;
-
-      const response = await getPrograms(academy.uuid);
-
-      if (response) {
-        setPrograms(response);
-      } else {
-        setPrograms([]);
-      }
-    };
-
-    fetchData();
-  }, [academy]);
-
-  if (!academy) return null;
 
   return (
     <View style={styles.container}>

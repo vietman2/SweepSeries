@@ -18,6 +18,22 @@ jest.mock("@fragments/Academy", () => ({
 }));
 
 describe("<AcademyDetailLayout />", () => {
+  const defaultContext = {
+    academy: sampleAcademyDetail,
+    programs: [],
+    coaches: [],
+    notices: [],
+    summary: undefined,
+    reviews: [],
+    result: undefined,
+    loading: false,
+    error: false,
+    showDetailPage: false,
+    selectCoach: jest.fn(),
+    selectNotice: jest.fn(),
+    refresh: jest.fn(),
+  };
+
   beforeEach(() => {
     jest
       .spyOn(Router, "usePathname")
@@ -25,12 +41,9 @@ describe("<AcademyDetailLayout />", () => {
   });
 
   it("handles navigation", () => {
-    jest.spyOn(AcademyDetailContext, "useAcademyDetail").mockReturnValue({
-      academy: sampleAcademyDetail,
-      showDetailPage: false,
-      selectCoach: jest.fn(),
-      selectNotice: jest.fn(),
-    });
+    jest
+      .spyOn(AcademyDetailContext, "useAcademyDetail")
+      .mockReturnValue(defaultContext);
 
     const { getByTestId } = renderWithProviders(<AcademyDetailLayout />);
 
@@ -39,10 +52,8 @@ describe("<AcademyDetailLayout />", () => {
 
   it("handles detail page", () => {
     jest.spyOn(AcademyDetailContext, "useAcademyDetail").mockReturnValue({
-      academy: sampleAcademyDetail,
+      ...defaultContext,
       showDetailPage: true,
-      selectCoach: jest.fn(),
-      selectNotice: jest.fn(),
     });
 
     renderWithProviders(<AcademyDetailLayout />);
@@ -50,10 +61,8 @@ describe("<AcademyDetailLayout />", () => {
 
   it("handles no academy", () => {
     jest.spyOn(AcademyDetailContext, "useAcademyDetail").mockReturnValue({
+      ...defaultContext,
       academy: null,
-      showDetailPage: false,
-      selectCoach: jest.fn(),
-      selectNotice: jest.fn(),
     });
 
     renderWithProviders(<AcademyDetailLayout />);

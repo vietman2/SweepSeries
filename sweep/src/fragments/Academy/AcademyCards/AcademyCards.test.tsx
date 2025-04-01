@@ -64,13 +64,24 @@ describe("<AcademyCards />", () => {
     await waitFor(() => fireEvent.press(getAllByTestId("normal-card")[0]));
   });
 
-  it("should render pro mode with academies", async () => {
+  it("should render pro mode with academies and handle scroll", async () => {
     jest
       .spyOn(AuthContext, "useAuth")
       .mockReturnValue({ ...defaultAuthContext, mode: "pro" });
 
-    const { getAllByTestId } = renderWithProviders(<AcademyCards />);
+    const { getAllByTestId, getByTestId } = renderWithProviders(
+      <AcademyCards />
+    );
 
-    await waitFor(() => fireEvent.press(getAllByTestId("pro-card")[0]));
+    await waitFor(() => {
+      fireEvent.press(getAllByTestId("pro-card")[0]);
+      fireEvent.scroll(getByTestId("scroll"), {
+        nativeEvent: {
+          contentOffset: { x: 100, y: 0 },
+          contentSize: { width: 1000, height: 100 },
+          layoutMeasurement: { width: 100, height: 100 },
+        },
+      });
+    });
   });
 });

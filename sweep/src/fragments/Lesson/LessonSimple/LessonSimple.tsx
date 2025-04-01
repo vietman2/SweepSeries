@@ -48,13 +48,41 @@ export function LessonSimple({ lesson }: Readonly<Props>) {
   );
 }
 
+export function LessonToReview({ lesson }: Readonly<Props>) {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.date}>{lesson.full_date}</Text>
+      <Text style={styles.academyName}>{lesson.academy_name}</Text>
+      <View style={styles.horizontal}>
+        <View style={[styles.chip, { backgroundColor: theme.primary }]}>
+          <Text style={[styles.chipText, { color: theme.background }]}>
+            완료
+          </Text>
+        </View>
+        <VerticalDivider color={lesson.color} width={2} />
+        <View style={styles.content}>
+          <Text style={styles.title}>{lesson.title}</Text>
+          <Text style={styles.detail}>{lesson.curriculum}</Text>
+        </View>
+      </View>
+    </View>
+  );
+}
+
 interface RequestProps {
   lessonRequest: LessonRequestType;
   checked: boolean;
   onCheck: () => void;
 }
 
-export function LessonRequestSimple({ lessonRequest, checked, onCheck }: Readonly<RequestProps>) {
+export function LessonRequestSimple({
+  lessonRequest,
+  checked,
+  onCheck,
+}: Readonly<RequestProps>) {
   const [expanded, setExpanded] = useState<boolean>(false);
 
   const { theme } = useTheme();
@@ -204,5 +232,10 @@ const createStyles = (theme: ThemeColorType) =>
     },
     checkBox: {
       justifyContent: "center",
+    },
+    academyName: {
+      fontSize: 18,
+      fontWeight: "600",
+      color: theme.primary,
     },
   });

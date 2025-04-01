@@ -1,18 +1,25 @@
 import { useEffect, useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
+import styled from "styled-components/native";
 
 import { Divider } from "@components/Dividers";
 import { AppIcon } from "@components/Icons";
 import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
-import { CoachDetailType } from "@models/products";
-import { getCoachDetails, likeCoach } from "@services/products";
+import { ReviewSimple, ReviewsSummary } from "@fragments/Review";
+import { CoachDetailType, CoachReviewResponseType } from "@models/products";
+import {
+  getCoachDetails,
+  getCoachReviews,
+  likeCoach,
+} from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
 export function CoachDetail() {
   const [coach, setCoach] = useState<CoachDetailType>();
+  const [reviews, setReviews] = useState<CoachReviewResponseType>();
 
   const [refreshCount, setRefreshCount] = useState<number>(0);
   const { coachid } = useLocalSearchParams<{ coachid: string }>();
@@ -34,17 +41,19 @@ export function CoachDetail() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getCoachDetails(coachid);
+      const response1 = await getCoachDetails(coachid);
+      const response2 = await getCoachReviews(coachid);
 
-      if (response) {
-        setCoach(response);
+      if (response1 && response2) {
+        setCoach(response1);
+        setReviews(response2);
       }
     };
 
     fetchData();
   }, [refreshCount]);
 
-  if (!coach) {
+  if (!coach || !reviews) {
     return null;
   }
 
@@ -52,37 +61,34 @@ export function CoachDetail() {
     <Scroll style={styles.wrapper}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <View style={styles.profile}>
+          <Profile>
             <Image src={coach.profile_image} style={styles.image} />
-          </View>
-          <View style={styles.row}>
+          </Profile>
+          <NameLikeShare>
             <Text style={styles.title}>
               {`${coach.name} `}
               <Text style={styles.sub}>코치</Text>
             </Text>
-            <View style={styles.row}>
-              <TouchableOpacity onPress={handleLikePress} testID="like-button">
-                <AppIcon
-                  icon={coach.is_liked ? "heart" : "heart-outline"}
-                  size={20}
-                  color={theme.primary}
-                />
-              </TouchableOpacity>
-              <AppIcon icon="share" size={20} color={theme.lowEmphasis} />
-            </View>
-          </View>
-          <View style={styles.horizontal}>
+            <TouchableOpacity onPress={handleLikePress} testID="like-button">
+              <AppIcon
+                icon={coach.is_liked ? "heart" : "heart-outline"}
+                size={20}
+                color={theme.primary}
+              />
+            </TouchableOpacity>
+          </NameLikeShare>
+          <Horizontal>
             <AppIcon icon="person-check" size={20} color={theme.lowEmphasis} />
             <Text style={styles.professions}>
               {coach.professions.map((p) => p.kor_name).join(", ")}
             </Text>
-          </View>
-          <View style={styles.horizontal}>
+          </Horizontal>
+          <Horizontal>
             <AppIcon icon="star" size={20} color="#F2B517" />
             <Text style={styles.ratings}>
               {coach.rating.toFixed(2)} ({coach.num_reviews})
             </Text>
-          </View>
+          </Horizontal>
         </View>
         <Divider />
         <View style={styles.content}>
@@ -90,7 +96,16 @@ export function CoachDetail() {
           <Text style={styles.introduction}>{coach.introduction}</Text>
         </View>
         <Divider />
-        <View />
+        <Reviews>
+          <ReviewsSummary summary={reviews.summary} />
+          <Divider />
+          {reviews.results.map((review) => (
+            <View key={review.id}>
+              <ReviewSimple review={review} />
+              <Divider />
+            </View>
+          ))}
+        </Reviews>
       </View>
     </Scroll>
   );
@@ -159,8 +174,27 @@ const createStyles = (theme: ThemeColorType) =>
       color: theme.highEmphasis,
     },
     introduction: {
-      fontSize: 16,
-      lineHeight: 24,
+      fontSize: 14,
+      lineHeight: 20,
       color: theme.mediumEmphasis,
     },
   });
+
+const Reviews = styled.View`
+  gap: 16px;
+`;
+
+const Profile = styled.View`
+  align-items: center;
+  justify-content: center;
+`;
+
+const Horizontal = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+`;
+
+const NameLikeShare = styled(Horizontal)`
+  justify-content: space-between;
+`;

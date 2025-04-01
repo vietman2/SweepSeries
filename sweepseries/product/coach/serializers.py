@@ -1,7 +1,6 @@
 import uuid
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.storage import default_storage
-from django.db import models
 from rest_framework import serializers
 
 from auth.person.models import Person
@@ -31,7 +30,7 @@ class CoachSimpleSerializer(serializers.ModelSerializer):
         model = Coach
         fields = [
             "uuid", "name", "career", "profile_image", "introduction", "professions",
-            "rating", "num_reviews", "is_liked", "instagram", "blog", "academy_uuid"
+            "rating", "num_reviews", "is_liked", "instagram", "blog", "academy_uuid",
         ]
 
     def get_name(self, obj):
@@ -41,14 +40,10 @@ class CoachSimpleSerializer(serializers.ModelSerializer):
         return get_presigned_url(obj.profile_image)
 
     def get_rating(self, obj):
-        reviews = obj.reviews.all()
-        if reviews.exists():
-            return reviews.aggregate(models.Avg('rating'))['rating__avg']
-
-        return 0.0
+        return obj.cached_rating
 
     def get_num_reviews(self, obj):
-        return obj.reviews.count()
+        return obj.num_reviews
 
     def get_is_liked(self, obj):
         ## context request might not be available in some cases

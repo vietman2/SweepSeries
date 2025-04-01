@@ -1,7 +1,7 @@
 import re
 import uuid
 from django.core.files.storage import default_storage
-from django.db import models, transaction
+from django.db import transaction
 from django.db.models import Q
 from rest_framework import serializers
 from phonenumber_field.validators import validate_international_phonenumber
@@ -10,7 +10,7 @@ from auth.user.serializers import UserRelatedSerializer
 from core.utils import get_presigned_url
 from product.address.models import Address, Sigungu
 from product.address.utils import get_coordinates, fetch_map_image
-from product.contract.models import Contract
+from product.contract.models import Contract, Review
 from product.lesson.models import Session, SessionRequest
 from product.program.models import Program
 from .enums import NoticeTypeChoices
@@ -56,14 +56,10 @@ class AcademySimpleSerializer(serializers.ModelSerializer):
         ]
 
     def get_rating(self, obj):
-        reviews = obj.reviews.all()
-        if reviews.exists():
-            return reviews.aggregate(models.Avg('rating'))['rating__avg']
-
-        return 0.0
+        return obj.cached_rating
 
     def get_num_reviews(self, obj):
-        return obj.reviews.count()
+        return obj.num_reviews
 
     def get_num_likes(self, obj):
         return obj.likes.count()
@@ -77,11 +73,10 @@ class AcademySimpleSerializer(serializers.ModelSerializer):
         return AcademyLike.objects.filter(academy=obj, user=user).exists()
 
     def get_top_review(self, obj):
-        reviews = obj.reviews.all()
-        if reviews.exists():
-            return reviews.order_by('-rating').first().content
-
-        return ""
+        q = Q(contract__curriculum__program__academy=obj)
+        reviews = Review.objects.filter(q)
+        top_review = reviews.order_by('-academy_rating').first()
+        return top_review.academy_comment if top_review else None
 
     def get_location(self, obj):
         return obj.address.region.get_display_name()
@@ -175,14 +170,10 @@ class AcademyDetailSerializer(serializers.ModelSerializer):
         return AcademyImageSerializer(obj.images.all(), many=True).data
 
     def get_rating(self, obj):
-        reviews = obj.reviews.all()
-        if reviews.exists():
-            return reviews.aggregate(models.Avg('rating'))['rating__avg']
-
-        return 0.0
+        return obj.cached_rating
 
     def get_num_reviews(self, obj):
-        return obj.reviews.count()
+        return obj.num_reviews
 
     def get_is_liked(self, obj):
         request = self.context.get('request')

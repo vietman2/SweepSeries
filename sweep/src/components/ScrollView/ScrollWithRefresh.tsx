@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from "react";
-import { Keyboard, RefreshControl } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { Keyboard } from "react-native";
+import { RefreshControl, ScrollView } from "react-native-gesture-handler";
 
 interface Props {
   children: React.ReactNode;
@@ -18,36 +16,23 @@ export default function ScrollWithRefresh({
   stickyIndex,
   hideKeyboardOnScroll = false,
 }: Readonly<Props>) {
-  const [isPulledDown, setIsPulledDown] = useState<boolean>(false);
-
-  const onScroll = (event: any) => {
-    const scrollY = event.nativeEvent.contentOffset.y;
-
-    if (scrollY < -100) {
-      setIsPulledDown(true);
-    } else {
-      setIsPulledDown(false);
-    }
-
+  const onScroll = () => {
     if (hideKeyboardOnScroll) {
       Keyboard.dismiss();
-    }
-  };
-
-  const onScrollEndDrag = () => {
-    if (isPulledDown && !refreshing) {
-      onRefresh();
     }
   };
 
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
-      refreshControl={<RefreshControl refreshing={refreshing} />}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} enabled />
+      }
       onScroll={onScroll}
-      onScrollEndDrag={onScrollEndDrag}
       scrollEventThrottle={16}
       stickyHeaderIndices={stickyIndex ? [stickyIndex] : undefined}
+      overScrollMode="always"
+      contentContainerStyle={{ flexGrow: 1 }}
       testID="scroll-view"
     >
       {children}

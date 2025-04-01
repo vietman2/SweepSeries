@@ -2,7 +2,6 @@ import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { AcademyNotices } from "./AcademyNotices";
 import * as AcademyDetailContext from "@contexts/academy";
-import * as NoticesAPI from "@services/products/notices";
 import { sampleNotices, sampleAcademyDetail } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
@@ -16,36 +15,47 @@ jest.mock("@fragments/Notice", () => ({
 }));
 
 describe("<AcademyNotices />", () => {
+  const defaultContext = {
+    academy: sampleAcademyDetail,
+    programs: [],
+    coaches: [],
+    notices: sampleNotices,
+    summary: undefined,
+    reviews: [],
+    result: undefined,
+    loading: false,
+    error: false,
+    showDetailPage: false,
+    selectCoach: jest.fn(),
+    selectNotice: jest.fn(),
+    refresh: jest.fn(),
+  };
+
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.spyOn(AcademyDetailContext, "useAcademyDetail").mockReturnValue({
-      academy: sampleAcademyDetail,
-      showDetailPage: false,
-      selectCoach: jest.fn(),
-      selectNotice: jest.fn(),
-    });
+    jest
+      .spyOn(AcademyDetailContext, "useAcademyDetail")
+      .mockReturnValue(defaultContext);
   });
 
   it("renders and handles navigate correctly", async () => {
-    jest.spyOn(NoticesAPI, "getNotices").mockResolvedValueOnce(sampleNotices);
     const { getByTestId } = renderWithProviders(<AcademyNotices />);
 
     await waitFor(() => fireEvent.press(getByTestId("notice-1")));
   });
 
-  it("handles api error", async () => {
-    jest.spyOn(NoticesAPI, "getNotices").mockResolvedValueOnce(null);
-    renderWithProviders(<AcademyNotices />);
+  it("renders empty list", async () => {
+    jest
+      .spyOn(AcademyDetailContext, "useAcademyDetail")
+      .mockReturnValue({...defaultContext, notices: []});
 
-    await waitFor(() => expect("소식이 없습니다.").toBeTruthy());
+      renderWithProviders(<AcademyNotices />);
   });
 
   it("handles no academy", async () => {
     jest.spyOn(AcademyDetailContext, "useAcademyDetail").mockReturnValue({
+      ...defaultContext,
       academy: null,
-      showDetailPage: false,
-      selectCoach: jest.fn(),
-      selectNotice: jest.fn(),
     });
     renderWithProviders(<AcademyNotices />);
   });

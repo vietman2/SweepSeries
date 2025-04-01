@@ -2,7 +2,11 @@ import { CurriculumSelector } from "./LessonAddFragments/CurriculumSelector";
 import { OtherFields } from "./LessonAddFragments/OtherFields";
 import { ProgramSelector } from "./LessonAddFragments/ProgramSelector";
 import { StudentSelector } from "./LessonAddFragments/StudentSelector";
-import { LessonSimple, LessonRequestSimple } from "./LessonSimple/LessonSimple";
+import {
+  LessonSimple,
+  LessonRequestSimple,
+  LessonToReview,
+} from "./LessonSimple/LessonSimple";
 
 export {
   CurriculumSelector,
@@ -11,4 +15,5 @@ export {
   StudentSelector,
   LessonSimple,
   LessonRequestSimple,
+  LessonToReview,
 };

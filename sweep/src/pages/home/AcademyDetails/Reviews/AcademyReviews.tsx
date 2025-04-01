@@ -1,26 +1,28 @@
-import { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { Divider } from "@components/Dividers";
+import { AppIcon } from "@components/Icons";
+import { useAcademyDetail } from "@contexts/academy";
 import { useTheme } from "@contexts/theme";
-import { ReviewsHeader, ReviewSimple } from "@fragments/Review";
-import { ReviewType } from "@models/products";
-import { sampleReviews } from "@testdata/products";
+import { ReviewsSummary, ReviewSimple } from "@fragments/Review";
 import { ThemeColorType } from "@themes/colors";
 
 export function AcademyReviews() {
-  const [reviews, setReviews] = useState<ReviewType[]>([]);
-
+  const { summary, result, reviews } = useAcademyDetail();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  useEffect(() => {
-    setReviews(sampleReviews);
-  }, []);
+  if (!summary || !result || !reviews) {
+    return null;
+  }
+
+  const handleMore = async () => {
+    // TODO: Implement pagination
+  };
 
   return (
     <View style={styles.container}>
-      <ReviewsHeader rating={4.5} />
+      <ReviewsSummary summary={summary} />
       <Divider />
       {/*TODO: Filter and Sort */}
       {reviews.map((review) => (
@@ -29,6 +31,16 @@ export function AcademyReviews() {
           <Divider />
         </View>
       ))}
+      {result.next && (
+        <TouchableOpacity
+          onPress={handleMore}
+          style={styles.moreButton}
+          testID="load-more"
+        >
+          <AppIcon icon="plus" size={16} color={theme.primary} />
+          <Text style={styles.buttonText}>더보기</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -40,5 +52,17 @@ const createStyles = (theme: ThemeColorType) =>
       padding: 16,
       gap: 16,
       backgroundColor: theme.background,
+    },
+    moreButton: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: 8,
+      backgroundColor: theme.background,
+    },
+    buttonText: {
+      color: theme.primary,
+      fontSize: 14,
+      marginLeft: 8,
     },
   });

@@ -36,6 +36,9 @@ class Program(models.Model):
     teams           = models.ManyToManyField(CoachTeam, related_name='programs')
     select_disabled = models.BooleanField(default=True)
 
+    cached_rating   = models.FloatField(default=0)
+    num_reviews     = models.PositiveIntegerField(default=0)
+
     objects     = models.Manager()
 
     class Meta:

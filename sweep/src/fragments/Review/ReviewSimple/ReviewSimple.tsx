@@ -1,6 +1,5 @@
 import { Image, StyleSheet, View } from "react-native";
 
-import { RatingDiaplay } from "../Rating/RatingDisplay";
 import { AppIcon } from "@components/Icons";
 import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
@@ -20,20 +19,18 @@ export function ReviewSimple({ review }: Readonly<Props>) {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerWrapper}>
-          <Image src={review.author_profile} style={styles.authorProfile} />
-          <Text style={styles.authorNickname}>{review.author_nickname}</Text>
-          <Text style={styles.date}>{review.date}</Text>
+          <Image
+            src={review.reviewer.profile_image}
+            style={styles.authorProfile}
+          />
+          <Text style={styles.authorNickname}>{review.reviewer.name}</Text>
+          <Text style={styles.date}>{review.created_at}</Text>
         </View>
-        <AppIcon icon="dots" size={16} color={theme.lowEmphasis} />
       </View>
-      <RatingDiaplay rating={review.rating} />
-      <View style={styles.information}>
-        <Text style={styles.informationText}>{review.lesson}</Text>
-        <Text style={styles.informationText}>{review.coach}</Text>
-      </View>
+      <RatingDisplay rating={review.rating} />
       <View style={styles.tags}>
         {review.tags.map((tag) => (
-          <Tag key={tag} text={tag} />
+          <Tag key={tag.id} text={tag.tag} />
         ))}
       </View>
       <Scroll horizontal>
@@ -41,7 +38,7 @@ export function ReviewSimple({ review }: Readonly<Props>) {
           <Image key={image} src={image} style={styles.image} />
         ))}
       </Scroll>
-      <Text style={styles.content}>{review.content}</Text>
+      <Text style={styles.content}>{review.comment}</Text>
       {review.reply && (
         <View style={styles.reply}>
           <Text style={styles.replyAuthor}>{review.reply.author_name}</Text>
@@ -63,6 +60,41 @@ function Tag({ text }: Readonly<TagProps>) {
   return (
     <View style={styles.tag}>
       <Text style={styles.tagText}>{text}</Text>
+    </View>
+  );
+}
+
+interface RatingProps {
+  rating: number;
+}
+
+function RatingDisplay({ rating }: Readonly<RatingProps>) {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+
+  return (
+    <View style={styles.rating}>
+      <AppIcon icon="star" size={16} color="#F2B517" />
+      <AppIcon
+        icon={rating >= 2 ? "star" : "star-outline"}
+        size={16}
+        color="#F2B517"
+      />
+      <AppIcon
+        icon={rating >= 3 ? "star" : "star-outline"}
+        size={16}
+        color="#F2B517"
+      />
+      <AppIcon
+        icon={rating >= 4 ? "star" : "star-outline"}
+        size={16}
+        color="#F2B517"
+      />
+      <AppIcon
+        icon={rating == 5 ? "star" : "star-outline"}
+        size={16}
+        color="#F2B517"
+      />
     </View>
   );
 }
@@ -133,7 +165,7 @@ const createStyles = (theme: ThemeColorType) =>
     content: {
       fontSize: 14,
       lineHeight: 20,
-      color: theme.highEmphasis,
+      color: theme.mediumEmphasis,
     },
     reply: {
       marginHorizontal: 8,
@@ -151,5 +183,10 @@ const createStyles = (theme: ThemeColorType) =>
       fontSize: 14,
       lineHeight: 20,
       color: theme.highEmphasis,
+    },
+    rating: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 4,
     },
   });

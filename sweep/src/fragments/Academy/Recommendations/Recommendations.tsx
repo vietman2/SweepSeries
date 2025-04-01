@@ -26,7 +26,7 @@ export function Recommendations({
 
   const handleAcademySelect = (academy: AcademySimpleType) => {
     router.push({
-      pathname: "/home/academy/[id]",
+      pathname: "/home/academy/[id]/information",
       params: { id: academy.uuid },
     });
   };

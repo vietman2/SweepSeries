@@ -3,7 +3,6 @@ from rest_framework import serializers
 
 from product.lesson.models import Session
 from product.lesson.serializers import SessionSerializer
-from core.utils import get_presigned_url
 from .models import Person
 
 class PersonSerializer(serializers.ModelSerializer):
@@ -47,7 +46,7 @@ class StudentSimpleSerializer(serializers.ModelSerializer):
         if not user.profiles.first().profile_image:
             return None
 
-        return get_presigned_url(obj.user.profiles.first().profile_image)
+        return obj.user.profiles.first().profile_image
 
     def get_default_color(self, obj):
         try:

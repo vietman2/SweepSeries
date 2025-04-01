@@ -4,13 +4,12 @@ import { router } from "expo-router";
 
 import { CalendarHeader } from "@components/Calendars";
 import { Divider } from "@components/Dividers";
-import { LoadingComponent } from "@components/Fallbacks";
-import { Scroll } from "@components/ScrollView";
+import { ScrollView } from "@components/ScrollView";
 import { Text } from "@components/Texts";
 import { useAuth } from "@contexts/auth";
 import { useHome } from "@contexts/home";
 import { useTheme } from "@contexts/theme";
-import { NormalCard } from "@fragments/Academy";
+import { NormalCard, ProCard } from "@fragments/Academy";
 import { LessonSimple } from "@fragments/Lesson";
 import { LessonDetailType } from "@models/calendar";
 import { getSessions } from "@services/calendar";
@@ -21,10 +20,16 @@ export function MyAcademy() {
   const [selectedMonth, setSelectedMonth] = useState<string>("");
 
   const [loading, setLoading] = useState<boolean>(true);
+  const [refreshCount, setRefreshCount] = useState<number>(0);
   const { mode } = useAuth();
   const { academy } = useHome();
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  const handleRefresh = () => {
+    setLoading(true);
+    setRefreshCount((prev) => prev + 1);
+  };
 
   const handleLessonPress = (lesson: LessonDetailType) => {
     const lessonId = lesson.id.slice(1);
@@ -57,33 +62,46 @@ export function MyAcademy() {
     };
 
     fetchData();
-  }, [selectedMonth]);
+  }, [selectedMonth, refreshCount]);
 
-  if (!academy) return null;
-  if (loading) return <LoadingComponent />;
+  if (!academy || mode === "guest") return null;
 
   return (
-    <Scroll style={styles.container}>
-      <NormalCard academy={academy} />
-      <View style={styles.content}>
-        <Text style={styles.subtitle}>레슨 일정 및 피드백 목록</Text>
-        <CalendarHeader
-          selectedMonth={selectedMonth}
-          setSelectedMonth={setSelectedMonth}
-        />
-        {schedules.map((schedule) => (
-          <View key={schedule.id} style={styles.lesson}>
-            <TouchableOpacity
-              onPress={() => handleLessonPress(schedule)}
-              testID={`lesson-${schedule.id}`}
-            >
-              <LessonSimple lesson={schedule} />
-            </TouchableOpacity>
-            <Divider />
-          </View>
-        ))}
+    <ScrollView refreshing={loading} onRefresh={handleRefresh}>
+      <View style={styles.container}>
+        {mode === "pro" ? (
+          <ProCard academy={academy} type={2} />
+        ) : (
+          <NormalCard academy={academy} type={2} />
+        )}
+        <View style={styles.content}>
+          <Text style={styles.subtitle}>레슨 일정 및 피드백 목록</Text>
+          <CalendarHeader
+            selectedMonth={selectedMonth}
+            setSelectedMonth={setSelectedMonth}
+          />
+          {schedules.length === 0 ? (
+            <View style={styles.emptyWrapper}>
+              <Text style={styles.emptyText}>일정이 없습니다.</Text>
+            </View>
+          ) : (
+            <>
+              {schedules.map((schedule) => (
+                <View key={schedule.id} style={styles.lesson}>
+                  <TouchableOpacity
+                    onPress={() => handleLessonPress(schedule)}
+                    testID={`lesson-${schedule.id}`}
+                  >
+                    <LessonSimple lesson={schedule} />
+                  </TouchableOpacity>
+                  <Divider />
+                </View>
+              ))}
+            </>
+          )}
+        </View>
       </View>
-    </Scroll>
+    </ScrollView>
   );
 }
 
@@ -106,5 +124,14 @@ const createStyles = (theme: ThemeColorType) =>
     lesson: {
       paddingVertical: 4,
       gap: 8,
+    },
+    emptyWrapper: {
+      justifyContent: "center",
+      alignItems: "center",
+      marginVertical: 64,
+    },
+    emptyText: {
+      fontSize: 18,
+      color: theme.mediumEmphasis,
     },
   });

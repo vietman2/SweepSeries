@@ -1,10 +1,14 @@
 import { fireEvent } from "@testing-library/react-native";
 
-import { LessonSimple, LessonRequestSimple } from "./LessonSimple";
+import {
+  LessonSimple,
+  LessonRequestSimple,
+  LessonToReview,
+} from "./LessonSimple";
 import { sampleLesson, sampleLessonRequests } from "@testdata/calendar";
 import { renderWithProviders } from "@utils/test-utils";
 
-describe("LessonSimple", () => {
+describe("<LessonSimple />", () => {
   it("renders correctly", () => {
     renderWithProviders(<LessonSimple lesson={sampleLesson} />);
   });
@@ -16,7 +20,7 @@ describe("LessonSimple", () => {
   });
 });
 
-describe("LessonRequestSimple", () => {
+describe("<LessonRequestSimple />", () => {
   it("renders correctly", () => {
     const { getAllByTestId } = renderWithProviders(
       <>
@@ -34,5 +38,11 @@ describe("LessonRequestSimple", () => {
     );
 
     fireEvent.press(getAllByTestId("expand-button")[0]);
+  });
+});
+
+describe("<LessonToReview />", () => {
+  it("renders correctly", () => {
+    renderWithProviders(<LessonToReview lesson={sampleLesson} />);
   });
 });

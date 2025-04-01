@@ -28,9 +28,7 @@ interface Props {
   refreshCount: number;
 }
 
-export function AcademySearch({
-  refreshCount,
-}: Readonly<Props>) {
+export function AcademySearch({ refreshCount }: Readonly<Props>) {
   const [academies, setAcademies] = useState<AcademySimpleType[]>([]);
   const [query, setQuery] = useState<string>("");
   const [selectedSort, setSelectedSort] = useState<string>("기본순");

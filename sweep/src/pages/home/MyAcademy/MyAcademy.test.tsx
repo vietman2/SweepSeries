@@ -1,11 +1,12 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { MyAcademy } from "./MyAcademy";
+import * as AuthContext from "@contexts/auth";
 import * as HomeContext from "@contexts/home";
 import * as SessionsAPI from "@services/calendar/sessions";
 import { sampleLesson } from "@testdata/calendar";
-import { renderWithProviders } from "@utils/test-utils";
 import { sampleAcademies } from "@testdata/products";
+import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("expo-router", () => ({
   router: {
@@ -14,6 +15,7 @@ jest.mock("expo-router", () => ({
 }));
 jest.mock("@fragments/Academy", () => ({
   NormalCard: () => null,
+  ProCard: () => null,
 }));
 jest.mock("@fragments/Lesson", () => ({
   LessonSimple: () => null,
@@ -21,6 +23,12 @@ jest.mock("@fragments/Lesson", () => ({
 
 describe("<MyAcademy />", () => {
   beforeEach(() => {
+    jest.spyOn(AuthContext, "useAuth").mockReturnValue({
+      selectedProfile: null,
+      mode: "normal",
+      login: jest.fn(),
+      logout: jest.fn(),
+    });
     jest.spyOn(HomeContext, "useHome").mockReturnValue({
       academy: sampleAcademies[0],
       selectAcademy: jest.fn(),
@@ -35,7 +43,13 @@ describe("<MyAcademy />", () => {
     waitFor(() => renderWithProviders(<MyAcademy />));
   });
 
-  it("should render correctly (month >= 10)", async () => {
+  it("should render correctly (month >= 10) as pro mode and handle refresh", async () => {
+    jest.spyOn(AuthContext, "useAuth").mockReturnValue({
+      selectedProfile: null,
+      mode: "pro",
+      login: jest.fn(),
+      logout: jest.fn(),
+    });
     jest.spyOn(SessionsAPI, "getSessions").mockResolvedValue([sampleLesson]);
     jest.spyOn(Date.prototype, "getFullYear").mockReturnValue(2024);
     jest.spyOn(Date.prototype, "getMonth").mockReturnValue(11);
@@ -44,6 +58,7 @@ describe("<MyAcademy />", () => {
 
     await waitFor(() => {
       fireEvent.press(getByTestId("lesson-1"));
+      fireEvent.press(getByTestId("refresh"));
     });
   });
 

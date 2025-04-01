@@ -10,15 +10,32 @@ jest.mock("@fragments/Academy", () => ({
 }));
 
 describe("<AcademyInformation />", () => {
+  const defaultContext = {
+    academy: sampleAcademyDetail,
+    programs: [],
+    coaches: [],
+    notices: [],
+    summary: undefined,
+    reviews: [],
+    result: undefined,
+    loading: false,
+    error: false,
+    showDetailPage: false,
+    selectCoach: jest.fn(),
+    selectNotice: jest.fn(),
+    refresh: jest.fn(),
+  };
+
   it("should render correctly", () => {
-    jest.spyOn(AcademyDetailContext, "useAcademyDetail").mockReturnValue({
-      academy: sampleAcademyDetail,
-    });
+    jest
+      .spyOn(AcademyDetailContext, "useAcademyDetail")
+      .mockReturnValue(defaultContext);
     renderWithProviders(<AcademyInformation />);
   });
 
   it("renders nothing if academy is null", () => {
     jest.spyOn(AcademyDetailContext, "useAcademyDetail").mockReturnValue({
+      ...defaultContext,
       academy: null,
     });
     renderWithProviders(<AcademyInformation />);

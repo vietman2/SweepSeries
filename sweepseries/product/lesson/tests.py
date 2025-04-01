@@ -9,7 +9,8 @@ class LessonAPITestCase(APITestCase):
         "core/data/test/coaches.json", "core/data/initial/regions.json",
         "core/data/test/academies.json", "core/data/initial/facilities.json",
         "core/data/test/programs.json", "core/data/initial/programs.json",
-        "core/data/test/calendar.json",
+        "core/data/test/contracts.json", "core/data/test/lessons.json",
+        "core/data/initial/reviewtags.json",
     ]
 
     def setUp(self):
@@ -102,10 +103,11 @@ class LessonAPITestCase(APITestCase):
 
 class SessionAPITestCase(APITestCase):
     fixtures = [
-        "core/data/test/users.json", "core/data/test/calendar.json",
-        'core/data/test/coaches.json', 'core/data/test/programs.json',
-        'core/data/test/academies.json', 'core/data/initial/regions.json',
-        'core/data/initial/professions.json',
+        "core/data/test/users.json", "core/data/test/lessons.json",
+        "core/data/test/coaches.json", "core/data/test/programs.json",
+        "core/data/test/academies.json", "core/data/initial/regions.json",
+        "core/data/initial/professions.json", "core/data/test/contracts.json",
+        "core/data/initial/reviewtags.json",
     ]
 
     def setUp(self):
@@ -200,7 +202,8 @@ class SessionRequestAPITestCase(APITestCase):
         "core/data/test/coaches.json", "core/data/initial/regions.json",
         "core/data/test/academies.json", "core/data/initial/facilities.json",
         "core/data/test/programs.json", "core/data/initial/programs.json",
-        "core/data/test/calendar.json", "core/data/test/lessons.json"
+        "core/data/test/lessons.json", "core/data/test/contracts.json",
+        "core/data/initial/reviewtags.json",
     ]
 
     def setUp(self):

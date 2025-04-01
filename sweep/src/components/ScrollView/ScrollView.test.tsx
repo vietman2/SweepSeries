@@ -21,14 +21,10 @@ describe("<ScrollWithRefresh />", () => {
       scrollView.props.onScroll({
         nativeEvent: { contentOffset: { y: -150 } },
       });
-      scrollView.props.onScrollEndDrag();
-
-      scrollView.props.onScroll({ nativeEvent: { contentOffset: { y: -50 } } });
-      scrollView.props.onScrollEndDrag();
     });
   });
 
-  it("renders correctly without sticky and handle keyboard dismiss", () => {
+  it("handles scroll with keyboard dismiss without sticky", () => {
     const { getByTestId } = render(
       <ScrollWithRefresh
         refreshing={false}
@@ -44,10 +40,6 @@ describe("<ScrollWithRefresh />", () => {
       scrollView.props.onScroll({
         nativeEvent: { contentOffset: { y: -150 } },
       });
-      scrollView.props.onScrollEndDrag();
-
-      scrollView.props.onScroll({ nativeEvent: { contentOffset: { y: -50 } } });
-      scrollView.props.onScrollEndDrag();
     });
   });
 });

@@ -1,3 +1,5 @@
+from io import BytesIO
+from PIL import Image
 from django.conf import settings
 from django.utils import timezone
 import boto3
@@ -51,3 +53,11 @@ def get_duration_text(duration):
     minutes_text = f'{minutes}분' if minutes else ''
 
     return ' '.join([text for text in [days_text, hours_text, minutes_text] if text])
+
+def generate_photo_file():
+    file = BytesIO()
+    image = Image.new("RGBA", size=(100, 100), color=(155, 0, 0))
+    image.save(file, "png")
+    file.name = "test.png"
+    file.seek(0)
+    return file

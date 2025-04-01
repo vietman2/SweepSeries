@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from product.program.serializers import CurriculumSerializer
-from .models import Contract
+from ..models import Contract
 
 class ContractSerializer(serializers.ModelSerializer):
     curriculum          = CurriculumSerializer(read_only=True)

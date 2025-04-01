@@ -28,7 +28,7 @@ export function CoachSimple({ coach }: Readonly<Props>) {
             color={theme.primary}
           />
         </View>
-        <Text style={styles.intro}>{coach.introduction}</Text>
+        <Text numberOfLines={2} style={styles.intro}>{coach.introduction}</Text>
         <View style={styles.professions}>
           {coach.professions.map((profession) => (
             <View key={profession.id} style={styles.profession}>
