@@ -24,7 +24,6 @@ describe("<AcademyNotices />", () => {
     reviews: [],
     result: undefined,
     loading: false,
-    error: false,
     showDetailPage: false,
     selectCoach: jest.fn(),
     selectNotice: jest.fn(),

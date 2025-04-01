@@ -24,7 +24,6 @@ describe("<AcademyReviews />", () => {
     reviews: sampleReviews,
     result: sampleReviewResponse,
     loading: false,
-    error: false,
     showDetailPage: false,
     selectCoach: jest.fn(),
     selectNotice: jest.fn(),
@@ -35,6 +34,18 @@ describe("<AcademyReviews />", () => {
     jest
       .spyOn(AcademyContext, "useAcademyDetail")
       .mockReturnValue(defaultContext);
+
+    const { getByTestId } = renderWithProviders(<AcademyReviews />);
+
+    await waitFor(() => {
+      fireEvent.press(getByTestId("load-more"));
+    });
+  });
+
+  it("renders empty list", async () => {
+    jest
+      .spyOn(AcademyContext, "useAcademyDetail")
+      .mockReturnValue({...defaultContext, reviews: []});
 
     const { getByTestId } = renderWithProviders(<AcademyReviews />);
 

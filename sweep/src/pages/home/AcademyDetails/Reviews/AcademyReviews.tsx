@@ -1,6 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { Divider } from "@components/Dividers";
+import { Empty } from "@components/Fallbacks";
 import { AppIcon } from "@components/Icons";
 import { useAcademyDetail } from "@contexts/academy";
 import { useTheme } from "@contexts/theme";
@@ -25,12 +26,18 @@ export function AcademyReviews() {
       <ReviewsSummary summary={summary} />
       <Divider />
       {/*TODO: Filter and Sort */}
-      {reviews.map((review) => (
-        <View key={review.id}>
-          <ReviewSimple review={review} />
-          <Divider />
-        </View>
-      ))}
+      {reviews.length > 0 ? (
+        <>
+          {reviews.map((review) => (
+            <View key={review.id}>
+              <ReviewSimple review={review} />
+              <Divider />
+            </View>
+          ))}
+        </>
+      ) : (
+        <Empty message="등록된 리뷰가 없습니다." type={2} />
+      )}
       {result.next && (
         <TouchableOpacity
           onPress={handleMore}

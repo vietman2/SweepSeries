@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { Divider } from "@components/Dividers";
-import { Text } from "@components/Texts";
+import { Empty } from "@components/Fallbacks";
 import { useAcademyDetail } from "@contexts/academy";
 import { useTheme } from "@contexts/theme";
 import { NoticeSimple } from "@fragments/Notice";
@@ -36,9 +36,7 @@ export function AcademyNotices() {
           ))}
         </>
       ) : (
-        <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>소식이 없습니다.</Text>
-        </View>
+        <Empty message="등록된 공지가 없습니다." type={2} />
       )}
     </View>
   );
@@ -54,14 +52,5 @@ const createStyles = (theme: ThemeColorType) =>
     },
     notice: {
       gap: 16,
-    },
-    emptyContainer: {
-      flex: 0.5,
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    emptyText: {
-      fontSize: 24,
-      color: theme.mediumEmphasis,
     },
   });
