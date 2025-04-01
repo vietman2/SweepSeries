@@ -10,6 +10,7 @@ import {
   ReviewResponseType,
   ReviewType,
 } from "@models/products";
+import { alert } from "@services/alert";
 import {
   getAcademyDetail,
   getCoaches,
@@ -29,7 +30,6 @@ interface AcademyDetailContextType {
   result: ReviewResponseType | undefined;
   showDetailPage: boolean;
   loading: boolean;
-  error: boolean;
   selectCoach: (coach: CoachSimpleType) => void;
   selectNotice: (id: string, notice: NoticeSimpleType) => void;
   refresh: () => void;
@@ -54,7 +54,6 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
   const [showDetailPage, setShowDetailPage] = useState<boolean>(false);
   const [refreshCount, setRefreshCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
 
   const { id } = useLocalSearchParams<{ id: string }>();
   const pathname = usePathname();
@@ -92,9 +91,11 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
 
       if (response) {
         setAcademy(response);
-        setError(false);
       } else {
-        setAcademy(null);
+        alert(
+          "오류 발생",
+          "데이터를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+        );
       }
     };
 
@@ -103,10 +104,11 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
 
       if (response) {
         setCoaches(response);
-        setError(false);
       } else {
-        setCoaches([]);
-        setError(true);
+        alert(
+          "오류 발생",
+          "데이터를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+        );
       }
     };
 
@@ -115,10 +117,11 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
 
       if (response) {
         setPrograms(response);
-        setError(false);
       } else {
-        setPrograms([]);
-        setError(true);
+        alert(
+          "오류 발생",
+          "데이터를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+        );
       }
     };
 
@@ -127,10 +130,11 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
 
       if (response) {
         setNotices(response);
-        setError(false);
       } else {
-        setNotices([]);
-        setError(true);
+        alert(
+          "오류 발생",
+          "데이터를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+        );
       }
     };
 
@@ -142,31 +146,20 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
         setSummary(response1);
         setReviews(response2.results);
         setResult(response2);
-        setError(false);
       } else {
-        setSummary(undefined);
-        setReviews([]);
-        setResult(undefined);
-        setError(true);
+        alert(
+          "오류 발생",
+          "데이터를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+        );
       }
     };
 
-    if (pathname.includes("information")) {
-      fetchAcademies();
-    }
-    if (pathname.includes("programs")) {
-      fetchPrograms();
-    }
-    if (pathname.includes("coaches")) {
-      fetchCoaches();
-    }
-    if (pathname.includes("notices")) {
-      fetchNotices();
-    }
-    if (pathname.includes("reviews")) {
-      fetchReviews();
-    }
-  }, [id, pathname, refreshCount]);
+    fetchAcademies();
+    fetchCoaches();
+    fetchPrograms();
+    fetchNotices();
+    fetchReviews();
+  }, [id, refreshCount]);
 
   useEffect(() => {
     if (pathname.split("/").length < 6) {
@@ -185,7 +178,6 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
       result,
       showDetailPage,
       loading,
-      error,
       selectCoach,
       selectNotice,
       refresh: handleRefresh,
@@ -200,7 +192,6 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
       result,
       showDetailPage,
       loading,
-      error,
     ]
   );
 
