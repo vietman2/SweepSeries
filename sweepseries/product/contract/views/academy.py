@@ -63,7 +63,7 @@ class AcademyReviewViewSet(ModelViewSet):
 
     @extend_schema(summary="아카데미 평점 요약 조회", tags=["아카데미"])
     @action(detail=False, methods=['get'])
-    def summary(self, request):     # pylint: disable=unused-argument
+    def summary(self, request, *args, **kwargs):     # pylint: disable=unused-argument
         academy_id = self.kwargs.get('academy_id')
         academy = Academy.objects.filter(uuid=academy_id).first()
 
