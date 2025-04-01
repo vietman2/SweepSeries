@@ -20,6 +20,11 @@ describe("<Empty>", () => {
   it("renders correctly", () => {
     renderWithProviders(<Empty message="Empty message" />);
   });
+
+  it("renders type 2", () => {
+    renderWithProviders(<Empty message="Empty message" type={2} />);
+  });
+
 });
 
 describe("<ErrorPage>", () => {
