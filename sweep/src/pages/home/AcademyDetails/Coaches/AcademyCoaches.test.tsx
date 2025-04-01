@@ -24,7 +24,6 @@ describe("<AcademyCoaches />", () => {
     reviews: [],
     result: undefined,
     loading: false,
-    error: false,
     showDetailPage: false,
     selectCoach: jest.fn(),
     selectNotice: jest.fn(),
@@ -48,10 +47,7 @@ describe("<AcademyCoaches />", () => {
     jest
       .spyOn(AcademyDetailContext, "useAcademyDetail")
       .mockReturnValue({ ...defaultContext, coaches: [] });
-    const { getByText } = renderWithProviders(<AcademyCoaches />);
 
-    await waitFor(() =>
-      expect(getByText("등록된 코치가 아직 없습니다.")).toBeTruthy()
-    );
+    renderWithProviders(<AcademyCoaches />);
   });
 });

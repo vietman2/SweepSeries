@@ -1,6 +1,7 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 
+import { Empty } from "@components/Fallbacks";
 import { useAcademyDetail } from "@contexts/academy";
 import { useTheme } from "@contexts/theme";
 import { ProgramSimple } from "@fragments/Program";
@@ -22,9 +23,7 @@ export function AcademyPrograms() {
   return (
     <View style={styles.container}>
       {programs.length === 0 ? (
-        <View style={styles.emptyWrapper}>
-          <Text style={styles.emptyText}>등록된 프로그램이 없습니다.</Text>
-        </View>
+        <Empty message="등록된 프로그램이 없습니다." type={2} />
       ) : (
         <>
           {programs.map((program) => (
@@ -49,15 +48,5 @@ const createStyles = (theme: ThemeColorType) =>
       backgroundColor: theme.background,
       padding: 16,
       gap: 16,
-    },
-    emptyWrapper: {
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 100,
-    },
-    emptyText: {
-      fontSize: 18,
-      fontWeight: "bold",
-      color: theme.highEmphasis,
     },
   });

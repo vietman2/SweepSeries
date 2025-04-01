@@ -1,6 +1,6 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { Text } from "@components/Texts";
+import { Empty } from "@components/Fallbacks";
 import { useAcademyDetail } from "@contexts/academy";
 import { useTheme } from "@contexts/theme";
 import { CoachSimple } from "@fragments/Coach";
@@ -19,7 +19,7 @@ export function AcademyCoaches() {
   return (
     <View style={styles.container}>
       {coaches.length === 0 ? (
-        <Text>등록된 코치가 아직 없습니다.</Text>
+        <Empty message="등록된 코치가 아직 없습니다." type={2} />
       ) : (
         <>
           {coaches.map((coach) => (
