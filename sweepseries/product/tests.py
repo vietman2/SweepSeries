@@ -1,7 +1,7 @@
+from unittest.mock import patch
 from django.db.models import F, Q
 from django.test import TestCase
 from django.utils import timezone
-from unittest.mock import patch
 
 from auth.person.models import Person
 from product.coach.models import Coach
