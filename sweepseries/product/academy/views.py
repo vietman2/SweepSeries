@@ -77,6 +77,7 @@ class AcademyViewSet(ModelViewSet):
     @extend_schema(summary="아카데미 리스트 조회", tags=["아카데미"])
     def list(self, request, *args, **kwargs):
         query = request.query_params.get('query', None)
+        sort = request.query_params.get('sortBy', None)
         user = request.user
 
         q = Q()
@@ -98,11 +99,21 @@ class AcademyViewSet(ModelViewSet):
                 )
 
             self.queryset = Academy.objects.filter(q)
+
             serializer = AcademyStatusSerializer(self.queryset, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         q &= Q(is_verified=True)
         self.queryset = self.queryset.filter(q)
+
+        if sort == "인기순":
+            self.queryset = self.queryset.order_by('-likes')
+        elif sort == "평점순":
+            self.queryset = self.queryset.order_by('-cached_rating')
+        else:
+            ## 잘못된 값이 들어오면 그냥 기본순으로 반환
+            pass
+
         serializer = AcademySimpleSerializer(self.queryset, many=True)
         serializer.context['request'] = request
 
