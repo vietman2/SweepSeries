@@ -79,7 +79,7 @@ class ReviewViewSet(ModelViewSet):
 
     @extend_schema(summary="리뷰 목록 조회", tags=["리뷰"])
     @action(detail=False, methods=['get'])
-    def tags(self, request, *args, **kwargs):
+    def tags(self, request):        # pylint: disable=unused-argument
         lesson_positives = LessonReviewTags.objects.filter(is_positive=True)
         lesson_negatives = LessonReviewTags.objects.filter(is_positive=False)
 

@@ -1,6 +1,6 @@
 import json
-from rest_framework.test import APITestCase
 from unittest.mock import patch
+from rest_framework.test import APITestCase
 
 from auth.user.models import User
 from core.utils import generate_photo_file

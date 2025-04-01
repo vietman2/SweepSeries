@@ -121,32 +121,32 @@ class ReviewSerializer(serializers.ModelSerializer):
             'secure_academy': value['secure'],
         }
 
-    def validate(self, data):
-        contract = self.validate_session(data.pop('session_id'))
-        data['contract'] = contract
+    def validate(self, attrs):
+        contract = self.validate_session(attrs.pop('session_id'))
+        attrs['contract'] = contract
 
-        lesson_review = data.pop('lesson_review')
-        coach_review = data.pop('coach_review')
-        academy_review = data.pop('academy_review')
+        lesson_review = attrs.pop('lesson_review')
+        coach_review = attrs.pop('coach_review')
+        academy_review = attrs.pop('academy_review')
 
         lesson_data = self.validate_lesson(lesson_review)
-        data['lesson_rating'] = lesson_data['lesson_rating']
-        data['lesson_comment'] = lesson_data['lesson_comment']
-        data['lesson_tags'] = lesson_data['lesson_tags']
+        attrs['lesson_rating'] = lesson_data['lesson_rating']
+        attrs['lesson_comment'] = lesson_data['lesson_comment']
+        attrs['lesson_tags'] = lesson_data['lesson_tags']
 
         coach_data = self.validate_coach(coach_review)
-        data['coach_rating'] = coach_data['coach_rating']
-        data['coach_comment'] = coach_data['coach_comment']
-        data['coach_tags'] = coach_data['coach_tags']
-        data['secure_coach'] = coach_data['secure_coach']
+        attrs['coach_rating'] = coach_data['coach_rating']
+        attrs['coach_comment'] = coach_data['coach_comment']
+        attrs['coach_tags'] = coach_data['coach_tags']
+        attrs['secure_coach'] = coach_data['secure_coach']
 
         academy_data = self.validate_academy(academy_review)
-        data['academy_rating'] = academy_data['academy_rating']
-        data['academy_comment'] = academy_data['academy_comment']
-        data['academy_tags'] = academy_data['academy_tags']
-        data['secure_academy'] = academy_data['secure_academy']
+        attrs['academy_rating'] = academy_data['academy_rating']
+        attrs['academy_comment'] = academy_data['academy_comment']
+        attrs['academy_tags'] = academy_data['academy_tags']
+        attrs['secure_academy'] = academy_data['secure_academy']
 
-        return data
+        return attrs
 
     def create(self, validated_data):
         lesson_tags = validated_data.pop('lesson_tags')
