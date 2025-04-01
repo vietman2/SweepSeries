@@ -45,12 +45,15 @@ export async function createAcademy(
   }
 }
 
-export async function getAcademies(query?: string) {
+export async function getAcademies(query?: string, sort?: string) {
+  const params = {
+    query,
+    sortBy: sort,
+  };
+
   try {
     const response = await axios.get("/v1/academies/", {
-      params: query && {
-        query,
-      },
+      params,
     });
 
     return response.data;
