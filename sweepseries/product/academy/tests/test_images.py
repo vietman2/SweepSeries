@@ -1,6 +1,6 @@
+from unittest.mock import patch
 from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APITestCase
-from unittest.mock import patch
 
 from auth.user.models import User
 
