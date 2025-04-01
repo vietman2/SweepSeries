@@ -22,7 +22,7 @@ import { AcademySimpleType } from "@models/products";
 import { getAcademies } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
-const sortOptions = ["기본순", "인기순", "최신순", "평점순"];
+const sortOptions = ["기본순", "인기순", "평점순"];
 
 interface Props {
   refreshCount: number;
@@ -39,9 +39,13 @@ export function AcademySearch({ refreshCount }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  const handleSortButtonPress = () => {
+    ref.current?.expand();
+  };
+
   const handleSortSelect = (sort: string) => {
     setSelectedSort(sort);
-    ref.current?.close();
+    ref.current?.forceClose();
   };
 
   const handleAcademySelect = (academy: AcademySimpleType) => {
@@ -66,7 +70,7 @@ export function AcademySearch({ refreshCount }: Readonly<Props>) {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const response = await getAcademies(query);
+      const response = await getAcademies(query, selectedSort);
 
       if (response) {
         setAcademies(response);
@@ -94,7 +98,7 @@ export function AcademySearch({ refreshCount }: Readonly<Props>) {
           <View style={styles.horizontal}>
             <TouchableOpacity
               style={styles.sortButton}
-              onPress={() => ref.current?.expand()}
+              onPress={handleSortButtonPress}
               testID="sort-button"
             >
               <AppIcon icon="sort" size={18} color={theme.background} />
@@ -123,7 +127,7 @@ export function AcademySearch({ refreshCount }: Readonly<Props>) {
       <BottomSheet
         ref={ref}
         index={-1}
-        enableDynamicSizing
+        snapPoints={["60%"]}
         backdropComponent={renderBackdrop}
       >
         <BottomSheetView style={styles.sortChoicesContainer}>
