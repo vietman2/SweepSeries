@@ -13,7 +13,7 @@ export const sampleLessonSimple: LessonType = {
   description: "코치: 홍길동\t수강생: 김철수",
   done: true,
   curriculum: "타격",
-  full_date: "2022-11-01T09:00:00",
+  full_date: "2022년 11월 01일",
   academy_name: "엘리트 야구 아카데미",
 };
 
