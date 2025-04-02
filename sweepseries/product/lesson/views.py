@@ -17,6 +17,7 @@ from product.academy.permissions import IsAcademyStaff
 from product.coach.models import Coach
 from product.contract.models import Contract
 from product.contract.serializers import ContractSerializer
+from product.program.utils import get_available_times_from_session
 from .models import Lesson, Session, SessionRequest
 from .serializers import LessonSerializer, SessionDetailSerializer, SessionRequestSerializer
 from .utils import accept_requests
@@ -113,9 +114,14 @@ class SessionViewSet(ModelViewSet):
         data = []
 
         q = Q(start_datetime__range=(start_date, end_date))
-        q &= Q(lesson__student=request.user.person)
 
-        sessions = Session.objects.filter(q)
+        coach = Coach.objects.filter(person=request.user.person).first()
+        if coach is None:
+            q &= Q(lesson__student=request.user.person)
+        else:
+            q &= Q(lesson__coaches=coach) | Q(lesson__student=request.user.person)
+
+        sessions = Session.objects.filter(q).distinct()
 
         for session in sessions:
             data.append(SessionDetailSerializer(session).data)
@@ -195,6 +201,31 @@ class SessionViewSet(ModelViewSet):
             data.append(SessionDetailSerializer(session).data)
 
         return Response(data, status=status.HTTP_200_OK)
+
+    @extend_schema(summary="레슨 변경 가능 시간 조회", tags=["레슨"])
+    @action(detail=True, methods=['get'])
+    def available_times(self, request, *args, **kwargs):    ## pylint: disable=unused-argument
+        ## 레슨 변경 시, 변경 가능한 시간을 조회한다.
+        session = self.get_object()
+        date = request.query_params.get("date", None)
+
+        if date is None:
+            return Response(
+                data={"message": "잘못된 요청입니다."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            date = datetime.strptime(date, "%Y-%m-%d").date()
+        except ValueError:
+            return Response(
+                data={"message": "잘못된 요청입니다."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        times = get_available_times_from_session(session, date)
+
+        return Response(data={"times": times}, status=status.HTTP_200_OK)
 
 class SessionRequestViewSet(ModelViewSet):
     queryset = SessionRequest.objects.all()
