@@ -7,11 +7,16 @@ export const login = async (username: string, password: string) => {
     const response = await axios.post("/v1/login/", {
       username,
       password,
+    }, {
+      headers: {
+        "X-Sweep-Platform": "sweep/mobile",
+      },
     });
 
     axios.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${response.data.access}`;
+
     await saveSecure("refreshToken", response.data.refresh);
 
     return response.data;
@@ -22,9 +27,17 @@ export const login = async (username: string, password: string) => {
 
 export const socialLogin = async (id: number | string) => {
   try {
-    const response = await axios.post("/v1/login/social/", {
-      username: id,
-    });
+    const response = await axios.post(
+      "/v1/login/social/",
+      {
+        username: id,
+      },
+      {
+        headers: {
+          "X-Sweep-Platform": "sweep/mobile",
+        },
+      }
+    );
 
     if (response.data.result === "not_registered") {
       return "REDIRECT";
@@ -60,9 +73,17 @@ export const logout = async () => {
 export const refresh = async () => {
   try {
     const refreshToken = await getSecure("refreshToken");
-    const response = await axios.post("/v1/tokens/refresh/", {
-      refresh: refreshToken,
-    });
+    const response = await axios.post(
+      "/v1/tokens/refresh/",
+      {
+        refresh: refreshToken,
+      },
+      {
+        headers: {
+          "X-Sweep-Platform": "sweep/mobile",
+        },
+      }
+    );
 
     axios.defaults.headers.common[
       "Authorization"
