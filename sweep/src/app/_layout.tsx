@@ -10,7 +10,7 @@ import { Stack, SplashScreen } from "expo-router";
 import axios from "axios";
 import { initializeKakaoSDK } from "@react-native-kakao/core";
 import NaverLogin from "@react-native-seoul/naver-login";
-import { ThemeProvider as StyledThemeProvider } from "styled-components";
+import { ThemeProvider as StyledThemeProvider } from "styled-components/native";
 
 import { AuthProvider, useAuth } from "@contexts/auth";
 import { ThemeProvider } from "@contexts/theme";
