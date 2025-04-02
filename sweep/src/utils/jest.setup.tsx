@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
+import { BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
+
 import * as AlertAPI from "@services/alert/alert";
 
 jest
@@ -68,6 +71,53 @@ jest.mock("@react-navigation/material-top-tabs", () => {
       Screen: ({ component }: { component: () => React.ReactNode }) =>
         component(),
     })),
+  };
+});
+jest.mock("@gorhom/bottom-sheet", () => {
+  const { forwardRef } = jest.requireActual("react");
+
+  return {
+    __esModule: true,
+    default: forwardRef(
+      (
+        {
+          backdropComponent,
+          children,
+        }: {
+          backdropComponent: React.FC<BottomSheetBackdropProps>;
+          children: React.ReactNode;
+        },
+        ref
+      ) => (
+        <>
+          {backdropComponent &&
+            backdropComponent({
+              animatedIndex: {
+                value: 0,
+                get: jest.fn(),
+                set: jest.fn(),
+                modify: jest.fn(),
+                addListener: jest.fn(),
+                removeListener: jest.fn(),
+              },
+              animatedPosition: {
+                value: 0,
+                get: jest.fn(),
+                set: jest.fn(),
+                modify: jest.fn(),
+                addListener: jest.fn(),
+                removeListener: jest.fn(),
+              },
+            })}
+          {children}
+        </>
+      )
+    ),
+    BottomSheetBackdrop: () => "BottomSheetBackdrop",
+    BottomSheetBackdropProps: {},
+    BottomSheetScrollView: ({ children }: { children: React.ReactNode }) =>
+      children,
+    BottomSheetView: ({ children }: { children: React.ReactNode }) => children,
   };
 });
 jest.mock("@quidone/react-native-wheel-picker", () => {
@@ -250,6 +300,7 @@ jest.mock("@components/Modals", () => {
         {children}
       </View>
     ),
+    SuccessAlert: () => null,
   };
 });
 jest.mock("@components/Pickers", () => {
