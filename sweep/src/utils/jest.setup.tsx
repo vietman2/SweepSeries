@@ -221,6 +221,18 @@ jest.mock("@components/Menus", () => {
 jest.mock("@components/Modals", () => {
   const { TouchableOpacity, View } = jest.requireActual("react-native");
   return {
+    BaseModal: ({ children }: { children: React.ReactNode }) => children,
+    BaseModalWithDismiss: ({
+      children,
+      onDismiss,
+    }: {
+      children: React.ReactNode;
+      onDismiss: () => void;
+    }) => (
+      <TouchableOpacity onPress={onDismiss} testID="dismiss-modal">
+        {children}
+      </TouchableOpacity>
+    ),
     SimpleModal: ({
       children,
       buttonText,
