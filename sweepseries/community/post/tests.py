@@ -1,10 +1,11 @@
+from django.test import TestCase
 from django.utils import timezone
 from rest_framework.test import APITestCase
 
 from auth.user.models import User
 from auth.userprofile.models import UserProfile
 from community.comment.models import Comment, ReComment
-from .models import Post
+from .models import Post, PostReport
 
 class PostAPITest(APITestCase):
     fixtures = ['core/data/test/community.json', 'core/data/test/users.json']
@@ -317,3 +318,14 @@ class PostReportAPITest(APITestCase):
         self.client.force_authenticate(user=self.admin)
         response = self.client.patch(self.url + '1/', {'feedback': 'test'})
         self.assertEqual(response.status_code, 400)
+
+class PostModelsTestCase(TestCase):
+    fixtures = ['core/data/test/community.json', 'core/data/test/users.json']
+
+    def test_post_str(self):
+        post = Post.objects.get(pk=2024072300000001)
+        self.assertEqual(str(post), "[덕아웃] 제목 1")
+
+    def test_post_report_str(self):
+        post_report = PostReport.objects.get(pk=1)
+        self.assertEqual(str(post_report), "신고된 게시물: 제목 1")
