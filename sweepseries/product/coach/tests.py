@@ -7,7 +7,7 @@ from django.test import TestCase
 from rest_framework.test import APITestCase
 
 from auth.user.models import User
-from .models import Coach, CoachWorkingHours, SpecialWorkingDay
+from .models import Coach, CoachWorkingHours, SpecialWorkingDay, CoachProfession
 from .utils import get_working_hours
 
 class CoachTestCase(APITestCase):
@@ -299,3 +299,18 @@ class CoachUpdateTestCase(APITestCase):
             "blog": "https://www.blog.com/test"
         })
         self.assertEqual(response.status_code, 400)
+
+class CoachModelsTestCase(TestCase):
+    fixtures = [
+        "core/data/initial/professions.json", "core/data/test/coaches.json",
+        "core/data/test/users.json", "core/data/initial/regions.json",
+        "core/data/test/academies.json", "core/data/initial/facilities.json"
+    ]
+
+    def test_coach_str(self):
+        coach = Coach.objects.get(uuid="923e4567-e89b-12d3-a456-426614174999")
+        self.assertEqual(str(coach), "홍길동 - (아카데미 1)")
+
+    def test_coach_profession_str(self):
+        coach_profession = CoachProfession.objects.get(pk=1)
+        self.assertEqual(str(coach_profession), "투수 전문")

@@ -19,6 +19,8 @@ class Contract(TimeStampedModel):
 
     class Meta:
         db_table = 'contract'
+        verbose_name = '계약'
+        verbose_name_plural = '계약'
         ordering = ['-created_at']
 
 class Tag(models.Model):
@@ -31,16 +33,34 @@ class Tag(models.Model):
         abstract = True
 
 class LessonReviewTags(Tag):
+    def __str__(self):
+        sign = "+" if self.is_positive else "-"
+        return f"[레슨 리뷰] {self.tag} {sign}"
+
     class Meta:
         db_table = 'lesson_review_tags'
+        verbose_name = '레슨 리뷰 태그'
+        verbose_name_plural = '레슨 리뷰 태그'
 
 class CoachReviewTags(Tag):
+    def __str__(self):
+        sign = "+" if self.is_positive else "-"
+        return f"[코치 리뷰] {self.tag} {sign}"
+
     class Meta:
         db_table = 'coach_review_tags'
+        verbose_name = '코치 리뷰 태그'
+        verbose_name_plural = '코치 리뷰 태그'
 
 class AcademyReviewTags(Tag):
+    def __str__(self):
+        sign = "+" if self.is_positive else "-"
+        return f"[아카데미 리뷰] {self.tag} {sign}"
+
     class Meta:
         db_table = 'academy_review_tags'
+        verbose_name = '아카데미 리뷰 태그'
+        verbose_name_plural = '아카데미 리뷰 태그'
 
 class ReviewImage(TimeStampedModel):
     image   = models.ImageField(upload_to="reviews/")
@@ -49,6 +69,8 @@ class ReviewImage(TimeStampedModel):
 
     class Meta:
         db_table = 'review_image'
+        verbose_name = '리뷰 이미지'
+        verbose_name_plural = '리뷰 이미지'
 
 class Review(TimeStampedModel):
     contract        = models.OneToOneField(
@@ -87,4 +109,6 @@ class Review(TimeStampedModel):
 
     class Meta:
         db_table = 'review'
+        verbose_name = '리뷰'
+        verbose_name_plural = '리뷰'
         ordering = ['-created_at']

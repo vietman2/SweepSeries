@@ -8,16 +8,26 @@ class Target(models.Model):
 
     objects = models.Manager()
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         db_table = 'program_target'
+        verbose_name = '프로그램 대상'
+        verbose_name_plural = '프로그램 대상'
 
 class Position(models.Model):
     name    = models.CharField(max_length=255)
 
     objects = models.Manager()
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         db_table = 'program_position'
+        verbose_name = '프로그램 포지션 옵션'
+        verbose_name_plural = '프로그램 포지션 옵션'
 
 class CoachTeam(models.Model):
     coaches = models.ManyToManyField(Coach, related_name='coach_teams')
@@ -26,6 +36,8 @@ class CoachTeam(models.Model):
 
     class Meta:
         db_table = 'program_coach_team'
+        verbose_name = '코치 팀'
+        verbose_name_plural = '코치 팀'
 
 class Program(models.Model):
     academy         = models.ForeignKey(Academy, on_delete=models.CASCADE, related_name='programs')
@@ -43,6 +55,8 @@ class Program(models.Model):
 
     class Meta:
         db_table = 'program'
+        verbose_name = '프로그램'
+        verbose_name_plural = '프로그램'
         unique_together = ('academy', 'name')
 
 class Curriculum(models.Model):
@@ -56,4 +70,6 @@ class Curriculum(models.Model):
 
     class Meta:
         db_table = 'program_curriculum'
+        verbose_name = '프로그램 커리큘럼'
+        verbose_name_plural = '프로그램 커리큘럼'
         unique_together = ('program', 'num_lessons')

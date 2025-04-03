@@ -42,7 +42,7 @@
   {
     "model": "contract.lessonreviewtags",
     "pk": 9,
-    "fields": { "tag": "체계성이 부족해요", "is_positive": false }
+    "fields": { "tag": "체계적이지 않아요", "is_positive": false }
   },
   {
     "model": "contract.lessonreviewtags",

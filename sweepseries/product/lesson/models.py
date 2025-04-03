@@ -16,6 +16,8 @@ class Lesson(TimeStampedModel):
 
     class Meta:
         db_table = 'lessons'
+        verbose_name = '레슨'
+        verbose_name_plural = '레슨'
         unique_together = ('program', 'student')
 
 class Session(models.Model):
@@ -39,6 +41,8 @@ class Session(models.Model):
 
     class Meta:
         db_table = 'sessions'
+        verbose_name = '레슨 세션'
+        verbose_name_plural = '레슨 세션'
 
 class SessionRequest(TimeStampedModel):
     program         = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='requests')
@@ -56,6 +60,8 @@ class SessionRequest(TimeStampedModel):
 
     class Meta:
         db_table = 'session_requests'
+        verbose_name = '레슨 요청'
+        verbose_name_plural = '레슨 요청'
 
 class ScheduleChangeRequest(TimeStampedModel):
     session             = models.ForeignKey(
@@ -73,3 +79,5 @@ class ScheduleChangeRequest(TimeStampedModel):
 
     class Meta:
         db_table = 'schedule_change_requests'
+        verbose_name = '레슨 일정 변경 요청'
+        verbose_name_plural = '레슨 일정 변경 요청'
