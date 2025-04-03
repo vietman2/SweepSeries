@@ -1,6 +1,7 @@
 from rest_framework.test import APITestCase
 
 from auth.user.models import User
+from product.program.models import Program
 
 class SessionAPITestCase(APITestCase):
     fixtures = [
@@ -95,4 +96,32 @@ class SessionAPITestCase(APITestCase):
                 "mode": "student"
             }
         )
+        self.assertEqual(response.status_code, 400)
+
+    def test_available_times(self):
+        url = f"{self.url}1/available_times/"
+        self.client.force_authenticate(user=self.user)
+
+        ## 1. no time (saturday: coach off)
+        response = self.client.get(url, {"date": "2025-02-01"})
+        self.assertEqual(response.status_code, 200)
+
+        ## 2. closed (sunday: academy off)
+        response = self.client.get(url, {"date": "2025-02-02"})
+        self.assertEqual(response.status_code, 200)
+
+        ## 3. success
+        response = self.client.get(url, {"date": "2025-02-03"})
+        self.assertEqual(response.status_code, 200)
+
+    def test_available_times_fail(self):
+        url = f"{self.url}1/available_times/"
+        self.client.force_authenticate(user=self.user)
+
+        ## 1. no date
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 400)
+
+        ## 2. bad date
+        response = self.client.get(url, {"date": "2025/02/01"})
         self.assertEqual(response.status_code, 400)
