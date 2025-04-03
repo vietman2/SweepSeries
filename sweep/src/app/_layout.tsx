@@ -16,6 +16,7 @@ import { AuthProvider, useAuth } from "@contexts/auth";
 import { ThemeProvider } from "@contexts/theme";
 import { getProfile, refresh } from "@services/auth";
 import { lightColors } from "@themes/colors";
+import { initialize } from "@services/app";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -101,26 +102,23 @@ function AppRouter() {
       }
     };
 
-    const initializeKakao = async () => {
-      const kakaoAppKey = process.env.EXPO_PUBLIC_KAKAO_APP_KEY;
-      initializeKakaoSDK(kakaoAppKey || "");
-    };
+    const initializeSocialLogin = async () => {
+      const response = await initialize();
 
-    const initializeNaver = async () => {
-      const naverAppKey = process.env.EXPO_PUBLIC_NAVER_CONSUMER_KEY;
-      const naverAppSecret = process.env.EXPO_PUBLIC_NAVER_CONSUMER_SECRET;
+      if (response) {
+        initializeKakaoSDK(response.KAKAO_APP_KEY); 
 
-      NaverLogin.initialize({
-        appName: "Catch B",
-        consumerKey: naverAppKey || "",
-        consumerSecret: naverAppSecret || "",
-        serviceUrlSchemeIOS: "catchb",
-      });
+        NaverLogin.initialize({
+          appName: "Catch B",
+          consumerKey: response.NAVER_CONSUMER_KEY,
+          consumerSecret: response.NAVER_CONSUMER_SECRET,
+          serviceUrlSchemeIOS: "catchb",
+        });
+      }
     };
 
     refreshToken();
-    initializeKakao();
-    initializeNaver();
+    initializeSocialLogin();
   }, []);
 
   if (!ready) {
