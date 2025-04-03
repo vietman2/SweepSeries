@@ -30,7 +30,6 @@ class ScheduleChangeAPITestCase(APITestCase):
 
         ## 1. bad data
         response = self.client.post("/v1/sessions/a/schedule_change/", self.create_data)
-        print(response.data)
         self.assertEqual(response.status_code, 400)
 
         ## 2. no session
