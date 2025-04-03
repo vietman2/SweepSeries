@@ -4,6 +4,7 @@ from dj_rest_auth.jwt_auth import get_refresh_view
 from rest_framework.routers import DefaultRouter
 
 ## Apps
+from app.views import InitializerView
 from app.faq.views import FaqViewSet
 from app.inquiry.views import InquiryViewSet
 from app.notices.views import NoticeViewSet
@@ -97,6 +98,7 @@ router.register(
 router.register(r'sessions', SessionViewSet, basename='sessions')
 
 urlpatterns = [
+    path('initialize/', InitializerView.as_view(), name='initializer'),
     path('login/social/', SocialLoginView.as_view(), name='kakao-login'),
     path('login/', UserLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
