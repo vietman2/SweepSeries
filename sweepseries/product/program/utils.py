@@ -70,11 +70,11 @@ def generate_time_slots_from_academy(program, date):
 
     return (slots, academy_open_time, academy_close_time)
 
-def filter_coach_working_hours(team, date, open_time, close_time):
+def filter_coaches_working_hours(coaches, date, open_time, close_time):
     aggregated_start = open_time
     aggregated_end = close_time
 
-    for coach in team.coaches.all():
+    for coach in coaches:
         coach_work_hours = get_working_hours(coach, date)
 
         if coach_work_hours is None:
@@ -88,6 +88,21 @@ def filter_coach_working_hours(team, date, open_time, close_time):
 
     return (aggregated_start, aggregated_end)
 
+def get_time_slots(date, slots, aggregated_start, aggregated_end):
+    available_times = []
+
+    for slot in slots:
+        slot_start = datetime.strptime(slot, "%H:%M").time()
+        slot_start_dt = datetime.combine(date, slot_start)
+        slot_end_dt = slot_start_dt + timedelta(minutes=30)
+
+        # Check if within working hours and has no conflicts
+        available = aggregated_start <= slot_start <= aggregated_end
+
+        available_times.append({"time": slot, "is_available": available})
+
+    return available_times
+
 def is_time_conflicting(slot_start_dt, slot_end_dt, session_times, date):
     for res_start, res_end in session_times:
         res_start_dt = datetime.combine(date, res_start)
@@ -96,8 +111,8 @@ def is_time_conflicting(slot_start_dt, slot_end_dt, session_times, date):
             return True
     return False
 
-def filter_session_times(team, date, slots, aggregated_start, aggregated_end):
-    session_times = get_unavailable_session_times(team.coaches, date)
+def filter_session_times(coaches, date, slots, aggregated_start, aggregated_end):
+    session_times = get_unavailable_session_times(coaches, date)
 
     available_times = []
 
@@ -143,7 +158,7 @@ def get_available_times(program, team, date):
         raise serializers.ValidationError("팀을 선택해야 합니다.")
 
     # 4. 코치들의 근무 시간을 필터. 유저가 선택한 코치 중, 한명이라도 불가능한 시간대는, 불가능하다.
-    result = filter_coach_working_hours(team, date, academy_open_time, academy_close_time)
+    result = filter_coaches_working_hours(team.coaches.all(), date, academy_open_time, academy_close_time)
 
     if result is None:
         return [{"time": slot, "is_available": False} for slot in slots]
@@ -152,4 +167,34 @@ def get_available_times(program, team, date):
     aggregated_end = result[1]
 
     # 5. 코치들의 예약된 시간 필터
-    return filter_session_times(team, date, slots, aggregated_start, aggregated_end)
+    return filter_session_times(team.coaches, date, slots, aggregated_start, aggregated_end)
+
+def get_available_times_from_session(session, date):
+    # 1. 아카데미 영업 시간으로부터 30분 간격의 슬롯 생성
+    program = session.lesson.program
+    result = generate_time_slots_from_academy(program, date)
+
+    # 1-1. 슬롯이 없다면, 아카데미 휴무일이거나, 영업 시간이 없는 경우
+    if result is None:
+        return None
+
+    slots = result[0]
+    academy_open_time = result[1]
+    academy_close_time = result[2]
+
+    # 2. 프로그램이 코치팀 임의 선택인 경우, 모든 슬롯이 가능한 것으로 간주
+    if program.select_disabled:
+        return [{"time": slot, "is_available": True} for slot in slots]
+
+    # 4. 코치들의 근무 시간을 필터. 유저가 선택한 코치 중, 한명이라도 불가능한 시간대는, 불가능하다.
+    result = filter_coaches_working_hours(
+        session.coaches.all(),
+        date,
+        academy_open_time,
+        academy_close_time
+    )
+
+    if result is None:
+        return [{"time": slot, "is_available": False} for slot in slots]
+
+    return get_time_slots(date, slots, result[0], result[1])
