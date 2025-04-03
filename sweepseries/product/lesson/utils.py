@@ -5,6 +5,7 @@ from django.db.transaction import atomic
 from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 
+from product.coach.models import Coach
 from product.lesson.models import Session
 from .managers import add_student_to_academy, get_contract, create_or_get_lesson, create_session
 from .models import Session, SessionRequest
@@ -147,3 +148,18 @@ def accept_requests(request_ids):
         raise ValidationError("해당 레슨 요청이 존재하지 않습니다.") from e
 
     return True
+
+def get_my_sessions(start_date, end_date, person):
+    tz = timezone.get_current_timezone()
+    start_date = timezone.make_aware(start_date, tz)
+    end_date = timezone.make_aware(end_date, tz)
+
+    q = Q(start_datetime__range=(start_date, end_date))
+
+    coach = Coach.objects.filter(person=person).first()
+    if coach is None:
+        q &= Q(lesson__student=person)
+    else:
+        q &= Q(lesson__coaches=coach) | Q(lesson__student=person)
+
+    return Session.objects.filter(q).distinct()

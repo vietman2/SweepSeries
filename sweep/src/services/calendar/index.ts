@@ -20,8 +20,10 @@ import { createSchedule } from "./schedules";
 import {
   getSessions,
   getSessionDetails,
+  getSessionAvailableTimes,
   updateSessionFeedback,
   updateSessionNotes,
+  requestSessionScheduleChange,
 } from "./sessions";
 import { createTodo, toggleTodoStatus } from "./todos";
 
@@ -43,8 +45,10 @@ export {
   createSchedule,
   getSessions,
   getSessionDetails,
+  getSessionAvailableTimes,
   updateSessionFeedback,
   updateSessionNotes,
+  requestSessionScheduleChange,
   createTodo,
   toggleTodoStatus,
 };

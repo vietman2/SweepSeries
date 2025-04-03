@@ -4,6 +4,7 @@ from dj_rest_auth.jwt_auth import get_refresh_view
 from rest_framework.routers import DefaultRouter
 
 ## Apps
+from app.views import InitializerView
 from app.faq.views import FaqViewSet
 from app.inquiry.views import InquiryViewSet
 from app.notices.views import NoticeViewSet
@@ -11,11 +12,11 @@ from app.notices.views import NoticeViewSet
 ## Auth
 from auth.agreements.views import AgreementViewSet
 from auth.person.views import PersonViewSet, AcademyStudentViewSet
-from auth.user.register_views import (
+from auth.user.views import (
+    UserViewSet, UserLoginView, SocialLoginView,
     CheckUsernameEmailView, CheckPasswordView, CreateVerificationCodeView,
     VerifyPhoneView, RegisterView
 )
-from auth.user.views import UserViewSet, UserLoginView, SocialLoginView
 from auth.userprofile.views import UserProfileViewSet
 
 ## Calendar
@@ -37,7 +38,9 @@ from product.academy.views import (
 )
 from product.coach.views import CoachViewSet
 from product.contract.views import ReviewViewSet, AcademyReviewViewSet, CoachReviewViewSet
-from product.lesson.views import LessonViewSet, SessionViewSet, SessionRequestViewSet
+from product.lesson.views import (
+    LessonViewSet, SessionScheduleChangeViewSet, SessionViewSet, SessionRequestViewSet
+)
 from product.program.views import ProgramViewSet, CoachTeamViewSet
 
 router = DefaultRouter()
@@ -87,9 +90,15 @@ router.register(r'lessons', LessonViewSet, basename='lessons')
 router.register(r'lesson_requests', SessionRequestViewSet, basename='lesson-requests')
 router.register(r'programs/(?P<program_id>[^/.]+)/coaches', CoachTeamViewSet, basename='teams')
 router.register(r'programs', ProgramViewSet, basename='programs')
+router.register(
+    r'sessions/(?P<session_id>[^/.]+)/schedule_change',
+    SessionScheduleChangeViewSet,
+    basename='schedule-change'
+)
 router.register(r'sessions', SessionViewSet, basename='sessions')
 
 urlpatterns = [
+    path('initialize/', InitializerView.as_view(), name='initializer'),
     path('login/social/', SocialLoginView.as_view(), name='kakao-login'),
     path('login/', UserLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
