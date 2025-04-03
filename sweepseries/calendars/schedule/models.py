@@ -28,6 +28,8 @@ class PersonalSchedule(BaseSchedule):
 
     class Meta:
         db_table = 'personal_schedules'
+        verbose_name = '개인 일정'
+        verbose_name_plural = '개인 일정'
         ordering = ['-created_at']
 
 class AcademySchedule(BaseSchedule):
@@ -37,6 +39,8 @@ class AcademySchedule(BaseSchedule):
 
     class Meta:
         db_table = 'academy_schedules'
+        verbose_name = '아카데미 일정'
+        verbose_name_plural = '아카데미 일정'
         ordering = ['-created_at']
 
 class BaseEvent(models.Model):
@@ -59,6 +63,8 @@ class PersonalEvent(BaseEvent):
 
     class Meta:
         db_table = 'personal_events'
+        verbose_name = '개인 일정 상세'
+        verbose_name_plural = '개인 일정 상세'
         ordering = ['start_datetime']
 
 class AcademyEvent(BaseEvent):
@@ -68,4 +74,6 @@ class AcademyEvent(BaseEvent):
 
     class Meta:
         db_table = 'academy_events'
+        verbose_name = '아카데미 일정 상세'
+        verbose_name_plural = '아카데미 일정 상세'
         ordering = ['start_datetime']

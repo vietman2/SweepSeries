@@ -20,4 +20,6 @@ class Todo(TimeStampedModel):
 
     class Meta:
         db_table = 'todos'
+        verbose_name = '할 일'
+        verbose_name_plural = '할 일'
         ordering = ['deadline']
