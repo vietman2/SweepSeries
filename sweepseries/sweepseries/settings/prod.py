@@ -69,6 +69,11 @@ REST_AUTH = {
     'USER_DETAILS_SERIALIZER': 'auth.user.serializers.UserAuthSerializer',
 }
 
+## Kakao Login & Naver Login
+KAKAO_APP_KEY = config('KAKAO_APP_KEY')
+NAVER_CONSUMER_KEY = config('NAVER_CONSUMER_KEY')
+NAVER_CONSUMER_SECRET = config('NAVER_CONSUMER_SECRET')
+
 ## Storage
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY')
 AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_KEY')
