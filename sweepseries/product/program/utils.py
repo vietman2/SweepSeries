@@ -93,8 +93,6 @@ def get_time_slots(date, slots, aggregated_start, aggregated_end):
 
     for slot in slots:
         slot_start = datetime.strptime(slot, "%H:%M").time()
-        slot_start_dt = datetime.combine(date, slot_start)
-        slot_end_dt = slot_start_dt + timedelta(minutes=30)
 
         # Check if within working hours and has no conflicts
         available = aggregated_start <= slot_start <= aggregated_end
@@ -158,7 +156,12 @@ def get_available_times(program, team, date):
         raise serializers.ValidationError("팀을 선택해야 합니다.")
 
     # 4. 코치들의 근무 시간을 필터. 유저가 선택한 코치 중, 한명이라도 불가능한 시간대는, 불가능하다.
-    result = filter_coaches_working_hours(team.coaches.all(), date, academy_open_time, academy_close_time)
+    result = filter_coaches_working_hours(
+        team.coaches.all(),
+        date,
+        academy_open_time,
+        academy_close_time
+    )
 
     if result is None:
         return [{"time": slot, "is_available": False} for slot in slots]

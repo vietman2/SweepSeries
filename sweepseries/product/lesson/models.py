@@ -21,7 +21,11 @@ class Lesson(TimeStampedModel):
 class Session(models.Model):
     lesson          = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='sessions')
     coaches         = models.ManyToManyField(Coach, related_name='sessions')
-    contract        = models.ForeignKey(Contract, on_delete=models.CASCADE, related_name='sessions')
+    contract        = models.ForeignKey(
+        Contract,
+        on_delete=models.CASCADE,
+        related_name='sessions'
+    )
     start_datetime  = models.DateTimeField(validators=[validate_30_minutes_interval])
     end_datetime    = models.DateTimeField(validators=[validate_30_minutes_interval])
 
@@ -56,7 +60,7 @@ class SessionRequest(TimeStampedModel):
 class ScheduleChangeRequest(TimeStampedModel):
     session             = models.ForeignKey(
         Session,
-        on_delete=models.CASCADE, 
+        on_delete=models.CASCADE,
         related_name='schedule_change_requests'
     )
     new_start_datetime  = models.DateTimeField(validators=[validate_30_minutes_interval])

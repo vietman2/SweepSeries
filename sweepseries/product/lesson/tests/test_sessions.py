@@ -1,7 +1,6 @@
 from rest_framework.test import APITestCase
 
 from auth.user.models import User
-from product.program.models import Program
 
 class SessionAPITestCase(APITestCase):
     fixtures = [

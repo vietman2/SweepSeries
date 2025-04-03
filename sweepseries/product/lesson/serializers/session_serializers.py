@@ -45,8 +45,6 @@ class SessionSerializer(serializers.ModelSerializer):
         return f'코치: {coaches}\t수강생: {student}'
 
     def get_curriculum(self, obj):
-        coaches = ', '.join([coach.person.name for coach in obj.coaches.all()])
-
         return f"{obj.contract.curriculum.num_lessons}회권"
 
     def get_color(self, obj):

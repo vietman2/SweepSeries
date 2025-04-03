@@ -16,6 +16,7 @@ from product.coach.models import Coach
 from product.program.utils import get_available_times_from_session
 from ..models import Session
 from ..serializers import SessionDetailSerializer
+from ..utils import get_my_sessions
 
 class SessionViewSet(ModelViewSet):
     queryset = Session.objects.all()
@@ -42,23 +43,14 @@ class SessionViewSet(ModelViewSet):
             start_date = datetime(year, month, 1)
             end_date = start_date + relativedelta(months=1)
         except ValueError as e:
-            raise ValidationError("올바른 형식이 아닙니다.") from e
+            return Response(
+                data={"message": "잘못된 요청입니다."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        tz = timezone.get_current_timezone()
-        start_date = timezone.make_aware(start_date, tz)
-        end_date = timezone.make_aware(end_date, tz)
+        sessions = get_my_sessions(start_date, end_date, request.user.person)
 
         data = []
-
-        q = Q(start_datetime__range=(start_date, end_date))
-
-        coach = Coach.objects.filter(person=request.user.person).first()
-        if coach is None:
-            q &= Q(lesson__student=request.user.person)
-        else:
-            q &= Q(lesson__coaches=coach) | Q(lesson__student=request.user.person)
-
-        sessions = Session.objects.filter(q).distinct()
 
         for session in sessions:
             data.append(SessionDetailSerializer(session).data)
