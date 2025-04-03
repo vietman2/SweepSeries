@@ -19,7 +19,7 @@ export function LessonDateSelector({
 }: Readonly<Props>) {
   const { theme } = useTheme();
 
-  const dayComponent = ({ date }: { date: DateData }) => {
+  const DayComponent = ({ date }: { date: DateData }) => {
     const isSelectedDate = useMemo(
       () => date.dateString === selectedDate,
       [date, selectedDate]
@@ -46,7 +46,7 @@ export function LessonDateSelector({
     <Calendar
       initialDate={selectedDate}
       customHeader={CustomHeaderModal}
-      dayComponent={dayComponent}
+      dayComponent={DayComponent}
       hideExtraDays
     />
   );
