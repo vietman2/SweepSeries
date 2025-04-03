@@ -52,3 +52,20 @@ class SessionRequest(TimeStampedModel):
 
     class Meta:
         db_table = 'session_requests'
+
+class ScheduleChangeRequest(TimeStampedModel):
+    session             = models.ForeignKey(
+        Session,
+        on_delete=models.CASCADE, 
+        related_name='schedule_change_requests'
+    )
+    new_start_datetime  = models.DateTimeField(validators=[validate_30_minutes_interval])
+    new_end_datetime    = models.DateTimeField(validators=[validate_30_minutes_interval])
+
+    accepted            = models.BooleanField(default=False)
+    rejected            = models.BooleanField(default=False)
+
+    objects         = models.Manager()
+
+    class Meta:
+        db_table = 'schedule_change_requests'
