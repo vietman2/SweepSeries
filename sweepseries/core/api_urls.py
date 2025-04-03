@@ -11,11 +11,11 @@ from app.notices.views import NoticeViewSet
 ## Auth
 from auth.agreements.views import AgreementViewSet
 from auth.person.views import PersonViewSet, AcademyStudentViewSet
-from auth.user.register_views import (
+from auth.user.views import (
+    UserViewSet, UserLoginView, SocialLoginView,
     CheckUsernameEmailView, CheckPasswordView, CreateVerificationCodeView,
     VerifyPhoneView, RegisterView
 )
-from auth.user.views import UserViewSet, UserLoginView, SocialLoginView
 from auth.userprofile.views import UserProfileViewSet
 
 ## Calendar
@@ -37,7 +37,9 @@ from product.academy.views import (
 )
 from product.coach.views import CoachViewSet
 from product.contract.views import ReviewViewSet, AcademyReviewViewSet, CoachReviewViewSet
-from product.lesson.views import LessonViewSet, SessionViewSet, SessionRequestViewSet
+from product.lesson.views import (
+    LessonViewSet, SessionScheduleChangeViewSet, SessionViewSet, SessionRequestViewSet
+)
 from product.program.views import ProgramViewSet, CoachTeamViewSet
 
 router = DefaultRouter()
@@ -87,6 +89,11 @@ router.register(r'lessons', LessonViewSet, basename='lessons')
 router.register(r'lesson_requests', SessionRequestViewSet, basename='lesson-requests')
 router.register(r'programs/(?P<program_id>[^/.]+)/coaches', CoachTeamViewSet, basename='teams')
 router.register(r'programs', ProgramViewSet, basename='programs')
+router.register(
+    r'sessions/(?P<session_id>[^/.]+)/schedule_change',
+    SessionScheduleChangeViewSet,
+    basename='schedule-change'
+)
 router.register(r'sessions', SessionViewSet, basename='sessions')
 
 urlpatterns = [
