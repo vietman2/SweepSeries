@@ -1,7 +1,9 @@
 from django.conf import settings
+from django.test import TestCase
 from rest_framework.test import APITestCase
 
 from auth.user.models import User
+from .models import Notice
 
 class NoticesAPITestCase(APITestCase):
     fixtures = ["core/data/test/notices.json", "core/data/test/users.json"]
@@ -92,3 +94,10 @@ class NoticesAPITestCase(APITestCase):
         ## 1. not authenticated
         response = self.client.delete(self.url + "1/")
         self.assertEqual(response.status_code, 403)
+
+class NoticeModelTestCase(TestCase):
+    fixtures = ["core/data/test/notices.json", "core/data/test/users.json"]
+
+    def test_notice_str(self):
+        notice = Notice.objects.get(id=1)
+        self.assertEqual(str(notice), notice.title)

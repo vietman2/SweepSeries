@@ -15,5 +15,10 @@ class Inquiry(TimeStampedModel):
 
     objects     = models.Manager()
 
+    def __str__(self):
+        return f"{self.title} - {self.user.email} ({self.created_at.strftime('%Y-%m-%d')})"
+
     class Meta:
         db_table = 'inquiries'
+        verbose_name = '문의'
+        verbose_name_plural = '문의'

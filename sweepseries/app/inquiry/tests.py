@@ -1,6 +1,8 @@
+from django.test import TestCase
 from rest_framework.test import APITestCase
 
 from auth.user.models import User
+from .models import Inquiry
 
 class InquiryAPITestCase(APITestCase):
     fixtures = ["core/data/test/inquiries.json", "core/data/test/users.json"]
@@ -49,3 +51,10 @@ class InquiryAPITestCase(APITestCase):
         self.client.force_authenticate(self.user1)
         response = self.client.post(self.url, {"title": "test"})
         self.assertEqual(response.status_code, 400)
+
+class InquiryModelTestCase(TestCase):
+    fixtures = ["core/data/test/inquiries.json", "core/data/test/users.json"]
+
+    def test_inquiry_str(self):
+        inquiry = Inquiry.objects.get(id=1)
+        self.assertEqual(str(inquiry), "문의 1 제목 - admin@admin.com (2025-02-12)")
