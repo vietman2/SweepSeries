@@ -42,7 +42,7 @@ class SessionViewSet(ModelViewSet):
             year = int(year)
             start_date = datetime(year, month, 1)
             end_date = start_date + relativedelta(months=1)
-        except ValueError as e:
+        except ValueError:
             return Response(
                 data={"message": "잘못된 요청입니다."},
                 status=status.HTTP_400_BAD_REQUEST

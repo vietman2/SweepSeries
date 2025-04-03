@@ -88,7 +88,7 @@ def filter_coaches_working_hours(coaches, date, open_time, close_time):
 
     return (aggregated_start, aggregated_end)
 
-def get_time_slots(date, slots, aggregated_start, aggregated_end):
+def get_time_slots(slots, aggregated_start, aggregated_end):
     available_times = []
 
     for slot in slots:
@@ -196,4 +196,4 @@ def get_available_times_from_session(session, date):
     if result is None:
         return [{"time": slot, "is_available": False} for slot in slots]
 
-    return get_time_slots(date, slots, result[0], result[1])
+    return get_time_slots(slots, result[0], result[1])
