@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.test import TestCase
 from django.utils import timezone
 from rest_framework.test import APITestCase
@@ -55,43 +56,43 @@ class PostAPITest(APITestCase):
     def test_list_time_since(self):
         ## 1. seconds ago
         post = Post.objects.get(pk=2024072300000001)
-        post.created_at = timezone.now() - timezone.timedelta(seconds=30)
+        post.created_at = timezone.now() - timedelta(seconds=30)
         post.save()
         response = self.client.get(self.url, {'forum': '덕아웃'})
         self.assertEqual(response.data['posts'][0]['created_at'], "방금 전")
 
         ## 2. minutes ago
-        post.created_at = timezone.now() - timezone.timedelta(minutes=30)
+        post.created_at = timezone.now() - timedelta(minutes=30)
         post.save()
         response = self.client.get(self.url, {'forum': '덕아웃'})
         self.assertEqual(response.data['posts'][0]['created_at'], "30분 전")
 
         ## 3. hours ago
-        post.created_at = timezone.now() - timezone.timedelta(hours=3)
+        post.created_at = timezone.now() - timedelta(hours=3)
         post.save()
         response = self.client.get(self.url, {'forum': '덕아웃'})
         self.assertEqual(response.data['posts'][0]['created_at'], "3시간 전")
 
         ## 4. days ago
-        post.created_at = timezone.now() - timezone.timedelta(days=3)
+        post.created_at = timezone.now() - timedelta(days=3)
         post.save()
         response = self.client.get(self.url, {'forum': '덕아웃'})
         self.assertEqual(response.data['posts'][0]['created_at'], "3일 전")
 
         ## 5. weeks ago
-        post.created_at = timezone.now() - timezone.timedelta(weeks=3)
+        post.created_at = timezone.now() - timedelta(weeks=3)
         post.save()
         response = self.client.get(self.url, {'forum': '덕아웃'})
         self.assertEqual(response.data['posts'][0]['created_at'], "3주 전")
 
         ## 6. months ago
-        post.created_at = timezone.now() - timezone.timedelta(days=90)
+        post.created_at = timezone.now() - timedelta(days=90)
         post.save()
         response = self.client.get(self.url, {'forum': '덕아웃'})
         self.assertEqual(response.data['posts'][0]['created_at'], "3달 전")
 
         ## 7. years ago
-        post.created_at = timezone.now() - timezone.timedelta(days=365)
+        post.created_at = timezone.now() - timedelta(days=365)
         post.save()
         response = self.client.get(self.url, {'forum': '덕아웃'})
         self.assertEqual(response.data['posts'][0]['created_at'], "1년 전")

@@ -66,7 +66,8 @@ class CommentReport(Report):
     objects = models.Manager()
 
     def __str__(self):
-        return f'댓글 신고 (댓글 {self.comment.id})'
+        comment_id = self.comment.id if self.comment else '삭제된 댓글'
+        return f'댓글 신고 (댓글 {comment_id})'
 
     class Meta:
         db_table = 'comment_report'
@@ -84,7 +85,8 @@ class ReCommentReport(Report):
     objects = models.Manager()
 
     def __str__(self):
-        return f'대댓글 신고 (대댓글 {self.recomment.id})'
+        recomment_id = self.recomment.id if self.recomment else '삭제된 대댓글'
+        return f'대댓글 신고 (대댓글 {recomment_id})'
 
     class Meta:
         db_table = 'recomment_report'

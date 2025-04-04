@@ -59,7 +59,8 @@ class PostReport(Report):
     objects = models.Manager()
 
     def __str__(self):
-        return f"신고된 게시물: {self.post.title}"
+        title = self.post.title if self.post else '삭제된 게시물'
+        return f"신고된 게시물: {title}"
 
     class Meta:
         db_table = 'post_report'
