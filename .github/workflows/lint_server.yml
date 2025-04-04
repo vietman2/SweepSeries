@@ -44,4 +44,4 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         cd sweepseries
-        pipenv run DJANGO_SETTINGS_MODULE=sweepseries.settings.local pylint --load-plugins pylint_django --rcfile=.pylintrc .
+        pipenv run pylint --load-plugins pylint_django --rcfile=.pylintrc .
