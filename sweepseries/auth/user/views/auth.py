@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from typing import cast
 
 from core.utils import is_admin_page
 from ..models import User
@@ -46,6 +47,7 @@ class SocialLoginView(APIView):
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
+    refresh = cast(RefreshToken, refresh)
 
     return {
         'refresh': str(refresh),
