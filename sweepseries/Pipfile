@@ -23,6 +23,7 @@ requests = "*"
 python-dateutil = "*"
 boto3 = "==1.35.83"
 botocore = "==1.35.83"
+django-stubs = "*"
 
 [dev-packages]
 coverage = "*"
