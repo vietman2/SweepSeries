@@ -1,3 +1,4 @@
+from typing import cast
 from django.db.models import Q
 from django.utils import timezone
 from dj_rest_auth.views import LoginView
@@ -5,7 +6,6 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from typing import cast
 
 from core.utils import is_admin_page
 from ..models import User
