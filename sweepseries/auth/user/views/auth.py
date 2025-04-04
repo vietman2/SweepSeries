@@ -1,3 +1,4 @@
+from typing import cast
 from django.db.models import Q
 from django.utils import timezone
 from dj_rest_auth.views import LoginView
@@ -46,6 +47,7 @@ class SocialLoginView(APIView):
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
+    refresh = cast(RefreshToken, refresh)
 
     return {
         'refresh': str(refresh),

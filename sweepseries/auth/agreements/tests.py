@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from auth.user.models import User
-from .models import Agreement
+from .models import Agreement, AgreementVersion
 
 class AgreementsAPITestCase(APITestCase):
     fixtures = ["core/data/test/agreements.json", "core/data/test/users.json"]
@@ -103,8 +103,10 @@ class AgreementsAPITestCase(APITestCase):
 class AgreementModelTest(TestCase):
     fixtures = ["core/data/test/agreements.json"]
 
-    def setUp(self):
-        self.agreement = Agreement.objects.get(pk=1)
-
     def test_agreement_str(self):
-        self.assertEqual(str(self.agreement), "Mandatory without content")
+        agreement = Agreement.objects.get(pk=1)
+        self.assertEqual(str(agreement), "Mandatory without content")
+
+    def test_agreement_version_str(self):
+        version = AgreementVersion.objects.get(pk=1)
+        self.assertEqual(str(version), "Mandatory without content - 2024-11-30")

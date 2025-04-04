@@ -13,5 +13,7 @@ class Diary(models.Model):
 
     class Meta:
         db_table = 'diaries'
+        verbose_name = '다이어리'
+        verbose_name_plural = '다이어리'
         ordering = ['date']
         unique_together = ['user', 'date']

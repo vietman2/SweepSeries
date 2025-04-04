@@ -14,6 +14,8 @@ class Agreement(models.Model):
 
     class Meta:
         db_table = 'agreements'
+        verbose_name = '약관'
+        verbose_name_plural = '약관'
         ordering = ['deleted', '-required']
 
 class AgreementVersion(models.Model):
@@ -24,7 +26,12 @@ class AgreementVersion(models.Model):
 
     objects = models.Manager()
 
+    def __str__(self):
+        return f"{self.agreement} - {self.created_at.strftime('%Y-%m-%d')}"
+
     class Meta:
         db_table = 'agreement_versions'
+        verbose_name = '약관 버전'
+        verbose_name_plural = '약관 버전'
         unique_together = ('agreement', 'created_at')
         ordering = ['-created_at']

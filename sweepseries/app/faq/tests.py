@@ -1,7 +1,9 @@
 from django.conf import settings
+from django.test import TestCase
 from rest_framework.test import APITestCase
 
 from auth.user.models import User
+from .models import FAQ
 
 class FAQListAPITestCase(APITestCase):
     fixtures = ["core/data/test/faqs.json", "core/data/test/users.json"]
@@ -93,3 +95,10 @@ class FAQListAPITestCase(APITestCase):
         self.client.force_authenticate(self.admin)
         response = self.client.delete(self.url + "1/")
         self.assertEqual(response.status_code, 204)
+
+class FAQModelTestCase(TestCase):
+    fixtures = ["core/data/test/faqs.json"]
+
+    def test_faq_str(self):
+        faq = FAQ.objects.get(id=1)
+        self.assertEqual(str(faq), "예약 - 질문 1")

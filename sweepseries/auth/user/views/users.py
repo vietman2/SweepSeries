@@ -45,6 +45,7 @@ class UserViewSet(ModelViewSet):
         profile_id = request.query_params.get('profile_id', None)
 
         user = request.user
+
         if full:
             serializer = UserSerializer(user)
             serializer.context['profile_id'] = profile_id

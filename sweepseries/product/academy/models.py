@@ -16,8 +16,14 @@ class AcademyFacility(models.Model):
 
     objects = models.Manager()
 
+    def __str__(self):
+        type_name = FacilityTypeChoices(self.type).label
+        return f"{self.name} ({type_name})"
+
     class Meta:
         db_table = 'academy_facility'
+        verbose_name = '아카데미 시설'
+        verbose_name_plural = '아카데미 시설'
 
 class Academy(models.Model):
     uuid                    = models.UUIDField(
@@ -67,8 +73,13 @@ class Academy(models.Model):
 
     objects                 = models.Manager()
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         db_table = 'academy'
+        verbose_name = '아카데미'
+        verbose_name_plural = '아카데미'
 
 class AcademyStudent(models.Model):
     academy     = models.ForeignKey(Academy, on_delete=models.CASCADE, related_name='students')
@@ -87,6 +98,8 @@ class AcademyStudent(models.Model):
 
     class Meta:
         db_table = 'academy_student'
+        verbose_name = '아카데미 학생'
+        verbose_name_plural = '아카데미 학생'
         unique_together = ('academy', 'person')
 
 class AcademyImage(models.Model):
@@ -97,6 +110,8 @@ class AcademyImage(models.Model):
 
     class Meta:
         db_table = 'academy_image'
+        verbose_name = '아카데미 이미지'
+        verbose_name_plural = '아카데미 이미지'
 
 class AcademyLike(models.Model):
     academy     = models.ForeignKey(Academy, on_delete=models.CASCADE, related_name='likes')
@@ -108,6 +123,8 @@ class AcademyLike(models.Model):
 
     class Meta:
         db_table = 'academy_like'
+        verbose_name = '아카데미 좋아요'
+        verbose_name_plural = '아카데미 좋아요'
 
 class BusinessHoursManager(models.Manager):
     def create_business_hours(self, academy):
@@ -137,6 +154,8 @@ class BusinessHours(models.Model):
 
     class Meta:
         db_table = 'business_hours'
+        verbose_name = '아카데미 운영시간'
+        verbose_name_plural = '아카데미 운영시간'
         unique_together = ('academy', 'day_of_week')
 
 class SpecialDay(models.Model):
@@ -152,6 +171,8 @@ class SpecialDay(models.Model):
 
     class Meta:
         db_table = 'special_day'
+        verbose_name = '아카데미 특별 일정'
+        verbose_name_plural = '아카데미 특별 일정'
         unique_together = ('academy', 'date')
 
 class AcademyNotice(models.Model):
@@ -168,6 +189,8 @@ class AcademyNotice(models.Model):
 
     class Meta:
         db_table = 'academy_notice'
+        verbose_name = '아카데미 공지사항'
+        verbose_name_plural = '아카데미 공지사항'
         ordering = ['-created_at']
 
 class AcademyNoticeAttachment(models.Model):
@@ -181,3 +204,5 @@ class AcademyNoticeAttachment(models.Model):
 
     class Meta:
         db_table = 'academy_notice_attachment'
+        verbose_name = '아카데미 공지사항 첨부파일'
+        verbose_name_plural = '아카데미 공지사항 첨부파일'

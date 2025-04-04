@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 
 from auth.user.models import User
@@ -15,5 +16,12 @@ class Inquiry(TimeStampedModel):
 
     objects     = models.Manager()
 
+    def __str__(self):
+        user: User = self.user
+        created_at: datetime = self.created_at
+        return f"{self.title} - {user.email} ({created_at.strftime('%Y-%m-%d')})"
+
     class Meta:
         db_table = 'inquiries'
+        verbose_name = '문의'
+        verbose_name_plural = '문의'

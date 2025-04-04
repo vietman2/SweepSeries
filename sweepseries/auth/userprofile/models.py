@@ -13,8 +13,13 @@ class UserProfile(models.Model):
 
     objects = models.Manager()
 
+    def __str__(self):
+        return f"{self.user.username} - ({self.nickname})"
+
     class Meta:
         db_table = 'user_profile'
+        verbose_name = '회원 프로필'
+        verbose_name_plural = '회원 프로필'
         indexes = [
             models.Index(fields=['user']),
         ]

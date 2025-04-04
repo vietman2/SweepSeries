@@ -22,6 +22,9 @@ jobs:
       AWS_ACCESS_KEY: "AWS_ACCESS_KEY"
       AWS_SECRET_KEY: "AWS_SECRET_KEY"
       SMS_API_KEY: "SMS_API_KEY"
+      KAKAO_APP_KEY: "KAKAO_APP_KEY"
+      NAVER_CONSUMER_KEY: "NAVER_CONSUMER_KEY"
+      NAVER_CONSUMER_SECRET: "NAVER_CONSUMER_SECRET"
     strategy:
       matrix:
         python-version: ["3.9"]
@@ -43,5 +46,4 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         cd sweepseries
-        pipenv run pylint **/*.py --load-plugins pylint_django --django-settings-module=sweepseries.settings --rcfile=.pylintrc
-        pipenv run pylint $(git ls-files '*.py') --rcfile=.pylintrc
+        pipenv run sh -c 'DJANGO_SETTINGS_MODULE=sweepseries.settings.local pylint --load-plugins pylint_django --rcfile=.pylintrc .'

@@ -8,8 +8,13 @@ class Sido(models.Model):
 
     objects = models.Manager()
 
+    def __str__(self):
+        return self.sido_name
+
     class Meta:
         db_table = "sido"
+        verbose_name = "시도"
+        verbose_name_plural = "시도"
 
 class SigunguManager(models.Manager):
     def get_sigungu_from_bcode(self, bcode):
@@ -29,8 +34,13 @@ class Sigungu(models.Model):
     def get_display_name(self):
         return f"{self.sido.display} {self.sigungu_name}" # pylint: disable=no-member
 
+    def __str__(self):
+        return self.sigungu_name
+
     class Meta:
         db_table = "sigungu"
+        verbose_name = "시군구"
+        verbose_name_plural = "시군구"
 
 class Address(models.Model):
     # 주소
@@ -53,4 +63,6 @@ class Address(models.Model):
 
     class Meta:
         db_table = "address"
+        verbose_name = "주소"
+        verbose_name_plural = "주소"
         unique_together = [["road_address_part1", "road_address_part2"]]

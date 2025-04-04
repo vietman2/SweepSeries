@@ -1,8 +1,10 @@
 from unittest.mock import patch, MagicMock
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase
 from rest_framework.test import APITestCase
 
 from auth.user.models import User
+from .models import UserProfile
 
 class UserProfileAPITestCase(APITestCase):
     fixtures = ["core/data/test/users.json"]
@@ -64,3 +66,10 @@ class UserProfileAPITestCase(APITestCase):
         ## 2. no data
         response = self.client.patch(f"{self.url}2/image/")
         self.assertEqual(response.status_code, 400)
+
+class UserProfileModelTestCase(TestCase):
+    fixtures = ["core/data/test/users.json"]
+
+    def test_str_method(self):
+        profile = UserProfile.objects.get(user__username="normaluser")
+        self.assertEqual(str(profile), "normaluser - (별명)")

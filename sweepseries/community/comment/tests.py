@@ -1,9 +1,10 @@
+from django.test import TestCase
 from rest_framework.test import APITestCase
 
 from auth.user.models import User
 from auth.userprofile.models import UserProfile
-from community.comment.models import Comment
 from community.post.models import Post
+from .models import Comment, CommentReport, ReCommentReport
 
 class CommentAPITest(APITestCase):
     fixtures = ['core/data/test/community.json', 'core/data/test/users.json']
@@ -404,3 +405,13 @@ class ReCommentReportAPITest(APITestCase):
         ## 4. no feedback
         response = self.client.patch(f'{self.url}1/', {'feedback': 'feedback'})
         self.assertEqual(response.status_code, 400)
+
+class ReportModelsTestCase(TestCase):
+    fixtures = ['core/data/test/users.json', 'core/data/test/community.json']
+
+    def test_strs(self):
+        comment_report = CommentReport.objects.get(pk=1)
+        self.assertEqual(str(comment_report), '댓글 신고 (댓글 2)')
+
+        recomment_report = ReCommentReport.objects.get(pk=1)
+        self.assertEqual(str(recomment_report), '대댓글 신고 (대댓글 2)')

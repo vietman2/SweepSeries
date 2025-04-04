@@ -15,6 +15,8 @@ class Image(TimeStampedModel):
 
     class Meta:
         db_table = 'post_image'
+        verbose_name = '게시물 이미지'
+        verbose_name_plural = '게시물 이미지'
 
 class Post(TimeStampedModel):
     id              = CustomAutoField()
@@ -35,8 +37,14 @@ class Post(TimeStampedModel):
 
     objects = models.Manager()
 
+    def __str__(self):
+        forum_displayname = ForumChoices(self.forum).label
+        return f"[{forum_displayname}] {self.title}"
+
     class Meta:
         db_table = 'post'
+        verbose_name = '게시물'
+        verbose_name_plural = '게시물'
         ordering = ['-created_at']
         unique_together = ('forum', 'author', 'title')
 
@@ -50,8 +58,14 @@ class PostReport(Report):
 
     objects = models.Manager()
 
+    def __str__(self):
+        title = self.post.title if self.post else '삭제된 게시물'
+        return f"신고된 게시물: {title}"
+
     class Meta:
         db_table = 'post_report'
+        verbose_name = '게시물 신고'
+        verbose_name_plural = '게시물 신고'
 
 class PostLike(Like):
     post            = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_likes')
@@ -60,6 +74,8 @@ class PostLike(Like):
 
     class Meta:
         db_table = 'post_like'
+        verbose_name = '게시물 좋아요'
+        verbose_name_plural = '게시물 좋아요'
         unique_together = ('post', 'user')
 
 class PostContentView(models.Model):
@@ -72,4 +88,6 @@ class PostContentView(models.Model):
 
     class Meta:
         db_table = 'post_content_view'
+        verbose_name = '게시물 조회'
+        verbose_name_plural = '게시물 조회'
         unique_together = ('post', 'user')
