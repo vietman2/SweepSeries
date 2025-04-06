@@ -55,6 +55,28 @@
     }
   },
   {
+    "model": "agreements.agreement",
+    "pk": 6,
+    "fields": {
+      "created_at": "2025-01-01T10:14:06.943Z",
+      "title": "Catch B 개인정보 처리방침",
+      "required": true,
+      "deleted": false,
+      "deleted_at": null
+    }
+  },
+  {
+    "model": "agreements.agreement",
+    "pk": 7,
+    "fields": {
+      "created_at": "2025-01-01T10:14:31.290Z",
+      "title": "Catch B 서비스 이용약관",
+      "required": true,
+      "deleted": false,
+      "deleted_at": null
+    }
+  },
+  {
     "model": "agreements.agreementversion",
     "pk": 1,
     "fields": {
@@ -92,6 +114,36 @@
       "content": "",
       "summary": "신규 생성",
       "created_at": "2024-11-30T00:28:29.954Z"
+    }
+  },
+  {
+    "model": "agreements.agreementversion",
+    "pk": 5,
+    "fields": {
+      "agreement": 5,
+      "content": "",
+      "summary": "신규 생성",
+      "created_at": "2024-11-30T00:28:29.954Z"
+    }
+  },
+  {
+    "model": "agreements.agreementversion",
+    "pk": 6,
+    "fields": {
+      "agreement": 6,
+      "content": "Sample Privacy Policy",
+      "summary": "신규 생성",
+      "created_at": "2025-01-01T00:28:29.954Z"
+    }
+  },
+  {
+    "model": "agreements.agreementversion",
+    "pk": 7,
+    "fields": {
+      "agreement": 7,
+      "content": "Sample Terms of Service",
+      "summary": "신규 생성",
+      "created_at": "2025-01-01T00:28:29.954Z"
     }
   }
 ]
