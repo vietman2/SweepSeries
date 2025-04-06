@@ -43,7 +43,7 @@ export function PrivacyPolicy() {
         <label htmlFor="version">개인정보 처리방침 버전: </label>
         <select
           id="version"
-          value={selectedId ? selectedId : -1}
+          value={selectedId ?? -1}
           onChange={handleSelect}
           data-testid="version-select"
         >

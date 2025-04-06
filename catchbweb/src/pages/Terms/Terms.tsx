@@ -42,7 +42,7 @@ export function TermsOfService() {
         <label htmlFor="version">서비스 이용약관 버전: </label>
         <select
           id="version"
-          value={selectedVersionId ? selectedVersionId : -1}
+          value={selectedVersionId ?? -1}
           onChange={(e) => setSelectedVersionId(Number(e.target.value))}
           data-testid="version-select"
         >
