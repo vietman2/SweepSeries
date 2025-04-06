@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function getTerms() {
   try {
-    const response = await axios.get("/v1/agreements/");
+    const response = await axios.get("/v1/agreements/manage/");
 
     return response.data;
   } catch {
@@ -14,7 +14,7 @@ export async function getTerm(id: string | undefined) {
   if (!id) return null;
 
   try {
-    const response = await axios.get(`/v1/agreements/${id}`);
+    const response = await axios.get(`/v1/agreements/manage/${id}`);
 
     return response.data;
   } catch {
@@ -30,7 +30,7 @@ export async function createTerms(
   if (content === undefined) return null;
 
   try {
-    await axios.post("/v1/agreements/", {
+    await axios.post("/v1/agreements/manage/", {
       title,
       content,
       required: isRequired,
@@ -46,7 +46,7 @@ export async function deleteTerm(id: string | undefined) {
   if (!id) return null;
 
   try {
-    await axios.delete(`/v1/agreements/${id}`);
+    await axios.delete(`/v1/agreements/manage/${id}`);
 
     return true;
   } catch {
@@ -62,7 +62,7 @@ export async function updateTerm(
   if (content === undefined || !id) return null;
 
   try {
-    await axios.put(`/v1/agreements/${id}/`, {
+    await axios.put(`/v1/agreements/manage/${id}/`, {
       content,
       summary,
     });
