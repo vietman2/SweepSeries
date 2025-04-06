@@ -1,3 +1,3 @@
-import { getTerms } from "./terms";
+import { getPrivacyPolicy, getTermsOfService } from "./terms";
 
-export { getTerms };
+export { getPrivacyPolicy, getTermsOfService };

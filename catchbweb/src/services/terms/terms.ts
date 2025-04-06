@@ -1,14 +1,26 @@
 import axios from "axios";
 
-export const getTerms = async (query: string, version: number) => {
+export const getTermsOfService = async (version: number | null) => {
+  const params = version && { version };
+
   try {
-    const params: { query: string; version?: number } = { query };
+    const response = await axios.get("/v1/terms_of_service/", {
+      params,
+    });
 
-    if (version !== -1) {
-      params.version = version;
-    }
+    return response.data;
+  } catch {
+    return null;
+  }
+};
 
-    const response = await axios.get("/v1/agreements/", { params });
+export const getPrivacyPolicy = async (version: number | null) => {
+  const params = version && { version };
+
+  try {
+    const response = await axios.get("/v1/privacy_policy/", {
+      params,
+    });
 
     return response.data;
   } catch {

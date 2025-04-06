@@ -9,10 +9,10 @@ jest.mock("react-router-dom", () => ({
 
 describe("<PrivacyPolicy />", () => {
   it("renders correctly and handles select", async () => {
-    jest.spyOn(TermsAPI, "getTerms").mockResolvedValue({
-      history: [
+    jest.spyOn(TermsAPI, "getPrivacyPolicy").mockResolvedValue({
+      versions: [
         {
-          id: 0,
+          id: 1,
           created_at: "2021-01-01",
           summary: "Summary 1",
         },
@@ -30,7 +30,7 @@ describe("<PrivacyPolicy />", () => {
   });
 
   it("handles api error", async () => {
-    jest.spyOn(TermsAPI, "getTerms").mockResolvedValue(null);
+    jest.spyOn(TermsAPI, "getPrivacyPolicy").mockResolvedValue(null);
     render(<PrivacyPolicy />);
   });
 });

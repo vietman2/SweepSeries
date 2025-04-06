@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 import CatchBLogo from "@assets/catchb.svg";
-import { getTerms } from "@services/terms";
+import { getTermsOfService } from "@services/terms";
 
 type VersionType = {
   id: number;
@@ -14,27 +14,24 @@ type VersionType = {
 export function TermsOfService() {
   const [versionChoices, setVersionChoices] = useState<VersionType[]>([]);
   const [content, setContent] = useState<string>("");
-  const [selectedVersionId, setSelectedVersionId] = useState<number>(-1);
+  const [selectedVersionId, setSelectedVersionId] = useState<number | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getTerms(
-        "Catch B 서비스 이용약관",
-        selectedVersionId
-      );
+      const response = await getTermsOfService(selectedVersionId);
 
       if (response) {
-        setVersionChoices(response.history);
+        setVersionChoices(response.versions);
         setContent(response.content);
-
-        if (selectedVersionId === -1) {
-          setSelectedVersionId(response.history[0].id);
-        }
+        setSelectedVersionId(response.versions[0].id);
       }
     };
 
     fetchData();
   }, [selectedVersionId]);
+
 
   return (
     <Container>
@@ -45,7 +42,7 @@ export function TermsOfService() {
         <label htmlFor="version">서비스 이용약관 버전: </label>
         <select
           id="version"
-          value={selectedVersionId}
+          value={selectedVersionId ? selectedVersionId : -1}
           onChange={(e) => setSelectedVersionId(Number(e.target.value))}
           data-testid="version-select"
         >
