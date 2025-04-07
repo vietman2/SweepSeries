@@ -4,12 +4,12 @@ import {
   MaterialTopTabBarProps,
 } from "@react-navigation/material-top-tabs";
 
-import { ProfileManagement } from "./Profile/Profile";
-import { ProgramManagement } from "./Programs/Programs";
-import { CustomerManagement } from "./Customers/Customers";
-import { ReviewManagement } from "./Reviews/Reviews";
-import { EmployeeManagement } from "./Employees/Employees";
-import { NoticeManagement } from "./Notices/Notices";
+import { ProfileManagement } from "./ProfileManagement/ProfileManagement";
+import { ProgramManagement } from "./ProgramManagement/ProgramManagement";
+import { CustomerManagement } from "./CustomerManagement/CustomerManagement";
+import { ReviewManagement } from "./ReviewManagement/ReviewManagement";
+import { EmployeeManagement } from "./EmployeeManagement/EmployeeManagement";
+import { NoticeManagement } from "./NoticeManagement/NoticeManagement";
 import { TabBar } from "@components/Tabs";
 
 const Tab = createMaterialTopTabNavigator();

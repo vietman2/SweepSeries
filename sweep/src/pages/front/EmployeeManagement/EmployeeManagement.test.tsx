@@ -1,6 +1,6 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
-import { EmployeeManagement } from "./Employees";
+import { EmployeeManagement } from "./EmployeeManagement";
 import * as CoachesAPI from "@services/products/coach";
 import { sampleCoaches } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";

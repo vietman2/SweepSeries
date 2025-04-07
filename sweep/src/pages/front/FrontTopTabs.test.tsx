@@ -2,22 +2,22 @@ import { FrontTopTabs } from "./FrontTopTabs";
 import * as FrontContext from "@contexts/front";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("./Profile/Profile", () => ({
+jest.mock("./ProfileManagement/ProfileManagement", () => ({
   ProfileManagement: () => <div data-testid="ProfileManagement" />,
 }));
-jest.mock("./Programs/Programs", () => ({
+jest.mock("./ProgramManagement/ProgramManagement", () => ({
   ProgramManagement: () => <div data-testid="ProgramManagement" />,
 }));
-jest.mock("./Customers/Customers", () => ({
+jest.mock("./CustomerManagement/CustomerManagement", () => ({
   CustomerManagement: () => <div data-testid="CustomerManagement" />,
 }));
-jest.mock("./Reviews/Reviews", () => ({
+jest.mock("./ReviewManagement/ReviewManagement", () => ({
   ReviewManagement: () => <div data-testid="ReviewManagement" />,
 }));
-jest.mock("./Employees/Employees", () => ({
+jest.mock("./EmployeeManagement/EmployeeManagement", () => ({
   EmployeeManagement: () => <div data-testid="EmployeeManagement" />,
 }));
-jest.mock("./Notices/Notices", () => ({
+jest.mock("./NoticeManagement/NoticeManagement", () => ({
   NoticeManagement: () => <div data-testid="NoticeManagement" />,
 }));
 

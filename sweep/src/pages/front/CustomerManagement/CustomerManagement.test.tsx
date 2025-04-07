@@ -1,6 +1,6 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
-import { CustomerManagement } from "./Customers";
+import { CustomerManagement } from "./CustomerManagement";
 import * as FrontContext from "@contexts/front";
 import * as LessonsAPI from "@services/calendar/lessons";
 import * as StudentsAPI from "@services/products/students";

@@ -1,4 +1,4 @@
-import { ProfileManagement } from "./Profile";
+import { ProfileManagement } from "./ProfileManagement";
 import * as FrontContext from "@contexts/front";
 import { renderWithProviders } from "@utils/test-utils";
 

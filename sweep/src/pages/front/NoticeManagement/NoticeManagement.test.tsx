@@ -1,7 +1,7 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
 import * as IPicker from "expo-image-picker";
 
-import { NoticeManagement } from "./Notices";
+import { NoticeManagement } from "./NoticeManagement";
 import * as NoticesAPI from "@services/products/notices";
 import { sampleNotices } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";

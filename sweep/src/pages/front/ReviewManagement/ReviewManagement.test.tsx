@@ -1,6 +1,6 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
-import { ReviewManagement } from "./Reviews";
+import { ReviewManagement } from "./ReviewManagement";
 import * as ReviewsAPI from "@services/products/reviews";
 import {
   sampleReviewResponse,

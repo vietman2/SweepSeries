@@ -1,6 +1,6 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
-import { ProgramManagement } from "./Programs";
+import { ProgramManagement } from "./ProgramManagement";
 import * as ProgramsAPI from "@services/products/programs";
 import { sampleAcademyPrograms } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
