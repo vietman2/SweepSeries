@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       NAVER_API_KEY_ID: "NAVER_API_KEY_ID"
       NAVER_API_KEY: "NAVER_API_KEY"
       AWS_ACCESS_KEY: "AWS_ACCESS_KEY"
@@ -29,7 +29,7 @@ jobs:
         node-version: [18.x]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -96,6 +96,6 @@ jobs:
           cd ..
 
       - name: SonarQube Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
