@@ -4,31 +4,51 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Divider, VerticalDivider } from "@components/Dividers";
 import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
+import { useFront } from "@contexts/front";
 import { useTheme } from "@contexts/theme";
-import { ReviewsHeader, ReviewSimple } from "@fragments/Review";
-import { ReviewType } from "@models/products";
-import { sampleReviews } from "@testdata/products";
+import { ReviewsSummary, ReviewSimple } from "@fragments/Review";
+import {
+  ReviewType,
+  ReviewResponseType,
+  ReviewSummaryType,
+} from "@models/products";
+import { getAcademyReviews, getAcademyReviewSummary } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
 export function ReviewManagement() {
   const [selectedTab, setSelectedTab] = useState<"전체" | "미답변">("전체");
-  const [reviews, setReviews] = useState<ReviewType[]>([]);
 
+  const [result, setResult] = useState<ReviewResponseType>();
+  const [reviews, setReviews] = useState<ReviewType[]>([]);
+  const [summary, setSummary] = useState<ReviewSummaryType>();
+
+  const { uuid } = useFront();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   useEffect(() => {
-    if (selectedTab === "전체") {
-      setReviews(sampleReviews);
-    } else {
-      setReviews([]);
-    }
+    const fetchData = async () => {
+      const response1 = await getAcademyReviewSummary(uuid);
+      const response2 = await getAcademyReviews(uuid);
+
+      if (response1 && response2) {
+        setSummary(response1);
+        setReviews(response2.results);
+        setResult(response2);
+      }
+    };
+
+    fetchData();
   }, [selectedTab]);
+
+  if (!summary || !result || !reviews) {
+    return null;
+  }
 
   return (
     <Scroll style={styles.container}>
       <View style={styles.wrapper}>
-        <ReviewsHeader rating={4.82} />
+        <ReviewsSummary summary={summary} />
         <View style={styles.tabs}>
           <TouchableOpacity
             style={styles.tab}
