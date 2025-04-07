@@ -88,7 +88,7 @@ jobs:
           cd ..
           lcov-result-merger '*/coverage.lcov' coverage.lcov --prepend-source-files --prepend-path-fix "."
 
-      - name: Catch B Admin Web Coverage
+      - name: Catch B Web Coverage
         run: |
           cd catchbweb
           yarn global add lcov-result-merger
@@ -97,8 +97,7 @@ jobs:
           cd ..
           lcov-result-merger '*/coverage.lcov' coverage.lcov --prepend-source-files --prepend-path-fix "."
 
-      - name: Upload coverage to Coveralls
-        uses: coverallsapp/github-action@v2
+      - name: SonarQube Scan
+        uses: SonarSource/sonarcloud-github-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: ./coverage.lcov
+          SONAR_TOKEN: ${{ secrets. SONARCLOUD_TOKEN }}
