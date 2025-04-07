@@ -7,11 +7,6 @@ import * as AcademiesAPI from "@services/products/academy";
 import { renderWithProviders } from "@utils/test-utils";
 import { sampleAcademies } from "@testdata/products";
 
-jest.mock("expo-router", () => ({
-  router: {
-    push: jest.fn(),
-  },
-}));
 jest.mock("./Cards", () => {
   const { Text, TouchableOpacity } = jest.requireActual("react-native");
 

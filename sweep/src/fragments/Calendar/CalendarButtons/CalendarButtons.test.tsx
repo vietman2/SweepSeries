@@ -4,11 +4,6 @@ import { CalendarButtons } from "./CalendarButtons";
 import * as AuthContext from "@contexts/auth";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    push: jest.fn(),
-  },
-}));
 jest.mock("@contexts/auth", () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>

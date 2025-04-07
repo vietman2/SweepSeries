@@ -1,6 +1,7 @@
+import { fireEvent } from "@testing-library/react-native";
+
 import { TimeSelector } from "./TimeSelector";
 import { sampleAvailableTimes } from "@testdata/products";
-import { fireEvent } from "@testing-library/react-native";
 import { renderWithProviders } from "@utils/test-utils";
 
 describe("<TimeSelector />", () => {
