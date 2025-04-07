@@ -4,12 +4,6 @@ import { RegisterAcademy } from "./RegisterAcademy";
 import * as AcademyAPI from "@services/products/academy";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    dismissAll: jest.fn(),
-    push: jest.fn(),
-  },
-}));
 jest.mock("@actbase/react-daum-postcode", () => {
   const { TouchableOpacity } = jest.requireActual("react-native");
 

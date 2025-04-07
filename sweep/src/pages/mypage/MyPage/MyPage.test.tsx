@@ -7,14 +7,6 @@ import * as AuthAPI from "@services/auth/auth";
 import { sampleAuthor } from "@testdata/auth";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    canDismiss: jest.fn(),
-    dismissAll: jest.fn(),
-    replace: jest.fn(),
-    push: jest.fn(),
-  },
-}));
 jest.mock("@fragments/Profile", () => ({
   MainProfile: () => null,
 }));

@@ -78,7 +78,7 @@ export function RegisterAcademy() {
     if (response) {
       alert("아카데미 등록 성공", "아카데미 등록 신청이 완료되었습니다.");
       router.dismissAll();
-      router.push("/mypage/");
+      router.push("/mypage");
     } else {
       alert("아카데미 등록 실패", "아카데미 등록 중 오류가 발생했습니다.");
     }

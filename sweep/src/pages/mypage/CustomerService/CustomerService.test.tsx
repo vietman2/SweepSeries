@@ -7,11 +7,6 @@ import * as InquiriesAPI from "@services/app/inquiries";
 import { sampleInquiries } from "@testdata/customers";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    back: jest.fn(),
-  },
-}));
 jest.mock("@fragments/Inquiry", () => ({
   InquirySimple: () => "InquirySimple",
 }));

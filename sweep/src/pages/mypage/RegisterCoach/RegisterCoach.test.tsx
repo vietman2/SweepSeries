@@ -6,12 +6,6 @@ import * as CoachAPI from "@services/products/coach";
 import { sampleAcademies } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    dismissAll: jest.fn(),
-    push: jest.fn(),
-  },
-}));
 jest.mock("@components/Search", () => {
   const { TouchableOpacity } = jest.requireActual("react-native");
 
