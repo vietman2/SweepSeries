@@ -33,6 +33,8 @@ class BadResponseMiddleware(MiddlewareMixin):
 
         logger.error(log_message)
 
+        return None
+
     def process_response(self, request, response):
         if settings.DEBUG:
             return response
