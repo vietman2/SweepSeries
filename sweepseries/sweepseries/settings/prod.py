@@ -91,6 +91,10 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 ## SMS
 SMS_API_KEY = config("SMS_API_KEY")
 
+## Naver Map
+NAVER_CLIENT_ID = config("NAVER_API_KEY_ID")
+NAVER_CLIENT_SECRET = config("NAVER_API_KEY")
+
 CORS_ALLOWED_ORIGINS = [
     "https://sweepseries.com",
     "https://www.sweepseries.com",

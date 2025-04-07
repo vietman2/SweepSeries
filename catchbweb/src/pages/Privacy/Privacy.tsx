@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 import CatchBLogo from "@assets/catchb.svg";
-import { getTerms } from "@services/terms";
+import { getPrivacyPolicy } from "@services/terms";
 
 type VersionType = {
   id: number;
@@ -14,7 +14,7 @@ type VersionType = {
 export function PrivacyPolicy() {
   const [versions, setVersions] = useState<VersionType[]>([]);
   const [content, setContent] = useState<string>("");
-  const [selectedId, setSelectedId] = useState<number>(-1);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
 
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedId(Number(e.target.value));
@@ -22,15 +22,12 @@ export function PrivacyPolicy() {
 
   useEffect(() => {
     const fetchPrivacyPolicy = async () => {
-      const response = await getTerms("Catch B 개인정보 처리방침", selectedId);
+      const response = await getPrivacyPolicy(selectedId);
 
       if (response) {
-        setVersions(response.history);
+        setVersions(response.versions);
         setContent(response.content);
-
-        if (selectedId === -1) {
-          setSelectedId(response.history[0].id);
-        }
+        setSelectedId(response.versions[0].id);
       }
     };
 
@@ -46,7 +43,7 @@ export function PrivacyPolicy() {
         <label htmlFor="version">개인정보 처리방침 버전: </label>
         <select
           id="version"
-          value={selectedId}
+          value={selectedId ?? -1}
           onChange={handleSelect}
           data-testid="version-select"
         >

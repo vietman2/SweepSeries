@@ -1,67 +1,37 @@
 from django.utils import timezone
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from core.permissions import AdminOnly
-from core.utils import is_admin_page
-from .models import Agreement, AgreementVersion
-from .serializers import (
-    AgreementSimpleSerializer, AgreementDetailSerializer,
-    AgreementContentSerializer, AgreementUpdateSerializer
-)
+from core.permissions import AdminPageOnly
+from ..models import Agreement, AgreementVersion
+from ..serializers import AgreementManagerSerializer, AgreementUpdateSerializer
 
-class AgreementViewSet(ModelViewSet):
-    serializer_class = AgreementSimpleSerializer
+class AgreementManagerViewSet(ModelViewSet):
+    serializer_class = AgreementManagerSerializer
     queryset = Agreement.objects.all()
-    permission_classes = [AdminOnly]
+    permission_classes = [AdminPageOnly]
     http_method_names = ['get', 'post', 'delete', 'put']
 
-    def get_permissions(self):
-        if self.action in ['list', 'retrieve']:
-            return [AllowAny()]
-        return super().get_permissions()
-
+    @extend_schema(summary="약관 목록 조회 (관리자)", tags=["약관"])
     def list(self, request, *args, **kwargs):
-        user = request.user
-        if user.is_superuser and is_admin_page(request):
-            queryset = self.get_queryset()
-            serializer = AgreementDetailSerializer(queryset, many=True)
-
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        query = request.query_params.get('query', None)
-        version = request.query_params.get('version', None)
-        if query:
-            queryset = Agreement.objects.filter(deleted=False, title=query).first()
-
-            serializer = AgreementDetailSerializer(queryset)
-            serializer.context['version'] = version
-
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        queryset = Agreement.objects.filter(deleted=False)
-        serializer = AgreementSimpleSerializer(queryset, many=True)
+        queryset = self.get_queryset()
+        serializer = AgreementManagerSerializer(queryset, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(summary="약관 상세 조회 (관리자)", tags=["약관"])
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-
-        user = request.user
-        if user.is_superuser and is_admin_page(request):
-            serializer = AgreementDetailSerializer(instance)
-
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        serializer = AgreementContentSerializer(instance)
+        serializer = AgreementManagerSerializer(instance)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(summary="약관 생성", tags=["약관"])
     def create(self, request, *args, **kwargs):
-        serializer = AgreementDetailSerializer(data=request.data)
+        serializer = AgreementManagerSerializer(data=request.data)
         content = request.data.get('content', None)
 
         if content is None:
@@ -73,10 +43,11 @@ class AgreementViewSet(ModelViewSet):
             return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
         agreement = serializer.save()
-        AgreementVersion.objects.create(agreement=agreement, content=content)
+        AgreementVersion.objects.create(agreement=agreement, content=content, summary="신규 생성")
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    @extend_schema(summary="약관 삭제", tags=["약관"])
     def destroy(self, request, *args, **kwargs):
         agreement = self.get_object()
         agreement.deleted = True
@@ -85,6 +56,7 @@ class AgreementViewSet(ModelViewSet):
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @extend_schema(summary="약관 수정", tags=["약관"])
     def update(self, request, *args, **kwargs):
         agreement = self.get_object()
         serializer = AgreementUpdateSerializer(data=request.data)

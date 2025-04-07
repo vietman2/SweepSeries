@@ -10,7 +10,9 @@ from app.inquiry.views import InquiryViewSet
 from app.notices.views import NoticeViewSet
 
 ## Auth
-from auth.agreements.views import AgreementViewSet
+from auth.agreements.views import (
+    AgreementManagerViewSet, PrivacyPolicyView, TermsOfServiceView, ReadAgreementsView
+)
 from auth.person.views import PersonViewSet, AcademyStudentViewSet
 from auth.user.views import (
     UserViewSet, UserLoginView, SocialLoginView,
@@ -49,7 +51,8 @@ router.register(r'faqs', FaqViewSet, basename='faqs')
 router.register(r'inquiries', InquiryViewSet, basename='inquiries')
 router.register(r'notices', NoticeViewSet, basename='notices')
 
-router.register(r'agreements', AgreementViewSet, basename='agreements')
+router.register(r'agreements/manage', AgreementManagerViewSet, basename='agreements')
+router.register(r'agreements', ReadAgreementsView, basename='read-agreements')
 router.register(r'people', PersonViewSet, basename='people')
 router.register(r'users', UserViewSet, basename='users')
 router.register(r'profiles', UserProfileViewSet, basename='user-profiles')
@@ -103,6 +106,8 @@ urlpatterns = [
     path('login/', UserLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('register/', RegisterView.as_view(), name='register'),
+    path('terms_of_service/', TermsOfServiceView.as_view(), name='terms_of_service'),
+    path('privacy_policy/', PrivacyPolicyView.as_view(), name='privacy_policy'),
 
     path('check-username-email/', CheckUsernameEmailView.as_view(), name='check_username'),
     path('check-password/', CheckPasswordView.as_view(), name='check_password'),
