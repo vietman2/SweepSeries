@@ -1,7 +1,16 @@
+import { FrontLayout } from "./_layouts/FrontLayout";
+
 import { CreateProgram } from "./CreateProgram/CreateProgram";
 import { CustomerDetail } from "./CustomerDetail/CustomerDetail";
-import { Front } from "./FrontMain/FrontMain";
+import { FrontTopTabs } from "./FrontTopTabs";
 import { NoticeEdit } from "./NoticeEdit/NoticeEdit";
 import { ProgramEdit } from "./ProgramEdit/ProgramEdit";
 
-export { CreateProgram, CustomerDetail, Front, NoticeEdit, ProgramEdit };
+export {
+  FrontLayout,
+  CreateProgram,
+  CustomerDetail,
+  FrontTopTabs,
+  NoticeEdit,
+  ProgramEdit,
+};

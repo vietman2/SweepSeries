@@ -1,23 +1,23 @@
-import { Front } from "./FrontMain";
+import { FrontTopTabs } from "./FrontTopTabs";
 import * as FrontContext from "@contexts/front";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("../Profile/Profile", () => ({
+jest.mock("./Profile/Profile", () => ({
   ProfileManagement: () => <div data-testid="ProfileManagement" />,
 }));
-jest.mock("../Programs/Programs", () => ({
+jest.mock("./Programs/Programs", () => ({
   ProgramManagement: () => <div data-testid="ProgramManagement" />,
 }));
-jest.mock("../Customers/Customers", () => ({
+jest.mock("./Customers/Customers", () => ({
   CustomerManagement: () => <div data-testid="CustomerManagement" />,
 }));
-jest.mock("../Reviews/Reviews", () => ({
+jest.mock("./Reviews/Reviews", () => ({
   ReviewManagement: () => <div data-testid="ReviewManagement" />,
 }));
-jest.mock("../Employees/Employees", () => ({
+jest.mock("./Employees/Employees", () => ({
   EmployeeManagement: () => <div data-testid="EmployeeManagement" />,
 }));
-jest.mock("../Notices/Notices", () => ({
+jest.mock("./Notices/Notices", () => ({
   NoticeManagement: () => <div data-testid="NoticeManagement" />,
 }));
 
@@ -39,7 +39,7 @@ describe("<FrontMain />", () => {
       mode: null,
     });
 
-    renderWithProviders(<Front />);
+    renderWithProviders(<FrontTopTabs />);
   });
 
   it("renders academy correctly", async () => {
@@ -48,7 +48,7 @@ describe("<FrontMain />", () => {
       mode: "academy",
     });
 
-    renderWithProviders(<Front />);
+    renderWithProviders(<FrontTopTabs />);
   });
 
   it("renders coach correctly", async () => {
@@ -57,6 +57,6 @@ describe("<FrontMain />", () => {
       mode: "coach",
     });
 
-    renderWithProviders(<Front />);
+    renderWithProviders(<FrontTopTabs />);
   });
 });
