@@ -6,12 +6,6 @@ import * as StudentsAPI from "@services/products/students";
 import { sampleStudentLesson } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    push: jest.fn(),
-  },
-  useLocalSearchParams: jest.fn(() => ({ id: "1" })),
-}));
 jest.mock("@fragments/Lesson", () => ({
   LessonSimple: () => null,
 }));

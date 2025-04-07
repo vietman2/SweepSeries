@@ -7,9 +7,6 @@ import { sampleLesson } from "@testdata/calendar";
 import { sampleTagOptions } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: { back: jest.fn() },
-}));
 jest.mock("@fragments/Lesson", () => ({
   LessonSimple: () => <div>LessonSimple</div>,
 }));
