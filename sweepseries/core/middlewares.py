@@ -18,7 +18,7 @@ class DisableCookiesMiddleware(MiddlewareMixin):
 class BadResponseMiddleware(MiddlewareMixin):
     def process_exception(self, request, exception):
         if settings.DEBUG:
-            return None
+            return
 
         tb = traceback.format_exc()
 
