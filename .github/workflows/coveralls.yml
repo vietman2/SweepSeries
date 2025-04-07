@@ -77,7 +77,6 @@ jobs:
           yarn test --coverage --watchAll=false
           cp coverage/lcov.info coverage.lcov
           cd ..
-          lcov-result-merger '*/coverage.lcov' coverage.lcov --prepend-source-files --prepend-path-fix "."
 
       - name: Catch B Admin Web Coverage
         run: |
@@ -86,7 +85,6 @@ jobs:
           yarn test --coverage --watchAll=false
           cp coverage/lcov.info coverage.lcov
           cd ..
-          lcov-result-merger '*/coverage.lcov' coverage.lcov --prepend-source-files --prepend-path-fix "."
 
       - name: Catch B Web Coverage
         run: |
@@ -95,7 +93,6 @@ jobs:
           yarn test --coverage --watchAll=false
           cp coverage/lcov.info coverage.lcov
           cd ..
-          lcov-result-merger '*/coverage.lcov' coverage.lcov --prepend-source-files --prepend-path-fix "."
 
       - name: SonarQube Scan
         uses: SonarSource/sonarcloud-github-action@master
