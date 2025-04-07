@@ -6,13 +6,6 @@ import * as AcademyDetailContext from "@contexts/academy";
 import { sampleAcademyDetail } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  Slot: () => <div data-testid="Slot" />,
-  router: {
-    replace: jest.fn(),
-  },
-  usePathname: jest.fn(),
-}));
 jest.mock("@fragments/Academy", () => ({
   AcademyProfile: () => <div data-testid="AcademyProfile" />,
 }));

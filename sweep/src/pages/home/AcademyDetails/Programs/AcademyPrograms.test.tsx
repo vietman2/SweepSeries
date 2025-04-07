@@ -5,11 +5,6 @@ import * as AcademyDetailContext from "@contexts/academy";
 import { sampleAcademyPrograms } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    push: jest.fn(),
-  },
-}));
 jest.mock("@fragments/Program", () => ({
   ProgramSimple: () => "ProgramSimple",
 }));

@@ -42,6 +42,7 @@ jest.mock("expo-router", () => {
         ),
       }
     ),
+    Slot: () => <div data-testid="Slot" />,
     Redirect: jest.fn(),
     router: {
       canGoBack: jest.fn(),
@@ -49,6 +50,8 @@ jest.mock("expo-router", () => {
       push: jest.fn(),
       back: jest.fn(),
       replace: jest.fn(),
+      navigate: jest.fn(),
+      setParams: jest.fn(),
     },
     useLocalSearchParams: jest.fn(),
     usePathname: jest.fn(),
