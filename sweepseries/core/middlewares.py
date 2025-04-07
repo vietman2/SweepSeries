@@ -1,4 +1,5 @@
 import logging
+import sys
 import traceback
 from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
@@ -17,7 +18,7 @@ class DisableCookiesMiddleware(MiddlewareMixin):
 
 class BadResponseMiddleware(MiddlewareMixin):
     def process_exception(self, request, exception):
-        if settings.DEBUG:
+        if settings.DEBUG or 'unittest' in sys.modules:
             return
 
         tb = traceback.format_exc()
@@ -34,7 +35,7 @@ class BadResponseMiddleware(MiddlewareMixin):
         logger.error(log_message)
 
     def process_response(self, request, response):
-        if settings.DEBUG:
+        if settings.DEBUG or 'unittest' in sys.modules:
             return response
 
         if response.status_code >= 400:
