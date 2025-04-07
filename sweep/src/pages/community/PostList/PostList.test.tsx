@@ -8,12 +8,6 @@ import { sampleAuthor } from "@testdata/auth";
 import { samplePosts, sampleTags } from "@testdata/community";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    push: jest.fn(),
-  },
-  useFocusEffect: jest.fn(),
-}));
 jest.mock("@contexts/auth", () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>

@@ -7,11 +7,6 @@ import * as ProfilesAPI from "@services/auth/profiles";
 import { sampleUser } from "@testdata/auth";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    back: jest.fn(),
-  },
-}));
 jest.mock("@fragments/Profile", () => ({
   ProfileImage: () => null,
 }));

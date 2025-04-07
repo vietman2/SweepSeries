@@ -5,13 +5,6 @@ import * as SignupContext from "@contexts/signup";
 import * as RegisterAPI from "@services/auth/register";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    dismissAll: jest.fn(),
-    replace: jest.fn(),
-  },
-}));
-
 describe("<Extras />", () => {
   beforeEach(() => {
     jest.spyOn(RegisterAPI, "register").mockResolvedValue(true);

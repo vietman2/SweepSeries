@@ -8,11 +8,6 @@ import { sampleTagResponse } from "@testdata/community";
 import { renderWithProviders } from "@utils/test-utils";
 import { sampleAuthor } from "@testdata/auth";
 
-jest.mock("expo-router", () => ({
-  router: {
-    replace: jest.fn(),
-  },
-}));
 jest.mock("@fragments/Post", () => ({
   Tag: () => null,
 }));

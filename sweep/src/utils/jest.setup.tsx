@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
+import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import { BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
 
 import * as AlertAPI from "@services/alert/alert";
@@ -15,6 +16,49 @@ jest
     }
   );
 
+jest.mock("expo-router", () => {
+  const { Text, View } = jest.requireActual("react-native");
+
+  return {
+    Stack: Object.assign(
+      ({
+        children,
+        screenOptions,
+      }: {
+        children: React.ReactNode;
+        screenOptions: NativeStackNavigationOptions;
+      }) => (
+        <View>
+          {screenOptions.headerLeft && screenOptions.headerLeft({})}
+          {children}
+        </View>
+      ),
+      {
+        Screen: ({ options }: { options?: NativeStackNavigationOptions }) => (
+          <View>
+            {options?.headerLeft && options.headerLeft({})}
+            <Text>asdf</Text>
+          </View>
+        ),
+      }
+    ),
+    Slot: () => <div data-testid="Slot" />,
+    Redirect: jest.fn(),
+    router: {
+      canGoBack: jest.fn().mockReturnValue(true),
+      canDismiss: jest.fn().mockReturnValue(true),
+      dismissAll: jest.fn(),
+      push: jest.fn(),
+      back: jest.fn(),
+      replace: jest.fn(),
+      navigate: jest.fn(),
+      setParams: jest.fn(),
+    },
+    useLocalSearchParams: jest.fn().mockReturnValue({ id: "1" }),
+    usePathname: jest.fn(),
+    useFocusEffect: jest.fn(),
+  };
+});
 jest.mock("react-native-svg/css", () => ({
   SvgCssUri: "SvgCssUri",
 }));

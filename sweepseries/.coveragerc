@@ -1,6 +1,5 @@
 [run]
 relative_files = True
-source = .
 branch = True
 omit = 
     */migrations/*

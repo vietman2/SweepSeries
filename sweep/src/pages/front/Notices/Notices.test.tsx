@@ -6,11 +6,6 @@ import * as NoticesAPI from "@services/products/notices";
 import { sampleNotices } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    push: jest.fn(),
-  },
-}));
 jest.mock("@fragments/Notice", () => ({
   NoticeSimple: () => <div data-testid="notice-simple" />,
 }));

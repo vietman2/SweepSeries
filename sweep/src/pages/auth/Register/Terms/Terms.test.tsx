@@ -6,13 +6,6 @@ import * as AgreementsAPI from "@services/auth/agreements";
 import { sampleAgreements } from "@testdata/auth";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    push: jest.fn(),
-  },
-  useLocalSearchParams: jest.fn(),
-}));
-
 describe("<Terms />", () => {
   beforeEach(() => {
     jest

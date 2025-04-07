@@ -11,12 +11,6 @@ import {
 } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    back: jest.fn(),
-  },
-  useLocalSearchParams: jest.fn().mockReturnValue({ id: "1" }),
-}));
 jest.mock("@fragments/Coach", () => {
   const { TouchableOpacity } = jest.requireActual("react-native");
   const { sampleCoaches } = jest.requireActual("@testdata/products");

@@ -6,13 +6,6 @@ import * as AgreementsAPI from "@services/auth/agreements";
 import { sampleAgreement } from "@testdata/auth";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    back: jest.fn(),
-  },
-  useLocalSearchParams: jest.fn(),
-}));
-
 describe("<ReadTerm />", () => {
   beforeEach(() => {
     jest.spyOn(Router, "useLocalSearchParams").mockReturnValue({ id: "1" });

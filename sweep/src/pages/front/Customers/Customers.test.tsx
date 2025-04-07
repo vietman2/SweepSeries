@@ -8,11 +8,6 @@ import { sampleLessonSimple } from "@testdata/calendar";
 import { sampleStudents } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    push: jest.fn(),
-  },
-}));
 jest.mock("@fragments/Profile", () => ({
   ProfileImage: () => <div />,
 }));

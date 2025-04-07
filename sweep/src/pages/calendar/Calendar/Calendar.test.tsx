@@ -9,12 +9,6 @@ import { sampleAuthor } from "@testdata/auth";
 import { sampleCalendars, sampleScheduleResponse } from "@testdata/calendar";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    push: jest.fn(),
-  },
-  useFocusEffect: jest.fn(),
-}));
 jest.mock("@gorhom/bottom-sheet", () => ({
   __esModule: true,
   default: "BottomSheet",

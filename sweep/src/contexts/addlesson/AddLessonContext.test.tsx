@@ -11,9 +11,6 @@ import {
 } from "@testdata/products";
 
 jest.unmock("@contexts/addlesson");
-jest.mock("expo-router", () => ({
-  router: { back: jest.fn() },
-}));
 
 const TestComponent = () => {
   const {

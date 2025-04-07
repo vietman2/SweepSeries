@@ -21,15 +21,6 @@ import {
   sampleReviewSummary,
 } from "@testdata/products";
 
-jest.mock("expo-router", () => ({
-  router: {
-    push: jest.fn(),
-    back: jest.fn(),
-  },
-  useLocalSearchParams: jest.fn(),
-  usePathname: jest.fn(),
-}));
-
 const TestComponent = () => {
   const { selectCoach, selectNotice, refresh } = useAcademyDetail();
 

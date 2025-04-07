@@ -4,12 +4,6 @@ import { UsernameEmail } from "./UsernameEmail";
 import * as AuthAPI from "@services/auth/register";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    push: jest.fn(),
-  },
-}));
-
 describe("<UsernameEmail />", () => {
   it("renders and handles check correctly", () => {
     jest

@@ -4,12 +4,12 @@ import {
   MaterialTopTabBarProps,
 } from "@react-navigation/material-top-tabs";
 
-import { ProfileManagement } from "../Profile/Profile";
-import { ProgramManagement } from "../Programs/Programs";
-import { CustomerManagement } from "../Customers/Customers";
-import { ReviewManagement } from "../Reviews/Reviews";
-import { EmployeeManagement } from "../Employees/Employees";
-import { NoticeManagement } from "../Notices/Notices";
+import { ProfileManagement } from "./Profile/Profile";
+import { ProgramManagement } from "./Programs/Programs";
+import { CustomerManagement } from "./Customers/Customers";
+import { ReviewManagement } from "./Reviews/Reviews";
+import { EmployeeManagement } from "./Employees/Employees";
+import { NoticeManagement } from "./Notices/Notices";
 import { TabBar } from "@components/Tabs";
 
 const Tab = createMaterialTopTabNavigator();
@@ -18,7 +18,7 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 import { LoadingComponent } from "@components/Fallbacks";
 import { useFront } from "@contexts/front";
 
-export function Front() {
+export function FrontTopTabs() {
   const { mode } = useFront();
 
   if (mode === null) return <LoadingComponent />;

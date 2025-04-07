@@ -6,16 +6,6 @@ import * as CalendarsAPI from "@services/calendar/calendars";
 import { sampleCalendars } from "@testdata/calendar";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    back: jest.fn(),
-  },
-}));
-jest.mock("@gorhom/bottom-sheet", () => ({
-  __esModule: true,
-  default: "BottomSheet",
-  BottomSheetView: ({ children }: { children: React.ReactNode }) => children,
-}));
 jest.mock("@fragments/Calendar", () => ({
   ColorModal: () => <div>ColorModal</div>,
   NameModal: () => <div>NameModal</div>,

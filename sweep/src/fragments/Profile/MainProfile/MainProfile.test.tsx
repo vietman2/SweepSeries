@@ -7,11 +7,6 @@ import { renderWithProviders } from "@utils/test-utils";
 jest.mock("expo-linear-gradient", () => ({
   LinearGradient: "LinearGradient",
 }));
-jest.mock("expo-router", () => ({
-  router: {
-    push: jest.fn(),
-  },
-}));
 jest.mock("../ProfileImage/ProfileImage", () => ({
   ProfileImage: "ProfileImage",
 }));

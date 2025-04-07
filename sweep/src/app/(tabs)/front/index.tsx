@@ -1,3 +1,3 @@
-import { Front } from "@pages/front";
+import { FrontTopTabs } from "@pages/front";
 
-export default Front;
+export default FrontTopTabs;
