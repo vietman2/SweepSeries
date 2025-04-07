@@ -13,13 +13,6 @@ import {
 } from "@testdata/calendar";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  useLocalSearchParams: jest.fn(),
-  router: {
-    push: jest.fn(),
-    back: jest.fn(),
-  },
-}));
 jest.mock("expo-status-bar", () => ({
   StatusBar: () => null,
 }));

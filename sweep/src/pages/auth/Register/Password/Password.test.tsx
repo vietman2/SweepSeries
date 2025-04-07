@@ -4,10 +4,6 @@ import { Password } from "./Password";
 import * as AuthAPI from "@services/auth/register";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: { push: jest.fn() },
-}));
-
 describe("<Password />", () => {
   it("renders and handles checks correctly", () => {
     jest

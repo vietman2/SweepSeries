@@ -42,13 +42,17 @@ jest.mock("expo-router", () => {
         ),
       }
     ),
+    Redirect: jest.fn(),
     router: {
+      canGoBack: jest.fn(),
+      dismissAll: jest.fn(),
       push: jest.fn(),
       back: jest.fn(),
       replace: jest.fn(),
     },
     useLocalSearchParams: jest.fn(),
     usePathname: jest.fn(),
+    useFocusEffect: jest.fn(),
   };
 });
 jest.mock("react-native-svg/css", () => ({

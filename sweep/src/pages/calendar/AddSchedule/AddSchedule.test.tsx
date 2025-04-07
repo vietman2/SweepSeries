@@ -15,12 +15,6 @@ jest.mock("react-native", () => {
 
   return RN;
 });
-jest.mock("expo-router", () => ({
-  useLocalSearchParams: jest.fn(),
-  router: {
-    back: jest.fn(),
-  },
-}));
 jest.mock("@contexts/calendar", () => ({
   CalendarProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>

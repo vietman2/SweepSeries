@@ -5,12 +5,6 @@ import { AddTodo } from "./AddTodo";
 import * as TodosAPI from "@services/calendar/todos";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  useLocalSearchParams: jest.fn(),
-  router: {
-    back: jest.fn(),
-  },
-}));
 jest.mock("@contexts/calendar", () => ({
   CalendarProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>

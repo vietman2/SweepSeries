@@ -4,15 +4,6 @@ import { Login } from "./Login";
 import * as AuthAPI from "@services/auth/auth";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    back: jest.fn(),
-    dismissAll: jest.fn(),
-    replace: jest.fn(),
-  },
-  Redirect: jest.fn(),
-}));
-
 describe("<Login>", () => {
   it("handles login", async () => {
     jest

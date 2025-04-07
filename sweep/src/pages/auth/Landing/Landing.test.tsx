@@ -8,13 +8,6 @@ import * as AuthAPI from "@services/auth/auth";
 import { sampleAuthor } from "@testdata/auth";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    push: jest.fn(),
-    replace: jest.fn(),
-  },
-  Redirect: jest.fn(),
-}));
 jest.mock("@react-native-kakao/user", () => ({
   me: jest.fn(),
   login: jest.fn(),

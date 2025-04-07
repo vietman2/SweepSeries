@@ -5,12 +5,6 @@ import * as SignupContext from "@contexts/signup";
 import * as RegisterAPI from "@services/auth/register";
 import { renderWithProviders } from "@utils/test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    push: jest.fn(),
-  },
-}));
-
 describe("<PhoneNumber />", () => {
   beforeAll(() => {
     jest.useFakeTimers();
