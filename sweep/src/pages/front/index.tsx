@@ -1,10 +1,11 @@
 import { FrontLayout } from "./_layouts/FrontLayout";
-
-import { CreateProgram } from "./CreateProgram/CreateProgram";
-import { CustomerDetail } from "./CustomerDetail/CustomerDetail";
 import { FrontTopTabs } from "./FrontTopTabs";
-import { NoticeEdit } from "./NoticeEdit/NoticeEdit";
-import { ProgramEdit } from "./ProgramEdit/ProgramEdit";
+
+import { CreateProgram } from "./_modals/CreateProgram/CreateProgram";
+
+import { CustomerDetail } from "./CustomerManagement/CustomerDetail";
+import { NoticeEdit } from "./NoticeManagement/NoticeEdit";
+import { ProgramEdit } from "./ProgramManagement/ProgramEdit";
 
 export {
   FrontLayout,
