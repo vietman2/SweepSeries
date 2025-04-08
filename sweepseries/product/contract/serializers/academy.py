@@ -1,6 +1,7 @@
 from django.db.models import Q
 from rest_framework import serializers
 
+from core.utils import get_presigned_url
 from product.academy.models import Academy
 from .review import BaseReviewSerializer
 from .tags import AcademyReviewTagSerializer
@@ -18,7 +19,7 @@ class AcademyReviewSerializer(BaseReviewSerializer):
         return AcademyReviewTagSerializer(tags, many=True).data
 
     def get_images(self, obj):
-        return [image.image.url for image in obj.academy_images.all()]
+        return [get_presigned_url(image.image) for image in obj.academy_images.all()]
 
 class AcademyReviewSummarySerializer(serializers.ModelSerializer):
     average_rating  = serializers.SerializerMethodField()
