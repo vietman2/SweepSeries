@@ -117,7 +117,6 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     };
 
-
     fetchData();
   }, [id, refreshCount]);
 
