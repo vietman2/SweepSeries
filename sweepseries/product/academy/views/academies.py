@@ -6,7 +6,7 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from drf_spectacular.utils import extend_schema
@@ -14,20 +14,15 @@ from drf_spectacular.utils import extend_schema
 from core.permissions import AdminOnly
 from core.utils import is_admin_page
 from product.coach.enums import CoachApplicationStatus
-from product.coach.models import Coach
 from product.coach.serializers import CoachSimpleSerializer
-from .enums import DayChoices
-from .models import (
-    Academy, AcademyFacility, AcademyNotice,
-    BusinessHours, AcademyImage, AcademyLike, AcademyStudent
-)
-from .permissions import IsAcademyOwner, IsAcademyStaff
-from .serializers import (
+from ..enums import DayChoices
+from ..models import Academy, AcademyFacility, BusinessHours, AcademyLike
+from ..permissions import IsAcademyOwner, IsAcademyStaff
+from ..serializers import (
     AcademySimpleSerializer, AcademyRegisterSerializer, AcademyStatusSerializer,
-    AcademyDetailSerializer, AcademyNoticeSerializer, ConvenienceSerializer,
-    AcademyImageSerializer
+    AcademyDetailSerializer,
 )
-from .utils import update_daily_schedule, upload_logo
+from ..utils import update_daily_schedule, upload_logo
 
 class AcademyViewSet(ModelViewSet):
     queryset = Academy.objects.filter(is_rejected=False)
@@ -125,36 +120,6 @@ class AcademyViewSet(ModelViewSet):
         serializer = AcademyDetailSerializer(academy)
         serializer.context['request'] = request
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @extend_schema(summary="내 아카데미 조회", tags=["아카데미"])
-    @action(detail=False, methods=['get'])
-    def my(self, request):
-        user = request.user
-        mode = request.query_params.get('mode', 'owner')
-
-        if mode == 'student':
-            student_profiles = AcademyStudent.objects.filter(person=user.person)
-            academies = [student.academy for student in student_profiles]
-        elif mode == 'coach':
-            coach_profiles = Coach.objects.filter(person=user.person)
-            academies = [coach.academy for coach in coach_profiles]
-        else:
-            academies = Academy.objects.filter(owner=user)
-
-            if not academies.exists():
-                return Response(
-                    status=status.HTTP_404_NOT_FOUND,
-                    data={"error": "아카데미 정보가 없습니다."}
-                )
-
-        serializer = AcademySimpleSerializer(academies, many=True)
-        serializer.context['user'] = user
-        serializer.context['mode'] = mode
-
-        return Response(
-            status=status.HTTP_200_OK,
-            data=serializer.data
-        )
 
     @extend_schema(summary="좋아요 한 아카데미 조회", tags=["아카데미"])
     @action(detail=False, methods=['get'])
@@ -366,180 +331,3 @@ class AcademyViewSet(ModelViewSet):
         serializer = AcademySimpleSerializer(self.queryset, many=True)
         serializer.context['request'] = request
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-class FacilityViewSet(ModelViewSet):
-    queryset = AcademyFacility.objects.all()
-    serializer_class = ConvenienceSerializer
-    http_method_names = ['get']
-
-    def get_permissions(self):
-        return [IsAcademyOwner()]
-
-    @extend_schema(summary="시설 목록 조회", tags=["아카데미"])
-    def list(self, request, *args, **kwargs):
-        queryset = self.queryset
-        serializer = ConvenienceSerializer(queryset, many=True)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @extend_schema(exclude=True)
-    def retrieve(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-class AcademyNoticeViewSet(ModelViewSet):
-    queryset = AcademyNotice.objects.all()
-    serializer_class = AcademyNoticeSerializer
-    permission_classes = [AllowAny]
-    http_method_names = ['get', 'post', 'delete', 'patch']
-
-    @extend_schema(summary="공지사항 리스트 조회", tags=["아카데미"])
-    def list(self, request, *args, **kwargs):
-        academy = Academy.objects.get(uuid=kwargs['academy_id'])
-
-        queryset = self.queryset.filter(academy=academy)
-        serializer = AcademyNoticeSerializer(queryset, many=True)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @extend_schema(summary="공지사항 상세 조회", tags=["아카데미"])
-    def retrieve(self, request, *args, **kwargs):
-        notice = self.get_object()
-
-        serializer = AcademyNoticeSerializer(notice)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @extend_schema(summary="공지사항 등록", tags=["아카데미"])
-    def create(self, request, *args, **kwargs):
-        data = request.data
-        academy = Academy.objects.get(uuid=kwargs['academy_id'])
-
-        user = request.user
-
-        if user != academy.owner:
-            return Response(
-                status=status.HTTP_403_FORBIDDEN,
-                data={"error": "권한이 없습니다."}
-            )
-
-        serializer = AcademyNoticeSerializer(data=data)
-        serializer.context['academy'] = academy
-
-        try:
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-        except ValidationError as e:
-            return Response(
-                status=status.HTTP_400_BAD_REQUEST,
-                data={"error": e.detail}
-            )
-
-        return Response(
-            status=status.HTTP_201_CREATED,
-            data={"message": "공지사항 등록에 성공했습니다."}
-        )
-
-    @extend_schema(summary="공지사항 삭제", tags=["아카데미"])
-    def destroy(self, request, *args, **kwargs):
-        notice = self.get_object()
-
-        user = request.user
-        academy = notice.academy
-
-        if user != academy.owner:
-            return Response(
-                status=status.HTTP_403_FORBIDDEN,
-                data={"error": "권한이 없습니다."}
-            )
-
-        notice.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-    @extend_schema(summary="공지사항 수정", tags=["아카데미"])
-    def partial_update(self, request, *args, **kwargs):
-        notice = self.get_object()
-        academy = notice.academy
-
-        user = request.user
-
-        if user != academy.owner:
-            return Response(
-                status=status.HTTP_403_FORBIDDEN,
-                data={"error": "권한이 없습니다."}
-            )
-
-        data = request.data
-        serializer = AcademyNoticeSerializer(notice, data=data, partial=True)
-
-        try:
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-        except ValidationError as e:
-            return Response(
-                status=status.HTTP_400_BAD_REQUEST,
-                data={"error": e.detail}
-            )
-
-        return Response(
-            status=status.HTTP_200_OK,
-            data=serializer.data
-        )
-
-class AcademyImageViewSet(ModelViewSet):
-    queryset = AcademyImage.objects.all()
-    serializer_class = AcademyNoticeSerializer
-    permission_classes = [IsAuthenticated]
-    http_method_names = ['post', 'delete']
-
-    @extend_schema(summary="이미지 등록", tags=["아카데미"])
-    def create(self, request, *args, **kwargs):
-        academy = Academy.objects.get(uuid=kwargs['academy_id'])
-        images = request.FILES.getlist('images')
-
-        if len(images) == 0:
-            return Response(
-                status=status.HTTP_400_BAD_REQUEST,
-                data={"error": "이미지를 입력해주세요."}
-            )
-
-        user = request.user
-
-        if user != academy.owner:
-            return Response(
-                status=status.HTTP_403_FORBIDDEN,
-                data={"error": "권한이 없습니다."}
-            )
-
-        serializer_data = [{"image": image} for image in images]
-        serializer = AcademyImageSerializer(
-            data=serializer_data, many=True, context={"academy": academy}
-        )
-
-        try:
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-        except ValidationError as e:
-            return Response(
-                status=status.HTTP_400_BAD_REQUEST,
-                data={"error": e.detail}
-            )
-
-        return Response(
-            status=status.HTTP_201_CREATED,
-            data=serializer.data
-        )
-
-    @extend_schema(summary="이미지 삭제", tags=["아카데미"])
-    def destroy(self, request, *args, **kwargs):
-        image = self.get_object()
-
-        user = request.user
-        academy = image.academy
-
-        if user != academy.owner:
-            return Response(
-                status=status.HTTP_403_FORBIDDEN,
-                data={"error": "권한이 없습니다."}
-            )
-
-        image.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
