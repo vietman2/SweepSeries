@@ -35,8 +35,10 @@ from community.post.views import PostViewSet, PostReportViewSet
 from community.tag.views import TagViewSet
 
 ## Product
+from product.views import MyPromodeProfilesView
 from product.academy.views import (
-    AcademyViewSet, FacilityViewSet, AcademyNoticeViewSet, AcademyImageViewSet
+    AcademyViewSet, FacilityViewSet, AcademyNoticeViewSet,
+    AcademyImageViewSet, MyAcademiesView
 )
 from product.coach.views import CoachViewSet
 from product.contract.views import ReviewViewSet, AcademyReviewViewSet, CoachReviewViewSet
@@ -108,6 +110,8 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path('terms_of_service/', TermsOfServiceView.as_view(), name='terms_of_service'),
     path('privacy_policy/', PrivacyPolicyView.as_view(), name='privacy_policy'),
+    path('academies/my/', MyAcademiesView.as_view(), name='my_academies'),
+    path('pro/my/', MyPromodeProfilesView.as_view(), name='my_promode_profiles'),
 
     path('check-username-email/', CheckUsernameEmailView.as_view(), name='check_username'),
     path('check-password/', CheckPasswordView.as_view(), name='check_password'),
