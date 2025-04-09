@@ -1,6 +1,5 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
-from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -11,7 +10,7 @@ from ..serializers import AcademySimpleSerializer
 
 class MyAcademiesView(GenericAPIView):
     """
-        내 아카데미 조회: url은 /api/v1/academies/my/
+        내 아카데미 조회: url은 /v1/academies/my/
             - 일반모드: 학생으로서 소속된 아카데미 조회
             - 프로모드:
                 - 소속된 아카데미 전부 조회 (코치 / 사장 전부 함께 조회)
@@ -20,7 +19,6 @@ class MyAcademiesView(GenericAPIView):
     http_method_names = ['get']
 
     @extend_schema(summary="내 아카데미 조회", tags=["아카데미"])
-    @action(detail=False, methods=['get'])
     def get(self, request):
         user = request.user
         mode = request.query_params.get('mode', 'owner')
