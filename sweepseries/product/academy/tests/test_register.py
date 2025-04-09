@@ -1,5 +1,5 @@
 import json
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 from django.core.files.uploadedfile import SimpleUploadedFile
 import requests_mock
 from rest_framework.test import APITestCase
@@ -46,8 +46,9 @@ class AcademyRegisterTestCase(APITestCase):
         }
 
     @requests_mock.Mocker()
+    @patch('product.academy.utils.default_storage')
     @patch('django.core.files.storage.default_storage.save')
-    def test_academy_register(self, m, mock_save):
+    def test_academy_register(self, m, mock_save, mock_default_storage):
         return_address = {
             'addresses': [{
                 'y': '37.517362',
@@ -67,6 +68,17 @@ class AcademyRegisterTestCase(APITestCase):
             status_code=200
         )
         mock_save.return_value = 'test.png'
+        mock_s3_client = MagicMock()
+        mock_default_storage.connection.meta.client = mock_s3_client
+
+        fake_bucket = MagicMock()
+        fake_bucket.name = "test-bucket"
+        mock_default_storage.bucket = fake_bucket
+
+        expected_path = f"users/{self.user.uuid}/profiles/test1.jpg"
+        fake_url = f"https://test.com/{expected_path}"
+        mock_default_storage.url.return_value = fake_url
+
         self.client.force_authenticate(user=self.user)
         response = self.client.post(self.url, self.data, format="multipart")
 
