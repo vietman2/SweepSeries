@@ -2,7 +2,8 @@ import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { ProgramManagement } from "./ProgramManagement";
 import * as AcademyFrontContext from "@contexts/front";
-import { sampleAcademyPrograms } from "@testdata/products";
+
+import { sampleAcademyDetail, sampleAcademyPrograms } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("@fragments/Program", () => ({
@@ -11,8 +12,9 @@ jest.mock("@fragments/Program", () => ({
 
 describe("<ProgramManagement />", () => {
   const defaultContext = {
-    academy: null,
+    academy: sampleAcademyDetail,
     programs: [],
+    notices: [],
     facilityOptions: [],
     loading: false,
     refresh: jest.fn(),
@@ -35,6 +37,14 @@ describe("<ProgramManagement />", () => {
     jest
       .spyOn(AcademyFrontContext, "useAcademyFront")
       .mockReturnValue(defaultContext);
+
+    renderWithProviders(<ProgramManagement />);
+  });
+
+  it("handles bad config", async () => {
+    jest
+      .spyOn(AcademyFrontContext, "useAcademyFront")
+      .mockReturnValue({ ...defaultContext, academy: null });
 
     renderWithProviders(<ProgramManagement />);
   });

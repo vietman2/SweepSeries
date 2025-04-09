@@ -34,6 +34,7 @@ import {
 } from "@services/products";
 import { timeOptions } from "@testdata/products";
 import { ThemeColorType } from "@themes/colors";
+import { useAcademyFront } from "@contexts/front";
 
 export function ProgramEdit() {
   const [program, setProgram] = useState<ProgramSimpleType>();
@@ -50,7 +51,8 @@ export function ProgramEdit() {
   const [curriculumModal, setCurriculumModal] = useState<boolean>(false);
 
   const [refreshCount, setRefreshCount] = useState<number>(0);
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { programid } = useLocalSearchParams<{ programid: string }>();
+  const { refresh } = useAcademyFront();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -140,6 +142,7 @@ export function ProgramEdit() {
 
     if (response) {
       router.back();
+      refresh();
     } else {
       alert("삭제 실패", "프로그램 삭제에 실패했습니다.");
     }
@@ -151,7 +154,7 @@ export function ProgramEdit() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getProgramDetail(id);
+      const response = await getProgramDetail(programid);
 
       if (response) {
         setProgram(response.program);
@@ -168,7 +171,7 @@ export function ProgramEdit() {
     };
 
     fetchData();
-  }, [id, refreshCount]);
+  }, [programid, refreshCount]);
 
   useEffect(() => {
     if (program) {

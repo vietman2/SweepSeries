@@ -9,19 +9,18 @@ import { ProgramSimpleType } from "@models/products";
 import { ThemeColorType } from "@themes/colors";
 
 export function ProgramManagement() {
-  const { programs } = useAcademyFront();
+  const { academy, programs } = useAcademyFront();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  if (!academy) return null;
+
   const handleCreate = () => {
-    router.push("/front/program/create");
+    router.push(`/front/academy/${academy.uuid}/programs/create`);
   };
 
   const handleDetail = (program: ProgramSimpleType) => {
-    router.push({
-      pathname: "/front/program/[id]",
-      params: { id: program.id },
-    });
+    router.push(`/front/academy/${academy.uuid}/programs/${program.id}`);
   };
 
   return (
@@ -29,7 +28,7 @@ export function ProgramManagement() {
       <View style={styles.wrapper}>
         {programs.length === 0 && (
           <View style={styles.emptyList}>
-            <Text style={styles.emptyText}>No programs available</Text>
+            <Text style={styles.emptyText}>아직 프로그램이 없습니다.</Text>
           </View>
         )}
         {programs.map((program) => (
@@ -75,6 +74,7 @@ const createStyles = (theme: ThemeColorType) =>
       flex: 1,
       alignItems: "center",
       justifyContent: "center",
+      marginVertical: 64,
     },
     emptyText: {
       color: theme.highEmphasis,
