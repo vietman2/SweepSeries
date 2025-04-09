@@ -1,4 +1,5 @@
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { getSecure, removeSecure, saveSecure } from "@services/storage";
 
@@ -63,6 +64,8 @@ export const logout = async () => {
 
     delete axios.defaults.headers.common["Authorization"];
     await removeSecure("refreshToken");
+    await AsyncStorage.removeItem("selectedCalendarId");
+    await AsyncStorage.removeItem("front_profile");
 
     return true;
   } catch {
