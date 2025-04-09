@@ -1,6 +1,8 @@
+import { sampleAcademyProfiles } from "./academies";
 import {
   CoachDetailType,
   CoachProfessionType,
+  CoachProfileType,
   CoachSimpleType,
 } from "@models/products";
 
@@ -24,6 +26,15 @@ const sampleCoachProfessions: CoachProfessionType[] = [
   {
     id: 5,
     kor_name: "트레이닝 전문",
+  },
+];
+
+export const sampleCoachProfiles: CoachProfileType[] = [
+  {
+    uuid: "1",
+    name: "김코치",
+    profile_image: "https://placeholder.com/150",
+    academy: sampleAcademyProfiles[0],
   },
 ];
 

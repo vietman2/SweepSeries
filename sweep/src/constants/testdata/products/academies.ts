@@ -1,4 +1,17 @@
-import { AcademyDetailType, AcademySimpleType } from "@models/products";
+import { AcademyDetailType, AcademyProfileType, AcademySimpleType } from "@models/products";
+
+export const sampleAcademyProfiles: AcademyProfileType[] = [
+  {
+    uuid: "1",
+    name: "Catch B 아카데미",
+    logo: "https://yaguin.com/lf_img/lfi15856190990.jpeg",
+  },
+  {
+    uuid: "2",
+    name: "JS 아카데미",
+    logo: "https://cdn.ccdailynews.com/news/photo/202101/2030853_517727_5828.jpg",
+  },
+];
 
 export const sampleAcademies: AcademySimpleType[] = [
   {

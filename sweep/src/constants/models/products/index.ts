@@ -1,11 +1,12 @@
 import {
+  AcademyProfileType,
   AcademySimpleType,
   AcademyDetailType,
   FacilityType,
   WorkingHoursType,
   ScheduleDetailType,
 } from "./academy";
-import { CoachDetailType, CoachProfessionType, CoachSimpleType } from "./coach";
+import { CoachProfileType, CoachDetailType, CoachProfessionType, CoachSimpleType } from "./coach";
 import { NoticeSimpleType } from "./notice";
 import {
   ProgramSimpleType,
@@ -33,8 +34,10 @@ import {
 } from "./student";
 
 export {
+  AcademyProfileType,
   AcademySimpleType,
   AcademyDetailType,
+  CoachProfileType,
   CoachDetailType,
   CoachProfessionType,
   CoachSimpleType,
