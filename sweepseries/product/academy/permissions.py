@@ -17,3 +17,11 @@ class IsAcademyStaff(BasePermission):
                 return True
 
         return False
+
+class IsObjectAcademyOwner(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if obj.academy.owner == request.user:
+            ## 아카데미 소유자
+            return True
+
+        return False
