@@ -266,23 +266,6 @@ class CoachViewSet(ModelViewSet):
             data={"message": "좋아요에 성공했습니다."}
         )
 
-    @extend_schema(summary="내 코치 정보 조회", tags=["코치"])
-    @action(detail=False, methods=['get'])
-    def me(self, request, *args, **kwargs):     # pylint: disable=unused-argument
-        user = request.user
-        coach = Coach.objects.filter(person__user=user)
-
-        if not coach.exists():
-            return Response(
-                status=status.HTTP_404_NOT_FOUND,
-                data={"error": "코치 정보가 없습니다."}
-            )
-
-        coach = coach.first()
-        serializer = CoachSimpleSerializer(coach)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
     @extend_schema(summary="코치 소개글 수정", tags=["코치"])
     @action(detail=True, methods=['patch'])
     def introduction(self, request, pk=None):   # pylint: disable=unused-argument

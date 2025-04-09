@@ -134,17 +134,6 @@ class CoachTestCase(APITestCase):
         response = self.client.post(f"{self.url}923e4567-e89b-12d3-a456-426614174999/like/")
         self.assertEqual(response.status_code, 200)
 
-    def test_me(self):
-        self.client.force_authenticate(user=self.user)
-        response = self.client.get(f"{self.url}me/")
-        self.assertEqual(response.status_code, 200)
-
-    def test_me_fail(self):
-        ## 1. user has no coach
-        self.client.force_authenticate(user=self.user2)
-        response = self.client.get(f"{self.url}me/")
-        self.assertEqual(response.status_code, 404)
-
 class WorkingHoursTestCase(TestCase):
     fixtures = [
         "core/data/initial/professions.json", "core/data/test/coaches.json",
