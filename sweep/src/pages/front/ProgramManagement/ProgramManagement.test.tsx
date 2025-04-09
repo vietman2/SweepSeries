@@ -2,7 +2,6 @@ import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { ProgramManagement } from "./ProgramManagement";
 import * as AcademyFrontContext from "@contexts/front";
-
 import { sampleAcademyDetail, sampleAcademyPrograms } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 

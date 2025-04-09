@@ -7,6 +7,7 @@ import { AppIcon } from "@components/Icons";
 import { TextInput } from "@components/Inputs";
 import { Scroll } from "@components/ScrollView";
 import { CalloutSmall, Text } from "@components/Texts";
+import { useAcademyFront } from "@contexts/front";
 import { useTheme } from "@contexts/theme";
 import { CoachModal } from "@fragments/Coach";
 import {
@@ -34,7 +35,6 @@ import {
 } from "@services/products";
 import { timeOptions } from "@testdata/products";
 import { ThemeColorType } from "@themes/colors";
-import { useAcademyFront } from "@contexts/front";
 
 export function ProgramEdit() {
   const [program, setProgram] = useState<ProgramSimpleType>();
