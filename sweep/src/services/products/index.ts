@@ -24,7 +24,6 @@ import {
   getEmployedCoaches,
   acceptCoach,
   rejectCoach,
-  getMyCoachProfile,
   updateCoachIntro,
   updateCoachSNS,
 } from "./coach";
@@ -35,6 +34,7 @@ import {
   deleteNotice,
   editNotice,
 } from "./notices";
+import { getPromodeProfiles } from "./profiles";
 import {
   getTargets,
   getPositions,
@@ -85,7 +85,6 @@ export {
   getEmployedCoaches,
   acceptCoach,
   rejectCoach,
-  getMyCoachProfile,
   updateCoachIntro,
   updateCoachSNS,
   createNotice,
@@ -93,6 +92,7 @@ export {
   getNotice,
   deleteNotice,
   editNotice,
+  getPromodeProfiles,
   getTargets,
   getPositions,
   getPrograms,
