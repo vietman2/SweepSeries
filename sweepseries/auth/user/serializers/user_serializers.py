@@ -23,7 +23,7 @@ class UserAuthSerializer(serializers.ModelSerializer):
         return UserProfileSerializer(first_profile).data
 
     def get_mode(self, obj):
-        ## 아카데미 대표이거나
+        ## 아카데미 대표이거나 코치인 경우 "pro"
         ## 그 외의 경우 "normal"
         if Academy.objects.filter(owner=obj).exists():
             return 'pro'
