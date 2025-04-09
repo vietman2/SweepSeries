@@ -1,28 +1,17 @@
-import { useEffect, useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 
 import { AppIcon } from "@components/Icons";
-import { ScrollView } from "@components/ScrollView";
-import { useFront } from "@contexts/front";
+import { useAcademyFront } from "@contexts/front";
 import { useTheme } from "@contexts/theme";
 import { ProgramSimple } from "@fragments/Program";
 import { ProgramSimpleType } from "@models/products";
-import { getPrograms } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
 export function ProgramManagement() {
-  const [programs, setPrograms] = useState<ProgramSimpleType[]>([]);
-  const [refreshCount, setRefreshCount] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  const { uuid } = useFront();
+  const { programs } = useAcademyFront();
   const { theme } = useTheme();
   const styles = createStyles(theme);
-
-  const handleRefresh = () => {
-    setRefreshCount(refreshCount + 1);
-  };
 
   const handleCreate = () => {
     router.push("/front/program/create");
@@ -35,46 +24,31 @@ export function ProgramManagement() {
     });
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-
-      const response = await getPrograms(uuid);
-
-      if (response) {
-        setPrograms(response);
-      } else {
-        setPrograms([]);
-      }
-
-      setLoading(false);
-    };
-
-    fetchData();
-  }, [uuid, refreshCount]);
-
   return (
     <View style={styles.container}>
-      <ScrollView refreshing={loading} onRefresh={handleRefresh}>
-        <View style={styles.wrapper}>
-          {programs.map((program) => (
-            <TouchableOpacity
-              key={program.id}
-              onPress={() => handleDetail(program)}
-              testID={`program-${program.id}`}
-            >
-              <ProgramSimple program={program} />
-            </TouchableOpacity>
-          ))}
+      <View style={styles.wrapper}>
+        {programs.length === 0 && (
+          <View style={styles.emptyList}>
+            <Text style={styles.emptyText}>No programs available</Text>
+          </View>
+        )}
+        {programs.map((program) => (
           <TouchableOpacity
-            onPress={handleCreate}
-            style={styles.button}
-            testID="create"
+            key={program.id}
+            onPress={() => handleDetail(program)}
+            testID={`program-${program.id}`}
           >
-            <AppIcon icon="plus-circle" size={24} color={theme.primary} />
+            <ProgramSimple program={program} />
           </TouchableOpacity>
-        </View>
-      </ScrollView>
+        ))}
+        <TouchableOpacity
+          onPress={handleCreate}
+          style={styles.button}
+          testID="create"
+        >
+          <AppIcon icon="plus-circle" size={24} color={theme.primary} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -96,5 +70,15 @@ const createStyles = (theme: ThemeColorType) =>
       borderWidth: 1,
       borderColor: theme.border,
       borderRadius: 8,
+    },
+    emptyList: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    emptyText: {
+      color: theme.highEmphasis,
+      fontSize: 16,
+      fontWeight: "600",
     },
   });

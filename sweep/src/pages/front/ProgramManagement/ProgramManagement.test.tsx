@@ -1,7 +1,7 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { ProgramManagement } from "./ProgramManagement";
-import * as ProgramsAPI from "@services/products/programs";
+import * as AcademyFrontContext from "@contexts/front";
 import { sampleAcademyPrograms } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
@@ -10,22 +10,32 @@ jest.mock("@fragments/Program", () => ({
 }));
 
 describe("<ProgramManagement />", () => {
+  const defaultContext = {
+    academy: null,
+    programs: [],
+    facilityOptions: [],
+    loading: false,
+    refresh: jest.fn(),
+  };
+
   it("renders and handles navigate correctly", async () => {
     jest
-      .spyOn(ProgramsAPI, "getPrograms")
-      .mockResolvedValue(sampleAcademyPrograms);
+      .spyOn(AcademyFrontContext, "useAcademyFront")
+      .mockReturnValue({ ...defaultContext, programs: sampleAcademyPrograms });
+
     const { getByTestId } = renderWithProviders(<ProgramManagement />);
 
     await waitFor(() => {
-      fireEvent.press(getByTestId("refresh"));
       fireEvent.press(getByTestId("program-1"));
+      fireEvent.press(getByTestId("create"));
     });
   });
 
-  it("handles bad response and navigate correctly", async () => {
-    jest.spyOn(ProgramsAPI, "getPrograms").mockResolvedValue(null);
-    const { getByTestId } = renderWithProviders(<ProgramManagement />);
+  it("handles no programs", async () => {
+    jest
+      .spyOn(AcademyFrontContext, "useAcademyFront")
+      .mockReturnValue(defaultContext);
 
-    await waitFor(() => fireEvent.press(getByTestId("create")));
+    renderWithProviders(<ProgramManagement />);
   });
 });
