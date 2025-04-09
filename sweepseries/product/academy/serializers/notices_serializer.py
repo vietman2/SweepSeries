@@ -6,7 +6,6 @@ from core.utils import get_presigned_url
 from ..enums import NoticeTypeChoices
 from ..models import AcademyNotice, AcademyNoticeAttachment
 
-
 class AcademyNoticeSerializer(serializers.ModelSerializer):
     """
         아카데미 공지사항 Serializer
