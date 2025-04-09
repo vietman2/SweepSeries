@@ -6,6 +6,10 @@ from core.utils import get_presigned_url
 from ..models import Academy, AcademyImage, AcademyFacility
 
 class AcademyStatusSerializer(serializers.ModelSerializer):
+    """
+        아카데미 상태 확인용 Serializer
+            - 관리자 페이지에서 등록 요청을 한 아카데미를 승인/거절 할 때 사용
+    """
     owner           = UserRelatedSerializer(read_only=True)
     certification   = serializers.SerializerMethodField()
     verified_at     = serializers.DateTimeField(format="%Y-%m-%d", read_only=True)
