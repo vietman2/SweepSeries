@@ -7,7 +7,6 @@ import {
   likeCoach,
   getCoachesByProfile,
   getCoachDetails,
-  getMyCoachProfile,
   getEmployedCoaches,
   acceptCoach,
   rejectCoach,
@@ -120,24 +119,6 @@ describe("getCoachesByProfile", () => {
     jest.spyOn(axios, "get").mockRejectedValue(null);
 
     const result = await getCoachesByProfile(1);
-
-    expect(result).toBeNull();
-  });
-});
-
-describe("getMyCoachProfile", () => {
-  it("should get my coach profile", async () => {
-    jest.spyOn(axios, "get").mockResolvedValue({ data: {} });
-
-    const result = await getMyCoachProfile();
-
-    expect(result).toEqual({});
-  });
-
-  it("should return null on error", async () => {
-    jest.spyOn(axios, "get").mockRejectedValue(null);
-
-    const result = await getMyCoachProfile();
 
     expect(result).toBeNull();
   });
