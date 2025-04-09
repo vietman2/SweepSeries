@@ -2,8 +2,10 @@ from unittest.mock import patch
 from django.db.models import F, Q
 from django.test import TestCase
 from django.utils import timezone
+from rest_framework.test import APITestCase
 
 from auth.person.models import Person
+from auth.user.models import User
 from product.coach.models import Coach
 from product.contract.models import Contract
 from product.lesson.models import Session
@@ -111,3 +113,19 @@ class UpdateRatingsTestCase(TestCase):
         program = Contract.objects.get(pk=1).curriculum.program
         self.assertEqual(program.cached_rating, 4.0)
         self.assertEqual(program.num_reviews, 1)
+
+class PromodeProfilesAPITestCase(APITestCase):
+    fixtures = [
+        "core/data/test/users.json", "core/data/initial/regions.json",
+        "core/data/test/academies.json", "core/data/test/coaches.json",
+        "core/data/initial/facilities.json", "core/data/initial/professions.json",
+    ]
+
+    def setUp(self):
+        self.url = "/v1/pro/my/"
+        user = User.objects.get(username="normaluser")
+        self.client.force_authenticate(user=user)
+
+    def test_get_my_promode_profiles(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
