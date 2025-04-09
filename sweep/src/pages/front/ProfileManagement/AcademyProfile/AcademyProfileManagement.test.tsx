@@ -20,6 +20,7 @@ describe("<AcademyProfileManagement />", () => {
   const defaultContext = {
     academy: null,
     programs: [],
+    notices: [],
     facilityOptions: [],
     loading: false,
     refresh: jest.fn(),
