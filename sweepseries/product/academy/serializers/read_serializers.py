@@ -9,6 +9,21 @@ from .more_serializers import AcademyImageSerializer, ConvenienceSerializer
 from ..models import Academy, AcademyLike
 from ..utils import get_weekly_schedule, get_schedule_details
 
+class AcademyProfileSerializer(serializers.ModelSerializer):
+    """
+        아카데미 프로필 Serializer
+            - 프로모드 Front에서만 사용
+    """
+    logo        = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Academy
+        fields = ["uuid", "name", "logo"]
+
+    def get_logo(self, obj):
+        print(obj.logo.url)
+        return obj.logo.url if obj.logo else None
+
 class AcademySimpleSerializer(serializers.ModelSerializer):
     rating      = serializers.SerializerMethodField()
     num_reviews = serializers.SerializerMethodField()
@@ -57,7 +72,7 @@ class AcademySimpleSerializer(serializers.ModelSerializer):
         return obj.address.region.get_display_name()
 
     def get_logo(self, obj):
-        return get_presigned_url(obj.logo)
+        return obj.logo.url if obj.logo else None
 
     def get_last_session(self, obj):
         ## 가장 최근에 진행된 세션
@@ -136,7 +151,7 @@ class AcademyDetailSerializer(serializers.ModelSerializer):
         return f"{obj.address.road_address_part1}, {obj.address.road_address_part2}"
 
     def get_logo(self, obj):
-        return get_presigned_url(obj.logo)
+        return obj.logo.url if obj.logo else None
 
     def get_map(self, obj):
         return get_presigned_url(obj.address.map_image)
