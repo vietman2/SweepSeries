@@ -29,6 +29,7 @@ export type CoachSimpleType = {
 export type CoachDetailType = {
   uuid: string;
   name: string;
+  academy_uuid: string;
   profile_image: string;
   professions: CoachProfessionType[];
   is_liked: boolean;

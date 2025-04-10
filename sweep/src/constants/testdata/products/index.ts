@@ -15,7 +15,6 @@ import {
   sampleTagOptions,
   sampleReviewResponse,
   sampleReviewSummary,
-  sampleCoachReviewResponse,
 } from "./review";
 import { sampleStudents, sampleStudentLesson } from "./students";
 
@@ -38,7 +37,6 @@ export {
   sampleTagOptions,
   sampleReviewResponse,
   sampleReviewSummary,
-  sampleCoachReviewResponse,
   sampleStudents,
   sampleStudentLesson,
 };

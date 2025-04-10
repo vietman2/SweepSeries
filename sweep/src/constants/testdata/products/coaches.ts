@@ -83,6 +83,7 @@ export const sampleCoaches: CoachSimpleType[] = [
 export const sampleCoachDetail: CoachDetailType = {
   uuid: "1",
   name: "홍길동",
+  academy_uuid: "2",
   profile_image:
     "https://i.namu.wiki/i/Gi_zEqsd9H46GcmFjGefP7Y7RKlTOvzeHA1-yNtL9L_-K4k-_N16xn54WDZkR9aJJQYplpRcyW46AfhwTg2fZw.webp",
   introduction:
