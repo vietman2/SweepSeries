@@ -14,6 +14,8 @@ describe("<ProgramManagement />", () => {
     academy: sampleAcademyDetail,
     programs: [],
     notices: [],
+    coaches: [],
+    requests: [],
     facilityOptions: [],
     loading: false,
     refresh: jest.fn(),

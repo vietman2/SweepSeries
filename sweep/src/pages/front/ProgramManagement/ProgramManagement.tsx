@@ -2,6 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 
 import { AppIcon } from "@components/Icons";
+import { ScrollView } from "@components/ScrollView";
 import { useAcademyFront } from "@contexts/front";
 import { useTheme } from "@contexts/theme";
 import { ProgramSimple } from "@fragments/Program";
@@ -9,7 +10,7 @@ import { ProgramSimpleType } from "@models/products";
 import { ThemeColorType } from "@themes/colors";
 
 export function ProgramManagement() {
-  const { academy, programs } = useAcademyFront();
+  const { academy, programs, loading, refresh } = useAcademyFront();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -24,7 +25,11 @@ export function ProgramManagement() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      refreshing={loading}
+      onRefresh={refresh}
+      style={styles.container}
+    >
       <View style={styles.wrapper}>
         {programs.length === 0 && (
           <View style={styles.emptyList}>
@@ -48,7 +53,7 @@ export function ProgramManagement() {
           <AppIcon icon="plus-circle" size={24} color={theme.primary} />
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
