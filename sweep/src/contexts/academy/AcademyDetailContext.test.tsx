@@ -64,11 +64,12 @@ describe("<AcademyDetailContext />", () => {
       .spyOn(ProgramsAPI, "getPrograms")
       .mockResolvedValue(sampleAcademyPrograms);
     jest
-      .spyOn(ReviewsAPI, "getAcademyReviewSummary")
-      .mockResolvedValue(sampleReviewSummary);
-    jest
       .spyOn(ReviewsAPI, "getAcademyReviews")
-      .mockResolvedValue({ ...sampleReviewResponse, results: sampleReviews });
+      .mockResolvedValue({
+        ...sampleReviewResponse,
+        results: sampleReviews,
+        summary: sampleReviewSummary,
+      });
   });
 
   it("should handle initial data fetch fail", async () => {
@@ -81,7 +82,7 @@ describe("<AcademyDetailContext />", () => {
     const { getByTestId } = renderPage();
 
     jest.spyOn(AcademiesAPI, "getAcademyDetail").mockResolvedValueOnce(null);
-    
+
     await waitFor(() => {
       fireEvent.press(getByTestId("refresh"));
       jest.advanceTimersByTime(1000);
