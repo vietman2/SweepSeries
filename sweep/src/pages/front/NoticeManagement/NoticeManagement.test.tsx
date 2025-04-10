@@ -2,8 +2,9 @@ import { fireEvent, waitFor } from "@testing-library/react-native";
 import * as IPicker from "expo-image-picker";
 
 import { NoticeManagement } from "./NoticeManagement";
+import * as AcademyFrontContext from "@contexts/front";
 import * as NoticesAPI from "@services/products/notices";
-import { sampleNotices } from "@testdata/products";
+import { sampleAcademyDetail, sampleNotices } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.mock("@fragments/Notice", () => ({
@@ -11,18 +12,32 @@ jest.mock("@fragments/Notice", () => ({
 }));
 
 describe("<NoticeManagement />", () => {
+  const defaultContext = {
+    academy: sampleAcademyDetail,
+    programs: [],
+    notices: sampleNotices,
+    facilityOptions: [],
+    loading: false,
+    refresh: jest.fn(),
+  };
   const mockImage = {
     uri: "uri",
     width: 100,
     height: 100,
   };
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest
+      .spyOn(AcademyFrontContext, "useAcademyFront")
+      .mockReturnValue(defaultContext);
+  });
+
   it("renders notices and handle create", async () => {
     jest.spyOn(IPicker, "launchImageLibraryAsync").mockResolvedValue({
       canceled: false,
       assets: [mockImage],
     });
-    jest.spyOn(NoticesAPI, "getNotices").mockResolvedValue(sampleNotices);
     jest.spyOn(NoticesAPI, "createNotice").mockResolvedValue(true);
     const { getByTestId } = renderWithProviders(<NoticeManagement />);
 
@@ -42,7 +57,6 @@ describe("<NoticeManagement />", () => {
       canceled: true,
       assets: null,
     });
-    jest.spyOn(NoticesAPI, "getNotices").mockResolvedValue(null);
     jest.spyOn(NoticesAPI, "createNotice").mockResolvedValue(null);
     const { getByTestId } = renderWithProviders(<NoticeManagement />);
 
@@ -51,5 +65,12 @@ describe("<NoticeManagement />", () => {
       fireEvent.press(getByTestId("open"));
       fireEvent.press(getByTestId("저장"));
     });
+  });
+
+  it("handles bad config", async () => {
+    jest
+      .spyOn(AcademyFrontContext, "useAcademyFront")
+      .mockReturnValue({...defaultContext, academy: null});
+    renderWithProviders(<NoticeManagement />);
   });
 });

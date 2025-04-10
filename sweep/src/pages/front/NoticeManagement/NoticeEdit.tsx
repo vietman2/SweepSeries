@@ -12,6 +12,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { TextButton } from "@components/Buttons";
 import { LoadingComponent } from "@components/Fallbacks";
 import { AppIcon } from "@components/Icons";
+import { useAcademyFront } from "@contexts/front";
 import { useTheme } from "@contexts/theme";
 import { NoticeBlock } from "@fragments/Notice";
 import { NoticeSimpleType } from "@models/products";
@@ -26,10 +27,11 @@ export function NoticeEdit() {
   const [editedTitle, setEditedTitle] = useState<string>("");
   const [editedContent, setEditedContent] = useState<string>("");
 
-  const { id, academyId } = useLocalSearchParams<{
+  const { id, noticeid } = useLocalSearchParams<{
     id: string;
-    academyId: string;
+    noticeid: string;
   }>();
+  const { refresh } = useAcademyFront();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -38,12 +40,7 @@ export function NoticeEdit() {
   };
 
   const handleEditSubmit = async () => {
-    const response = await editNotice(
-      academyId,
-      id,
-      editedTitle,
-      editedContent
-    );
+    const response = await editNotice(id, noticeid, editedTitle, editedContent);
 
     if (response) {
       setEditMode(false);
@@ -54,9 +51,10 @@ export function NoticeEdit() {
   };
 
   const handleDelete = async () => {
-    const response = await deleteNotice(academyId, id);
+    const response = await deleteNotice(id, noticeid);
 
     if (response) {
+      refresh();
       router.back();
     } else {
       alert("공지 삭제 실패", "공지를 삭제하는데 실패했습니다.");
@@ -75,7 +73,7 @@ export function NoticeEdit() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getNotice(academyId, id);
+      const response = await getNotice(id, noticeid);
 
       if (response) {
         setNotice(response);
