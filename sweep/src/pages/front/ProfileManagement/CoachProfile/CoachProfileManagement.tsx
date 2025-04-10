@@ -14,27 +14,20 @@ import { TextInput } from "@components/Inputs";
 import { SimpleModal } from "@components/Modals";
 import { Scroll } from "@components/ScrollView";
 import { CalloutSmall, Text } from "@components/Texts";
-import { useFront } from "@contexts/front";
+import { useCoachFront } from "@contexts/front";
 import { useTheme } from "@contexts/theme";
-import { CoachDetailType } from "@models/products";
 import { alert } from "@services/alert";
-import {
-  getCoachDetails,
-  updateCoachIntro,
-  updateCoachSNS,
-} from "@services/products";
+import { updateCoachIntro, updateCoachSNS } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
 export function CoachProfileManagement() {
-  const [coach, setCoach] = useState<CoachDetailType>();
   const [introInput, setIntroInput] = useState<string>("");
   const [introModalVisible, setIntroModalVisible] = useState<boolean>(false);
   const [instagramInput, setInstagramInput] = useState<string>("");
   const [blogInput, setBlogInput] = useState<string>("");
   const [snsModalVisible, setSnsModalVisible] = useState<boolean>(false);
-  const [refreshCount, setRefreshCount] = useState<number>(0);
 
-  const { uuid } = useFront();
+  const { coach, refresh } = useCoachFront();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -54,11 +47,7 @@ export function CoachProfileManagement() {
     setSnsModalVisible(false);
   };
 
-  const handleRefresh = () => {
-    setRefreshCount((prev) => prev + 1);
-  };
-
-  const handleEditProfile = () => {};
+  const handleEditProfile = () => {}; // TODO: Implement this function
 
   const getInstagramText = () => {
     if (coach?.instagram) {
@@ -73,7 +62,7 @@ export function CoachProfileManagement() {
 
     if (response) {
       closeIntroModal();
-      handleRefresh();
+      refresh();
     } else {
       alert("수정 실패", "오류가 발생했습니다.");
     }
@@ -88,26 +77,19 @@ export function CoachProfileManagement() {
 
     if (response) {
       closeSnsModal();
-      handleRefresh();
+      refresh();
     } else {
       alert("수정 실패", "오류가 발생했습니다.");
     }
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await getCoachDetails(uuid);
-
-      if (response) {
-        setCoach(response);
-        setIntroInput(response.introduction);
-        setInstagramInput(response.instagram);
-        setBlogInput(response.blog);
-      }
-    };
-
-    fetchData();
-  }, [refreshCount, uuid]);
+    if (coach) {
+      setIntroInput(coach.introduction);
+      setInstagramInput(coach.instagram);
+      setBlogInput(coach.blog);
+    }
+  }, [coach]);
 
   if (!coach) {
     return <LoadingComponent />;

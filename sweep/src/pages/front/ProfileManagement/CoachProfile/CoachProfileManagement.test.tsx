@@ -1,25 +1,32 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
-import { CoachProfileManagement } from "./CoachProfile";
+import { CoachProfileManagement } from "./CoachProfileManagement";
+import * as CoachFrontContext from "@contexts/front";
 import * as CoachesAPI from "@services/products/coach";
 import { sampleCoachDetail } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
 describe("<CoachProfileManagement />", () => {
-  it("handles data fetch fail", async () => {
-    jest.spyOn(CoachesAPI, "getCoachDetails").mockResolvedValue(null);
-
-    renderWithProviders(<CoachProfileManagement />);
-
-    await waitFor(() => {
-      expect("LoadingComponent").toBeTruthy();
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(CoachFrontContext, "useCoachFront").mockReturnValue({
+      coach: sampleCoachDetail,
+      loading: false,
+      refresh: jest.fn(),
     });
   });
 
+  it("handles loading", async () => {
+    jest.spyOn(CoachFrontContext, "useCoachFront").mockReturnValue({
+      coach: undefined,
+      loading: false,
+      refresh: jest.fn(),
+    });
+
+    renderWithProviders(<CoachProfileManagement />);
+  });
+
   it("handles intro and sns updates", async () => {
-    jest
-      .spyOn(CoachesAPI, "getCoachDetails")
-      .mockResolvedValue(sampleCoachDetail);
     jest.spyOn(CoachesAPI, "updateCoachIntro").mockResolvedValue(true);
     jest.spyOn(CoachesAPI, "updateCoachSNS").mockResolvedValue(true);
 
@@ -46,9 +53,10 @@ describe("<CoachProfileManagement />", () => {
   });
 
   it("handles intro and sns open and update fail", async () => {
-    jest.spyOn(CoachesAPI, "getCoachDetails").mockResolvedValue({
-      ...sampleCoachDetail,
-      instagram: "",
+    jest.spyOn(CoachFrontContext, "useCoachFront").mockReturnValue({
+      coach: { ...sampleCoachDetail, instagram: "" },
+      loading: false,
+      refresh: jest.fn(),
     });
     jest.spyOn(CoachesAPI, "updateCoachIntro").mockResolvedValue(false);
     jest.spyOn(CoachesAPI, "updateCoachSNS").mockResolvedValue(false);
