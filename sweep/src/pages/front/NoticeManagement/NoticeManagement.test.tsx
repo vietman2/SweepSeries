@@ -16,6 +16,8 @@ describe("<NoticeManagement />", () => {
     academy: sampleAcademyDetail,
     programs: [],
     notices: sampleNotices,
+    coaches: [],
+    requests: [],
     facilityOptions: [],
     loading: false,
     refresh: jest.fn(),

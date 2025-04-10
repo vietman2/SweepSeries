@@ -6,6 +6,7 @@ import { launchImageLibraryAsync, ImagePickerAsset } from "expo-image-picker";
 import { Divider } from "@components/Dividers";
 import { AppIcon } from "@components/Icons";
 import { SimpleModal } from "@components/Modals";
+import { ScrollView } from "@components/ScrollView";
 import { Text } from "@components/Texts";
 import { useAcademyFront } from "@contexts/front";
 import { useTheme } from "@contexts/theme";
@@ -23,7 +24,7 @@ export function NoticeManagement() {
   const [imageInput, setImageInput] = useState<ImagePickerAsset>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
-  const { academy, notices, refresh } = useAcademyFront();
+  const { academy, notices, loading, refresh } = useAcademyFront();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -70,30 +71,32 @@ export function NoticeManagement() {
 
   return (
     <>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>내 소식</Text>
-          <TouchableOpacity
-            style={styles.editButton}
-            onPress={openModal}
-            testID="open"
-          >
-            <AppIcon icon="pencil" size={14} color={theme.primary} />
-            <Text style={styles.editText}>작성하기</Text>
-          </TouchableOpacity>
-        </View>
-        {notices.map((notice) => (
-          <View key={notice.id} style={styles.notice}>
+      <ScrollView refreshing={loading} onRefresh={refresh}>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.title}>내 소식</Text>
             <TouchableOpacity
-              onPress={() => handleNoticePress(notice.id)}
-              testID={`notice-${notice.id}`}
+              style={styles.editButton}
+              onPress={openModal}
+              testID="open"
             >
-              <NoticeSimple notice={notice} />
+              <AppIcon icon="pencil" size={14} color={theme.primary} />
+              <Text style={styles.editText}>작성하기</Text>
             </TouchableOpacity>
-            <Divider />
           </View>
-        ))}
-      </View>
+          {notices.map((notice) => (
+            <View key={notice.id} style={styles.notice}>
+              <TouchableOpacity
+                onPress={() => handleNoticePress(notice.id)}
+                testID={`notice-${notice.id}`}
+              >
+                <NoticeSimple notice={notice} />
+              </TouchableOpacity>
+              <Divider />
+            </View>
+          ))}
+        </View>
+      </ScrollView>
       <SimpleModal
         title="소식 작성"
         buttonText="저장"
