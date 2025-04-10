@@ -9,6 +9,7 @@ type ProfileType = {
   uuid: string;
   name: string;
   image: string;
+  mode: "academy" | "coach";
 };
 
 interface FrontContextType {
@@ -32,6 +33,7 @@ export const FrontProvider: React.FC<{ children: React.ReactNode }> = ({
     uuid: "",
     name: "",
     image: "",
+    mode: "academy",
   });
 
   const [isReady, setIsReady] = useState<boolean>(false);
@@ -46,6 +48,7 @@ export const FrontProvider: React.FC<{ children: React.ReactNode }> = ({
       uuid: academy.uuid,
       name: academy.name,
       image: academy.logo,
+      mode: "academy",
     });
 
     await saveStorage("front_uuid", academy.uuid);
@@ -61,12 +64,13 @@ export const FrontProvider: React.FC<{ children: React.ReactNode }> = ({
       uuid: coach.uuid,
       name: `${coach.name} 코치 (${coach.academy.name})`,
       image: coach.profile_image,
+      mode: "coach",
     });
 
     await saveStorage("front_uuid", coach.uuid);
 
     router.replace({
-      pathname: "/front/coach/[id]",
+      pathname: "/front/coach/[id]/profile",
       params: { id: coach.uuid },
     });
   };
@@ -100,6 +104,7 @@ export const FrontProvider: React.FC<{ children: React.ReactNode }> = ({
             uuid: academy.uuid,
             name: academy.name,
             image: academy.logo,
+            mode: "academy",
           });
           router.replace({
             pathname: "/front/academy/[id]/profile",
@@ -112,9 +117,10 @@ export const FrontProvider: React.FC<{ children: React.ReactNode }> = ({
             uuid: coach.uuid,
             name: `${coach.name} 코치 (${coach.academy.name})`,
             image: coach.profile_image,
+            mode: "coach",
           });
           router.replace({
-            pathname: "/front/coach/[id]",
+            pathname: "/front/coach/[id]/profile",
             params: { id: coach.uuid },
           });
           return;
