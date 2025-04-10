@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { SvgCssUri } from "react-native-svg/css";
 
 import { useTheme } from "@contexts/theme";
@@ -47,21 +47,6 @@ export function HorizontalLogo({ size = 30 }: Readonly<Props>) {
         width={width}
         height={size}
       />
-    </View>
-  );
-}
-
-interface CustomProps {
-  image: string;
-  text: string;
-  color: string;
-}
-
-export function CustomLogo({ image, text, color }: Readonly<CustomProps>) {
-  return (
-    <View style={styles.customContainer}>
-      <Image src={image} style={styles.image} />
-      <Text style={[styles.customText, { color }]}>{text}</Text>
     </View>
   );
 }
