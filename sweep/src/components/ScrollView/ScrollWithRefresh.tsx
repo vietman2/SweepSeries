@@ -1,4 +1,4 @@
-import { Keyboard } from "react-native";
+import { Keyboard, ViewStyle } from "react-native";
 import { RefreshControl, ScrollView } from "react-native-gesture-handler";
 
 interface Props {
@@ -7,6 +7,7 @@ interface Props {
   onRefresh: () => void;
   stickyIndex?: number;
   hideKeyboardOnScroll?: boolean;
+  style?: ViewStyle;
 }
 
 export default function ScrollWithRefresh({
@@ -15,6 +16,7 @@ export default function ScrollWithRefresh({
   onRefresh,
   stickyIndex,
   hideKeyboardOnScroll = false,
+  style,
 }: Readonly<Props>) {
   const onScroll = () => {
     if (hideKeyboardOnScroll) {
@@ -33,6 +35,7 @@ export default function ScrollWithRefresh({
       stickyHeaderIndices={stickyIndex ? [stickyIndex] : undefined}
       overScrollMode="always"
       contentContainerStyle={{ flexGrow: 1 }}
+      style={style}
       testID="scroll-view"
     >
       {children}
