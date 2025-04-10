@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Dimensions,
   Image,
@@ -49,12 +49,6 @@ export function AcademyProfile({ academy, pro, onRefresh }: Readonly<Props>) {
       setLiked(!liked);
     }
   };
-
-  useEffect(() => {
-    if (pro && onRefresh) {
-      onRefresh();
-    }
-  }, [logoModalVisible, imagesModalVisible]);
 
   return (
     <>
@@ -126,18 +120,24 @@ export function AcademyProfile({ academy, pro, onRefresh }: Readonly<Props>) {
           </View>
         </View>
       </View>
-      <ImagesModal
-        modalOpen={imagesModalVisible}
-        setModalOpen={setImagesModalVisible}
-        uuid={academy.uuid}
-        currentImages={academy.images}
-      />
-      <LogoModal
-        modalOpen={logoModalVisible}
-        setModalOpen={setLogoModalVisible}
-        uuid={academy.uuid}
-        currentLogo={academy.logo}
-      />
+      {onRefresh && (
+        <>
+          <ImagesModal
+            modalOpen={imagesModalVisible}
+            setModalOpen={setImagesModalVisible}
+            uuid={academy.uuid}
+            currentImages={academy.images}
+            refresh={onRefresh}
+          />
+          <LogoModal
+            modalOpen={logoModalVisible}
+            setModalOpen={setLogoModalVisible}
+            uuid={academy.uuid}
+            currentLogo={academy.logo}
+            refresh={onRefresh}
+          />
+        </>
+      )}
     </>
   );
 }
