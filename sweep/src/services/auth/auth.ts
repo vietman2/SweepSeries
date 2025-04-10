@@ -65,7 +65,7 @@ export const logout = async () => {
     delete axios.defaults.headers.common["Authorization"];
     await removeSecure("refreshToken");
     await AsyncStorage.removeItem("selectedCalendarId");
-    await AsyncStorage.removeItem("front_profile");
+    await AsyncStorage.removeItem("front_uuid");
 
     return true;
   } catch {
