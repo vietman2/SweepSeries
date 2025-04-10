@@ -20,6 +20,7 @@ interface Props {
   setModalOpen: (open: boolean) => void;
   uuid: string;
   currentLogo: string;
+  refresh: () => void;
 }
 
 export function LogoModal({
@@ -27,12 +28,14 @@ export function LogoModal({
   setModalOpen,
   uuid,
   currentLogo,
+  refresh,
 }: Readonly<Props>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   const hideLogoModal = () => {
     setModalOpen(false);
+    refresh();
   };
 
   const handleImagePicker = async () => {

@@ -23,6 +23,7 @@ interface Props {
   setModalOpen: (open: boolean) => void;
   uuid: string;
   currentImages: ImageType[];
+  refresh: () => void;
 }
 
 export function ImagesModal({
@@ -30,6 +31,7 @@ export function ImagesModal({
   setModalOpen,
   uuid,
   currentImages,
+  refresh,
 }: Readonly<Props>) {
   const [images, setImages] = useState<ImageType[]>(currentImages);
 
@@ -38,6 +40,7 @@ export function ImagesModal({
 
   const hideImagesModal = () => {
     setModalOpen(false);
+    refresh();
   };
 
   const handleImagePicker = async () => {

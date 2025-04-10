@@ -38,6 +38,7 @@ describe("<ImagesModal />", () => {
         setModalOpen={jest.fn()}
         uuid="uuid"
         currentImages={[{ id: 3, uri: "url3" }]}
+        refresh={jest.fn()}
       />
     );
 
@@ -57,6 +58,7 @@ describe("<ImagesModal />", () => {
         setModalOpen={jest.fn()}
         uuid="uuid"
         currentImages={[{ id: 3, uri: "url3" }]}
+        refresh={jest.fn()}
       />
     );
 
@@ -77,6 +79,7 @@ describe("<ImagesModal />", () => {
         setModalOpen={jest.fn()}
         uuid="uuid"
         currentImages={[]}
+        refresh={jest.fn()}
       />
     );
 
