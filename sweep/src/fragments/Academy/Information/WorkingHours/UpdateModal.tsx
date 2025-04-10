@@ -32,13 +32,13 @@ export function UpdateModal({
   hideModal,
   onRefresh,
 }: Readonly<ModalProps>) {
-  const { id } = useLocalSearchParams<{ id: string }>();
   const [isEveryday, setIsEveryday] = useState<boolean>(true);
   const [isAllWeekdays, setIsAllWeekdays] = useState<boolean>(true);
   const [isAllWeekends, setIsAllWeekends] = useState<boolean>(true);
   const [scheduleInputs, setScheduleInputs] =
     useState<ScheduleDetailType[]>(initialSchedule);
 
+  const { id } = useLocalSearchParams<{ id: string }>();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -92,6 +92,27 @@ export function UpdateModal({
     });
   };
 
+  useEffect(() => {
+    // Initial Schedule Inputs
+    const days = schedule.map((schedule) => schedule.day);
+
+    if (days.includes("매일")) {
+      setIsEveryday(true);
+      setIsAllWeekdays(true);
+      setIsAllWeekends(true);
+    } else {
+      setIsEveryday(false);
+    }
+
+    if (days.includes("평일")) {
+      setIsAllWeekdays(true);
+    }
+
+    if (days.includes("주말")) {
+      setIsAllWeekends(true);
+    }
+  }, []);
+
   const editWorkingHours = async () => {
     // 분 단위가 반드시 00 또는 30이어야 함
     const isValid = scheduleInputs.every((schedule) => {
@@ -127,27 +148,6 @@ export function UpdateModal({
       alert("수정 실패", "오류가 발생했습니다.");
     }
   };
-
-  useEffect(() => {
-    // Initial Schedule Inputs
-    const days = schedule.map((schedule) => schedule.day);
-
-    if (days.includes("매일")) {
-      setIsEveryday(true);
-      setIsAllWeekdays(true);
-      setIsAllWeekends(true);
-    } else {
-      setIsEveryday(false);
-    }
-
-    if (days.includes("평일")) {
-      setIsAllWeekdays(true);
-    }
-
-    if (days.includes("주말")) {
-      setIsAllWeekends(true);
-    }
-  }, []);
 
   return (
     <SimpleModal
