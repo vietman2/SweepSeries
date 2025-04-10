@@ -57,6 +57,8 @@ describe("<CreateProgram />", () => {
     academy: sampleAcademyDetail,
     programs: [],
     notices: [],
+    coaches: [],
+    requests: [],
     facilityOptions: [],
     loading: false,
     refresh: jest.fn(),
