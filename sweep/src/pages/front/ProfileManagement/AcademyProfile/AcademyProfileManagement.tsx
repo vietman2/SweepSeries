@@ -1,11 +1,10 @@
-
 import { Image, StyleSheet, View } from "react-native";
 
 import { Divider } from "@components/Dividers";
 import { AppIcon } from "@components/Icons";
-import { Scroll } from "@components/ScrollView";
+import { ScrollView } from "@components/ScrollView";
 import { Text } from "@components/Texts";
-import { useAcademyFront } from "@contexts/front";
+import { useAcademyFront, useFront } from "@contexts/front";
 import { useTheme } from "@contexts/theme";
 import {
   AcademyProfile,
@@ -16,15 +15,25 @@ import {
 import { ThemeColorType } from "@themes/colors";
 
 export function AcademyProfileManagement() {
-  const { academy, facilityOptions, refresh } = useAcademyFront();
+  const { academy, facilityOptions, loading, refresh } = useAcademyFront();
+  const { refreshProfile } = useFront();
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  const handleRefreshProfile = () => {
+    refresh();
+    refreshProfile();
+  };
 
   if (!academy) return null;
 
   return (
-    <Scroll style={styles.container}>
-      <AcademyProfile pro academy={academy} onRefresh={refresh} />
+    <ScrollView
+      refreshing={loading}
+      onRefresh={refresh}
+      style={styles.container}
+    >
+      <AcademyProfile pro academy={academy} onRefresh={handleRefreshProfile} />
       <View style={styles.content}>
         <Divider />
         <Introduction
@@ -65,7 +74,7 @@ export function AcademyProfileManagement() {
           </View>
         </View>
       </View>
-    </Scroll>
+    </ScrollView>
   );
 }
 

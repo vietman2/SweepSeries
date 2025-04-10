@@ -1,3 +1,5 @@
+import { fireEvent } from "@testing-library/react-native";
+
 import { AcademyProfileManagement } from "./AcademyProfileManagement";
 import * as AcademyFrontContext from "@contexts/front";
 import { sampleAcademyDetail } from "@testdata/products";
@@ -7,7 +9,9 @@ jest.mock("@fragments/Academy", () => {
   const { TouchableOpacity } = jest.requireActual("react-native");
 
   return {
-    AcademyProfile: () => <div>AcademyProfile</div>,
+    AcademyProfile: ({ onRefresh }: { onRefresh: () => void }) => (
+      <TouchableOpacity onPress={onRefresh} testID="refresh-profile" />
+    ),
     Facilities: () => <div>Facilities</div>,
     Introduction: ({ onRefresh }: { onRefresh: () => void }) => (
       <TouchableOpacity onPress={onRefresh} testID="intro" />
@@ -21,23 +25,29 @@ describe("<AcademyProfileManagement />", () => {
     academy: null,
     programs: [],
     notices: [],
+    coaches: [],
+    requests: [],
     facilityOptions: [],
     loading: false,
     refresh: jest.fn(),
   };
 
-  it("renders correctly", async () => {
+  it("renders correctly and handles refresh", async () => {
     jest.spyOn(AcademyFrontContext, "useAcademyFront").mockReturnValue({
       ...defaultContext,
       academy: sampleAcademyDetail,
     });
-    renderWithProviders(<AcademyProfileManagement />);
+
+    const { getByTestId } = renderWithProviders(<AcademyProfileManagement />);
+
+    fireEvent.press(getByTestId("refresh-profile"));
   });
 
   it("handles no academy correctly", async () => {
     jest
       .spyOn(AcademyFrontContext, "useAcademyFront")
       .mockReturnValue(defaultContext);
+
     renderWithProviders(<AcademyProfileManagement />);
   });
 });
