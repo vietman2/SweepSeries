@@ -1,62 +1,88 @@
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { fireEvent, render, waitFor } from "@testing-library/react-native";
 
 import { FrontProvider, useFront } from "./FrontContext";
-import * as AcademiesAPI from "@services/products/academy";
-import * as CoachesAPI from "@services/products/coach";
-import { sampleAcademies, sampleCoaches } from "@testdata/products";
-
-jest.unmock("@contexts/front");
+import * as ProfilesAPI from "@services/products/profiles";
+import * as StorageAPI from "@services/storage/asyncstorage";
+import { sampleAcademyProfiles, sampleCoachProfiles } from "@testdata/products";
 
 const TestComponent = () => {
-  const { selectAcademy, selectCoach, refresh } = useFront();
+  const { selectAcademy, selectCoach, refreshProfile } = useFront();
 
   return (
-    <View>
+    <>
       <TouchableOpacity
-        testID="selectAcademy"
-        onPress={() => selectAcademy(sampleAcademies[0])}
+        onPress={() => selectAcademy(sampleAcademyProfiles[0])}
+        testID="academy"
       />
       <TouchableOpacity
-        testID="selectCoach"
-        onPress={() => selectCoach(sampleCoaches[0])}
+        onPress={() => selectCoach(sampleCoachProfiles[0])}
+        testID="coach"
       />
-      <TouchableOpacity testID="refresh" onPress={refresh} />
-    </View>
+      <TouchableOpacity onPress={refreshProfile} testID="refresh" />
+    </>
   );
 };
 
-describe("FrontProvider", () => {
-  it("selects academy and coach correctly", async () => {
-    jest
-      .spyOn(AcademiesAPI, "getMyAcademies")
-      .mockResolvedValue(sampleAcademies);
-    jest
-      .spyOn(CoachesAPI, "getMyCoachProfile")
-      .mockResolvedValue(sampleCoaches[0]);
-
-    const { getByTestId } = render(
+describe("<FrontContext />", () => {
+  const renderPage = () => {
+    return render(
       <FrontProvider>
         <TestComponent />
       </FrontProvider>
     );
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(StorageAPI, "getStorage").mockResolvedValue(null);
+    jest.spyOn(ProfilesAPI, "getPromodeProfiles").mockResolvedValue({
+      academies: [{ ...sampleAcademyProfiles[0], uuid: "academy1" }],
+      coach: [{ ...sampleCoachProfiles[0], uuid: "coach1" }],
+    });
+  });
+
+  it("handles no storage data and defaults to first academy", async () => {
+    jest.spyOn(ProfilesAPI, "getPromodeProfiles").mockResolvedValue({
+      academies: [{ ...sampleAcademyProfiles[0], uuid: "academy1" }],
+      coach: [],
+    });
+
+    const { getByTestId } = renderPage();
 
     await waitFor(() => {
-      fireEvent.press(getByTestId("selectAcademy"));
-      fireEvent.press(getByTestId("selectCoach"));
+      fireEvent.press(getByTestId("academy"));
+    });
+  });
+
+  it("handles no storage data and defaults to first coach", async () => {
+    jest.spyOn(ProfilesAPI, "getPromodeProfiles").mockResolvedValue({
+      academies: [],
+      coach: [{ ...sampleCoachProfiles[0], uuid: "coach1" }],
+    });
+
+    const { getByTestId } = renderPage();
+
+    await waitFor(() => {
+      fireEvent.press(getByTestId("coach"));
+    });
+  });
+
+  it("handles academy data saved in storage, api error and refresh", async () => {
+    jest.spyOn(ProfilesAPI, "getPromodeProfiles").mockResolvedValueOnce(null);
+    jest.spyOn(StorageAPI, "getStorage").mockResolvedValue("academy1");
+
+    const { getByTestId } = renderPage();
+
+    await waitFor(() => {
       fireEvent.press(getByTestId("refresh"));
     });
   });
 
-  it("handles api errors", async () => {
-    jest.spyOn(AcademiesAPI, "getMyAcademies").mockResolvedValue(null);
-    jest.spyOn(CoachesAPI, "getMyCoachProfile").mockResolvedValue(null);
+  it("handles coach data saved in storage", async () => {
+    jest.spyOn(StorageAPI, "getStorage").mockResolvedValue("coach1");
 
-    render(
-      <FrontProvider>
-        <TestComponent />
-      </FrontProvider>
-    );
+    await waitFor(() => renderPage());
   });
 
   it("handles context misuse", async () => {
