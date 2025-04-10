@@ -2,102 +2,158 @@ import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 
+import { LoadingComponent } from "@components/Fallbacks";
 import { ScrollView } from "@components/ScrollView";
 import { Searchbar } from "@components/Search";
 import { Text } from "@components/Texts";
-import { useFront } from "@contexts/front";
+import { useAcademyFront, useCoachFront, useFront } from "@contexts/front";
 import { useTheme } from "@contexts/theme";
 import { ProfileImage } from "@fragments/Profile";
 import { ScheduleSimple } from "@fragments/Schedule";
 import { LessonType } from "@models/calendar";
 import { StudentSimpleType } from "@models/products";
-import { getDailyLessons } from "@services/calendar";
 import { getStudents } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
-export function CustomerManagement() {
-  const [lessons, setLesson] = useState<LessonType[]>([]);
-  const [students, setStudents] = useState<StudentSimpleType[]>([]);
+export function AcademyCustomerManagement() {
+  const { activeProfile } = useFront();
 
+  if (activeProfile.mode !== "academy") return null;
+
+  const { lessons, loading, refresh } = useAcademyFront();
+
+  const handleNavigate = (id: number) => {
+    router.push(`/front/academy/${activeProfile.uuid}/customers/${id}`);
+  };
+
+  return (
+    <Content
+      academyUUID={activeProfile.uuid}
+      mode="academy"
+      lessons={lessons}
+      navigateToDetails={handleNavigate}
+      loading={loading}
+      refresh={refresh}
+    />
+  );
+}
+
+export function CoachCustomerManagement() {
+  const { activeProfile } = useFront();
+
+  if (activeProfile.mode !== "coach") return null;
+
+  const { coach, lessons, loading, refresh } = useCoachFront();
+
+  const handleNavigate = (id: number) => {
+    router.push(`/front/coach/${activeProfile.uuid}/customers/${id}`);
+  };
+
+  if (!coach) return <LoadingComponent />;
+
+  return (
+    <Content
+      academyUUID={coach.academy_uuid}
+      mode="coach"
+      lessons={lessons}
+      navigateToDetails={handleNavigate}
+      loading={loading}
+      refresh={refresh}
+    />
+  );
+}
+
+interface Props {
+  academyUUID: string;
+  mode: "academy" | "coach";
+  lessons: LessonType[];
+  navigateToDetails: (id: number) => void;
+  loading: boolean;
+  refresh: () => void;
+}
+
+function Content({
+  academyUUID,
+  mode,
+  lessons,
+  navigateToDetails,
+  loading,
+  refresh,
+}: Readonly<Props>) {
+  const [students, setStudents] = useState<StudentSimpleType[]>([]);
   const [query, setQuery] = useState<string>("");
+  const [loadingStudents, setLoadingStudents] = useState<boolean>(false);
   const [refreshCount, setRefreshCount] = useState<number>(0);
 
-  const { uuid, mode, coach } = useFront();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   const handleRefresh = () => {
+    refresh();
     setRefreshCount((prev) => prev + 1);
-  };
-
-  const navigateToDetail = (id: number) => {
-    router.push({
-      pathname: "/front/customer/[id]",
-      params: { id },
-    });
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      const response1 = await getDailyLessons(
-        uuid,
-        new Date().toISOString().slice(0, 10),
-        mode
-      );
-      const queryUuid = mode === "coach" ? coach?.academy_uuid : uuid;
-      const response2 = await getStudents(queryUuid, mode, query);
+      const response = await getStudents(academyUUID, mode, query);
 
-      if (response1 && response2) {
-        setLesson(response1);
-        setStudents(response2);
+      if (response) {
+        setStudents(response);
       }
+
+      setLoadingStudents(false);
     };
 
     fetchData();
-  }, [uuid, mode, query, refreshCount]);
+  }, [academyUUID, mode, query, refreshCount]);
 
   return (
-    <View style={styles.container}>
-      <ScrollView onRefresh={handleRefresh} refreshing={false}>
-        <View style={styles.wrapper}>
-          <Text style={styles.title}>오늘 진행한 레슨</Text>
-          <View style={styles.schedules}>
-            {lessons.map((lesson) => (
-              <View style={styles.schedule} key={lesson.id}>
-                <ScheduleSimple schedule={lesson} type="레슨" />
-              </View>
-            ))}
-          </View>
-          <View style={styles.horizontal}>
-            <Text style={styles.title}>수강생 목록</Text>
-            <Text style={styles.subtitle}>인원 ({students.length})</Text>
-          </View>
-          <View style={styles.searchWrapper}>
-            <Searchbar
-              placeholder="이름으로 검색하세요"
-              value={query}
-              onChange={setQuery}
-            />
-          </View>
-          <View style={styles.list}>
-            {students.map((student) => (
-              <TouchableOpacity
-                style={styles.student}
-                key={student.id}
-                onPress={() => navigateToDetail(student.id)}
-                testID={`student-${student.id}`}
-              >
-                <ProfileImage
-                  uri={student.profile_image}
-                  color={student.default_color}
-                />
-                <Text key={student.id}>{student.name}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+    <ScrollView
+      refreshing={loading || loadingStudents}
+      onRefresh={handleRefresh}
+      style={styles.container}
+    >
+      <View style={styles.wrapper}>
+        <Text style={styles.title}>오늘 진행한 레슨</Text>
+        <View style={styles.schedules}>
+          {lessons.length === 0 && (
+            <Text style={styles.emptyText}>오늘 예정된 레슨이 없습니다.</Text>
+          )}
+          {lessons.map((lesson) => (
+            <View style={styles.schedule} key={lesson.id}>
+              <ScheduleSimple schedule={lesson} type="레슨" />
+            </View>
+          ))}
         </View>
-      </ScrollView>
-    </View>
+        <View style={styles.horizontal}>
+          <Text style={styles.title}>아카데미 수강생 목록</Text>
+          <Text style={styles.subtitle}>인원 ({students.length})</Text>
+        </View>
+        <View style={styles.searchWrapper}>
+          <Searchbar
+            placeholder="이름으로 검색하세요"
+            value={query}
+            onChange={setQuery}
+          />
+        </View>
+        <View style={styles.list}>
+          {students.map((student) => (
+            <TouchableOpacity
+              style={styles.student}
+              key={student.id}
+              onPress={() => navigateToDetails(student.id)}
+              testID={`student-${student.id}`}
+            >
+              <ProfileImage
+                uri={student.profile_image}
+                color={student.default_color}
+              />
+              <Text key={student.id}>{student.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -129,6 +185,13 @@ const createStyles = (theme: ThemeColorType) =>
     },
     title: {
       fontSize: 20,
+      fontWeight: "bold",
+      color: theme.highEmphasis,
+    },
+    emptyText: {
+      marginVertical: 8,
+      textAlign: "center",
+      fontSize: 14,
       fontWeight: "bold",
       color: theme.highEmphasis,
     },
