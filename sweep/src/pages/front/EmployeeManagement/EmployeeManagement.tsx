@@ -1,47 +1,23 @@
-import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
-import { Scroll } from "@components/ScrollView";
+import { Scroll, ScrollView } from "@components/ScrollView";
 import { Text } from "@components/Texts";
-import { useFront } from "@contexts/front";
+import { useAcademyFront } from "@contexts/front";
 import { useTheme } from "@contexts/theme";
 import { CoachRequest, CoachSimple } from "@fragments/Coach";
-import { CoachSimpleType } from "@models/products";
-import { getEmployedCoaches } from "@services/products";
 import { ThemeColorType } from "@themes/colors";
 
 export function EmployeeManagement() {
-  const [coaches, setCoaches] = useState<CoachSimpleType[]>([]);
-  const [requests, setRequests] = useState<CoachSimpleType[]>([]);
-
-  const [refreshCount, setRefreshCount] = useState(0);
-
-  const { uuid } = useFront();
+  const { coaches, requests, loading, refresh } = useAcademyFront();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  const handleRefresh = () => {
-    setRefreshCount((prev) => prev + 1);
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await getEmployedCoaches(uuid);
-
-      if (response) {
-        setCoaches(response.accepted);
-        setRequests(response.pending);
-      } else {
-        setCoaches([]);
-        setRequests([]);
-      }
-    };
-
-    fetchData();
-  }, [refreshCount, uuid]);
-
   return (
-    <Scroll style={styles.container}>
+    <ScrollView
+      refreshing={loading}
+      onRefresh={refresh}
+      style={styles.container}
+    >
       <View style={styles.wrapper}>
         {requests.length > 0 && (
           <View style={styles.content}>
@@ -51,7 +27,7 @@ export function EmployeeManagement() {
                 <CoachRequest
                   key={request.uuid}
                   coach={request}
-                  onRefresh={handleRefresh}
+                  onRefresh={refresh}
                 />
               ))}
             </Scroll>
@@ -70,7 +46,7 @@ export function EmployeeManagement() {
           )}
         </View>
       </View>
-    </Scroll>
+    </ScrollView>
   );
 }
 

@@ -1,7 +1,7 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { EmployeeManagement } from "./EmployeeManagement";
-import * as CoachesAPI from "@services/products/coach";
+import * as AcademyFrontContext from "@contexts/front";
 import { sampleCoaches } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
@@ -17,11 +17,24 @@ jest.mock("@fragments/Coach", () => {
 });
 
 describe("<EmployeeManagement />", () => {
+  const defaultContext = {
+    academy: null,
+    programs: [],
+    notices: [],
+    coaches: sampleCoaches,
+    requests: [sampleCoaches[0]],
+    facilityOptions: [],
+    loading: false,
+    refresh: jest.fn(),
+  };
+
+  beforeEach(() => {
+    jest
+      .spyOn(AcademyFrontContext, "useAcademyFront")
+      .mockReturnValue(defaultContext);
+  });
+
   it("renders correctly", async () => {
-    jest.spyOn(CoachesAPI, "getEmployedCoaches").mockResolvedValue({
-      accepted: [sampleCoaches[0], sampleCoaches[1]],
-      pending: [sampleCoaches[2]],
-    });
     const { getByTestId } = renderWithProviders(<EmployeeManagement />);
 
     await waitFor(() => {
@@ -30,7 +43,10 @@ describe("<EmployeeManagement />", () => {
   });
 
   it("handles data fetch error", async () => {
-    jest.spyOn(CoachesAPI, "getEmployedCoaches").mockResolvedValue(null);
+    jest
+      .spyOn(AcademyFrontContext, "useAcademyFront")
+      .mockReturnValue({ ...defaultContext, coaches: [] });
+
     const { getByText } = renderWithProviders(<EmployeeManagement />);
 
     await waitFor(() => {
