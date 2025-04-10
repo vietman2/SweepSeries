@@ -56,7 +56,6 @@ import {
   getTagOptions,
   createReview,
   getAcademyReviews,
-  getAcademyReviewSummary,
   getCoachReviews,
 } from "./reviews";
 import { getStudents, getAcademyStudentDetail } from "./students";
@@ -111,7 +110,6 @@ export {
   getTagOptions,
   createReview,
   getAcademyReviews,
-  getAcademyReviewSummary,
   getCoachReviews,
   getStudents,
   getAcademyStudentDetail,

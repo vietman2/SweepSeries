@@ -5,7 +5,6 @@ import {
   getTagOptions,
   createReview,
   getAcademyReviews,
-  getAcademyReviewSummary,
   getCoachReviews,
 } from "./reviews";
 
@@ -148,25 +147,6 @@ describe("getAcademyReviews", () => {
     axios.get = jest.fn().mockRejectedValue(null);
 
     const result = await getAcademyReviews("1");
-
-    expect(result).toBeNull();
-  });
-});
-
-describe("getAcademyReviewSummary", () => {
-  it("should return academy review summary", async () => {
-    const summary = { rating: 5, count: 10 };
-    axios.get = jest.fn().mockResolvedValue({ data: summary });
-
-    const result = await getAcademyReviewSummary("1");
-
-    expect(result).toEqual(summary);
-  });
-
-  it("should return null if request fails", async () => {
-    axios.get = jest.fn().mockRejectedValue(null);
-
-    const result = await getAcademyReviewSummary("1");
 
     expect(result).toBeNull();
   });

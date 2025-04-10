@@ -133,16 +133,6 @@ export async function getAcademyReviews(uuid: string) {
   }
 }
 
-export async function getAcademyReviewSummary(uuid: string) {
-  try {
-    const response = await axios.get(`/v1/academies/${uuid}/reviews/summary/`);
-
-    return response.data;
-  } catch {
-    return null;
-  }
-}
-
 export async function getCoachReviews(uuid: string) {
   try {
     const response = await axios.get(`/v1/coaches/${uuid}/reviews/`);
