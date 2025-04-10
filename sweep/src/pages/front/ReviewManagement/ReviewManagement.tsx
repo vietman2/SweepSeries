@@ -1,54 +1,54 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { Divider, VerticalDivider } from "@components/Dividers";
+import { ErrorPage } from "@components/Fallbacks";
 import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
-import { useFront } from "@contexts/front";
+import { useAcademyFront, useCoachFront, useFront } from "@contexts/front";
 import { useTheme } from "@contexts/theme";
 import { ReviewsSummary, ReviewSimple } from "@fragments/Review";
-import {
-  ReviewType,
-  ReviewResponseType,
-  ReviewSummaryType,
-} from "@models/products";
-import { getAcademyReviews, getAcademyReviewSummary } from "@services/products";
+import { ReviewResponseType } from "@models/products";
 import { ThemeColorType } from "@themes/colors";
 
-export function ReviewManagement() {
+export function AcademyReviewManagement() {
+  const { activeProfile } = useFront();
+
+  if (activeProfile.mode !== "academy") return null;
+
+  const { reviews } = useAcademyFront();
+
+  if (!reviews) return <ErrorPage />;
+
+  return <Content reviewsData={reviews} />;
+}
+
+export function CoachReviewManagement() {
+  const { activeProfile } = useFront();
+
+  if (activeProfile.mode !== "coach") return null;
+
+  const { reviews } = useCoachFront();
+
+  if (!reviews) return <ErrorPage />;
+
+  return <Content reviewsData={reviews} />;
+}
+
+interface Props {
+  reviewsData: ReviewResponseType;
+}
+
+function Content({ reviewsData }: Readonly<Props>) {
   const [selectedTab, setSelectedTab] = useState<"전체" | "미답변">("전체");
 
-  const [result, setResult] = useState<ReviewResponseType>();
-  const [reviews, setReviews] = useState<ReviewType[]>([]);
-  const [summary, setSummary] = useState<ReviewSummaryType>();
-
-  const { uuid } = useFront();
   const { theme } = useTheme();
   const styles = createStyles(theme);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response1 = await getAcademyReviewSummary(uuid);
-      const response2 = await getAcademyReviews(uuid);
-
-      if (response1 && response2) {
-        setSummary(response1);
-        setReviews(response2.results);
-        setResult(response2);
-      }
-    };
-
-    fetchData();
-  }, [selectedTab]);
-
-  if (!summary || !result || !reviews) {
-    return null;
-  }
 
   return (
     <Scroll style={styles.container}>
       <View style={styles.wrapper}>
-        <ReviewsSummary summary={summary} />
+        <ReviewsSummary summary={reviewsData.summary} />
         <View style={styles.tabs}>
           <TouchableOpacity
             style={styles.tab}
@@ -81,7 +81,7 @@ export function ReviewManagement() {
           </TouchableOpacity>
         </View>
         <Divider />
-        {reviews.map((review) => (
+        {reviewsData.results.map((review) => (
           <View key={review.id}>
             <ReviewSimple review={review} />
             <Divider />
