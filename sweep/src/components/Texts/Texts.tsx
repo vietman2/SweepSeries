@@ -4,25 +4,6 @@ import { AppIcon } from "@components/Icons";
 import { useTheme } from "@contexts/theme";
 import { ThemeColorType } from "@themes/colors";
 
-interface Props {
-  title: string;
-  subtitle?: string;
-}
-
-export function InputTitle({ title, subtitle }: Readonly<Props>) {
-  const { theme } = useTheme();
-  const styles = createStyles(theme);
-
-  return (
-    <View style={styles.container}>
-      <View>
-        <Text style={styles.title}>{title}</Text>
-        {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
-      </View>
-    </View>
-  );
-}
-
 interface CalloutProps {
   text: string;
   color?: string;
@@ -60,19 +41,6 @@ export function CalloutLarge({ text }: Readonly<CalloutProps>) {
 
 const createStyles = (theme: ThemeColorType) =>
   StyleSheet.create({
-    container: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
-    },
-    title: {
-      fontSize: 16,
-      fontWeight: "bold",
-    },
-    subtitle: {
-      fontSize: 14,
-      color: "#666666",
-    },
     calloutSmall: {
       paddingVertical: 4,
       paddingHorizontal: 12,

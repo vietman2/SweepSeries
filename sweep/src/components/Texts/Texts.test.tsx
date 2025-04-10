@@ -1,4 +1,4 @@
-import { CalloutLarge, CalloutSmall, InputTitle } from "./Texts";
+import { CalloutLarge, CalloutSmall } from "./Texts";
 import { renderWithProviders } from "@utils/test-utils";
 
 jest.unmock("@components/Texts");
@@ -16,15 +16,5 @@ describe("<CalloutSmall />", () => {
 
   it("should render with color", () => {
     renderWithProviders(<CalloutSmall text="Title" color="black" />);
-  });
-});
-
-describe("<InputTitle />", () => {
-  it("should render without subtitle", () => {
-    renderWithProviders(<InputTitle title="Title" />);
-  });
-
-  it("should render with subtitle", () => {
-    renderWithProviders(<InputTitle title="Title" subtitle="Subtitle" />);
   });
 });
