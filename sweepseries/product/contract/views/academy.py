@@ -16,12 +16,12 @@ class AcademyReviewPageNumberPagination(PageNumberPagination):
     max_page_size = 100
 
     def get_paginated_response(self, data):
-        return Response({
+        return {
             'count': self.page.paginator.count,
             'next': self.get_next_link(),
             'previous': self.get_previous_link(),
             'results': data
-        })
+        }
 
 class AcademyReviewViewSet(ModelViewSet):
     """
@@ -52,7 +52,21 @@ class AcademyReviewViewSet(ModelViewSet):
         page = self.paginate_queryset(reviews)
 
         serializer = AcademyReviewSerializer(page, many=True)
-        return self.get_paginated_response(serializer.data)
+        data = self.get_paginated_response(serializer.data)
+
+        data["summary"] = {
+            "average_rating": academy.cached_rating,
+            "summary": {
+                "rating_5": reviews.filter(academy_rating=5).count(),
+                "rating_4": reviews.filter(academy_rating=4).count(),
+                "rating_3": reviews.filter(academy_rating=3).count(),
+                "rating_2": reviews.filter(academy_rating=2).count(),
+                "rating_1": reviews.filter(academy_rating=1).count(),
+                "total": reviews.count(),
+            }
+        }
+
+        return Response(data, status=status.HTTP_200_OK)
 
     @extend_schema(exclude=True)
     def retrieve(self, request, *args, **kwargs):
@@ -60,19 +74,3 @@ class AcademyReviewViewSet(ModelViewSet):
             status=status.HTTP_405_METHOD_NOT_ALLOWED,
             data={"error": "잘못된 요청입니다."}
         )
-
-    @extend_schema(summary="아카데미 평점 요약 조회", tags=["아카데미"])
-    @action(detail=False, methods=['get'])
-    def summary(self, request, *args, **kwargs):     # pylint: disable=unused-argument
-        academy_id = self.kwargs.get('academy_id')
-        academy = Academy.objects.filter(uuid=academy_id).first()
-
-        if academy is None:
-            return Response(
-                status=status.HTTP_400_BAD_REQUEST,
-                data={"error": "아카데미를 찾을 수 없습니다."}
-            )
-
-        serializer = AcademyReviewSummarySerializer(academy)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)

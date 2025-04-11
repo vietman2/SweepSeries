@@ -37,15 +37,3 @@ class AcademyReviewsAPITestCase(APITestCase):
         invalid_url = f"/v1/academies/{self.user.uuid}/reviews/"
         response = self.client.get(invalid_url)
         self.assertEqual(response.status_code, 400)
-
-    def test_summary(self):
-        self.client.force_authenticate(user=self.user)
-        response = self.client.get(f"{self.url}summary/")
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('average_rating', response.data)
-
-    def test_summary_invalid_academy(self):
-        self.client.force_authenticate(user=self.user)
-        invalid_url = f"/v1/academies/{self.user.uuid}/reviews/summary/"
-        response = self.client.get(invalid_url)
-        self.assertEqual(response.status_code, 400)
