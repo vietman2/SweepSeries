@@ -438,7 +438,6 @@ jest.mock("@components/Texts", () => {
   const { Text } = jest.requireActual("react-native");
 
   return {
-    InputTitle: () => null,
     CalloutSmall: () => null,
     CalloutLarge: () => null,
     Text,
@@ -506,19 +505,47 @@ jest.mock("@contexts/calendar", () => ({
   }),
 }));
 jest.mock("@contexts/front", () => ({
+  AcademyFrontProvider: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  useAcademyFront: jest.fn().mockReturnValue({
+    academy: null,
+    programs: [],
+    notices: [],
+    coaches: [],
+    requests: [],
+    reviews: [],
+    lessons: [],
+    facilityOptions: [],
+    loading: false,
+    refresh: jest.fn(),
+  }),
+  CoachFrontProvider: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  useCoachFront: jest.fn().mockReturnValue({
+    coach: undefined,
+    reviews: [],
+    lessons: [],
+    loading: false,
+    refresh: jest.fn(),
+  }),
   FrontProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
   ),
   useFront: jest.fn().mockReturnValue({
-    mode: null,
-    uuid: "1",
     academies: [],
-    coach: undefined,
-    headerImage: "",
-    headerText: "",
+    coaches: [],
+    activeProfile: {
+      uuid: "",
+      name: "",
+      image: "",
+      mode: "academy",
+    },
+    isReady: false,
     selectAcademy: jest.fn(),
     selectCoach: jest.fn(),
-    refresh: jest.fn(),
+    refreshProfile: jest.fn(),
   }),
 }));
 jest.mock("@contexts/home", () => ({

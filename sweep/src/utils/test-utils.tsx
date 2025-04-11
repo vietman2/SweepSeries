@@ -6,7 +6,11 @@ import { AcademyDetailProvider } from "@contexts/academy";
 import { AddLessonProvider } from "@contexts/addlesson";
 import { AuthProvider } from "@contexts/auth";
 import { CalendarProvider } from "@contexts/calendar";
-import { FrontProvider } from "@contexts/front";
+import {
+  AcademyFrontProvider,
+  CoachFrontProvider,
+  FrontProvider,
+} from "@contexts/front";
 import { HomeProvider } from "@contexts/home";
 import { SignupProvider } from "@contexts/signup";
 import { ThemeProvider as MyThemeProvider } from "@contexts/theme";
@@ -19,15 +23,19 @@ export const renderWithProviders = (ui: ReactElement) => {
         <AuthProvider>
           <CalendarProvider>
             <FrontProvider>
-              <HomeProvider>
-                <AcademyDetailProvider>
-                  <SignupProvider>
-                    <AddLessonProvider>
-                      <MyThemeProvider>{children}</MyThemeProvider>
-                    </AddLessonProvider>
-                  </SignupProvider>
-                </AcademyDetailProvider>
-              </HomeProvider>
+              <AcademyFrontProvider>
+                <CoachFrontProvider>
+                  <HomeProvider>
+                    <AcademyDetailProvider>
+                      <SignupProvider>
+                        <AddLessonProvider>
+                          <MyThemeProvider>{children}</MyThemeProvider>
+                        </AddLessonProvider>
+                      </SignupProvider>
+                    </AcademyDetailProvider>
+                  </HomeProvider>
+                </CoachFrontProvider>
+              </AcademyFrontProvider>
             </FrontProvider>
           </CalendarProvider>
         </AuthProvider>
