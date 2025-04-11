@@ -84,6 +84,9 @@ class AcademyStudentViewSet(ModelViewSet):
         if not academy.students.filter(person__id=student.id).exists():
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+        month = request.query_params.get('month', None)
+
         serializer = StudentDetailSerializer(student)
+        serializer.context['month'] = month
 
         return Response(serializer.data, status=status.HTTP_200_OK)

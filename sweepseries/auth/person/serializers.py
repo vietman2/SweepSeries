@@ -1,4 +1,8 @@
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
+from django.utils import timezone
 from rest_framework import serializers
 
 from product.lesson.models import Session
@@ -65,6 +69,27 @@ class StudentDetailSerializer(serializers.ModelSerializer):
 
     def get_lessons(self, obj):
         lessons = obj.lessons.all()
-        sessions = Session.objects.filter(lesson__in=lessons)
+        month_query = self.context.get('month', None)
+
+        try:
+            month_str = month_query.split('-')[1]
+            year_str = month_query.split('-')[0]
+            month = int(month_str)
+            year = int(year_str)
+            start_date = datetime(year, month, 1)
+            end_date = start_date + relativedelta(months=1)
+        except ValueError as e:
+            raise serializers.ValidationError("올바른 형식이 아닙니다.") from e
+        except AttributeError as e:
+            raise serializers.ValidationError("년월을 입력해주세요.") from e
+
+        tz = timezone.get_current_timezone()
+        start_date = timezone.make_aware(start_date, tz)
+        end_date = timezone.make_aware(end_date, tz)
+
+        q = Q(lesson__in=lessons)
+        q &= Q(start_datetime__range=[start_date, end_date])
+
+        sessions = Session.objects.filter(q).order_by('start_datetime')
 
         return SessionSerializer(sessions, many=True).data
