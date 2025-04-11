@@ -67,6 +67,7 @@ jobs:
           cd sweepseries
           pipenv run coverage run manage.py test
           pipenv run coverage xml
+          sed -i "s|<source></source>|<source>sweepseries</source>" coverage.xml
           cd ..
 
       - name: Catch B Mobile App Coverage
