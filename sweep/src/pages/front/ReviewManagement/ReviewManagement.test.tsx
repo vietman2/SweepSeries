@@ -28,6 +28,7 @@ describe("<CoachReviewManagement />", () => {
     jest.spyOn(FrontContexts, "useCoachFront").mockReturnValue({
       coach: undefined,
       reviews: sampleReviewResponse,
+      lessons: [],
       loading: false,
       refresh: jest.fn(),
     });
@@ -69,6 +70,7 @@ describe("<CoachReviewManagement />", () => {
     jest.spyOn(FrontContexts, "useCoachFront").mockReturnValue({
       coach: undefined,
       reviews: undefined,
+      lessons: [],
       loading: false,
       refresh: jest.fn(),
     });
@@ -87,6 +89,7 @@ describe("<AcademyReviewManagement />", () => {
       coaches: [],
       requests: [],
       reviews: sampleReviewResponse,
+      lessons: [],
       facilityOptions: [],
       loading: false,
       refresh: jest.fn(),
@@ -132,6 +135,7 @@ describe("<AcademyReviewManagement />", () => {
       notices: [],
       coaches: [],
       requests: [],
+      lessons: [],
       reviews: undefined,
       facilityOptions: [],
       loading: false,

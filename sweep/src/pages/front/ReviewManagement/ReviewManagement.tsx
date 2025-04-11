@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { Divider, VerticalDivider } from "@components/Dividers";
 import { ErrorPage } from "@components/Fallbacks";
-import { Scroll } from "@components/ScrollView";
+import { ScrollView } from "@components/ScrollView";
 import { Text } from "@components/Texts";
 import { useAcademyFront, useCoachFront, useFront } from "@contexts/front";
 import { useTheme } from "@contexts/theme";
@@ -16,11 +16,11 @@ export function AcademyReviewManagement() {
 
   if (activeProfile.mode !== "academy") return null;
 
-  const { reviews } = useAcademyFront();
+  const { reviews, loading, refresh } = useAcademyFront();
 
   if (!reviews) return <ErrorPage />;
 
-  return <Content reviewsData={reviews} />;
+  return <Content reviewsData={reviews} loading={loading} refresh={refresh} />;
 }
 
 export function CoachReviewManagement() {
@@ -28,25 +28,31 @@ export function CoachReviewManagement() {
 
   if (activeProfile.mode !== "coach") return null;
 
-  const { reviews } = useCoachFront();
+  const { reviews, loading, refresh } = useCoachFront();
 
   if (!reviews) return <ErrorPage />;
 
-  return <Content reviewsData={reviews} />;
+  return <Content reviewsData={reviews} loading={loading} refresh={refresh} />;
 }
 
 interface Props {
   reviewsData: ReviewResponseType;
+  loading: boolean;
+  refresh: () => void;
 }
 
-function Content({ reviewsData }: Readonly<Props>) {
+function Content({ reviewsData, loading, refresh }: Readonly<Props>) {
   const [selectedTab, setSelectedTab] = useState<"전체" | "미답변">("전체");
 
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   return (
-    <Scroll style={styles.container}>
+    <ScrollView
+      refreshing={loading}
+      onRefresh={refresh}
+      style={styles.container}
+    >
       <View style={styles.wrapper}>
         <ReviewsSummary summary={reviewsData.summary} />
         <View style={styles.tabs}>
@@ -61,7 +67,7 @@ function Content({ reviewsData }: Readonly<Props>) {
                 selectedTab === "전체" && { color: theme.primary },
               ]}
             >
-              전체 (1)
+              전체 ({reviewsData.summary.summary.total})
             </Text>
           </TouchableOpacity>
           <VerticalDivider width={1} />
@@ -88,7 +94,7 @@ function Content({ reviewsData }: Readonly<Props>) {
           </View>
         ))}
       </View>
-    </Scroll>
+    </ScrollView>
   );
 }
 
