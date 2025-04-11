@@ -21,7 +21,6 @@ class AcademyProfileSerializer(serializers.ModelSerializer):
         fields = ["uuid", "name", "logo"]
 
     def get_logo(self, obj):
-        print(obj.logo.url)
         return obj.logo.url if obj.logo else None
 
 class AcademySimpleSerializer(serializers.ModelSerializer):
