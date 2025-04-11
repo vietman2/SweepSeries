@@ -15,6 +15,7 @@ export const sampleLessonSimple: LessonType = {
   curriculum: "타격",
   full_date: "2022년 11월 01일",
   academy_name: "엘리트 야구 아카데미",
+  coach_uuids: ["2"],
 };
 
 export const sampleLesson: LessonDetailType = {

@@ -22,6 +22,7 @@ export type LessonType = {
   curriculum: string;
   full_date: string;
   academy_name: string;
+  coach_uuids: string[];
 } & ScheduleType;
 
 export type LessonDetailType = {
