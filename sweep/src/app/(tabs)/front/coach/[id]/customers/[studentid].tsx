@@ -1,3 +1,3 @@
-import { CustomerDetail } from "@pages/front";
+import { CoachCustomerDetail } from "@pages/front";
 
-export default CustomerDetail;
+export default CoachCustomerDetail;
