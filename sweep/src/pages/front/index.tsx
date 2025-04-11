@@ -1,3 +1,5 @@
+import { AcademyFrontTabs } from "./_layouts/AcademyFrontTabs";
+import { CoachFrontTabs } from "./_layouts/CoachFrontTabs";
 import { FrontLayout } from "./_layouts/FrontLayout";
 
 import { AcademyProfileManagement } from "./ProfileManagement/AcademyProfile/AcademyProfileManagement";
@@ -23,6 +25,8 @@ import { NoticeEdit } from "./NoticeManagement/NoticeEdit";
 import { ProgramEdit } from "./ProgramManagement/ProgramEdit";
 
 export {
+  AcademyFrontTabs,
+  CoachFrontTabs,
   FrontLayout,
   AcademyProfileManagement,
   CoachProfileManagement,
