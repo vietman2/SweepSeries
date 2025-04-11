@@ -17,6 +17,20 @@ const TestComponent = () => {
   return <TouchableOpacity onPress={refresh} testID="refresh" />;
 };
 
+const defaultProfile = {
+  uuid: "uuid",
+  name: "",
+  image: "",
+};
+const defaultFrontContext = {
+  academies: [],
+  coaches: [],
+  isReady: true,
+  selectAcademy: jest.fn(),
+  selectCoach: jest.fn(),
+  refreshProfile: jest.fn(),
+};
+
 describe("<AcademyFrontContext />", () => {
   const renderPage = () => {
     return render(
@@ -32,18 +46,11 @@ describe("<AcademyFrontContext />", () => {
     jest.clearAllMocks();
     jest.useFakeTimers();
     jest.spyOn(FrontContext, "useFront").mockReturnValue({
-      academies: [],
-      coaches: [],
+      ...defaultFrontContext,
       activeProfile: {
-        uuid: "uuid",
-        name: "",
-        image: "",
+        ...defaultProfile,
         mode: "academy",
       },
-      isReady: true,
-      selectAcademy: jest.fn(),
-      selectCoach: jest.fn(),
-      refreshProfile: jest.fn(),
     });
     jest.spyOn(LessonsAPI, "getDailyLessons").mockResolvedValue([]);
     jest
@@ -83,18 +90,11 @@ describe("<AcademyFrontContext />", () => {
 
   it("handles bad config", async () => {
     jest.spyOn(FrontContext, "useFront").mockReturnValue({
-      academies: [],
-      coaches: [],
+      ...defaultFrontContext,
       activeProfile: {
-        uuid: "uuid",
-        name: "",
-        image: "",
+        ...defaultProfile,
         mode: "coach",
       },
-      isReady: true,
-      selectAcademy: jest.fn(),
-      selectCoach: jest.fn(),
-      refreshProfile: jest.fn(),
     });
 
     waitFor(() => renderPage());
