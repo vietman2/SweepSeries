@@ -1,4 +1,4 @@
-from .academy import AcademyReviewSerializer, AcademyReviewSummarySerializer
+from .academy import AcademyReviewSerializer
 from .coach import CoachReviewSerializer
 from .contract import ContractSerializer
 from .review import ReviewSerializer
@@ -6,7 +6,6 @@ from .tags import CoachReviewTagSerializer, LessonReviewTagSerializer, AcademyRe
 
 __all__ = [
     'AcademyReviewSerializer',
-    'AcademyReviewSummarySerializer',
     'CoachReviewSerializer',
     'ContractSerializer',
     'ReviewSerializer',

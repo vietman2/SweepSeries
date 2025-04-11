@@ -1,6 +1,5 @@
 from django.db.models import Q
 from rest_framework import status
-from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -8,7 +7,7 @@ from drf_spectacular.utils import extend_schema
 
 from product.academy.models import Academy
 from ..models import Review
-from ..serializers import AcademyReviewSerializer, AcademyReviewSummarySerializer
+from ..serializers import AcademyReviewSerializer
 
 class AcademyReviewPageNumberPagination(PageNumberPagination):
     page_size = 20
