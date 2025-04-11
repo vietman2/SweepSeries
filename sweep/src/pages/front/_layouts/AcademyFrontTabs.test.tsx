@@ -5,22 +5,29 @@ import { AcademyFrontTabs } from "./AcademyFrontTabs";
 import * as FrontContexts from "@contexts/front";
 import { renderWithProviders } from "@utils/test-utils";
 
+const defaultProfile = {
+  uuid: "123",
+  name: "Test Academy",
+  image: "test-image-url",
+};
+const defaultContext = {
+  academies: [],
+  coaches: [],
+  isReady: true,
+  selectAcademy: jest.fn(),
+  selectCoach: jest.fn(),
+  refreshProfile: jest.fn(),
+};
+
 describe("<AcademyFrontTabs />", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.spyOn(FrontContexts, "useFront").mockReturnValue({
-      academies: [],
-      coaches: [],
+      ...defaultContext,
       activeProfile: {
-        uuid: "123",
-        name: "Test Academy",
-        image: "test-image-url",
+        ...defaultProfile,
         mode: "academy",
       },
-      isReady: true,
-      selectAcademy: jest.fn(),
-      selectCoach: jest.fn(),
-      refreshProfile: jest.fn(),
     });
   });
 
