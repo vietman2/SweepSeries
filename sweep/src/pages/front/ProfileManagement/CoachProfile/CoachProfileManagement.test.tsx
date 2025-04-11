@@ -11,6 +11,8 @@ describe("<CoachProfileManagement />", () => {
     jest.clearAllMocks();
     jest.spyOn(CoachFrontContext, "useCoachFront").mockReturnValue({
       coach: sampleCoachDetail,
+      reviews: undefined,
+      lessons: [],
       loading: false,
       refresh: jest.fn(),
     });
@@ -19,6 +21,8 @@ describe("<CoachProfileManagement />", () => {
   it("handles loading", async () => {
     jest.spyOn(CoachFrontContext, "useCoachFront").mockReturnValue({
       coach: undefined,
+      reviews: undefined,
+      lessons: [],
       loading: false,
       refresh: jest.fn(),
     });
@@ -55,6 +59,8 @@ describe("<CoachProfileManagement />", () => {
   it("handles intro and sns open and update fail", async () => {
     jest.spyOn(CoachFrontContext, "useCoachFront").mockReturnValue({
       coach: { ...sampleCoachDetail, instagram: "" },
+      reviews: undefined,
+      lessons: [],
       loading: false,
       refresh: jest.fn(),
     });
