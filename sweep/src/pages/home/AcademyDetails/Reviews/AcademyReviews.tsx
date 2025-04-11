@@ -9,11 +9,11 @@ import { ReviewsSummary, ReviewSimple } from "@fragments/Review";
 import { ThemeColorType } from "@themes/colors";
 
 export function AcademyReviews() {
-  const { summary, result, reviews } = useAcademyDetail();
+  const { reviews } = useAcademyDetail();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  if (!summary || !result || !reviews) {
+  if (!reviews) {
     return null;
   }
 
@@ -23,12 +23,12 @@ export function AcademyReviews() {
 
   return (
     <View style={styles.container}>
-      <ReviewsSummary summary={summary} />
+      <ReviewsSummary summary={reviews.summary} />
       <Divider />
       {/*TODO: Filter and Sort */}
-      {reviews.length > 0 ? (
+      {reviews.results.length > 0 ? (
         <>
-          {reviews.map((review) => (
+          {reviews.results.map((review) => (
             <View key={review.id}>
               <ReviewSimple review={review} />
               <Divider />
@@ -38,7 +38,7 @@ export function AcademyReviews() {
       ) : (
         <Empty message="등록된 리뷰가 없습니다." type={2} />
       )}
-      {result.next && (
+      {reviews.next && (
         <TouchableOpacity
           onPress={handleMore}
           style={styles.moreButton}
