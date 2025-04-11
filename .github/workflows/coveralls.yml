@@ -66,6 +66,7 @@ jobs:
         run: |
           cd sweepseries
           pipenv run coverage run manage.py test
+          pipenv run coverage lcov
           pipenv run coverage xml
           sed -i "s|<source></source>|<source>sweepseries</source>|g" coverage.xml
           cd ..
@@ -77,6 +78,7 @@ jobs:
           yarn test --coverage --watchAll=false
           cp coverage/lcov.info coverage.lcov
           cd ..
+          lcov-result-merger '*/coverage.lcov' coverage.lcov --prepend-source-files --prepend-path-fix "."
 
       - name: Catch B Admin Web Coverage
         run: |
@@ -85,6 +87,7 @@ jobs:
           yarn test --coverage --watchAll=false
           cp coverage/lcov.info coverage.lcov
           cd ..
+          lcov-result-merger '*/coverage.lcov' coverage.lcov --prepend-source-files --prepend-path-fix "."
 
       - name: Catch B Web Coverage
         run: |
@@ -93,8 +96,15 @@ jobs:
           yarn test --coverage --watchAll=false
           cp coverage/lcov.info coverage.lcov
           cd ..
+          lcov-result-merger '*/coverage.lcov' coverage.lcov --prepend-source-files --prepend-path-fix "."
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Upload Coverage to Coveralls
+        uses: coverallsapp/github-action@v2.2.3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./coverage.lcov
