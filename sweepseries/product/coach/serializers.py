@@ -6,6 +6,7 @@ from rest_framework import serializers
 from auth.person.models import Person
 from core.utils import get_presigned_url
 from product.academy.models import Academy
+from product.academy.serializers import AcademyProfileSerializer
 from .enums import CareerChoices
 from .models import Coach, CoachProfession, CoachWorkingHours
 
@@ -13,6 +14,22 @@ class CoachProfessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = CoachProfession
         fields = ["id", "kor_name"]
+
+class CoachProfileSerializer(serializers.ModelSerializer):
+    name            = serializers.CharField(source="person.name", read_only=True)
+    academy         = serializers.SerializerMethodField()
+    profile_image   = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Coach
+        fields = ["uuid", "name", "profile_image", "academy"]
+
+    def get_profile_image(self, obj):
+        return get_presigned_url(obj.profile_image)
+
+    def get_academy(self, obj):
+        serializer = AcademyProfileSerializer(obj.academy)
+        return serializer.data
 
 class CoachSimpleSerializer(serializers.ModelSerializer):
     name            = serializers.SerializerMethodField(read_only=True)

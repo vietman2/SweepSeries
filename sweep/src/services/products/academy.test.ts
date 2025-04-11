@@ -143,6 +143,12 @@ describe("getAcademyDetail", () => {
     expect(result).toEqual({});
   });
 
+  it("should return null if uuid is undefined", async () => {
+    const result = await getAcademyDetail(undefined);
+
+    expect(result).toBeNull();
+  });
+
   it("should return null on error", async () => {
     jest.spyOn(axios, "get").mockRejectedValue(null);
 

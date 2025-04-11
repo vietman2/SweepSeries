@@ -1,11 +1,17 @@
 import {
+  AcademyProfileType,
   AcademySimpleType,
   AcademyDetailType,
   FacilityType,
   WorkingHoursType,
   ScheduleDetailType,
 } from "./academy";
-import { CoachDetailType, CoachProfessionType, CoachSimpleType } from "./coach";
+import {
+  CoachProfileType,
+  CoachDetailType,
+  CoachProfessionType,
+  CoachSimpleType,
+} from "./coach";
 import { NoticeSimpleType } from "./notice";
 import {
   ProgramSimpleType,
@@ -24,7 +30,6 @@ import {
   TagType,
   ReviewInputType,
   ReviewSummaryType,
-  CoachReviewResponseType,
 } from "./review";
 import {
   StudentSimpleType,
@@ -33,8 +38,10 @@ import {
 } from "./student";
 
 export {
+  AcademyProfileType,
   AcademySimpleType,
   AcademyDetailType,
+  CoachProfileType,
   CoachDetailType,
   CoachProfessionType,
   CoachSimpleType,
@@ -53,7 +60,6 @@ export {
   ReviewType,
   ReviewInputType,
   ReviewSummaryType,
-  CoachReviewResponseType,
   ReplyType,
   TagOptionsType,
   TagType as ReviewTagType,

@@ -19,6 +19,7 @@ describe("<LogoModal />", () => {
         setModalOpen={jest.fn()}
         uuid="uuid"
         currentLogo="currentLogo"
+        refresh={jest.fn()}
       />
     );
 
@@ -35,6 +36,7 @@ describe("<LogoModal />", () => {
         setModalOpen={jest.fn()}
         uuid="uuid"
         currentLogo="currentLogo"
+        refresh={jest.fn()}
       />
     );
 
@@ -53,6 +55,7 @@ describe("<LogoModal />", () => {
         setModalOpen={jest.fn()}
         uuid="uuid"
         currentLogo="currentLogo"
+        refresh={jest.fn()}
       />
     );
 

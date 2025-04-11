@@ -1,5 +1,12 @@
 import { ImageType } from "@models/app";
 
+// 프로모드 Front에서 사용
+export type AcademyProfileType = {
+  uuid: string;
+  name: string;
+  logo: string;
+}
+
 export type AcademySimpleType = {
   uuid: string;
   name: string;

@@ -123,16 +123,6 @@ export async function rejectCoach(coachId: string) {
   }
 }
 
-export async function getMyCoachProfile() {
-  try {
-    const response = await axios.get("/v1/coaches/me/");
-
-    return response.data;
-  } catch {
-    return null;
-  }
-}
-
 export async function updateCoachIntro(
   uuid: string | undefined,
   introduction: string

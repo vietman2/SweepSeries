@@ -24,7 +24,6 @@ import {
   getEmployedCoaches,
   acceptCoach,
   rejectCoach,
-  getMyCoachProfile,
   updateCoachIntro,
   updateCoachSNS,
 } from "./coach";
@@ -35,6 +34,7 @@ import {
   deleteNotice,
   editNotice,
 } from "./notices";
+import { getPromodeProfiles } from "./profiles";
 import {
   getTargets,
   getPositions,
@@ -56,7 +56,6 @@ import {
   getTagOptions,
   createReview,
   getAcademyReviews,
-  getAcademyReviewSummary,
   getCoachReviews,
 } from "./reviews";
 import { getStudents, getAcademyStudentDetail } from "./students";
@@ -85,7 +84,6 @@ export {
   getEmployedCoaches,
   acceptCoach,
   rejectCoach,
-  getMyCoachProfile,
   updateCoachIntro,
   updateCoachSNS,
   createNotice,
@@ -93,6 +91,7 @@ export {
   getNotice,
   deleteNotice,
   editNotice,
+  getPromodeProfiles,
   getTargets,
   getPositions,
   getPrograms,
@@ -111,7 +110,6 @@ export {
   getTagOptions,
   createReview,
   getAcademyReviews,
-  getAcademyReviewSummary,
   getCoachReviews,
   getStudents,
   getAcademyStudentDetail,

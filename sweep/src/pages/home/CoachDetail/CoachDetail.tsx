@@ -9,7 +9,7 @@ import { Scroll } from "@components/ScrollView";
 import { Text } from "@components/Texts";
 import { useTheme } from "@contexts/theme";
 import { ReviewSimple, ReviewsSummary } from "@fragments/Review";
-import { CoachDetailType, CoachReviewResponseType } from "@models/products";
+import { CoachDetailType, ReviewResponseType } from "@models/products";
 import {
   getCoachDetails,
   getCoachReviews,
@@ -19,7 +19,7 @@ import { ThemeColorType } from "@themes/colors";
 
 export function CoachDetail() {
   const [coach, setCoach] = useState<CoachDetailType>();
-  const [reviews, setReviews] = useState<CoachReviewResponseType>();
+  const [reviews, setReviews] = useState<ReviewResponseType>();
 
   const [refreshCount, setRefreshCount] = useState<number>(0);
   const { coachid } = useLocalSearchParams<{ coachid: string }>();

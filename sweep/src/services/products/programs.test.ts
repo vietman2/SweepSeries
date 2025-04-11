@@ -53,6 +53,11 @@ describe("getPrograms", () => {
     expect(result).toEqual({});
   });
 
+  it("should return null if the uuid is undefined", async () => {
+    const result = await getPrograms(undefined);
+    expect(result).toBeNull();
+  });
+
   it("should return null if the request fails", async () => {
     jest.spyOn(axios, "get").mockRejectedValue(new Error());
     const result = await getPrograms("uuid");

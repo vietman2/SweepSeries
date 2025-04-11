@@ -10,7 +10,7 @@ import { ThemeColorType } from "@themes/colors";
 
 interface Props {
   lesson: LessonDetailType;
-    mode: string;
+  mode: string;
   openSheet: () => void;
 }
 

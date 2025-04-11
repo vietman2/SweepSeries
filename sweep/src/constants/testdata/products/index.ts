@@ -1,5 +1,5 @@
-import { sampleAcademies, sampleAcademyDetail } from "./academies";
-import { sampleCoaches, sampleCoachDetail } from "./coaches";
+import { sampleAcademies, sampleAcademyDetail, sampleAcademyProfiles } from "./academies";
+import { sampleCoaches, sampleCoachDetail, sampleCoachProfiles } from "./coaches";
 import { sampleNotices } from "./notices";
 import {
   sampleAcademyPrograms,
@@ -15,15 +15,16 @@ import {
   sampleTagOptions,
   sampleReviewResponse,
   sampleReviewSummary,
-  sampleCoachReviewResponse,
 } from "./review";
 import { sampleStudents, sampleStudentLesson } from "./students";
 
 export {
   sampleAcademies,
   sampleAcademyDetail,
+  sampleAcademyProfiles,
   sampleCoaches,
   sampleCoachDetail,
+  sampleCoachProfiles,
   sampleNotices,
   sampleAcademyPrograms,
   sampleProgramPositions,
@@ -36,7 +37,6 @@ export {
   sampleTagOptions,
   sampleReviewResponse,
   sampleReviewSummary,
-  sampleCoachReviewResponse,
   sampleStudents,
   sampleStudentLesson,
 };

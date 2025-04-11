@@ -17,7 +17,20 @@ jest
   );
 
 jest.mock("expo-router", () => {
-  const { Text, View } = jest.requireActual("react-native");
+  const { Text, TouchableOpacity, View } = jest.requireActual("react-native");
+
+  const MockTopTabs = ({ children }: { children: React.ReactNode }) => children;
+  const MockTopTabsScreen = ({
+    name,
+    listeners,
+  }: {
+    name: string;
+    listeners: any;
+  }) => (
+    <TouchableOpacity onPress={listeners.tabPress} testID={`tab-${name}`} />
+  );
+
+  MockTopTabs.Screen = MockTopTabsScreen;
 
   return {
     Stack: Object.assign(
@@ -57,6 +70,7 @@ jest.mock("expo-router", () => {
     useLocalSearchParams: jest.fn().mockReturnValue({ id: "1" }),
     usePathname: jest.fn(),
     useFocusEffect: jest.fn(),
+    withLayoutContext: jest.fn().mockReturnValue(MockTopTabs),
   };
 });
 jest.mock("react-native-svg/css", () => ({
@@ -438,7 +452,6 @@ jest.mock("@components/Texts", () => {
   const { Text } = jest.requireActual("react-native");
 
   return {
-    InputTitle: () => null,
     CalloutSmall: () => null,
     CalloutLarge: () => null,
     Text,
@@ -506,19 +519,47 @@ jest.mock("@contexts/calendar", () => ({
   }),
 }));
 jest.mock("@contexts/front", () => ({
+  AcademyFrontProvider: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  useAcademyFront: jest.fn().mockReturnValue({
+    academy: null,
+    programs: [],
+    notices: [],
+    coaches: [],
+    requests: [],
+    reviews: [],
+    lessons: [],
+    facilityOptions: [],
+    loading: false,
+    refresh: jest.fn(),
+  }),
+  CoachFrontProvider: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  useCoachFront: jest.fn().mockReturnValue({
+    coach: undefined,
+    reviews: [],
+    lessons: [],
+    loading: false,
+    refresh: jest.fn(),
+  }),
   FrontProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
   ),
   useFront: jest.fn().mockReturnValue({
-    mode: null,
-    uuid: "1",
     academies: [],
-    coach: undefined,
-    headerImage: "",
-    headerText: "",
+    coaches: [],
+    activeProfile: {
+      uuid: "",
+      name: "",
+      image: "",
+      mode: "academy",
+    },
+    isReady: false,
     selectAcademy: jest.fn(),
     selectCoach: jest.fn(),
-    refresh: jest.fn(),
+    refreshProfile: jest.fn(),
   }),
 }));
 jest.mock("@contexts/home", () => ({

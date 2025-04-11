@@ -34,12 +34,6 @@ export type ReviewResponseType = {
   count: number;
   next: string;
   previous: string;
-};
-
-export type CoachReviewResponseType = {
-  count: number;
-  next: string;
-  previous: string;
   results: ReviewType[];
   summary: ReviewSummaryType;
 };

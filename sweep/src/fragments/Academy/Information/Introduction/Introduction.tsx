@@ -22,11 +22,13 @@ export function Introduction({
   edit = false,
   onRefresh,
 }: Readonly<Props>) {
-  const { id } = useLocalSearchParams<{ id: string }>();
   const [introInput, setIntroInput] = useState<string>(introduction);
   const [expanded, setExpanded] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
+  const { id } = useLocalSearchParams<{
+    id: string;
+  }>();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 

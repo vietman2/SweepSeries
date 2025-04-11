@@ -96,24 +96,24 @@ class AcademyUpdatesTestCase(APITestCase):
         )
         self.assertEqual(response.status_code, 400)
 
-    @patch('django.core.files.storage.default_storage.save')
-    def test_academy_lodo_update(self, mock_save):
+    @patch('product.academy.views.academies.upload_logo')
+    def test_academy_lodo_update(self, mock_upload_logo):
         self.client.force_authenticate(user=self.user)
-        mock_save.return_value = 'test.png'
+        mock_upload_logo.return_value = 'test.png'
         response = self.client.patch(f"{self.url}{self.academy.uuid}/logo/", {
             "main_logo": self.test_image1
         })
         self.assertEqual(response.status_code, 200)
 
-    @patch('django.core.files.storage.default_storage.save')
-    def test_academy_lodo_update_fail(self, mock_save):
+    @patch('product.academy.views.academies.upload_logo')
+    def test_academy_lodo_update_fail(self, mock_upload_logo):
         ## no image
         self.client.force_authenticate(user=self.user)
         response = self.client.patch(f"{self.url}{self.academy.uuid}/logo/")
         self.assertEqual(response.status_code, 400)
 
         ## upload fail
-        mock_save.side_effect = ClientError(error_response={}, operation_name='test')
+        mock_upload_logo.side_effect = ClientError(error_response={}, operation_name='test')
         response = self.client.patch(f"{self.url}{self.academy.uuid}/logo/", {
             "main_logo": self.test_image1
         })

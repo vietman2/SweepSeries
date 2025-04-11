@@ -82,7 +82,9 @@ export async function getLikedAcademies() {
   }
 }
 
-export async function getAcademyDetail(uuid: string) {
+export async function getAcademyDetail(uuid: string | undefined) {
+  if (!uuid) return null;
+
   try {
     const response = await axios.get(`/v1/academies/${uuid}/`);
 

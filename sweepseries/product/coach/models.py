@@ -24,7 +24,7 @@ class CoachProfession(models.Model):
 
 class Coach(models.Model):
     uuid            = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    person          = models.OneToOneField(Person, on_delete=models.CASCADE, related_name='coach')
+    person          = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='coach')
     academy         = models.ForeignKey(Academy, on_delete=models.CASCADE, related_name='coaches')
 
     introduction    = models.TextField()
@@ -63,6 +63,7 @@ class Coach(models.Model):
         db_table = 'coach'
         verbose_name = '코치'
         verbose_name_plural = '코치'
+        unique_together = ('person', 'academy')
 
 class CoachLike(models.Model):
     coach       = models.ForeignKey(Coach, on_delete=models.CASCADE, related_name='likes')

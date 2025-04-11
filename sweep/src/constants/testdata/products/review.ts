@@ -4,7 +4,6 @@ import {
   ReviewSummaryType,
   TagOptionsType,
   ReviewTagType,
-  CoachReviewResponseType,
 } from "@models/products";
 import { sampleStudents } from "./students";
 
@@ -63,12 +62,6 @@ export const sampleReviews: ReviewType[] = [
   },
 ];
 
-export const sampleReviewResponse: ReviewResponseType = {
-  count: 1,
-  next: "next-url",
-  previous: "",
-};
-
 export const sampleReviewSummary: ReviewSummaryType = {
   uuid: 1,
   average_rating: 5,
@@ -82,7 +75,7 @@ export const sampleReviewSummary: ReviewSummaryType = {
   },
 };
 
-export const sampleCoachReviewResponse: CoachReviewResponseType = {
+export const sampleReviewResponse: ReviewResponseType = {
   count: 1,
   next: "next-url",
   previous: "",

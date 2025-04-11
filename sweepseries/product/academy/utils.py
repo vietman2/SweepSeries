@@ -128,7 +128,16 @@ def update_daily_schedule(day, new_schedule):
 def upload_logo(uuid, file):
     filename = file.name.split("/")[-1]
     path = f"products/academies/{uuid}/main_logo/{filename}"
-    default_storage.save(path, file)
+
+    s3_client = default_storage.connection.meta.client
+    bucket_name = default_storage.bucket.name
+
+    s3_client.upload_fileobj(
+        file,
+        bucket_name,
+        path,
+        ExtraArgs={'ACL': 'public-read'}
+    )
 
     return path
 

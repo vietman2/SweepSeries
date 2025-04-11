@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SvgCssUri } from "react-native-svg/css";
 import { useLocalSearchParams } from "expo-router";
@@ -26,9 +26,9 @@ export function Facilities({
   edit = false,
   onRefresh,
 }: Readonly<Props>) {
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const [selectedFacilities, setSelectedFacilities] =
-    useState<FacilityType[]>(facilities);
+  const [selectedFacilities, setSelectedFacilities] = useState<FacilityType[]>(
+    []
+  );
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const facilitiesToDisplay = facilities.filter(
@@ -36,6 +36,9 @@ export function Facilities({
   );
   const optionsToDisplay = options.filter((facility) => facility.type === type);
 
+  const { id } = useLocalSearchParams<{
+    id: string;
+  }>();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -70,6 +73,10 @@ export function Facilities({
       alert("저장 실패", "시설 정보를 수정하는데 실패했습니다.");
     }
   };
+
+  useEffect(() => {
+    setSelectedFacilities(facilities);
+  }, [facilities]);
 
   return (
     <>

@@ -64,12 +64,14 @@ class AcademyStudentAPITestCase(APITestCase):
 
     def test_students_retrieve(self):
         self.client.force_authenticate(user=self.user)
-        response = self.client.get(f"{self.url}{self.academy.uuid}/students/1/")
+        params = {"month": "2025-01"}
+        response = self.client.get(f"{self.url}{self.academy.uuid}/students/1/", params)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_students_retrieve_fail(self):
         self.client.force_authenticate(user=self.user)
-        response = self.client.get(f"{self.url}{self.academy.uuid}/students/3/")
+        params = {"month": "2025-01"}
+        response = self.client.get(f"{self.url}{self.academy.uuid}/students/3/", params)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 class PersonModelTest(TestCase):

@@ -88,7 +88,11 @@ export async function editProgram(
   }
 }
 
-export async function getPrograms(uuid: string) {
+export async function getPrograms(uuid: string | undefined) {
+  if (!uuid) {
+    return null;
+  }
+
   try {
     const response = await axios.get(`/v1/programs/?academy=${uuid}`);
     return response.data;

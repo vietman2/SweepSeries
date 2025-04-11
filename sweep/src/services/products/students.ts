@@ -24,11 +24,19 @@ export async function getStudents(
 
 export async function getAcademyStudentDetail(
   academyId: string,
-  studentId: string
+  studentId: string,
+  month: string
 ) {
+  if (month === "") return null;
+
   try {
     const response = await axios.get(
-      `/v1/academies/${academyId}/students/${studentId}/`
+      `/v1/academies/${academyId}/students/${studentId}/`,
+      {
+        params: {
+          month,
+        },
+      }
     );
 
     return response.data;

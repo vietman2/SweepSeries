@@ -7,7 +7,7 @@ from .enums import RepeatTypeChoices
 
 class BaseSchedule(TimeStampedModel):
     title           = models.CharField(max_length=100)
-    description     = models.TextField()
+    description     = models.TextField(blank=True)
     color           = models.CharField(max_length=7)
 
     repeat_type     = models.CharField(

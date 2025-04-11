@@ -5,7 +5,7 @@ import * as CoachesAPI from "@services/products/coach";
 import * as ReviewsAPI from "@services/products/reviews";
 import {
   sampleCoachDetail,
-  sampleCoachReviewResponse,
+  sampleReviewResponse,
 } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
@@ -21,7 +21,7 @@ describe("<CoachDetail />", () => {
       .mockResolvedValue(sampleCoachDetail);
     jest
       .spyOn(ReviewsAPI, "getCoachReviews")
-      .mockResolvedValueOnce(sampleCoachReviewResponse);
+      .mockResolvedValueOnce(sampleReviewResponse);
   });
 
   it("handles bad response", () => {

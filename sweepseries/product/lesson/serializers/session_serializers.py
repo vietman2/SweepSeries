@@ -16,12 +16,13 @@ class SessionSerializer(serializers.ModelSerializer):
     date        = serializers.SerializerMethodField()
     full_date   = serializers.SerializerMethodField()
     academy_name= serializers.SerializerMethodField()
+    coach_uuids = serializers.SerializerMethodField()
 
     class Meta:
         model = Session
         fields = [
             'id', 'type', 'title', 'description', 'color', 'curriculum',
-            'time', 'done', 'date', 'full_date', 'academy_name'
+            'time', 'done', 'date', 'full_date', 'academy_name', 'coach_uuids'
         ]
 
     def get_id(self, obj):
@@ -91,6 +92,9 @@ class SessionSerializer(serializers.ModelSerializer):
 
     def get_academy_name(self, obj):
         return obj.lesson.program.academy.name
+
+    def get_coach_uuids(self, obj):
+        return [coach.uuid for coach in obj.coaches.all()]
 
 class SessionDetailSerializer(SessionSerializer):
     coaches     = serializers.SerializerMethodField()

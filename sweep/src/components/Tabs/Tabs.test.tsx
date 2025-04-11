@@ -4,10 +4,8 @@ import {
   MaterialTopTabBarProps,
 } from "@react-navigation/material-top-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-import { Tabs } from "react-native-collapsible-tab-view";
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
-import { CollapsibleTab } from "./CollapsibleTab";
 import { FAQTabs } from "./FAQTabs";
 import { TabBar } from "./Tabbar";
 import { renderWithProviders } from "@utils/test-utils";
@@ -20,23 +18,6 @@ const MockComponent = () => <div />;
 
 configureReanimatedLogger({
   strict: false,
-});
-
-describe("<CollapsibleTab />", () => {
-  it("renders correctly", () => {
-    const { getByText } = renderWithProviders(
-      <Tabs.Container renderTabBar={(props) => <CollapsibleTab {...props} />}>
-        <Tabs.Tab name="Tab1">
-          <MockComponent />
-        </Tabs.Tab>
-        <Tabs.Tab name="Tab2">
-          <MockComponent />
-        </Tabs.Tab>
-      </Tabs.Container>
-    );
-
-    waitFor(() => fireEvent.press(getByText("Tab2")));
-  });
 });
 
 describe("<FAQTabs />", () => {
