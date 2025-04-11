@@ -54,6 +54,12 @@ describe("getSessionAvailableTimes", () => {
     expect(availableTimes).toEqual({ times: [] });
   });
 
+  it("should return null if the date is empty", async () => {
+    const availableTimes = await getSessionAvailableTimes("1", "");
+
+    expect(availableTimes).toBeNull();
+  });
+
   it("should return null if the request fails", async () => {
     jest.spyOn(axios, "get").mockRejectedValue(new Error());
 

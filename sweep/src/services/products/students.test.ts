@@ -30,15 +30,21 @@ describe("getAcademyStudentDetail", () => {
   it("should return data correctly", async () => {
     jest.spyOn(axios, "get").mockResolvedValue({ data: "data" });
 
-    const result = await getAcademyStudentDetail("academyId", "studentId");
+    const result = await getAcademyStudentDetail("academyId", "studentId", "1234");
 
     expect(result).toBe("data");
+  });
+
+  it("should return null if month is empty", async () => {
+    const result = await getAcademyStudentDetail("academyId", "studentId", "");
+
+    expect(result).toBeNull();
   });
 
   it("should return null if an error occurs", async () => {
     jest.spyOn(axios, "get").mockRejectedValue(new Error());
 
-    const result = await getAcademyStudentDetail("academyId", "studentId");
+    const result = await getAcademyStudentDetail("academyId", "studentId", "1234");
 
     expect(result).toBeNull();
   });

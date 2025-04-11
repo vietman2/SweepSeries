@@ -26,6 +26,8 @@ export async function getSessionAvailableTimes(
   sessionId: string,
   date: string
 ) {
+  if (date === "") return null;
+
   try {
     const response = await axios.get(
       `/v1/sessions/${sessionId}/available_times/`,
