@@ -17,10 +17,9 @@ import { ThemeColorType } from "@themes/colors";
 
 export function AcademyCustomerManagement() {
   const { activeProfile } = useFront();
+  const { lessons, loading, refresh } = useAcademyFront();
 
   if (activeProfile.mode !== "academy") return null;
-
-  const { lessons, loading, refresh } = useAcademyFront();
 
   const handleNavigate = (id: number) => {
     router.push(`/front/academy/${activeProfile.uuid}/customers/${id}`);
@@ -40,10 +39,9 @@ export function AcademyCustomerManagement() {
 
 export function CoachCustomerManagement() {
   const { activeProfile } = useFront();
+  const { coach, lessons, loading, refresh } = useCoachFront();
 
   if (activeProfile.mode !== "coach") return null;
-
-  const { coach, lessons, loading, refresh } = useCoachFront();
 
   const handleNavigate = (id: number) => {
     router.push(`/front/coach/${activeProfile.uuid}/customers/${id}`);

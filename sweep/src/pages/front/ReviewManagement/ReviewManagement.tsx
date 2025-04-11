@@ -13,10 +13,9 @@ import { ThemeColorType } from "@themes/colors";
 
 export function AcademyReviewManagement() {
   const { activeProfile } = useFront();
+  const { reviews, loading, refresh } = useAcademyFront();
 
   if (activeProfile.mode !== "academy") return null;
-
-  const { reviews, loading, refresh } = useAcademyFront();
 
   if (!reviews) return <ErrorPage />;
 
@@ -25,10 +24,9 @@ export function AcademyReviewManagement() {
 
 export function CoachReviewManagement() {
   const { activeProfile } = useFront();
+  const { reviews, loading, refresh } = useCoachFront();
 
   if (activeProfile.mode !== "coach") return null;
-
-  const { reviews, loading, refresh } = useCoachFront();
 
   if (!reviews) return <ErrorPage />;
 

@@ -29,10 +29,9 @@ export function AcademyCustomerDetail() {
 
 export function CoachCustomerDetail() {
   const { activeProfile } = useFront();
+  const { coach } = useCoachFront();
 
   if (activeProfile.mode !== "coach") return null;
-
-  const { coach } = useCoachFront();
 
   if (!coach) return null;
 
