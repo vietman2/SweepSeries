@@ -24,7 +24,7 @@ export const CoachFrontProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [coach, setCoach] = useState<CoachDetailType>();
   const [reviews, setReviews] = useState<ReviewResponseType>();
-  const [lessons, setLesson] = useState<LessonType[]>([]);
+  const [lessons, setLessons] = useState<LessonType[]>([]);
 
   const [refreshCount, setRefreshCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
@@ -57,7 +57,7 @@ export const CoachFrontProvider: React.FC<{ children: React.ReactNode }> = ({
       if (response1 && response2 && response3) {
         setCoach(response1);
         setReviews(response2);
-        setLesson(response3);
+        setLessons(response3);
       } else {
         alert(
           "오류 발생",

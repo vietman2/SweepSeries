@@ -48,7 +48,7 @@ export const AcademyFrontProvider: React.FC<{ children: React.ReactNode }> = ({
   const [coaches, setCoaches] = useState<CoachSimpleType[]>([]);
   const [requests, setRequests] = useState<CoachSimpleType[]>([]);
   const [reviews, setReviews] = useState<ReviewResponseType>();
-  const [lessons, setLesson] = useState<LessonType[]>([]);
+  const [lessons, setLessons] = useState<LessonType[]>([]);
 
   // 정보 수정용 옵션들
   const [facilityOptions, setFacilityOptions] = useState<FacilityType[]>([]);
@@ -57,15 +57,6 @@ export const AcademyFrontProvider: React.FC<{ children: React.ReactNode }> = ({
   const [loading, setLoading] = useState<boolean>(false);
 
   const { activeProfile } = useFront();
-
-  const handleRefresh = () => {
-    setRefreshCount((prev) => prev + 1);
-
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  };
 
   useEffect(() => {
     // 새로고침 할 때마다 다시 불러올 데이터
@@ -99,7 +90,7 @@ export const AcademyFrontProvider: React.FC<{ children: React.ReactNode }> = ({
         setCoaches(response4.accepted);
         setRequests(response4.pending);
         setReviews(response5);
-        setLesson(response6);
+        setLessons(response6);
       } else {
         alert(
           "오류 발생",
@@ -123,6 +114,15 @@ export const AcademyFrontProvider: React.FC<{ children: React.ReactNode }> = ({
 
     fetchInitialData();
   }, []);
+
+  const handleRefresh = () => {
+    setRefreshCount((prev) => prev + 1);
+
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  };
 
   const value = useMemo(
     () => ({
