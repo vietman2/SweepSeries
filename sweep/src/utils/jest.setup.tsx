@@ -17,7 +17,20 @@ jest
   );
 
 jest.mock("expo-router", () => {
-  const { Text, View } = jest.requireActual("react-native");
+  const { Text, TouchableOpacity, View } = jest.requireActual("react-native");
+
+  const MockTopTabs = ({ children }: { children: React.ReactNode }) => children;
+  const MockTopTabsScreen = ({
+    name,
+    listeners,
+  }: {
+    name: string;
+    listeners: any;
+  }) => (
+    <TouchableOpacity onPress={listeners.tabPress} testID={`tab-${name}`} />
+  );
+
+  MockTopTabs.Screen = MockTopTabsScreen;
 
   return {
     Stack: Object.assign(
@@ -57,6 +70,7 @@ jest.mock("expo-router", () => {
     useLocalSearchParams: jest.fn().mockReturnValue({ id: "1" }),
     usePathname: jest.fn(),
     useFocusEffect: jest.fn(),
+    withLayoutContext: jest.fn().mockReturnValue(MockTopTabs),
   };
 });
 jest.mock("react-native-svg/css", () => ({
