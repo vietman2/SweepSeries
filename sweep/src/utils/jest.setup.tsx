@@ -196,34 +196,35 @@ jest.mock("@quidone/react-native-wheel-picker", () => {
     ValueChangedEvent: jest.fn(),
   };
 });
-jest.mock("@components/Buttons", () => ({
-  SvgIconButton: ({ icon, onPress }: { icon: string; onPress: () => void }) => {
-    const { TouchableOpacity } = jest.requireActual("react-native");
+jest.mock("@components/Buttons", () => {
+  const { TouchableOpacity } = jest.requireActual("react-native");
 
-    return <TouchableOpacity onPress={onPress} testID={icon} />;
-  },
-  KakaoButton: ({ onPress }: { onPress: () => void }) => {
-    const { TouchableOpacity } = jest.requireActual("react-native");
-
-    return <TouchableOpacity onPress={onPress} testID="kakao-button" />;
-  },
-  NaverButton: ({ onPress }: { onPress: () => void }) => {
-    const { TouchableOpacity } = jest.requireActual("react-native");
-
-    return <TouchableOpacity onPress={onPress} testID="naver-button" />;
-  },
-  Link: () => null,
-  TextButton: ({ text, onPress }: { text: string; onPress: () => void }) => {
-    const { TouchableOpacity } = jest.requireActual("react-native");
-
-    return <TouchableOpacity onPress={onPress} testID={text} />;
-  },
-  Toggle: ({ onToggle }: { onToggle: () => void }) => {
-    const { TouchableOpacity } = jest.requireActual("react-native");
-
-    return <TouchableOpacity onPress={onToggle} testID="toggle" />;
-  },
-}));
+  return {
+    SvgIconButton: ({
+      icon,
+      onPress,
+    }: {
+      icon: string;
+      onPress: () => void;
+    }) => <TouchableOpacity onPress={onPress} testID={icon} />,
+    BackButton: ({ onPress }: { onPress: () => void }) => (
+      <TouchableOpacity onPress={onPress} testID="back-button" />
+    ),
+    KakaoButton: ({ onPress }: { onPress: () => void }) => (
+      <TouchableOpacity onPress={onPress} testID="kakao-button" />
+    ),
+    NaverButton: ({ onPress }: { onPress: () => void }) => (
+      <TouchableOpacity onPress={onPress} testID="naver-button" />
+    ),
+    Link: () => null,
+    TextButton: ({ text, onPress }: { text: string; onPress: () => void }) => (
+      <TouchableOpacity onPress={onPress} testID={text} />
+    ),
+    Toggle: ({ onToggle }: { onToggle: () => void }) => (
+      <TouchableOpacity onPress={onToggle} testID="toggle" />
+    ),
+  };
+});
 jest.mock("@components/Calendars", () => ({
   CalendarHeader: () => null,
   CustomHeader: () => null,
