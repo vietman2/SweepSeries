@@ -53,9 +53,6 @@ describe("<AcademyDetailContext />", () => {
     jest.useFakeTimers();
     jest.spyOn(Router, "useLocalSearchParams").mockReturnValue({ id: "1" });
     jest
-      .spyOn(Router, "usePathname")
-      .mockReturnValue("/home/academy/1/information");
-    jest
       .spyOn(AcademiesAPI, "getAcademyDetail")
       .mockResolvedValue(sampleAcademyDetail);
     jest.spyOn(NoticesAPI, "getNotices").mockResolvedValue(sampleNotices);
@@ -90,20 +87,12 @@ describe("<AcademyDetailContext />", () => {
   });
 
   it("should handle coach detail page", async () => {
-    jest
-      .spyOn(Router, "usePathname")
-      .mockReturnValue("/home/academy/1/coaches/1");
-
     const { getByTestId } = renderPage();
 
     await waitFor(() => fireEvent.press(getByTestId("coach")));
   });
 
   it("should handle notice detail page", async () => {
-    jest
-      .spyOn(Router, "usePathname")
-      .mockReturnValue("/home/academy/1/notices/1");
-
     const { getByTestId } = renderPage();
 
     await waitFor(() => fireEvent.press(getByTestId("notice")));
