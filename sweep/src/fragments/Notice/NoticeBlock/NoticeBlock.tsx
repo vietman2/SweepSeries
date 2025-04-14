@@ -1,5 +1,7 @@
 import { Image, StyleSheet, Text, View } from "react-native";
+import { router } from "expo-router";
 
+import { BackButton } from "@components/Buttons";
 import { useTheme } from "@contexts/theme";
 import { NoticeSimpleType } from "@models/products";
 import { ThemeColorType } from "@themes/colors";
@@ -14,6 +16,7 @@ export function NoticeBlock({ notice }: Readonly<Props>) {
 
   return (
     <View style={styles.wrapper}>
+      <BackButton onPress={() => router.back()} />
       <Text style={styles.date}>{notice.updated_at}</Text>
       <Text style={styles.title}>{notice.title}</Text>
       <Text style={styles.content}>{notice.content}</Text>
@@ -31,8 +34,7 @@ const createStyles = (theme: ThemeColorType) =>
   StyleSheet.create({
     wrapper: {
       flex: 1,
-      paddingVertical: 24,
-      paddingHorizontal: 16,
+      padding: 16,
       gap: 16,
     },
     date: {
