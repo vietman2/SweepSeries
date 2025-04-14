@@ -9,6 +9,11 @@ import {
 } from "@testdata/products";
 import { renderWithProviders } from "@utils/test-utils";
 
+jest.mock("@fragments/Coach", () => ({
+  CoachIntroduction: () => <></>,
+  CoachProfileImage: () => <></>,
+  CoachSNS: () => <></>,
+}));
 jest.mock("@fragments/Review", () => ({
   ReviewSimple: () => <></>,
   ReviewsSummary: () => <></>,
@@ -26,7 +31,8 @@ describe("<CoachDetail />", () => {
 
   it("handles bad response", () => {
     jest.spyOn(CoachesAPI, "getCoachDetails").mockResolvedValue(null);
-    renderWithProviders(<CoachDetail />);
+   
+     renderWithProviders(<CoachDetail />);
   });
 
   it("renders and handles like correctly", async () => {
@@ -37,6 +43,8 @@ describe("<CoachDetail />", () => {
 
     jest.spyOn(CoachesAPI, "likeCoach").mockResolvedValueOnce(null);
     await waitFor(() => fireEvent.press(getByTestId("like-button")));
+
+    fireEvent.press(getByTestId("back-button"));
   });
 
   it("renders not liked coach correctly", async () => {
