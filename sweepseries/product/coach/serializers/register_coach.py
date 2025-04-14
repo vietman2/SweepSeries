@@ -7,6 +7,7 @@ from auth.person.models import Person
 from product.academy.models import Academy
 from ..enums import CareerChoices
 from ..models import Coach, CoachWorkingHours
+from ..utils import upload_profile_image
 
 class CoachRegisterSerializer(serializers.ModelSerializer):
     profile_image   = serializers.FileField(write_only=True)
@@ -63,10 +64,8 @@ class CoachRegisterSerializer(serializers.ModelSerializer):
     def upload_profile_image(self, **kwargs):
         new_id = kwargs['uuid']
         file = self.validated_data['profile_image']
-        filename = file.name.split('/')[-1]
-        path = f"products/coaches/{new_id}/{filename}"
-        default_storage.save(path, file)
-        return path
+
+        return upload_profile_image(new_id, file)
 
     def save(self, **kwargs):
         new_id = uuid.uuid4()

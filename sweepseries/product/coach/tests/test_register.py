@@ -1,5 +1,5 @@
 import json
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APITestCase
 
@@ -30,15 +30,39 @@ class CoachRegisterTestCase(APITestCase):
             "professions": json.dumps(professions)
         }
 
+    @patch('product.coach.utils.default_storage')
     @patch('django.core.files.storage.default_storage.save')
-    def test_create_coach(self, mock_save):
-        self.client.force_authenticate(user=self.user)
+    def test_create_coach(self, mock_save, mock_default_storage):
         mock_save.return_value = 'test.png'
+        mock_s3_client = MagicMock()
+        mock_default_storage.connection.meta.client = mock_s3_client
+
+        fake_bucket = MagicMock()
+        fake_bucket.name = "test-bucket"
+        mock_default_storage.bucket = fake_bucket
+
+        expected_path = f"users/{self.user.uuid}/profiles/test1.jpg"
+        fake_url = f"https://test.com/{expected_path}"
+        mock_default_storage.url.return_value = fake_url
+
+        self.client.force_authenticate(user=self.user)
         response = self.client.post(self.url, self.create_data, format='multipart')
         self.assertEqual(response.status_code, 201)
 
+    @patch('product.coach.utils.default_storage')
     @patch('django.core.files.storage.default_storage.save')
-    def test_create_coach_2(self, mock_save):
+    def test_create_coach_2(self, mock_save, mock_default_storage):
+        mock_s3_client = MagicMock()
+        mock_default_storage.connection.meta.client = mock_s3_client
+
+        fake_bucket = MagicMock()
+        fake_bucket.name = "test-bucket"
+        mock_default_storage.bucket = fake_bucket
+
+        expected_path = f"users/{self.user.uuid}/profiles/test1.jpg"
+        fake_url = f"https://test.com/{expected_path}"
+        mock_default_storage.url.return_value = fake_url
+
         ## with undefined career and no profession
         self.client.force_authenticate(user=self.user)
         data = self.create_data.copy()
