@@ -115,7 +115,7 @@ export async function acceptCoach(coachId: string) {
 
 export async function rejectCoach(coachId: string) {
   try {
-    const response = await axios.post(`/v1/coaches/${coachId}/deny/`);
+    const response = await axios.post(`/v1/coaches/${coachId}/reject/`);
 
     return response.data;
   } catch {
