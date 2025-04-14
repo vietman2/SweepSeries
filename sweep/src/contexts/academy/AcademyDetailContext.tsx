@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { router, useLocalSearchParams, usePathname } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
 import {
   AcademyDetailType,
@@ -23,7 +23,6 @@ interface AcademyDetailContextType {
   coaches: CoachSimpleType[];
   notices: NoticeSimpleType[];
   reviews: ReviewResponseType | undefined;
-  showDetailPage: boolean;
   loading: boolean;
   selectCoach: (coach: CoachSimpleType) => void;
   selectNotice: (id: string, notice: NoticeSimpleType) => void;
@@ -43,12 +42,10 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
   const [notices, setNotices] = useState<NoticeSimpleType[]>([]);
   const [reviews, setReviews] = useState<ReviewResponseType>();
 
-  const [showDetailPage, setShowDetailPage] = useState<boolean>(false);
   const [refreshCount, setRefreshCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
 
   const { id } = useLocalSearchParams<{ id: string }>();
-  const pathname = usePathname();
 
   const handleRefresh = () => {
     setRefreshCount((prev) => prev + 1);
@@ -64,8 +61,6 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
       pathname: "/(tabs)/home/academy/[id]/coaches/[coachid]",
       params: { id: coach.academy_uuid, coachid: coach.uuid },
     });
-
-    setShowDetailPage(true);
   };
 
   const selectNotice = (id: string, notice: NoticeSimpleType) => {
@@ -73,8 +68,6 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
       pathname: "/home/academy/[id]/notices/[noticeid]",
       params: { id: id, noticeid: notice.id },
     });
-
-    setShowDetailPage(true);
   };
 
   useEffect(() => {
@@ -109,12 +102,6 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
     fetchData();
   }, [id, refreshCount]);
 
-  useEffect(() => {
-    if (pathname.split("/").length < 6) {
-      setShowDetailPage(false);
-    }
-  }, [pathname]);
-
   const value = useMemo(
     () => ({
       academy,
@@ -122,7 +109,6 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
       coaches,
       notices,
       reviews,
-      showDetailPage,
       loading,
       selectCoach,
       selectNotice,
@@ -134,7 +120,6 @@ export const AcademyDetailProvider: React.FC<{ children: React.ReactNode }> = ({
       coaches,
       notices,
       reviews,
-      showDetailPage,
       loading,
     ]
   );

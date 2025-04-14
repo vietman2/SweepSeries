@@ -115,7 +115,27 @@ export async function acceptCoach(coachId: string) {
 
 export async function rejectCoach(coachId: string) {
   try {
-    const response = await axios.post(`/v1/coaches/${coachId}/deny/`);
+    const response = await axios.post(`/v1/coaches/${coachId}/reject/`);
+
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
+export async function updateCoachProfileImage(coachId: string, image: ImagePickerAsset) {
+  try {
+    const form = new FormData();
+    form.append("profile_image", {
+      uri: image.uri,
+      name: image.fileName,
+    });
+
+    const response = await axios.patch(`/v1/coaches/${coachId}/profile_image/`, form, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     return response.data;
   } catch {

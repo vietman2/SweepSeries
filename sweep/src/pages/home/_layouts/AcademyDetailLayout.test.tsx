@@ -16,12 +16,9 @@ describe("<AcademyDetailLayout />", () => {
     programs: [],
     coaches: [],
     notices: [],
-    summary: undefined,
-    reviews: [],
-    result: undefined,
+    reviews: undefined,
     loading: false,
     error: false,
-    showDetailPage: false,
     selectCoach: jest.fn(),
     selectNotice: jest.fn(),
     refresh: jest.fn(),
@@ -41,15 +38,6 @@ describe("<AcademyDetailLayout />", () => {
     const { getByTestId } = renderWithProviders(<AcademyDetailLayout />);
 
     fireEvent.press(getByTestId("tab-programs"));
-  });
-
-  it("handles detail page", () => {
-    jest.spyOn(AcademyDetailContext, "useAcademyDetail").mockReturnValue({
-      ...defaultContext,
-      showDetailPage: true,
-    });
-
-    renderWithProviders(<AcademyDetailLayout />);
   });
 
   it("handles no academy", () => {

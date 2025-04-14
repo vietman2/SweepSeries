@@ -6,6 +6,7 @@ import {
   formatTime,
   formatPrice,
   formatDate,
+  formatInstagramLink,
 } from "./formatters";
 
 it("formats birth date", () => {
@@ -55,4 +56,12 @@ it("formats price", () => {
 
 it("formats date", () => {
   expect(formatDate(new Date("2024-12-31"))).toBe("2024.12.31 (화)");
+});
+
+it("formats Instagram link", () => {
+  expect(formatInstagramLink("https://www.instagram.com/username")).toBe(
+    "@username"
+  );
+
+  expect(formatInstagramLink(undefined)).toBe("");
 });

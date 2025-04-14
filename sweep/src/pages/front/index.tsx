@@ -2,8 +2,8 @@ import { AcademyFrontTabs } from "./_layouts/AcademyFrontTabs";
 import { CoachFrontTabs } from "./_layouts/CoachFrontTabs";
 import { FrontLayout } from "./_layouts/FrontLayout";
 
-import { AcademyProfileManagement } from "./ProfileManagement/AcademyProfile/AcademyProfileManagement";
-import { CoachProfileManagement } from "./ProfileManagement/CoachProfile/CoachProfileManagement";
+import { AcademyProfileManagement } from "./ProfileManagement/AcademyProfileManagement";
+import { CoachProfileManagement } from "./ProfileManagement/CoachProfileManagement";
 import { ProgramManagement } from "./ProgramManagement/ProgramManagement";
 import { CreateProgram } from "./ProgramManagement/CreateProgram";
 import { EmployeeManagement } from "./EmployeeManagement/EmployeeManagement";

@@ -55,7 +55,7 @@ export const formatMobileNumber = (number: string) => {
   const digits = number.replace(/\D/g, "");
 
   if (digits.length == 11) {
-  return digits.replace(/(\d{3})(\d{0,4})(\d{0,4})/, "$1-$2-$3").trim();
+    return digits.replace(/(\d{3})(\d{0,4})(\d{0,4})/, "$1-$2-$3").trim();
   }
 
   return digits;
@@ -111,4 +111,10 @@ export const formatDate = (date: Date) => {
   const dayOfWeekText = ["일", "월", "화", "수", "목", "금", "토"];
 
   return `${year}.${month}.${day} (${dayOfWeekText[dayOfWeek]})`;
+};
+
+export const formatInstagramLink = (link: string | undefined) => {
+  if (!link) return "";
+
+  return "@" + link.split("/").pop();
 };
