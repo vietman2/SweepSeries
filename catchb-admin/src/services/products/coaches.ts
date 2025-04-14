@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getCoaches = async (status: string) => {
   try {
-    const response = await axios.get("/v1/coaches/", {
+    const response = await axios.get("/staff/coaches/", {
       params: {
         status: status,
       },
@@ -16,7 +16,7 @@ export const getCoaches = async (status: string) => {
 
 export const approveCoach = async (coachId: string) => {
   try {
-    const response = await axios.post(`/v1/coaches/${coachId}/approve/`);
+    const response = await axios.post(`/staff/coaches/${coachId}/approve/`);
 
     return response.data;
   } catch {
@@ -26,7 +26,7 @@ export const approveCoach = async (coachId: string) => {
 
 export const rejectCoach = async (coachId: string, rejectReason: string) => {
   try {
-    const response = await axios.post(`/v1/coaches/${coachId}/reject/`, {
+    const response = await axios.post(`/staff/coaches/${coachId}/reject/`, {
       reject_reason: rejectReason,
     });
 
