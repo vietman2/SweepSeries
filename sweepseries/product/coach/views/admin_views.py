@@ -7,7 +7,6 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from core.permissions import AdminPageOnly
-from core.utils import is_admin_page
 from ..models import Coach
 from ..serializers import CoachStatusSerializer
 

@@ -23,7 +23,7 @@ class CoachProfileUpdateMixins:
 
     @extend_schema(summary="코치 소개글 수정", tags=["코치"])
     @action(detail=True, methods=['patch'])
-    def profile_image(self, request, pk=None):
+    def profile_image(self, request, pk=None):   # pylint: disable=unused-argument
         """
             코치 프로필 이미지 수정
         """

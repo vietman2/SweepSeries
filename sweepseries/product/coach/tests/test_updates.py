@@ -1,5 +1,5 @@
-from botocore.exceptions import ClientError
 from unittest.mock import patch, MagicMock
+from botocore.exceptions import ClientError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APITestCase
 
