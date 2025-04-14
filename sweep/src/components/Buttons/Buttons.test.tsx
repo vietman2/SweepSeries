@@ -1,6 +1,6 @@
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
-import { SvgIconButton } from "./IconButton";
+import { SvgIconButton, BackButton } from "./IconButton";
 import { KakaoButton, NaverButton } from "./SocialButtons";
 import { Link, TextButton } from "./TextButton";
 import { Toggle } from "./Toggle";
@@ -20,6 +20,17 @@ describe("<SvgIconButton>", () => {
         />
         <SvgIconButton icon="heart" text="좋아요" onPress={() => {}} />
       </div>
+    );
+  });
+});
+
+describe("<BackButton>", () => {
+  it("renders correctly", () => {
+    renderWithProviders(
+      <>
+        <BackButton onPress={jest.fn()} />
+        <BackButton onPress={jest.fn()} color="red" />
+      </>
     );
   });
 });
