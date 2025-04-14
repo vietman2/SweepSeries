@@ -12,6 +12,7 @@ import {
   rejectCoach,
   updateCoachIntro,
   updateCoachSNS,
+  updateCoachProfileImage,
 } from "./coach";
 
 jest.mock("form-data", () => {
@@ -250,6 +251,32 @@ describe("updateCoachSNS", () => {
     jest.spyOn(axios, "patch").mockRejectedValue(null);
 
     const result = await updateCoachSNS("coachId", "insta", "blog");
+
+    expect(result).toBeNull();
+  });
+});
+
+describe("updateCoachProfileImage", () => {
+  const image = {
+    uri: "uri",
+    fileName: "fileName",
+    width: 1,
+    height: 1,
+  };
+
+
+  it("should update a coach's profile image", async () => {
+    jest.spyOn(axios, "patch").mockResolvedValue({ data: {} });
+
+    const result = await updateCoachProfileImage("coachId", image);
+
+    expect(result).toEqual({});
+  });
+
+  it("should return null on error", async () => {
+    jest.spyOn(axios, "patch").mockRejectedValue(null);
+
+    const result = await updateCoachProfileImage("coachId", image);
 
     expect(result).toBeNull();
   });

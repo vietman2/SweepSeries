@@ -24,6 +24,7 @@ import {
   getEmployedCoaches,
   acceptCoach,
   rejectCoach,
+  updateCoachProfileImage,
   updateCoachIntro,
   updateCoachSNS,
 } from "./coach";
@@ -84,6 +85,7 @@ export {
   getEmployedCoaches,
   acceptCoach,
   rejectCoach,
+  updateCoachProfileImage,
   updateCoachIntro,
   updateCoachSNS,
   createNotice,
