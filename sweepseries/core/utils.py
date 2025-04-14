@@ -20,7 +20,7 @@ def get_presigned_url(filename: str) -> str:
             'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
             'Key': f'{filename}',
         },
-        ExpiresIn=300,
+        ExpiresIn=10800,
     )
 
 def is_admin_page(request: object) -> bool:
